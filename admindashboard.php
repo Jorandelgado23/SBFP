@@ -53,15 +53,60 @@
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle text-muted pr-0" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <span class="avatar avatar-sm mt-2">
-                <img src="./assets/avatars/face-1.jpg" alt="..." class="avatar-img rounded-circle">
-              </span>
+            <?php
+session_start();
+
+if (!isset($_SESSION['email'])) {
+    header("Location: login.php"); // Redirect to login if not logged in
+    exit();
+}
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$email = $_SESSION['email'];
+
+// Prepare and bind
+$stmt = $conn->prepare("SELECT firstname, lastname FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($user_firstname, $user_lastname);
+
+if ($stmt->num_rows > 0) {
+    $stmt->fetch();
+} else {
+    echo "No user found with that email address.";
+    exit();
+}
+
+$stmt->close();
+$conn->close();
+?>
+
+    <div>
+        <span class="avatar avatar-sm mt-2">
+            <!-- Removed the img tag to only display the user's name -->
+        </span>
+        <span><?php echo htmlspecialchars($user_firstname . ' ' . $user_lastname); ?></span>
+    </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
               <a class="dropdown-item" href="#">Profile</a>
               <a class="dropdown-item" href="#">Settings</a>
               <a class="dropdown-item" href="#">Activities</a>
               <a class="dropdown-item" href="logout.php">logout</a>
+
             </div>
           </li>
         </ul>

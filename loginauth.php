@@ -20,11 +20,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // Prepare and bind
-    $stmt = $conn->prepare("SELECT id, firstname, lastname, password, role FROM users WHERE email = ?");
+    $stmt = $conn->prepare("SELECT id, firstname, lastname, email, password, role FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $stmt->store_result();
-    $stmt->bind_result($id, $firstname, $lastname, $hashed_password, $role);
+    $stmt->bind_result($id, $firstname, $lastname, $email, $hashed_password, $role);
 
     if ($stmt->num_rows > 0) {
         $stmt->fetch();
@@ -34,6 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['id'] = $id;
             $_SESSION['firstname'] = $firstname;
             $_SESSION['lastname'] = $lastname;
+            $_SESSION['email'] = $email; // Store email in session
             $_SESSION['role'] = $role;
 
             // Redirect based on role

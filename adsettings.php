@@ -47,9 +47,53 @@
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle text-muted pr-0" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <span class="avatar avatar-sm mt-2">
-                <img src="./assets/avatars/face-1.jpg" alt="..." class="avatar-img rounded-circle">
-              </span>
+            <?php
+session_start();
+
+if (!isset($_SESSION['email'])) {
+    header("Location: login.php"); // Redirect to login if not logged in
+    exit();
+}
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$email = $_SESSION['email'];
+
+// Prepare and bind
+$stmt = $conn->prepare("SELECT firstname, lastname FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($user_firstname, $user_lastname);
+
+if ($stmt->num_rows > 0) {
+    $stmt->fetch();
+} else {
+    echo "No user found with that email address.";
+    exit();
+}
+
+$stmt->close();
+$conn->close();
+?>
+
+    <div>
+        <span class="avatar avatar-sm mt-2">
+            <!-- Removed the img tag to only display the user's name -->
+        </span>
+        <span><?php echo htmlspecialchars($user_firstname . ' ' . $user_lastname); ?></span>
+    </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
               <a class="dropdown-item" href="#">Profile</a>
@@ -197,97 +241,133 @@
                     <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Notifications</a>
                   </li>
                 </ul>
-                <form>
-                  <div class="row mt-5 align-items-center">
-                    <div class="col-md-3 text-center mb-5">
-                      <div class="avatar avatar-xl">
-                        <img src="./assets/avatars/face-1.jpg" alt="..." class="avatar-img rounded-circle">
-                      </div>
-                    </div>
-                    <div class="col">
-                      <div class="row align-items-center">
-                        <div class="col-md-7">
-                          <h4 class="mb-1">Brown, Asher</h4>
-                          <p class="small mb-3"><span class="badge badge-dark">New York, USA</span></p>
-                        </div>
-                      </div>
-                      <div class="row mb-4">
-                        <div class="col-md-7">
-                          <p class="text-muted"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit nisl ullamcorper, rutrum metus in, congue lectus. In hac habitasse platea dictumst. Cras urna quam, malesuada vitae risus at, pretium blandit sapien. </p>
-                        </div>
-                        <div class="col">
-                          <p class="small mb-0 text-muted">Nec Urna Suscipit Ltd</p>
-                          <p class="small mb-0 text-muted">P.O. Box 464, 5975 Eget Avenue</p>
-                          <p class="small mb-0 text-muted">(537) 315-1481</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <hr class="my-4">
-                  <div class="form-row">
-                    <div class="form-group col-md-6">
-                      <label for="firstname">Firstname</label>
-                      <input type="text" id="firstname" class="form-control" placeholder="Brown">
-                    </div>
-                    <div class="form-group col-md-6">
-                      <label for="lastname">Lastname</label>
-                      <input type="text" id="lastname" class="form-control" placeholder="Asher">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="inputEmail4">Email</label>
-                    <input type="email" class="form-control" id="inputEmail4" placeholder="brown@asher.me">
-                  </div>
-                  <div class="form-group">
-                    <label for="inputAddress5">Address</label>
-                    <input type="text" class="form-control" id="inputAddress5" placeholder="P.O. Box 464, 5975 Eget Avenue">
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group col-md-6">
-                      <label for="inputCompany5">Company</label>
-                      <input type="text" class="form-control" id="inputCompany5" placeholder="Nec Urna Suscipit Ltd">
-                    </div>
-                    <div class="form-group col-md-4">
-                      <label for="inputState5">State</label>
-                      <select id="inputState5" class="form-control">
-                        <option selected="">Choose...</option>
-                        <option>...</option>
-                      </select>
-                    </div>
-                    <div class="form-group col-md-2">
-                      <label for="inputZip5">Zip</label>
-                      <input type="text" class="form-control" id="inputZip5" placeholder="98232">
-                    </div>
-                  </div>
-                  <hr class="my-4">
-                  <div class="row mb-4">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label for="inputPassword4">Old Password</label>
-                        <input type="password" class="form-control" id="inputPassword5">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputPassword5">New Password</label>
-                        <input type="password" class="form-control" id="inputPassword5">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputPassword6">Confirm Password</label>
-                        <input type="password" class="form-control" id="inputPassword6">
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <p class="mb-2">Password requirements</p>
-                      <p class="small text-muted mb-2"> To create a new password, you have to meet all of the following requirements: </p>
-                      <ul class="small text-muted pl-4 mb-0">
-                        <li> Minimum 8 character </li>
-                        <li>At least one special character</li>
-                        <li>At least one number</li>
-                        <li>Can’t be the same as a previous password </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Save Change</button>
-                </form>
+                
+              
+               <?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id = $_POST['id'];
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+    $email = $_POST['email'];
+    $old_password = $_POST['old_password'];
+    $new_password = $_POST['new_password'];
+    $confirm_password = $_POST['confirm_password'];
+
+    $sql = "UPDATE users SET firstname=?, lastname=?, email=? WHERE id=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sssi", $firstname, $lastname, $email, $id);
+    $stmt->execute();
+
+    if (!empty($new_password) && $new_password === $confirm_password) {
+        $check_password_sql = "SELECT password FROM users WHERE id=?";
+        $stmt = $conn->prepare($check_password_sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $hashed_password = $row['password'];
+            if (password_verify($old_password, $hashed_password)) {
+                $hashed_new_password = password_hash($new_password, PASSWORD_DEFAULT);
+                $update_password_sql = "UPDATE users SET password=? WHERE id=?";
+                $stmt = $conn->prepare($update_password_sql);
+                $stmt->bind_param("si", $hashed_new_password, $id);
+                $stmt->execute();
+            } else {
+                echo "Old password is incorrect.";
+            }
+        }
+    }
+
+    if ($_FILES['profile_picture']['error'] == UPLOAD_ERR_OK) {
+        $tmp_name = $_FILES["profile_picture"]["tmp_name"];
+        $name = basename($_FILES["profile_picture"]["name"]);
+        $destination_dir = "./assets/avatars/";
+        if (!file_exists($destination_dir)) {
+            mkdir($destination_dir, 0777, true);
+        }
+        $destination = $destination_dir . $name;
+        if (move_uploaded_file($tmp_name, $destination)) {
+            $update_picture_sql = "UPDATE users SET profile_picture=? WHERE id=?";
+            $stmt = $conn->prepare($update_picture_sql);
+            $stmt->bind_param("si", $name, $id);
+            $stmt->execute();
+            echo "Profile picture updated successfully.";
+        } else {
+            echo "Error uploading profile picture.";
+        }
+    }
+}
+
+$conn->close();
+?>
+
+
+<form action="update_profile.php" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="<?php echo $user_id; ?>">
+    <div class="form-group">
+        <label for="firstname">Firstname:</label>
+        <input type="text" name="firstname" class="form-control" value="<?php echo $user_firstname; ?>">
+    </div>
+    <div class="form-group">
+        <label for="lastname">Lastname:</label>
+        <input type="text" name="lastname" class="form-control" value="<?php echo $user_lastname; ?>">
+    </div>
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" name="email" class="form-control" value="<?php echo $email; ?>">
+    </div>
+    <!-- Profile picture update section -->
+    <div class="row mt-5 align-items-center">
+        <div class="col-md-3 text-center mb-5">
+            <div class="avatar avatar-xl">
+                <!-- Display current profile picture if available -->
+                <img src="./assets/avatars/<?php echo $user_profile_picture; ?>" alt="..." class="avatar-img rounded-circle">
+            </div>
+            <!-- Input field for uploading new profile picture -->
+            <input type="file" name="profile_picture" class="form-control mt-3">
+        </div>
+        <div class="col">
+            <div class="row align-items-center">
+                <div class="col-md-7">
+                    <h4 class="mb-1"><?php echo $user_firstname . ', ' . $user_lastname; ?></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Password change section -->
+    <hr class="my-4">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="old_password">Old Password</label>
+                <input type="password" name="old_password" class="form-control" id="old_password" value="<?php echo $password; ?>">
+            </div>
+            <div class="form-group">
+                <label for="new_password">New Password</label>
+                <input type="password" name="new_password" class="form-control" id="new_password">
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" name="confirm_password" class="form-control" id="confirm_password">
+            </div>
+        </div>
+    </div>
+    <!-- Submit button -->
+    <button type="submit" class="btn btn-primary">Save Change</button>
+</form>
+
               </div> <!-- /.card-body -->
             </div> <!-- /.col-12 -->
           </div> <!-- .row -->

@@ -66,7 +66,7 @@
         <nav class="vertnav navbar navbar-light">
           <!-- nav bar -->
           <div class="w-100 mb-4 d-flex">
-            <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="./index.html">
+            <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="admindashboard.php">
               <svg version="1.1" id="logo" class="navbar-brand-img brand-sm" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 120 120" xml:space="preserve">
                 <g>
                   <polygon class="st0" points="78,105 15,105 24,87 87,87 	" />
@@ -77,283 +77,107 @@
             </a>
           </div>
           <ul class="navbar-nav flex-fill w-100 mb-2">
-            <li class="nav-item dropdown">
-              <a href="#dashboard" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+            
+              <a href="#dashboard" data-toggle="collapse" aria-expanded="false" >
                 <i class="fe fe-home fe-16"></i>
-                <span class="ml-3 item-text">Dashboard</span><span class="sr-only">(current)</span>
+                <span class="ml-3 item-text"  href="admindashboard.php">Dashboard</span><span class="sr-only">(current)</span>
               </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="dashboard">
-                <li class="nav-item active">
-                  <a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">Default</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./dashboard-analytics.html"><span class="ml-1 item-text">Analytics</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./dashboard-sales.html"><span class="ml-1 item-text">E-commerce</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./dashboard-saas.html"><span class="ml-1 item-text">Saas Dashboard</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./dashboard-system.html"><span class="ml-1 item-text">Systems</span></a>
-                </li>
-              </ul>
-            </li>
+             
           </ul>
           <p class="text-muted nav-heading mt-4 mb-1">
             <span>Components</span>
           </p>
           <ul class="navbar-nav flex-fill w-100 mb-2">
+          <ul class="navbar-nav flex-fill w-100 mb-2">
             <li class="nav-item dropdown">
               <a href="#ui-elements" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
                 <i class="fe fe-box fe-16"></i>
-                <span class="ml-3 item-text">UI elements</span>
+                <span class="ml-3 item-text">SBFP-FORM</span>
               </a>
               <ul class="collapse list-unstyled pl-4 w-100" id="ui-elements">
                 <li class="nav-item">
-                  <a class="nav-link pl-3" href="./ui-color.html"><span class="ml-1 item-text">Colors</span>
+                  <a class="nav-link pl-3" href="form1.php"><span class="ml-1 item-text">SBFP-FORM 1</span>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link pl-3" href="./ui-typograpy.html"><span class="ml-1 item-text">Typograpy</span></a>
+                  <a class="nav-link pl-3" href="./ui-typograpy.html"><span class="ml-1 item-text">SBFP-FORM 2</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link pl-3" href="./ui-icons.html"><span class="ml-1 item-text">Icons</span></a>
+                  <a class="nav-link pl-3" href="./ui-icons.html"><span class="ml-1 item-text">SBFP-FORM 3</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link pl-3" href="./ui-buttons.html"><span class="ml-1 item-text">Buttons</span></a>
+                  <a class="nav-link pl-3" href="./ui-buttons.html"><span class="ml-1 item-text">SBFP-FORM 4</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link pl-3" href="./ui-notification.html"><span class="ml-1 item-text">Notifications</span></a>
+                  <a class="nav-link pl-3" href="./ui-notification.html"><span class="ml-1 item-text">SBFP-FORM 5</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link pl-3" href="./ui-modals.html"><span class="ml-1 item-text">Modals</span></a>
+                  <a class="nav-link pl-3" href="./ui-modals.html"><span class="ml-1 item-text">SBFP-FORM 6</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link pl-3" href="./ui-tabs-accordion.html"><span class="ml-1 item-text">Tabs & Accordion</span></a>
+                  <a class="nav-link pl-3" href="./ui-tabs-accordion.html"><span class="ml-1 item-text">SBFP-FORM 7</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link pl-3" href="./ui-progress.html"><span class="ml-1 item-text">Progress</span></a>
+                  <a class="nav-link pl-3" href="./ui-progress.html"><span class="ml-1 item-text">SBFP-FORM 8</span></a>
                 </li>
               </ul>
             </li>
-            <li class="nav-item w-100">
-              <a class="nav-link" href="widgets.html">
-                <i class="fe fe-layers fe-16"></i>
-                <span class="ml-3 item-text">Widgets</span>
-                <span class="badge badge-pill badge-primary">New</span>
-              </a>
-            </li>
-            <li class="nav-item dropdown">
-              <a href="#forms" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-credit-card fe-16"></i>
-                <span class="ml-3 item-text">Forms</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="forms">
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./form_elements.html"><span class="ml-1 item-text">Basic Elements</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./form_advanced.html"><span class="ml-1 item-text">Advanced Elements</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./form_validation.html"><span class="ml-1 item-text">Validation</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./form_wizard.html"><span class="ml-1 item-text">Wizard</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./form_layouts.html"><span class="ml-1 item-text">Layouts</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./form_upload.html"><span class="ml-1 item-text">File upload</span></a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a href="#tables" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-grid fe-16"></i>
-                <span class="ml-3 item-text">Tables</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="tables">
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./table_basic.html"><span class="ml-1 item-text">Basic Tables</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./table_advanced.html"><span class="ml-1 item-text">Advanced Tables</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./table_datatables.html"><span class="ml-1 item-text">Data Tables</span></a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a href="#charts" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-pie-chart fe-16"></i>
-                <span class="ml-3 item-text">Charts</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="charts">
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./chart-inline.html"><span class="ml-1 item-text">Inline Chart</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./chart-chartjs.html"><span class="ml-1 item-text">Chartjs</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./chart-apexcharts.html"><span class="ml-1 item-text">ApexCharts</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./datamaps.html"><span class="ml-1 item-text">Datamaps</span></a>
-                </li>
-              </ul>
-            </li>
+           
           </ul>
-          <p class="text-muted nav-heading mt-4 mb-1">
-            <span>Apps</span>
-          </p>
-          <ul class="navbar-nav flex-fill w-100 mb-2">
+          </ul>
+        
+
+          
+
+            <ul class="navbar-nav flex-fill w-100 mb-2">
             <li class="nav-item w-100">
-              <a class="nav-link" href="calendar.html">
+              <a class="nav-link" href="adschoollist.php">
                 <i class="fe fe-calendar fe-16"></i>
-                <span class="ml-3 item-text">Calendar</span>
+                <span class="ml-3 item-text">School List</span>
               </a>
             </li>
-            <li class="nav-item dropdown">
-              <a href="#contact" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-book fe-16"></i>
-                <span class="ml-3 item-text">Contacts</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="contact">
-                <a class="nav-link pl-3" href="./contacts-list.html"><span class="ml-1">Contact List</span></a>
-                <a class="nav-link pl-3" href="./contacts-grid.html"><span class="ml-1">Contact Grid</span></a>
-                <a class="nav-link pl-3" href="./contacts-new.html"><span class="ml-1">New Contact</span></a>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a href="#profile" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-user fe-16"></i>
-                <span class="ml-3 item-text">Profile</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="profile">
-                <a class="nav-link pl-3" href="./profile.html"><span class="ml-1">Overview</span></a>
-                <a class="nav-link pl-3" href="./profile-settings.html"><span class="ml-1">Settings</span></a>
-                <a class="nav-link pl-3" href="./profile-security.html"><span class="ml-1">Security</span></a>
-                <a class="nav-link pl-3" href="./profile-notification.html"><span class="ml-1">Notifications</span></a>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a href="#fileman" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-folder fe-16"></i>
-                <span class="ml-3 item-text">File Manager</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="fileman">
-                <a class="nav-link pl-3" href="./files-list.html"><span class="ml-1">Files List</span></a>
-                <a class="nav-link pl-3" href="./files-grid.html"><span class="ml-1">Files Grid</span></a>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a href="#support" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-compass fe-16"></i>
-                <span class="ml-3 item-text">Help Desk</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="support">
-                <a class="nav-link pl-3" href="./support-center.html"><span class="ml-1">Home</span></a>
-                <a class="nav-link pl-3" href="./support-tickets.html"><span class="ml-1">Tickets</span></a>
-                <a class="nav-link pl-3" href="./support-ticket-detail.html"><span class="ml-1">Ticket Detail</span></a>
-                <a class="nav-link pl-3" href="./support-faqs.html"><span class="ml-1">FAQs</span></a>
-              </ul>
-            </li>
-          </ul>
-          <p class="text-muted nav-heading mt-4 mb-1">
-            <span>Extra</span>
-          </p>
-          <ul class="navbar-nav flex-fill w-100 mb-2">
-            <li class="nav-item dropdown">
-              <a href="#pages" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-file fe-16"></i>
-                <span class="ml-3 item-text">Pages</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100 w-100" id="pages">
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./page-orders.html">
-                    <span class="ml-1 item-text">Orders</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./page-timeline.html">
-                    <span class="ml-1 item-text">Timeline</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./page-invoice.html">
-                    <span class="ml-1 item-text">Invoice</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./page-404.html">
-                    <span class="ml-1 item-text">Page 404</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./page-500.html">
-                    <span class="ml-1 item-text">Page 500</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./page-blank.html">
-                    <span class="ml-1 item-text">Blank</span>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a href="#auth" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-shield fe-16"></i>
-                <span class="ml-3 item-text">Authentication</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="auth">
-                <a class="nav-link pl-3" href="./auth-login.html"><span class="ml-1">Login 1</span></a>
-                <a class="nav-link pl-3" href="./auth-login-half.html"><span class="ml-1">Login 2</span></a>
-                <a class="nav-link pl-3" href="./auth-register.html"><span class="ml-1">Register</span></a>
-                <a class="nav-link pl-3" href="./auth-resetpw.html"><span class="ml-1">Reset Password</span></a>
-                <a class="nav-link pl-3" href="./auth-confirm.html"><span class="ml-1">Confirm Password</span></a>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a href="#layouts" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-layout fe-16"></i>
-                <span class="ml-3 item-text">Layout</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="layouts">
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">Default</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./index-horizontal.html"><span class="ml-1 item-text">Top Navigation</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./index-boxed.html"><span class="ml-1 item-text">Boxed</span></a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-          <p class="text-muted nav-heading mt-4 mb-1">
-            <span>Documentation</span>
-          </p>
-          <ul class="navbar-nav flex-fill w-100 mb-2">
-            <li class="nav-item w-100">
-              <a class="nav-link" href="../docs/index.html">
-                <i class="fe fe-help-circle fe-16"></i>
-                <span class="ml-3 item-text">Getting Start</span>
-              </a>
-            </li>
-          </ul>
-          <div class="btn-box w-100 mt-4 mb-1">
-            <a href="https://themeforest.net/item/tinydash-bootstrap-html-admin-dashboard-template/27511269" target="_blank" class="btn mb-2 btn-primary btn-lg btn-block">
-              <i class="fe fe-shopping-cart fe-12 mx-2"></i><span class="small">Buy now</span>
-            </a>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+              <li class="nav-item w-100">
+                <a class="nav-link" href="adbeneficiaries.php">
+                  <i class="fe fe-calendar fe-16"></i>
+                  <span class="ml-3 item-text">Beneficiaries</span>
+                </a>
+              </li>
+
+              <ul class="navbar-nav flex-fill w-100 mb-2">
+              <li class="nav-item w-100">
+                <a class="nav-link" href="adaccountmanagement.php">
+                  <i class="fe fe-calendar fe-16"></i>
+                  <span class="ml-3 item-text">Account Management</span>
+                </a>
+              </li>
+
+              <ul class="navbar-nav flex-fill w-100 mb-2">
+              <li class="nav-item w-100">
+                <a class="nav-link" href="adanalytics.php">
+                  <i class="fe fe-calendar fe-16"></i>
+                  <span class="ml-3 item-text">Analytics</span>
+                </a>
+              </li>
+
+              <ul class="navbar-nav flex-fill w-100 mb-2">
+              <li class="nav-item w-100">
+                <a class="nav-link" href="adsettings.php">
+                  <i class="fe fe-calendar fe-16"></i>
+                  <span class="ml-3 item-text">Settings</span>
+                </a>
+              </li>
+
+              <ul class="navbar-nav flex-fill w-100 mb-2">
+              <li class="nav-item w-100">
+                <a class="nav-link" href="archieves.php">
+                  <i class="fe fe-calendar fe-16"></i>
+                  <span class="ml-3 item-text">Archieves</span>
+                </a>
+              </li>
+
           </div>
+                    
         </nav>
       </aside>
       <main role="main" class="main-content">
@@ -365,10 +189,57 @@
                   <h2 class="h3 mb-0 page-title">ACCOUNT MANAGEMENT</h2>
                 </div>
                 <div class="col-auto">
-                  <button type="button" class="btn btn-secondary"><span class="fe fe-trash fe-12 mr-2"></span>Delete</button>
-                  <button type="button" class="btn btn-primary"><span class="fe fe-filter fe-12 mr-2"></span>Create</button>
+                  <!-- <button type="button" class="btn btn-secondary"><span class="fe fe-trash fe-12 mr-2"></span>Delete</button> -->
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUserModal"><span class="fe fe-filter fe-12 mr-2"></span>Create</button>
                 </div>
               </div>
+
+            <!-- Create User Modal -->
+<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createUserModalLabel">Create User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="createUserForm">
+                    <div class="form-group">
+                        <label for="createRole">Role</label>
+                        <input type="text" class="form-control" id="createRole" name="role" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="createFirstName">First Name</label>
+                        <input type="text" class="form-control" id="createFirstName" name="firstname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="createLastName">Last Name</label>
+                        <input type="text" class="form-control" id="createLastName" name="lastname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="createEmail">Email</label>
+                        <input type="email" class="form-control" id="createEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="createPhoneNumber">Phone Number</label>
+                        <input type="text" class="form-control" id="createPhoneNumber" name="phone_number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="createBirthday">Birthday</label>
+                        <input type="date" class="form-control" id="createBirthday" name="birthday" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="createPassword">Password</label>
+                        <input type="password" class="form-control" id="createPassword" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create User</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
               <!-- table -->
               <!-- <div class="card shadow">
                 <div class="card-body">
@@ -640,8 +511,7 @@
                 </div>
               </div> -->
 
-<?php
-// accountconnect.php
+              <?php
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -655,10 +525,9 @@ if ($conn->connect_error) {
 }
 ?>
 
-
 <div class="container mt-5">
     <div class="card shadow">
-        <div class="card-body">
+        <div class="card-body"> 
             <table class="table table-borderless table-hover">
                 <thead>
                 <tr>
@@ -672,7 +541,6 @@ if ($conn->connect_error) {
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
-                    <!-- <th>Password</th> -->
                     <th>Phone Number</th>
                     <th>Birthday</th>
                     <th>Role</th>
@@ -681,49 +549,239 @@ if ($conn->connect_error) {
                 </thead>
                 <tbody>
                 <?php
-                include 'accountconnection.php';
-                $sql = "SELECT id, firstname, lastname, email, password, phone_number, birthday, role FROM users";
-                $result = $conn->query($sql);
+include 'accountconnection.php';
 
-                if ($result->num_rows > 0) {
-                    while($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>
-                                <div class='custom-control custom-checkbox'>
-                                    <input type='checkbox' class='custom-control-input' id='" . $row["id"] . "'>
-                                    <label class='custom-control-label' for='" . $row["id"] . "'></label>
-                                </div>
-                              </td>";
-                        echo "<td>" . $row["id"] . "</td>";
-                        echo "<td>" . $row["firstname"] . "</td>";
-                        echo "<td>" . $row["lastname"] . "</td>";
-                        echo "<td>" . $row["email"] . "</td>";
-                        // echo "<td>" . $row["password"] . "</td>";
-                        echo "<td>" . $row["phone_number"] . "</td>";
-                        echo "<td>" . $row["birthday"] . "</td>";
-                        echo "<td>" . $row["role"] . "</td>";
-                        echo "<td>
-                                <button class='btn btn-sm dropdown-toggle more-horizontal' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                                    <span class='text-muted sr-only'>Action</span>
-                                </button>
-                                <div class='dropdown-menu dropdown-menu-right'>
-                                    <a class='dropdown-item' href='#'>Edit</a>
-                                    <a class='dropdown-item' href='#'>Remove</a>
-                                    <a class='dropdown-item' href='#'>Assign</a>
-                                </div>
-                              </td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='10'>No users found</td></tr>";
-                }
-                $conn->close();
-                ?>
+// Fetch Admin Accounts
+$sql_admin = "SELECT id, firstname, lastname, email, phone_number, birthday, role FROM users WHERE role = 'admin'";
+$result_admin = $conn->query($sql_admin);
+
+// Display Admin Accounts
+if ($result_admin->num_rows > 0) {
+    echo "<h2>Admin Accounts</h2>";
+    echo "<table class='table table-borderless table-hover'>";
+    echo "<thead>";
+    echo "<tr>";
+    echo "<th>ID</th>";
+    echo "<th>First Name</th>";
+    echo "<th>Last Name</th>";
+    echo "<th>Email</th>";
+    echo "<th>Phone Number</th>";
+    echo "<th>Birthday</th>";
+    echo "<th>Role</th>";
+    echo "<th>Action</th>";
+    echo "</tr>";
+    echo "</thead>";
+    echo "<tbody>";
+    while ($row = $result_admin->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>" . $row["id"] . "</td>";
+        echo "<td>" . $row["firstname"] . "</td>";
+        echo "<td>" . $row["lastname"] . "</td>";
+        echo "<td>" . $row["email"] . "</td>";
+        echo "<td>" . $row["phone_number"] . "</td>";
+        echo "<td>" . $row["birthday"] . "</td>";
+        echo "<td>" . $row["role"] . "</td>";
+        echo "<td>
+                <button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '" . $row['birthday'] . "', '" . $row['role'] . "')\">Edit</button>
+                <button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\">Remove</button>
+              </td>";
+        echo "</tr>";
+    }
+    echo "</tbody>";
+    echo "</table>";
+} else {
+    echo "<p>No admin accounts found</p>";
+}
+
+// Fetch SBFP Accounts
+$sql_sbfp = "SELECT id, firstname, lastname, email, phone_number, birthday, role FROM users WHERE role = 'sbfp'";
+$result_sbfp = $conn->query($sql_sbfp);
+
+// Display SBFP Accounts
+if ($result_sbfp->num_rows > 0) {
+    echo "<h2>SBFP Accounts</h2>";
+    echo "<table class='table table-borderless table-hover'>";
+    echo "<thead>";
+    echo "<tr>";
+    echo "<th>ID</th>";
+    echo "<th>First Name</th>";
+    echo "<th>Last Name</th>";
+    echo "<th>Email</th>";
+    echo "<th>Phone Number</th>";
+    echo "<th>Birthday</th>";
+    echo "<th>Role</th>";
+    echo "<th>Action</th>";
+    echo "</tr>";
+    echo "</thead>";
+    echo "<tbody>";
+    while ($row = $result_sbfp->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>" . $row["id"] . "</td>";
+        echo "<td>" . $row["firstname"] . "</td>";
+        echo "<td>" . $row["lastname"] . "</td>";
+        echo "<td>" . $row["email"] . "</td>";
+        echo "<td>" . $row["phone_number"] . "</td>";
+        echo "<td>" . $row["birthday"] . "</td>";
+        echo "<td>" . $row["role"] . "</td>";
+        echo "<td>
+                <button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '" . $row['birthday'] . "', '" . $row['role'] . "')\">Edit</button>
+                <button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\">Remove</button>
+              </td>";
+        echo "</tr>";
+    }
+    echo "</tbody>";
+    echo "</table>";
+} else {
+    echo "<p>No SBFP accounts found</p>";
+}
+
+$conn->close();
+?>
+
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editUserForm">
+                    <input type="hidden" id="editUserId" name="id">
+                    <div class="form-group">
+                        <label for="editFirstName">First Name</label>
+                        <input type="text" class="form-control" id="editFirstName" name="firstname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editLastName">Last Name</label>
+                        <input type="text" class="form-control" id="editLastName" name="lastname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editEmail">Email</label>
+                        <input type="email" class="form-control" id="editEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPhoneNumber">Phone Number</label>
+                        <input type="text" class="form-control" id="editPhoneNumber" name="phone_number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editBirthday">Birthday</label>
+                        <input type="date" class="form-control" id="editBirthday" name="birthday" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editRole">Role</label>
+                        <input type="text" class="form-control" id="editRole" name="role" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Remove User Modal -->
+<div class="modal fade" id="removeUserModal" tabindex="-1" role="dialog" aria-labelledby="removeUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="removeUserModalLabel">Remove User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to remove this user?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmRemoveUser">Remove</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let editUserModal = document.getElementById('editUserModal');
+    let removeUserModal = document.getElementById('removeUserModal');
+    let editUserId;
+    let removeUserId;
+
+    function editUser(id, firstname, lastname, email, phone_number, birthday, role) {
+        document.getElementById('editUserId').value = id;
+        document.getElementById('editFirstName').value = firstname;
+        document.getElementById('editLastName').value = lastname;
+        document.getElementById('editEmail').value = email;
+        document.getElementById('editPhoneNumber').value = phone_number;
+        document.getElementById('editBirthday').value = birthday;
+        document.getElementById('editRole').value = role;
+        $('#editUserModal').modal('show');
+    }
+
+    function removeUser(id) {
+        removeUserId = id;
+        $('#removeUserModal').modal('show');
+    }
+
+    document.getElementById('editUserForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        let formData = new FormData(this);
+        fetch('edit_user.php', {
+            method: 'POST',
+            body: formData
+        }).then(response => response.json()).then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error updating user');
+            }
+        });
+    });
+
+    document.getElementById('confirmRemoveUser').addEventListener('click', function() {
+        fetch('remove_user.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: removeUserId })
+        }).then(response => response.json()).then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error removing user');
+            }
+        });
+    });
+</script>
+
+<script>
+    document.getElementById('createUserForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        let formData = new FormData(this);
+        fetch('create_user.php', {
+            method: 'POST',
+            body: formData
+        }).then(response => response.json()).then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error creating user');
+            }
+        });
+    });
+</script>
+
+
+
 
               <nav aria-label="Table Paging" class="my-3">
                 <ul class="pagination justify-content-end mb-0">
@@ -884,5 +942,9 @@ if ($conn->connect_error) {
       gtag('js', new Date());
       gtag('config', 'UA-56159088-1');
     </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
   </body>
 </html>

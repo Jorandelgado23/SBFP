@@ -66,7 +66,7 @@
         <nav class="vertnav navbar navbar-light">
           <!-- nav bar -->
           <div class="w-100 mb-4 d-flex">
-            <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="./index.html">
+            <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="admindashboard.php">
               <svg version="1.1" id="logo" class="navbar-brand-img brand-sm" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 120 120" xml:space="preserve">
                 <g>
                   <polygon class="st0" points="78,105 15,105 24,87 87,87 	" />
@@ -77,610 +77,180 @@
             </a>
           </div>
           <ul class="navbar-nav flex-fill w-100 mb-2">
-            <li class="nav-item dropdown">
-              <a href="#dashboard" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+            
+              <a href="#dashboard" data-toggle="collapse" aria-expanded="false" >
                 <i class="fe fe-home fe-16"></i>
-                <span class="ml-3 item-text">Dashboard</span><span class="sr-only">(current)</span>
+                <span class="ml-3 item-text"  href="admindashboard.php">Dashboard</span><span class="sr-only">(current)</span>
               </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="dashboard">
-                <li class="nav-item active">
-                  <a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">Default</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./dashboard-analytics.html"><span class="ml-1 item-text">Analytics</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./dashboard-sales.html"><span class="ml-1 item-text">E-commerce</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./dashboard-saas.html"><span class="ml-1 item-text">Saas Dashboard</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./dashboard-system.html"><span class="ml-1 item-text">Systems</span></a>
-                </li>
-              </ul>
-            </li>
+             
           </ul>
           <p class="text-muted nav-heading mt-4 mb-1">
             <span>Components</span>
           </p>
           <ul class="navbar-nav flex-fill w-100 mb-2">
+          <ul class="navbar-nav flex-fill w-100 mb-2">
             <li class="nav-item dropdown">
               <a href="#ui-elements" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
                 <i class="fe fe-box fe-16"></i>
-                <span class="ml-3 item-text">UI elements</span>
+                <span class="ml-3 item-text">SBFP-FORM</span>
               </a>
               <ul class="collapse list-unstyled pl-4 w-100" id="ui-elements">
                 <li class="nav-item">
-                  <a class="nav-link pl-3" href="./ui-color.html"><span class="ml-1 item-text">Colors</span>
+                  <a class="nav-link pl-3" href="form1.php"><span class="ml-1 item-text">SBFP-FORM 1</span>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link pl-3" href="./ui-typograpy.html"><span class="ml-1 item-text">Typograpy</span></a>
+                  <a class="nav-link pl-3" href="./ui-typograpy.html"><span class="ml-1 item-text">SBFP-FORM 2</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link pl-3" href="./ui-icons.html"><span class="ml-1 item-text">Icons</span></a>
+                  <a class="nav-link pl-3" href="./ui-icons.html"><span class="ml-1 item-text">SBFP-FORM 3</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link pl-3" href="./ui-buttons.html"><span class="ml-1 item-text">Buttons</span></a>
+                  <a class="nav-link pl-3" href="./ui-buttons.html"><span class="ml-1 item-text">SBFP-FORM 4</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link pl-3" href="./ui-notification.html"><span class="ml-1 item-text">Notifications</span></a>
+                  <a class="nav-link pl-3" href="./ui-notification.html"><span class="ml-1 item-text">SBFP-FORM 5</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link pl-3" href="./ui-modals.html"><span class="ml-1 item-text">Modals</span></a>
+                  <a class="nav-link pl-3" href="./ui-modals.html"><span class="ml-1 item-text">SBFP-FORM 6</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link pl-3" href="./ui-tabs-accordion.html"><span class="ml-1 item-text">Tabs & Accordion</span></a>
+                  <a class="nav-link pl-3" href="./ui-tabs-accordion.html"><span class="ml-1 item-text">SBFP-FORM 7</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link pl-3" href="./ui-progress.html"><span class="ml-1 item-text">Progress</span></a>
+                  <a class="nav-link pl-3" href="./ui-progress.html"><span class="ml-1 item-text">SBFP-FORM 8</span></a>
                 </li>
               </ul>
             </li>
-            <li class="nav-item w-100">
-              <a class="nav-link" href="widgets.html">
-                <i class="fe fe-layers fe-16"></i>
-                <span class="ml-3 item-text">Widgets</span>
-                <span class="badge badge-pill badge-primary">New</span>
-              </a>
-            </li>
-            <li class="nav-item dropdown">
-              <a href="#forms" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-credit-card fe-16"></i>
-                <span class="ml-3 item-text">Forms</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="forms">
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./form_elements.html"><span class="ml-1 item-text">Basic Elements</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./form_advanced.html"><span class="ml-1 item-text">Advanced Elements</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./form_validation.html"><span class="ml-1 item-text">Validation</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./form_wizard.html"><span class="ml-1 item-text">Wizard</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./form_layouts.html"><span class="ml-1 item-text">Layouts</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./form_upload.html"><span class="ml-1 item-text">File upload</span></a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a href="#tables" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-grid fe-16"></i>
-                <span class="ml-3 item-text">Tables</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="tables">
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./table_basic.html"><span class="ml-1 item-text">Basic Tables</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./table_advanced.html"><span class="ml-1 item-text">Advanced Tables</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./table_datatables.html"><span class="ml-1 item-text">Data Tables</span></a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a href="#charts" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-pie-chart fe-16"></i>
-                <span class="ml-3 item-text">Charts</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="charts">
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./chart-inline.html"><span class="ml-1 item-text">Inline Chart</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./chart-chartjs.html"><span class="ml-1 item-text">Chartjs</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./chart-apexcharts.html"><span class="ml-1 item-text">ApexCharts</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./datamaps.html"><span class="ml-1 item-text">Datamaps</span></a>
-                </li>
-              </ul>
-            </li>
+           
           </ul>
-          <p class="text-muted nav-heading mt-4 mb-1">
-            <span>Apps</span>
-          </p>
-          <ul class="navbar-nav flex-fill w-100 mb-2">
+          </ul>
+        
+
+          
+
+            <ul class="navbar-nav flex-fill w-100 mb-2">
             <li class="nav-item w-100">
-              <a class="nav-link" href="calendar.html">
+              <a class="nav-link" href="adschoollist.php">
                 <i class="fe fe-calendar fe-16"></i>
-                <span class="ml-3 item-text">Calendar</span>
+                <span class="ml-3 item-text">School List</span>
               </a>
             </li>
-            <li class="nav-item dropdown">
-              <a href="#contact" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-book fe-16"></i>
-                <span class="ml-3 item-text">Contacts</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="contact">
-                <a class="nav-link pl-3" href="./contacts-list.html"><span class="ml-1">Contact List</span></a>
-                <a class="nav-link pl-3" href="./contacts-grid.html"><span class="ml-1">Contact Grid</span></a>
-                <a class="nav-link pl-3" href="./contacts-new.html"><span class="ml-1">New Contact</span></a>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a href="#profile" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-user fe-16"></i>
-                <span class="ml-3 item-text">Profile</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="profile">
-                <a class="nav-link pl-3" href="./profile.html"><span class="ml-1">Overview</span></a>
-                <a class="nav-link pl-3" href="./profile-settings.html"><span class="ml-1">Settings</span></a>
-                <a class="nav-link pl-3" href="./profile-security.html"><span class="ml-1">Security</span></a>
-                <a class="nav-link pl-3" href="./profile-notification.html"><span class="ml-1">Notifications</span></a>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a href="#fileman" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-folder fe-16"></i>
-                <span class="ml-3 item-text">File Manager</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="fileman">
-                <a class="nav-link pl-3" href="./files-list.html"><span class="ml-1">Files List</span></a>
-                <a class="nav-link pl-3" href="./files-grid.html"><span class="ml-1">Files Grid</span></a>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a href="#support" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-compass fe-16"></i>
-                <span class="ml-3 item-text">Help Desk</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="support">
-                <a class="nav-link pl-3" href="./support-center.html"><span class="ml-1">Home</span></a>
-                <a class="nav-link pl-3" href="./support-tickets.html"><span class="ml-1">Tickets</span></a>
-                <a class="nav-link pl-3" href="./support-ticket-detail.html"><span class="ml-1">Ticket Detail</span></a>
-                <a class="nav-link pl-3" href="./support-faqs.html"><span class="ml-1">FAQs</span></a>
-              </ul>
-            </li>
-          </ul>
-          <p class="text-muted nav-heading mt-4 mb-1">
-            <span>Extra</span>
-          </p>
-          <ul class="navbar-nav flex-fill w-100 mb-2">
-            <li class="nav-item dropdown">
-              <a href="#pages" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-file fe-16"></i>
-                <span class="ml-3 item-text">Pages</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100 w-100" id="pages">
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./page-orders.html">
-                    <span class="ml-1 item-text">Orders</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./page-timeline.html">
-                    <span class="ml-1 item-text">Timeline</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./page-invoice.html">
-                    <span class="ml-1 item-text">Invoice</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./page-404.html">
-                    <span class="ml-1 item-text">Page 404</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./page-500.html">
-                    <span class="ml-1 item-text">Page 500</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./page-blank.html">
-                    <span class="ml-1 item-text">Blank</span>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a href="#auth" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-shield fe-16"></i>
-                <span class="ml-3 item-text">Authentication</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="auth">
-                <a class="nav-link pl-3" href="./auth-login.html"><span class="ml-1">Login 1</span></a>
-                <a class="nav-link pl-3" href="./auth-login-half.html"><span class="ml-1">Login 2</span></a>
-                <a class="nav-link pl-3" href="./auth-register.html"><span class="ml-1">Register</span></a>
-                <a class="nav-link pl-3" href="./auth-resetpw.html"><span class="ml-1">Reset Password</span></a>
-                <a class="nav-link pl-3" href="./auth-confirm.html"><span class="ml-1">Confirm Password</span></a>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a href="#layouts" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-layout fe-16"></i>
-                <span class="ml-3 item-text">Layout</span>
-              </a>
-              <ul class="collapse list-unstyled pl-4 w-100" id="layouts">
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">Default</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./index-horizontal.html"><span class="ml-1 item-text">Top Navigation</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link pl-3" href="./index-boxed.html"><span class="ml-1 item-text">Boxed</span></a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-          <p class="text-muted nav-heading mt-4 mb-1">
-            <span>Documentation</span>
-          </p>
-          <ul class="navbar-nav flex-fill w-100 mb-2">
-            <li class="nav-item w-100">
-              <a class="nav-link" href="../docs/index.html">
-                <i class="fe fe-help-circle fe-16"></i>
-                <span class="ml-3 item-text">Getting Start</span>
-              </a>
-            </li>
-          </ul>
-          <div class="btn-box w-100 mt-4 mb-1">
-            <a href="https://themeforest.net/item/tinydash-bootstrap-html-admin-dashboard-template/27511269" target="_blank" class="btn mb-2 btn-primary btn-lg btn-block">
-              <i class="fe fe-shopping-cart fe-12 mx-2"></i><span class="small">Buy now</span>
-            </a>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+              <li class="nav-item w-100">
+                <a class="nav-link" href="adbeneficiaries.php">
+                  <i class="fe fe-calendar fe-16"></i>
+                  <span class="ml-3 item-text">Beneficiaries</span>
+                </a>
+              </li>
+
+              <ul class="navbar-nav flex-fill w-100 mb-2">
+              <li class="nav-item w-100">
+                <a class="nav-link" href="adaccountmanagement.php">
+                  <i class="fe fe-calendar fe-16"></i>
+                  <span class="ml-3 item-text">Account Management</span>
+                </a>
+              </li>
+
+              <ul class="navbar-nav flex-fill w-100 mb-2">
+              <li class="nav-item w-100">
+                <a class="nav-link" href="adanalytics.php">
+                  <i class="fe fe-calendar fe-16"></i>
+                  <span class="ml-3 item-text">Analytics</span>
+                </a>
+              </li>
+
+              <ul class="navbar-nav flex-fill w-100 mb-2">
+              <li class="nav-item w-100">
+                <a class="nav-link" href="adsettings.php">
+                  <i class="fe fe-calendar fe-16"></i>
+                  <span class="ml-3 item-text">Settings</span>
+                </a>
+              </li>
+
+              <ul class="navbar-nav flex-fill w-100 mb-2">
+              <li class="nav-item w-100">
+                <a class="nav-link" href="archieves.php">
+                  <i class="fe fe-calendar fe-16"></i>
+                  <span class="ml-3 item-text">Archieves</span>
+                </a>
+              </li>
+
           </div>
+                    
         </nav>
       </aside>
       <main role="main" class="main-content">
-        <div class="container-fluid">
-          <div class="row justify-content-center">
-            <div class="col-12">
-              <div class="row align-items-center my-4">
+      <?php
+// Step 1: Connect to the database
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Step 2: Fetch school details from the schools table
+$sql = "SELECT id, school_name, division_province, school_district_municipality, beis_id, school_address, barangay_name, supervisor_principal_name, contact_number, email_address, total_beneficiaries FROM schools";
+$result = $conn->query($sql);
+
+?>
+
+<!-- Step 3: Display the school names in clickable cards -->
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="row align-items-center my-4">
                 <div class="col">
-                  <h2 class="h3 mb-0 page-title">Contacts</h2>
+                    <h2 class="h3 mb-0 page-title">Contacts</h2>
                 </div>
                 <div class="col-auto">
-                  <button type="button" class="btn btn-secondary"><span class="fe fe-trash fe-12 mr-2"></span>Delete</button>
-                  <button type="button" class="btn btn-primary"><span class="fe fe-filter fe-12 mr-2"></span>Create</button>
+                    <button type="button" class="btn btn-secondary"><span class="fe fe-trash fe-12 mr-2"></span>Delete</button>
+                    <button type="button" class="btn btn-primary"><span class="fe fe-filter fe-12 mr-2"></span>Create</button>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-md-3">
-                  <div class="card shadow mb-4">
-                    <div class="card-body text-center">
-                      <div class="avatar avatar-lg mt-4">
-                        <a href="">
-                          <img src="./assets/avatars/face-4.jpg" alt="..." class="avatar-img rounded-circle">
-                        </a>
-                      </div>
-                      <div class="card-text my-2">
-                        <strong class="card-title my-0">Bass Wendy </strong>
-                        <p class="small text-muted mb-0">Accumsan Consulting</p>
-                        <p class="small"><span class="badge badge-light text-muted">New York, USA</span></p>
-                      </div>
-                    </div> <!-- ./card-text -->
-                    <div class="card-footer">
-                      <div class="row align-items-center justify-content-between">
-                        <div class="col-auto">
-                          <small>
-                            <span class="dot dot-lg bg-success mr-1"></span> Online </small>
-                        </div>
-                        <div class="col-auto">
-                          <div class="file-action">
-                            <button type="button" class="btn btn-link dropdown-toggle more-vertical p-0 text-muted mx-auto" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <span class="text-muted sr-only">Action</span>
-                            </button>
-                            <div class="dropdown-menu m-2">
-                              <a class="dropdown-item" href="#"><i class="fe fe-meh fe-12 mr-4"></i>Profile</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-message-circle fe-12 mr-4"></i>Chat</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-mail fe-12 mr-4"></i>Contact</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-delete fe-12 mr-4"></i>Delete</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div> <!-- /.card-footer -->
-                  </div>
-                </div> <!-- .col -->
-                <div class="col-md-3">
-                  <div class="card shadow mb-4">
-                    <div class="card-body text-center">
-                      <div class="avatar avatar-lg mt-4">
-                        <a href="">
-                          <img src="./assets/avatars/face-1.jpg" alt="..." class="avatar-img rounded-circle">
-                        </a>
-                      </div>
-                      <div class="card-text my-2">
-                        <strong class="card-title my-0">Leblanc Yoshio</strong>
-                        <p class="small text-muted mb-0">Tristique Ltd</p>
-                        <p class="small"><span class="badge badge-light text-muted">United Kingdom</span></p>
-                      </div>
-                    </div> <!-- ./card-text -->
-                    <div class="card-footer">
-                      <div class="row align-items-center justify-content-between">
-                        <div class="col-auto">
-                          <small>
-                            <span class="dot dot-lg bg-secondary mr-1"></span> Offline </small>
-                        </div>
-                        <div class="col-auto">
-                          <div class="file-action">
-                            <button type="button" class="btn btn-link dropdown-toggle more-vertical p-0 text-muted mx-auto" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <span class="text-muted sr-only">Action</span>
-                            </button>
-                            <div class="dropdown-menu m-2">
-                              <a class="dropdown-item" href="#"><i class="fe fe-meh fe-12 mr-4"></i>Profile</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-message-circle fe-12 mr-4"></i>Chat</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-mail fe-12 mr-4"></i>Contact</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-delete fe-12 mr-4"></i>Delete</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div> <!-- /.card-footer -->
-                  </div>
-                </div> <!-- .col -->
-                <div class="col-md-3">
-                  <div class="card shadow mb-4">
-                    <div class="card-body text-center">
-                      <div class="avatar avatar-lg mt-4">
-                        <a href="">
-                          <img src="./assets/avatars/face-5.jpg" alt="..." class="avatar-img rounded-circle">
-                        </a>
-                      </div>
-                      <div class="card-text my-2">
-                        <strong class="card-title my-0">Higgins Uriah</strong>
-                        <p class="small text-muted mb-0">Suspendisse LLC</p>
-                        <p class="small"><span class="badge badge-light text-muted">Canada</span></p>
-                      </div>
-                    </div> <!-- ./card-text -->
-                    <div class="card-footer">
-                      <div class="row align-items-center justify-content-between">
-                        <div class="col-auto">
-                          <small>
-                            <span class="dot dot-lg bg-success mr-1"></span> Online </small>
-                        </div>
-                        <div class="col-auto">
-                          <div class="file-action">
-                            <button type="button" class="btn btn-link dropdown-toggle more-vertical p-0 text-muted mx-auto" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <span class="text-muted sr-only">Action</span>
-                            </button>
-                            <div class="dropdown-menu m-2">
-                              <a class="dropdown-item" href="#"><i class="fe fe-meh fe-12 mr-4"></i>Profile</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-message-circle fe-12 mr-4"></i>Chat</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-mail fe-12 mr-4"></i>Contact</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-delete fe-12 mr-4"></i>Delete</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div> <!-- /.card-footer -->
-                  </div>
-                </div> <!-- .col -->
-                <div class="col-md-3">
-                  <div class="card shadow mb-4">
-                    <div class="card-body text-center">
-                      <div class="avatar avatar-lg mt-4">
-                        <a href="">
-                          <img src="./assets/avatars/face-3.jpg" alt="..." class="avatar-img rounded-circle">
-                        </a>
-                      </div>
-                      <div class="card-text my-2">
-                        <strong class="card-title my-0">Brown Asher</strong>
-                        <p class="small text-muted mb-0">Orci Luctus Et Inc.</p>
-                        <p class="small"><span class="badge badge-dark">USA</span></p>
-                      </div>
-                    </div> <!-- ./card-text -->
-                    <div class="card-footer">
-                      <div class="row align-items-center justify-content-between">
-                        <div class="col-auto">
-                          <small>
-                            <span class="dot dot-lg bg-success mr-1"></span> Online </small>
-                        </div>
-                        <div class="col-auto">
-                          <div class="file-action">
-                            <button type="button" class="btn btn-link dropdown-toggle more-vertical p-0 text-muted mx-auto" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <span class="text-muted sr-only">Action</span>
-                            </button>
-                            <div class="dropdown-menu m-2">
-                              <a class="dropdown-item" href="#"><i class="fe fe-meh fe-12 mr-4"></i>Profile</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-message-circle fe-12 mr-4"></i>Chat</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-mail fe-12 mr-4"></i>Contact</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-delete fe-12 mr-4"></i>Delete</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div> <!-- /.card-footer -->
-                  </div>
-                </div> <!-- .col -->
-                <div class="col-md-3">
-                  <div class="card shadow mb-4">
-                    <div class="card-body text-center">
-                      <div class="avatar avatar-lg mt-4">
-                        <a href="">
-                          <img src="./assets/avatars/face-4.jpg" alt="..." class="avatar-img rounded-circle">
-                        </a>
-                      </div>
-                      <div class="card-text my-2">
-                        <strong class="card-title my-0">Bass Wendy </strong>
-                        <p class="small text-muted mb-0">Accumsan Consulting</p>
-                        <p class="small"><span class="badge badge-light text-muted">New York, USA</span></p>
-                      </div>
-                    </div> <!-- ./card-text -->
-                    <div class="card-footer">
-                      <div class="row align-items-center justify-content-between">
-                        <div class="col-auto">
-                          <small>
-                            <span class="dot dot-lg bg-success mr-1"></span> Online </small>
-                        </div>
-                        <div class="col-auto">
-                          <div class="file-action">
-                            <button type="button" class="btn btn-link dropdown-toggle more-vertical p-0 text-muted mx-auto" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <span class="text-muted sr-only">Action</span>
-                            </button>
-                            <div class="dropdown-menu m-2">
-                              <a class="dropdown-item" href="#"><i class="fe fe-meh fe-12 mr-4"></i>Profile</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-message-circle fe-12 mr-4"></i>Chat</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-mail fe-12 mr-4"></i>Contact</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-delete fe-12 mr-4"></i>Delete</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div> <!-- /.card-footer -->
-                  </div>
-                </div> <!-- .col -->
-                <div class="col-md-3">
-                  <div class="card shadow mb-4">
-                    <div class="card-body text-center">
-                      <div class="avatar avatar-lg mt-4">
-                        <a href="">
-                          <img src="./assets/avatars/face-1.jpg" alt="..." class="avatar-img rounded-circle">
-                        </a>
-                      </div>
-                      <div class="card-text my-2">
-                        <strong class="card-title my-0">Leblanc Yoshio</strong>
-                        <p class="small text-muted mb-0">Tristique Ltd</p>
-                        <p class="small"><span class="badge badge-light text-muted">United Kingdom</span></p>
-                      </div>
-                    </div> <!-- ./card-text -->
-                    <div class="card-footer">
-                      <div class="row align-items-center justify-content-between">
-                        <div class="col-auto">
-                          <small>
-                            <span class="dot dot-lg bg-secondary mr-1"></span> Offline </small>
-                        </div>
-                        <div class="col-auto">
-                          <div class="file-action">
-                            <button type="button" class="btn btn-link dropdown-toggle more-vertical p-0 text-muted mx-auto" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <span class="text-muted sr-only">Action</span>
-                            </button>
-                            <div class="dropdown-menu m-2">
-                              <a class="dropdown-item" href="#"><i class="fe fe-meh fe-12 mr-4"></i>Profile</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-message-circle fe-12 mr-4"></i>Chat</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-mail fe-12 mr-4"></i>Contact</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-delete fe-12 mr-4"></i>Delete</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div> <!-- /.card-footer -->
-                  </div>
-                </div> <!-- .col -->
-                <div class="col-md-3">
-                  <div class="card shadow mb-4">
-                    <div class="card-body text-center">
-                      <div class="avatar avatar-lg mt-4">
-                        <a href="">
-                          <img src="./assets/avatars/face-5.jpg" alt="..." class="avatar-img rounded-circle">
-                        </a>
-                      </div>
-                      <div class="card-text my-2">
-                        <strong class="card-title my-0">Higgins Uriah</strong>
-                        <p class="small text-muted mb-0">Suspendisse LLC</p>
-                        <p class="small"><span class="badge badge-light text-muted">Canada</span></p>
-                      </div>
-                    </div> <!-- ./card-text -->
-                    <div class="card-footer">
-                      <div class="row align-items-center justify-content-between">
-                        <div class="col-auto">
-                          <small>
-                            <span class="dot dot-lg bg-success mr-1"></span> Online </small>
-                        </div>
-                        <div class="col-auto">
-                          <div class="file-action">
-                            <button type="button" class="btn btn-link dropdown-toggle more-vertical p-0 text-muted mx-auto" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <span class="text-muted sr-only">Action</span>
-                            </button>
-                            <div class="dropdown-menu m-2">
-                              <a class="dropdown-item" href="#"><i class="fe fe-meh fe-12 mr-4"></i>Profile</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-message-circle fe-12 mr-4"></i>Chat</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-mail fe-12 mr-4"></i>Contact</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-delete fe-12 mr-4"></i>Delete</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div> <!-- /.card-footer -->
-                  </div>
-                </div> <!-- .col -->
-                <div class="col-md-3">
-                  <div class="card shadow mb-4">
-                    <div class="card-body text-center">
-                      <div class="avatar avatar-lg mt-4">
-                        <a href="">
-                          <img src="./assets/avatars/face-3.jpg" alt="..." class="avatar-img rounded-circle">
-                        </a>
-                      </div>
-                      <div class="card-text my-2">
-                        <strong class="card-title my-0">Brown Asher</strong>
-                        <p class="small text-muted mb-0">Orci Luctus Et Inc.</p>
-                        <p class="small"><span class="badge badge-dark">USA</span></p>
-                      </div>
-                    </div> <!-- ./card-text -->
-                    <div class="card-footer">
-                      <div class="row align-items-center justify-content-between">
-                        <div class="col-auto">
-                          <small>
-                            <span class="dot dot-lg bg-success mr-1"></span> Online </small>
-                        </div>
-                        <div class="col-auto">
-                          <div class="file-action">
-                            <button type="button" class="btn btn-link dropdown-toggle more-vertical p-0 text-muted mx-auto" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <span class="text-muted sr-only">Action</span>
-                            </button>
-                            <div class="dropdown-menu m-2">
-                              <a class="dropdown-item" href="#"><i class="fe fe-meh fe-12 mr-4"></i>Profile</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-message-circle fe-12 mr-4"></i>Chat</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-mail fe-12 mr-4"></i>Contact</a>
-                              <a class="dropdown-item" href="#"><i class="fe fe-delete fe-12 mr-4"></i>Delete</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div> <!-- /.card-footer -->
-                  </div>
-                </div> <!-- .col -->
-                <div class="col-md-9">
-                </div> <!-- .col -->
-              </div> <!-- .row -->
-              <nav aria-label="Table Paging" class="my-3">
+            </div>
+            <div class="row">
+                <?php
+                // Loop through fetched data and display school names in clickable cards
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo '<div class="col-md-3">';
+                        echo '<a href="school_details.php?id=' . $row["id"] . '" style="text-decoration: none;">'; // Link to another PHP page
+                        echo '<div class="card shadow mb-4">';
+                        echo '<div class="card-body text-center">';
+                        echo '<div class="card-text my-2">';
+                        echo '<strong class="card-title my-0">' . $row["school_name"] . '</strong>';
+                        echo '</div>'; // ./card-text
+                        echo '</div>'; // ./card-body
+                        echo '</div>'; // ./card
+                        echo '</a>';
+                        echo '</div>'; // .col-md-3
+                    }
+                } else {
+                    echo "0 results";
+                }
+                $conn->close();
+                ?>
+            </div> <!-- .row -->
+            <nav aria-label="Table Paging" class="my-3">
                 <ul class="pagination justify-content-end mb-0">
-                  <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                  <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                  <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
                 </ul>
-              </nav>
-            </div> <!-- .col-12 -->
-          </div> <!-- .row -->
-        </div> <!-- .container-fluid -->
+            </nav>
+        </div> <!-- .col-12 -->
+    </div> <!-- .row -->
+</div> <!-- .container-fluid -->
+
+
         <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">

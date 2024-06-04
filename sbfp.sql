@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 03, 2024 at 02:25 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Jun 03, 2024 at 10:14 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -224,18 +224,17 @@ CREATE TABLE `users` (
   `phone_number` varchar(15) DEFAULT NULL,
   `birthday` date DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `role` varchar(50) DEFAULT NULL,
-  `profile_picture` varchar(255) DEFAULT NULL
+  `role` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `phone_number`, `birthday`, `created_at`, `role`, `profile_picture`) VALUES
-(6, 'prince joran', 'delgado', 'jorandelgado23@gmail.com', '$2y$10$XmCvMr8.O7GqE7//bH49Fe.GGghfuQ1kbLZkKn0MLxJEsGt0DK11i', '09272484827', '2009-10-14', '2024-06-03 07:48:55', 'admin', NULL),
-(7, 'jeri', 'palasin', 'jdmalasin@gmail.com', '$2y$10$av2WrfnRJyEHXDMPLh/2n.Dg.8vLEWtXz.RxXesAnPMMwlGSBtJBi', '09123345435', '2014-07-04', '2024-06-03 07:50:03', 'sbfp', NULL),
-(9, 'jeri dominic', 'palasin', 'jdpalasin@gmail.com', '$2y$10$4j3cOc0FWr143A9zRkM51.9um6nPgi6qR36NEqs9ziuu/DsN69fMG', '09123345435', '2006-02-03', '2024-06-03 08:05:52', 'admin', NULL);
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `phone_number`, `birthday`, `created_at`, `role`) VALUES
+(6, 'prince joran', 'delgado', 'jorandelgado23@gmail.com', '$2y$10$XmCvMr8.O7GqE7//bH49Fe.GGghfuQ1kbLZkKn0MLxJEsGt0DK11i', '09272484827', '2009-10-14', '2024-06-03 07:48:55', 'admin'),
+(7, 'jeri', 'palasin', 'jdmalasin@gmail.com', '$2y$10$av2WrfnRJyEHXDMPLh/2n.Dg.8vLEWtXz.RxXesAnPMMwlGSBtJBi', '09123345435', '2014-07-04', '2024-06-03 07:50:03', 'sbfp'),
+(9, 'jeri dominic', 'palasin', 'jdpalasin@gmail.com', '$2y$10$4j3cOc0FWr143A9zRkM51.9um6nPgi6qR36NEqs9ziuu/DsN69fMG', '09123345435', '2006-02-03', '2024-06-03 08:05:52', 'admin');
 
 --
 -- Indexes for dumped tables

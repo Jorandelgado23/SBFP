@@ -574,7 +574,7 @@ if ($conn->connect_error) {
         <div class="card-body"> 
             <table class="table table-borderless table-hover">
                 <thead>
-                <tr>
+                <!-- <tr>
                     <th>
                         <div class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="all2">
@@ -590,7 +590,7 @@ if ($conn->connect_error) {
                     <th>Role</th>
                     <th>Action</th>
                 </tr>
-                </thead>
+                </thead> -->
                 <tbody>
                 <?php
 include 'accountconnection.php';

@@ -19,7 +19,7 @@
     <!-- App CSS -->
     <link rel="stylesheet" href="css/app-light.css" id="lightTheme">
     <link rel="stylesheet" href="css/app-dark.css" id="darkTheme" disabled>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.1.3/cerulean/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.1.3/cerulean/bootstrap.min.css"> -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
 
@@ -158,18 +158,34 @@ $conn->close();
              
             </li>
             <li class="nav-item">
-            <a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">SBFP-FORM 4</span></a>
+            <a class="nav-link pl-3" href="form4.php"><span class="ml-1 item-text">SBFP-FORM 4</span></a>
             <i class="fe fe-file fe-16"></i>
             </li>
             <li class="nav-item">
-            <a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">SBFP-FORM 5</span></a>
+            <a class="nav-link pl-3" href="form5.php"><span class="ml-1 item-text">SBFP-FORM 5</span></a>
             <i class="fe fe-file fe-16"></i>
           </li>
           <li class="nav-item">
             <a class="nav-link pl-3" href="./form6.php"><span class="ml-1 item-text">SBFP-FORM 6</span></a>
             <i class="fe fe-file fe-16"></i>
           </li>
+          <li class="nav-item">
+            <a class="nav-link pl-3" href="./form7.php"><span class="ml-1 item-text">SBFP-FORM 7</span></a>
+            <i class="fe fe-file fe-16"></i>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link pl-3" href="./form8.php"><span class="ml-1 item-text">SBFP-FORM 8</span></a>
+            <i class="fe fe-file fe-16"></i>
+          </li>
           </ul>
+
+          <ul class="navbar-nav flex-fill w-100 mb-2">
+              <li class="nav-item w-100">
+              <a class="nav-link" href="usersetting.php">
+                  <i class="fe fe-calendar fe-16"></i>
+                  <span class="ml-3 item-text">Settings</span>
+                </a>
+              </li>
          
           </div>
         </nav>
@@ -178,117 +194,146 @@ $conn->close();
         <div class="container-fluid">
           <div class="row justify-content-center">
             <div class="col-12">
-              <h1 class="page-title">Let's start</h1>
+              <h1 class="page-title">SCHOOL-BASED FEEDING PROGRAM - MILK COMPONENT</h1>
             </div> <!-- .col-12 -->
           </div> <!-- .row -->
         </div> <!-- .container-fluid -->
 
 <div class="container mt-5">
-    <h1>School-Based Feeding Program - Milk Component</h1>
-    <form action="submit6.php" method="post" id="consolidatedForm">
-        <h2>School Information</h2>
-        <div class="mb-3">
-            <label for="regionDivisionDistrict" class="form-label">REGION/DIVISION/DISTRICT:</label>
-            <input type="text" class="form-control" id="regionDivisionDistrict" name="region_division_district" required>
-        </div>
-        <div class="mb-3">
-            <label for="nameOfSchool" class="form-label">NAME OF SCHOOL:</label>
-            <input type="text" class="form-control" id="nameOfSchool" name="name_of_school" required>
-        </div>
-        <div class="mb-3">
-            <label for="schoolIdNumber" class="form-label">School ID Number:</label>
-            <input type="text" class="form-control" id="schoolIdNumber" name="school_id_number" required>
-        </div>
+<div class="container">
+  <h1>Submit School and Student Information</h1>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#formModal">
+    Open Form
+  </button>
 
-        <h2 class="mt-5">Student Information</h2>
-        <div id="studentSection">
-            <div class="student-info">
-                <div class="mb-3">
-                    <label for="studentName" class="form-label">Name:</label>
-                    <input type="text" class="form-control" id="studentName" name="student_name[]" required>
-                </div>
-                <div class="mb-3">
-                    <label for="gradeSection" class="form-label">Grade & Section:</label>
-                    <input type="text" class="form-control" id="gradeSection" name="grade_section[]" required>
-                </div>
-                <div class="mb-3">
-                    <label>Classification of Students in terms of Milk Tolerance (Please check one):</label>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="milk_tolerance[0]" value="Without milk intolerance and will participate in milk feeding" required>
-                        <label class="form-check-label">Without milk intolerance and will participate in milk feeding</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="milk_tolerance[0]" value="With milk intolerance but willing to participate in milk feeding" required>
-                        <label class="form-check-label">With milk intolerance but willing to participate in milk feeding</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="milk_tolerance[0]" value="Not allowed by parents to participate in milk feeding" required>
-                        <label class="form-check-label">Not allowed by parents to participate in milk feeding</label>
-                    </div>
-                </div>
-            </div>
+  <!-- Modal -->
+  <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formModalLabel">School and Student Information</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <button type="button" class="btn btn-secondary" onclick="addStudent()">Add Another Student</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+        <div class="modal-body">
+          <form action="submit6.php" method="post" id="consolidatedForm">
+            <h2>School Information</h2>
+            <div class="mb-3">
+              <label for="regionDivisionDistrict" class="form-label">REGION/DIVISION/DISTRICT:</label>
+              <input type="text" class="form-control" id="regionDivisionDistrict" name="region_division_district" required>
+            </div>
+            <div class="mb-3">
+              <label for="nameOfSchool" class="form-label">NAME OF SCHOOL:</label>
+              <input type="text" class="form-control" id="nameOfSchool" name="name_of_school" required>
+            </div>
+            <div class="mb-3">
+              <label for="schoolIdNumber" class="form-label">School ID Number:</label>
+              <input type="text" class="form-control" id="schoolIdNumber" name="school_id_number" required>
+            </div>
+
+            <h2 class="mt-5">Student Information</h2>
+            <div id="studentSection">
+              <div class="student-info">
+                <div class="mb-3">
+                  <label for="studentName" class="form-label">Name:</label>
+                  <input type="text" class="form-control" id="studentName" name="student_name[]" required>
+                </div>
+                <div class="mb-3">
+                  <label for="gradeSection" class="form-label">Grade & Section:</label>
+                  <input type="text" class="form-control" id="gradeSection" name="grade_section[]" required>
+                </div>
+                <div class="mb-3">
+                  <label>Classification of Students in terms of Milk Tolerance (Please check one):</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="milk_tolerance[0]" value="Without milk intolerance and will participate in milk feeding" required>
+                    <label class="form-check-label">Without milk intolerance and will participate in milk feeding</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="milk_tolerance[0]" value="With milk intolerance but willing to participate in milk feeding" required>
+                    <label class="form-check-label">With milk intolerance but willing to participate in milk feeding</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="milk_tolerance[0]" value="Not allowed by parents to participate in milk feeding" required>
+                    <label class="form-check-label">Not allowed by parents to participate in milk feeding</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="addStudent()">Add Another Student</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-    let studentIndex = 1;
+  let studentIndex = 1;
 
-    function addStudent() {
-        const studentSection = document.getElementById('studentSection');
-        const newStudent = document.createElement('div');
-        newStudent.classList.add('student-info');
-        newStudent.innerHTML = `
-            <div class="mb-3">
-                <label for="studentName" class="form-label">Name:</label>
-                <input type="text" class="form-control" id="studentName" name="student_name[]" required>
-            </div>
-            <div class="mb-3">
-                <label for="gradeSection" class="form-label">Grade & Section:</label>
-                <input type="text" class="form-control" id="gradeSection" name="grade_section[]" required>
-            </div>
-            <div class="mb-3">
-                <label>Classification of Students in terms of Milk Tolerance (Please check one):</label>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="milk_tolerance[${studentIndex}]" value="Without milk intolerance and will participate in milk feeding" required>
-                    <label class="form-check-label">Without milk intolerance and will participate in milk feeding</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="milk_tolerance[${studentIndex}]" value="With milk intolerance but willing to participate in milk feeding" required>
-                    <label class="form-check-label">With milk intolerance but willing to participate in milk feeding</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="milk_tolerance[${studentIndex}]" value="Not allowed by parents to participate in milk feeding" required>
-                    <label class="form-check-label">Not allowed by parents to participate in milk feeding</label>
-                </div>
-            </div>
-        `;
-        studentSection.appendChild(newStudent);
-        studentIndex++;
-    }
+  function addStudent() {
+    const studentSection = document.getElementById('studentSection');
+    const newStudent = document.createElement('div');
+    newStudent.classList.add('student-info');
+    newStudent.innerHTML = `
+      <div class="mb-3">
+        <label for="studentName" class="form-label">Name:</label>
+        <input type="text" class="form-control" id="studentName" name="student_name[]" required>
+      </div>
+      <div class="mb-3">
+        <label for="gradeSection" class="form-label">Grade & Section:</label>
+        <input type="text" class="form-control" id="gradeSection" name="grade_section[]" required>
+      </div>
+      <div class="mb-3">
+        <label>Classification of Students in terms of Milk Tolerance (Please check one):</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="milk_tolerance[${studentIndex}]" value="Without milk intolerance and will participate in milk feeding" required>
+          <label class="form-check-label">Without milk intolerance and will participate in milk feeding</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="milk_tolerance[${studentIndex}]" value="With milk intolerance but willing to participate in milk feeding" required>
+          <label class="form-check-label">With milk intolerance but willing to participate in milk feeding</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="milk_tolerance[${studentIndex}]" value="Not allowed by parents to participate in milk feeding" required>
+          <label class="form-check-label">Not allowed by parents to participate in milk feeding</label>
+        </div>
+      </div>
+    `;
+    studentSection.appendChild(newStudent);
+    studentIndex++;
+  }
+  
 
-    document.getElementById('consolidatedForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, submit it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                event.target.submit();
-            }
-        });
+  document.getElementById('consolidatedForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, submit it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        event.target.submit();
+      }
     });
+  });
 </script>
 
 
 <?php
+
+
+// Redirect to login page if the user is not logged in
+if (!isset($_SESSION['email'])) {
+    header("Location: login.php");
+    exit();
+}
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -302,8 +347,21 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT * FROM milkcomponent";
-$result = $conn->query($sql);
+// Retrieve session_id of the logged-in user
+$email = $_SESSION['email'];
+$stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($session_id);
+$stmt->fetch();
+$stmt->close();
+
+// Fetch data associated with the session_id of the logged-in user
+$stmt = $conn->prepare("SELECT * FROM milkcomponent WHERE session_id = ?");
+$stmt->bind_param("s", $session_id);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
 <div class="container mt-5">
@@ -341,6 +399,7 @@ $result = $conn->query($sql);
         </tbody>
     </table>
 </div>
+
 
 
 

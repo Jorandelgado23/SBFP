@@ -264,22 +264,57 @@ $conn->close();
               </li>
 
           </div>
-        <main role="main" class="main-content">
+          <main role="main" class="main-content">
     <div class="container">
-        <h1 class="mt-5"><?php echo $school_name; ?> Details</h1>
-        <p><strong>Division/Province:</strong> <?php echo $division_province; ?></p>
-        <p><strong>School District/Municipality:</strong> <?php echo $school_district_municipality; ?></p>
-        <p><strong>BEIS ID:</strong> <?php echo $beis_id; ?></p>
-        <p><strong>School Address:</strong> <?php echo $school_address; ?></p>
-        <p><strong>Barangay Name:</strong> <?php echo $barangay_name; ?></p>
-        <p><strong>Supervisor/Principal Name:</strong> <?php echo $supervisor_principal_name; ?></p>
-        <p><strong>Contact Number:</strong> <?php echo $contact_number; ?></p>
-        <p><strong>Email Address:</strong> <?php echo $email_address; ?></p>
-        <p><strong>Total Beneficiaries:</strong> <?php echo $total_beneficiaries; ?></p>
-        <a href="javascript:history.back()" class="btn btn-primary">Back</a>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><?php echo $school_name; ?> Details</h5>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Division/Province</th>
+                            <td><?php echo $division_province; ?></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">School District/Municipality</th>
+                            <td><?php echo $school_district_municipality; ?></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">BEIS ID</th>
+                            <td><?php echo $beis_id; ?></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">School Address</th>
+                            <td><?php echo $school_address; ?></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Barangay Name</th>
+                            <td><?php echo $barangay_name; ?></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Supervisor/Principal Name</th>
+                            <td><?php echo $supervisor_principal_name; ?></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Contact Number</th>
+                            <td><?php echo $contact_number; ?></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Email Address</th>
+                            <td><?php echo $email_address; ?></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Total Beneficiaries</th>
+                            <td><?php echo $total_beneficiaries; ?></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a href="javascript:history.back()" class="btn btn-primary">Back</a>
+            </div>
+        </div>
     </div>
+</main>
 
-    </main>
 
     <script src="js/jquery.min.js"></script>
     <script src="js/popper.min.js"></script>

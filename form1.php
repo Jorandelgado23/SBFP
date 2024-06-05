@@ -19,6 +19,11 @@
     <!-- App CSS -->
     <link rel="stylesheet" href="css/app-light.css" id="lightTheme">
     <link rel="stylesheet" href="css/app-dark.css" id="darkTheme" disabled>
+
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
   </head>
  
   <body class="vertical  light  ">
@@ -87,8 +92,12 @@ if ($stmt->num_rows > 0) {
 }
 
 $stmt->close();
-$conn->close();
+
+// Now you can use $user_firstname and $user_lastname in your code to display user information.
+// For example:
+echo "Welcome, $user_firstname $user_lastname!";
 ?>
+
 
     <div>
         <span class="avatar avatar-sm mt-2">
@@ -157,18 +166,36 @@ $conn->close();
              
             </li>
             <li class="nav-item">
-            <a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">SBFP-FORM 4</span></a>
+            <a class="nav-link pl-3" href="form4.php"><span class="ml-1 item-text">SBFP-FORM 4</span></a>
             <i class="fe fe-file fe-16"></i>
             </li>
             <li class="nav-item">
-            <a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">SBFP-FORM 5</span></a>
+            <a class="nav-link pl-3" href="form5.php"><span class="ml-1 item-text">SBFP-FORM 5</span></a>
             <i class="fe fe-file fe-16"></i>
           </li>
           <li class="nav-item">
             <a class="nav-link pl-3" href="./form6.php"><span class="ml-1 item-text">SBFP-FORM 6</span></a>
             <i class="fe fe-file fe-16"></i>
           </li>
+          <li class="nav-item">
+            <a class="nav-link pl-3" href="./form7.php"><span class="ml-1 item-text">SBFP-FORM 7</span></a>
+            <i class="fe fe-file fe-16"></i>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link pl-3" href="./form8.php"><span class="ml-1 item-text">SBFP-FORM 8</span></a>
+            <i class="fe fe-file fe-16"></i>
+          </li>
+
+          
           </ul>
+
+          <ul class="navbar-nav flex-fill w-100 mb-2">
+              <li class="nav-item w-100">
+              <a class="nav-link" href="usersetting.php">
+                  <i class="fe fe-calendar fe-16"></i>
+                  <span class="ml-3 item-text">Settings</span>
+                </a>
+              </li>
          
           </div>
         </nav>
@@ -330,90 +357,327 @@ $conn->close();
         </div>
     </div>
 </section>
+
+<?php
+
+if (!isset($_SESSION['email'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Retrieve session_id of the logged-in user
+$email = $_SESSION['email'];
+$stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($session_id);
+$stmt->fetch();
+$stmt->close();
+
+// Fetch submitted data for the logged-in user only
+$sql = "SELECT * FROM beneficiary_details WHERE session_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $session_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+?>
+
 <div class="container-fluid">
-          <div class="row justify-content-center">
-          <div class="row my-4">
-                <!-- Small table -->
-                <div class="col-md-12">
-                  <div class="card shadow">
-                    <div class="card-body">
-                      <!-- table -->
-                      <table class="table datatables" id="dataTable-1">
-            <thead>
+  <div class="row justify-content-center">
+    <div class="row my-4">
+      <!-- Small table -->
+      <div class="col-md-12">
+        <div class="card shadow">
+          <div class="card-body">
+            <!-- table -->
+            <table class="table datatables" id="dataTable-1">
+              <thead>
                 <tr>
-                    <th>No.</th>
-                    <th>Name</th>
-                    <th>Sex</th>
-                    <th>Grade/Section</th>
-                    <th>Date of Birth</th>
-                    <th>Date of Weighing</th>
-                    <th>Age</th>
-                    <th>Weight (Kg)</th>
-                    <th>Height (cm)</th>
-                    <th>BMI</th>
-                    <th>Nutritional Status (BMI-A)</th>
-                    <th>Nutritional Status (HFA)</th>
-                    <th>Dewormed?</th>
-                    <th>Parent's consent for milk?</th>
-                    <th>Participation in 4Ps?</th>
-                    <th>Beneficiary of SBFP in Previous Years?</th>
+                  <th>No.</th>
+                  <th>Name</th>
+                  <th>Sex</th>
+                  <th>Grade/Section</th>
+                  <th>Date of Birth</th>
+                  <th>Date of Weighing</th>
+                  <th>Age</th>
+                  <th>Weight (Kg)</th>
+                  <th>Height (cm)</th>
+                  <th>BMI</th>
+                  <th>Nutritional Status (BMI-A)</th>
+                  <th>Nutritional Status (HFA)</th>
+                  <th>Dewormed?</th>
+                  <th>Parent's consent for milk?</th>
+                  <th>Participation in 4Ps?</th>
+                  <th>Beneficiary of SBFP in Previous Years?</th>
+                  <th>Actions</th>
                 </tr>
-            </thead>
-            <tbody>
-            </div>
-            </div>
-            </div>
+              </thead>
+              <tbody>
+                <?php
+                if ($result->num_rows > 0) {
+                    $count = 1;
+                    // Output data of each row
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $count++ . "</td>";
+                        echo "<td>" . $row["name"] . "</td>";
+                        echo "<td>" . $row["sex"] . "</td>";
+                        echo "<td>" . $row["grade_section"] . "</td>";
+                        echo "<td>" . $row["date_of_birth"] . "</td>";
+                        echo "<td>" . $row["date_of_weighing"] . "</td>";
+                        echo "<td>" . $row["age"] . "</td>";
+                        echo "<td>" . $row["weight"] . "</td>";
+                        echo "<td>" . $row["height"] . "</td>";
+                        echo "<td>" . $row["bmi"] . "</td>";
+                        echo "<td>" . $row["nutritional_status_bmia"] . "</td>";
+                        echo "<td>" . $row["nutritional_status_hfa"] . "</td>";
+                        echo "<td>" . $row["dewormed"] . "</td>";
+                        echo "<td>" . $row["parents_consent_for_milk"] . "</td>";
+                        echo "<td>" . $row["participation_in_4ps"] . "</td>";
+                        echo "<td>" . $row["beneficiary_of_sbfp_in_previous_years"] . "</td>";
+                        echo "<td><button class='btn btn-primary edit-btn' data-id='" . $row["id"] . "'>Edit</button> <button class='btn btn-danger remove-btn' data-id='" . $row["id"] . "'>Remove</button></td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='17'>No data available</td></tr>";
+                }
+                $stmt->close();
+                $conn->close();
+                ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-        </section>
-        </main>
-        <?php
-        // Connect to database
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "sbfp";
-        $conn = new mysqli($servername, $username, $password, $dbname);
 
-        // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit Beneficiary Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editForm">
+          <input type="hidden" id="edit-id">
+          <div class="form-group">
+            <label for="edit-name">Name</label>
+            <input type="text" class="form-control" id="edit-name" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-sex">Sex</label>
+            <select class="form-control" id="edit-sex" required>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="edit-grade_section">Grade/Section</label>
+            <input type="text" class="form-control" id="edit-grade_section" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-date_of_birth">Date of Birth</label>
+            <input type="date" class="form-control" id="edit-date_of_birth" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-date_of_weighing">Date of Weighing</label>
+            <input type="date" class="form-control" id="edit-date_of_weighing" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-age">Age</label>
+            <input type="text" class="form-control" id="edit-age" readonly>
+          </div>
+          <div class="form-group">
+            <label for="edit-weight">Weight (Kg)</label>
+            <input type="number" class="form-control" id="edit-weight" step="0.01" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-height">Height (cm)</label>
+            <input type="number" class="form-control" id="edit-height" step="0.01" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-bmi">BMI</label>
+            <input type="text" class="form-control" id="edit-bmi" readonly>
+          </div>
+          <div class="form-group">
+            <label for="edit-nutritional_status_bmia">Nutritional Status (BMI-A)</label>
+            <select class="form-control" id="edit-nutritional_status_bmia" required>
+              <option value="Severely Wasted">Severely Wasted</option>
+              <option value="Wasted">Wasted</option>
+              <option value="Normal">Normal</option>
+              <option value="Overweight">Overweight</option>
+              <option value="Obese">Obese</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="edit-nutritional_status_hfa">Nutritional Status (HFA)</label>
+            <select class="form-control" id="edit-nutritional_status_hfa" required>
+              <option value="Stunted">Stunted</option>
+              <option value="Normal">Normal</option>
+              <option value="Tall">Tall</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn-primary" id="saveChanges">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+$(document).ready(function() {
+  // Handle Edit button click
+  $('.edit-btn').on('click', function() {
+    var id = $(this).data('id');
+    $.ajax({
+      url: 'fetch_beneficiary.php',
+      type: 'post',
+      data: { id: id },
+      success: function(response) {
+        response = JSON.parse(response);
+        $('#edit-id').val(response.id);
+        $('#edit-name').val(response.name);
+        $('#edit-sex').val(response.sex);
+        $('#edit-grade_section').val(response.grade_section);
+        $('#edit-date_of_birth').val(response.date_of_birth);
+        $('#edit-date_of_weighing').val(response.date_of_weighing);
+        $('#edit-age').val(response.age);
+        $('#edit-weight').val(response.weight);
+        $('#edit-height').val(response.height);
+        $('#edit-bmi').val(response.bmi);
+        $('#edit-nutritional_status_bmia').val(response.nutritional_status_bmia);
+        $('#edit-nutritional_status_hfa').val(response.nutritional_status_hfa);
+        $('#editModal').modal('show');
+      }
+    });
+  });
+
+  // Handle Save Changes button click
+  $('#saveChanges').on('click', function() {
+    var id = $('#edit-id').val();
+    var name = $('#edit-name').val();
+    var sex = $('#edit-sex').val();
+    var grade_section = $('#edit-grade_section').val();
+    var date_of_birth = $('#edit-date_of_birth').val();
+    var date_of_weighing = $('#edit-date_of_weighing').val();
+    var age = $('#edit-age').val();
+    var weight = $('#edit-weight').val();
+    var height = $('#edit-height').val();
+    var bmi = $('#edit-bmi').val();
+    var nutritional_status_bmia = $('#edit-nutritional_status_bmia').val();
+    var nutritional_status_hfa = $('#edit-nutritional_status_hfa').val();
+    $.ajax({
+      url: 'update_beneficiary.php',
+      type: 'post',
+      data: {
+        id: id,
+        name: name,
+        sex: sex,
+        grade_section: grade_section,
+        date_of_birth: date_of_birth,
+        date_of_weighing: date_of_weighing,
+        age: age,
+        weight: weight,
+        height: height,
+        bmi: bmi,
+        nutritional_status_bmia: nutritional_status_bmia,
+        nutritional_status_hfa: nutritional_status_hfa
+      },
+      success: function(response) {
+        alert(response);
+        $('#editModal').modal('hide');
+        location.reload();
+      }
+    });
+  });
+
+  // Handle Remove button click
+  $('.remove-btn').on('click', function() {
+    var id = $(this).data('id');
+    if (confirm('Are you sure you want to remove this record?')) {
+      $.ajax({
+        url: 'remove_beneficiary.php',
+        type: 'post',
+        data: { id: id },
+        success: function(response) {
+          alert(response);
+          location.reload();
         }
+      });
+    }
+  });
 
-        // Fetch submitted data
-        $sql = "SELECT * FROM beneficiary_details";
-        $result = $conn->query($sql);
+  // Auto-compute age
+  $('#edit-date_of_birth, #edit-date_of_weighing').on('change', function() {
+    var dob = new Date($('#edit-date_of_birth').val());
+    var dow = new Date($('#edit-date_of_weighing').val());
+    if (dob && dow) {
+      var age = dow.getFullYear() - dob.getFullYear();
+      var m = dow.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && dow.getDate() < dob.getDate())) {
+        age--;
+      }
+      $('#edit-age').val(age);
+    }
+  });
 
-        if ($result->num_rows > 0) {
-            $count = 1;
-            // Output data of each row
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . $count++ . "</td>";
-                echo "<td>" . $row["name"] . "</td>";
-                echo "<td>" . $row["sex"] . "</td>";
-                echo "<td>" . $row["grade_section"] . "</td>";
-                echo "<td>" . $row["date_of_birth"] . "</td>";
-                echo "<td>" . $row["date_of_weighing"] . "</td>";
-                echo "<td>" . $row["age"] . "</td>";
-                echo "<td>" . $row["weight"] . "</td>";
-                echo "<td>" . $row["height"] . "</td>";
-                echo "<td>" . $row["bmi"] . "</td>";
-                echo "<td>" . $row["nutritional_status_bmia"] . "</td>";
-                echo "<td>" . $row["nutritional_status_hfa"] . "</td>";
-                echo "<td>" . $row["dewormed"] . "</td>";
-                echo "<td>" . $row["parents_consent_for_milk"] . "</td>";
-                echo "<td>" . $row["participation_in_4ps"] . "</td>";
-                echo "<td>" . $row["beneficiary_of_sbfp_in_previous_years"] . "</td>";
-                echo "</tr>";
-            }
-        } else {
-            echo "<tr><td colspan='16'>No data available</td></tr>";
+  // Auto-compute BMI and Nutritional Status (BMI-A) and (HFA)
+  $('#edit-weight, #edit-height').on('input', function() {
+    var weight = parseFloat($('#edit-weight').val());
+    var height = parseFloat($('#edit-height').val());
+    if (weight && height) {
+      var bmi = (weight / Math.pow(height / 100, 2)).toFixed(2);
+      $('#edit-bmi').val(bmi);
+
+      // Compute Nutritional Status (BMI-A)
+      var bmi_status = 'Normal';
+      if (bmi < 16) {
+        bmi_status = 'Severely Wasted';
+      } else if (bmi < 18.5) {
+        bmi_status = 'Wasted';
+      } else if (bmi > 25) {
+        bmi_status = 'Overweight';
+      } else if (bmi > 30) {
+        bmi_status = 'Obese';
+      }
+      $('#edit-nutritional_status_bmia').val(bmi_status);
+
+      // Compute Nutritional Status (HFA)
+      var age = parseInt($('#edit-age').val());
+      var hfa_status = 'Normal';
+      if (age) {
+        if (height < (age * 5)) {  // Simple assumption for stunted
+          hfa_status = 'Stunted';
+        } else if (height > (age * 8)) {  // Simple assumption for tall
+          hfa_status = 'Tall';
         }
-        $conn->close();
-        ?>
-        </tbody>
-    </table>
-
+      }
+      $('#edit-nutritional_status_hfa').val(hfa_status);
+    }
+  });
+});
+</script>
     <script>
         function addBeneficiary() {
             let beneficiaryDetails = document.getElementById('beneficiary_details');
@@ -492,6 +756,9 @@ $conn->close();
             }
         }
     </script>
+
+
+
         <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">

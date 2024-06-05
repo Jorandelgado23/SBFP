@@ -1,5 +1,3 @@
-
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -8,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="favicon.ico">
-    <title>SBFP FORM 2</title>
+    <title>DASHBOARD</title>
     <!-- Simple bar CSS -->
     <link rel="stylesheet" href="css/simplebar.css">
     <!-- Fonts CSS -->
@@ -21,7 +19,7 @@
     <link rel="stylesheet" href="css/app-light.css" id="lightTheme">
     <link rel="stylesheet" href="css/app-dark.css" id="darkTheme" disabled>
   </head>
-
+ 
   <body class="vertical  light  ">
     <div class="wrapper">
       <nav class="topnav navbar navbar-light">
@@ -127,7 +125,7 @@ $conn->close();
           </div>
           <ul class="navbar-nav flex-fill w-100 mb-2">
             
-          <a href="#dashboard" data-toggle="collapse" aria-expanded="false" >
+              <a href="#dashboard" data-toggle="collapse" aria-expanded="false" >
                 <i class="fe fe-home fe-16"></i>
                 <span class="ml-3 item-text"  href="dashboard.php">Dashboard</span><span class="sr-only">(current)</span>
               </a>
@@ -169,9 +167,8 @@ $conn->close();
             <i class="fe fe-file fe-16"></i>
           </li>
           <li class="nav-item">
-            <a class="nav-link pl-3" href="./form7.php"><span class="ml-1 item-text">SBFP-FORM 7</span></a>
+            <a class="nav-link pl-3" href="./form6.php"><span class="ml-1 item-text">SBFP-FORM 7</span></a>
             <i class="fe fe-file fe-16"></i>
-          </li>
           </li>
           <li class="nav-item">
             <a class="nav-link pl-3" href="./form8.php"><span class="ml-1 item-text">SBFP-FORM 8</span></a>
@@ -193,172 +190,12 @@ $conn->close();
       <main role="main" class="main-content">
         <div class="container-fluid">
           <div class="row justify-content-center">
-            <div class="col-12">
-              <!-- <h1 class="page-title">Let's start</h1> -->
-            </div> <!-- .col-12 -->
+          <div class="col-12">
+            <h1 class="page-title">Let's start</h1>
+            
+        </div> <!-- .col-12 -->
           </div> <!-- .row -->
         </div> <!-- .container-fluid -->
-        
-        <h1>School-Based Feeding Program (SBFP) - List of Schools</h1>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#formModal">
-        OPEN FORM
-    </button>
-
-    <!-- The Modal -->
-    <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="formModalLabel">Beneficiary Form</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="submit2.php" method="post">
-                        <div class="form-group">
-                            <label>Division/Province:</label>
-                            <input type="text" class="form-control" name="division_province" required>
-                        </div>
-                        <div class="form-group">
-                            <label>School District/City/Municipality:</label>
-                            <input type="text" class="form-control" name="school_district_municipality" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Name of School:</label>
-                            <input type="text" class="form-control" name="school_name" required>
-                        </div>
-                        <div class="form-group">
-                            <label>BEIS ID No.:</label>
-                            <input type="text" class="form-control" name="beis_id">
-                        </div>
-                        <div class="form-group">
-                            <label>School Address:</label>
-                            <input type="text" class="form-control" name="school_address">
-                        </div>
-                        <div class="form-group">
-                            <label>Name of Barangay:</label>
-                            <input type="text" class="form-control" name="barangay_name">
-                        </div>
-                        <div class="form-group">
-                            <label>Name of District Supervisors/School Principal or OICs:</label>
-                            <input type="text" class="form-control" name="supervisor_principal_name">
-                        </div>
-                        <div class="form-group">
-                            <label>Contact Number:</label>
-                            <input type="text" class="form-control" name="contact_number">
-                        </div>
-                        <div class="form-group">
-                            <label>Email Address:</label>
-                            <input type="text" class="form-control" name="email_address">
-                        </div>
-                        <div class="form-group">
-                            <label>Total Beneficiaries:</label>
-                            <input type="number" class="form-control" name="total_beneficiaries" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-      <?php
-
-  if (!isset($_SESSION['email'])) {
-      header("Location: login.php");
-      exit();
-  }
-
-  $servername = "localhost";
-  $username = "root";
-  $password = "";
-  $dbname = "sbfp";
-
-  $conn = new mysqli($servername, $username, $password, $dbname);
-
-  if ($conn->connect_error) {
-      die("Connection failed: " . $conn->connect_error);
-  }
-
-  // Retrieve session_id of the logged-in user
-  $email = $_SESSION['email'];
-  $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
-  $stmt->bind_param("s", $email);
-  $stmt->execute();
-  $stmt->store_result();
-  $stmt->bind_result($session_id);
-  $stmt->fetch();
-  $stmt->close();
-
-  // Fetch data associated with the session_id of the logged-in user
-  $stmt = $conn->prepare("SELECT * FROM schools WHERE session_id = ?");
-  $stmt->bind_param("s", $session_id);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  ?>
-
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="row my-4">
-            <!-- Small table -->
-            <div class="col-md-12">
-                <div class="card shadow">
-                    <div class="card-body">
-                        <!-- table -->
-                        <table class="table datatables" id="dataTable-1">
-                            <thead>
-                                <tr>
-                                    <th>Division/Province</th>
-                                    <th>School District/City/Municipality</th>
-                                    <th>Name of School</th>
-                                    <th>BEIS ID No.</th>
-                                    <th>School Address</th>
-                                    <th>Name of Barangay</th>
-                                    <th>Name of District Supervisors/School Principal or OICs</th>
-                                    <th>Contact Number</th>
-                                    <th>Email Address</th>
-                                    <th>Total Beneficiaries</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                // Output data of each row
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<tr>";
-                                        echo "<td>" . $row["division_province"] . "</td>";
-                                        echo "<td>" . $row["school_district_municipality"] . "</td>";
-                                        echo "<td>" . $row["school_name"] . "</td>";
-                                        echo "<td>" . $row["beis_id"] . "</td>";
-                                        echo "<td>" . $row["school_address"] . "</td>";
-                                        echo "<td>" . $row["barangay_name"] . "</td>";
-                                        echo "<td>" . $row["supervisor_principal_name"] . "</td>";
-                                        echo "<td>" . $row["contact_number"] . "</td>";
-                                        echo "<td>" . $row["email_address"] . "</td>";
-                                        echo "<td>" . $row["total_beneficiaries"] . "</td>";
-                                        echo "</tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='10'>No records found</td></tr>";
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div> <!-- end section -->
-    </div> <!-- .col-12 -->
-</div> <!-- .row -->
-</div> <!-- .container-fluid -->
-
-
-
-
-
-
-
         <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">

@@ -196,13 +196,13 @@ $conn->close();
                 </a>
               </li>
 
-              <ul class="navbar-nav flex-fill w-100 mb-2">
+              <!-- <ul class="navbar-nav flex-fill w-100 mb-2">
               <li class="nav-item w-100">
                 <a class="nav-link" href="adanalytics.php">
                   <i class="fe fe-calendar fe-16"></i>
                   <span class="ml-3 item-text">Analytics</span>
                 </a>
-              </li>
+              </li> -->
 
               <ul class="navbar-nav flex-fill w-100 mb-2">
               <li class="nav-item w-100">
@@ -249,38 +249,42 @@ $conn->close();
                 </button>
             </div>
             <div class="modal-body">
-                <form id="createUserForm">
-                    <div class="form-group">
-                        <label for="createRole">Role</label>
-                        <input type="text" class="form-control" id="createRole" name="role" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="createFirstName">First Name</label>
-                        <input type="text" class="form-control" id="createFirstName" name="firstname" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="createLastName">Last Name</label>
-                        <input type="text" class="form-control" id="createLastName" name="lastname" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="createEmail">Email</label>
-                        <input type="email" class="form-control" id="createEmail" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="createPhoneNumber">Phone Number</label>
-                        <input type="text" class="form-control" id="createPhoneNumber" name="phone_number" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="createBirthday">Birthday</label>
-                        <input type="date" class="form-control" id="createBirthday" name="birthday" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="createPassword">Password</label>
-                        <input type="password" class="form-control" id="createPassword" name="password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Create User</button>
-                </form>
-            </div>
+    <form id="createUserForm">
+        <div class="form-group">
+            <label for="createRole">Role</label>
+            <select class="form-control" id="createRole" name="role" required>
+                <option value="sbfp">sbfp</option>
+                <option value="admin">admin</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="createFirstName">First Name</label>
+            <input type="text" class="form-control" id="createFirstName" name="firstname" required>
+        </div>
+        <div class="form-group">
+            <label for="createLastName">Last Name</label>
+            <input type="text" class="form-control" id="createLastName" name="lastname" required>
+        </div>
+        <div class="form-group">
+            <label for="createEmail">Email</label>
+            <input type="email" class="form-control" id="createEmail" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="createPhoneNumber">Phone Number</label>
+            <input type="text" class="form-control" id="createPhoneNumber" name="phone_number" required>
+        </div>
+        <div class="form-group">
+            <label for="createBirthday">Birthday</label>
+            <input type="date" class="form-control" id="createBirthday" name="birthday" required>
+        </div>
+        <div class="form-group">
+            <label for="createPassword">Password</label>
+            <input type="password" class="form-control" id="createPassword" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Create User</button>
+    </form>
+</div>
+
         </div>
     </div>
 </div>

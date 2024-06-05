@@ -1,21 +1,34 @@
 <?php
+session_start();
+if (!isset($_SESSION['email'])) {
+    header("Location: login.php");
+    exit();
+}
+
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "sbfp";
 
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Prepare and bind SQL statement
-$stmt = $conn->prepare("INSERT INTO schools (division_province, school_district_municipality, school_name, beis_id, school_address, barangay_name, supervisor_principal_name, contact_number, email_address, total_beneficiaries) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("sssssssssi", $division_province, $school_district_municipality, $school_name, $beis_id, $school_address, $barangay_name, $supervisor_principal_name, $contact_number, $email_address, $total_beneficiaries);
+// Retrieve session_id of the logged-in user
+$email = $_SESSION['email'];
+$stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($session_id);
+$stmt->fetch();
+$stmt->close();
 
+// Prepare and bind SQL statement
+$stmt = $conn->prepare("INSERT INTO schools (session_id, division_province, school_district_municipality, school_name, beis_id, school_address, barangay_name, supervisor_principal_name, contact_number, email_address, total_beneficiaries) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("ssssssssssi", $session_id, $division_province, $school_district_municipality, $school_name, $beis_id, $school_address, $barangay_name, $supervisor_principal_name, $contact_number, $email_address, $total_beneficiaries);
 
 // Set parameters and execute
 $division_province = $_POST['division_province'];
@@ -34,4 +47,6 @@ echo "New record created successfully";
 
 $stmt->close();
 $conn->close();
+header("Location: form2.php");
+
 ?>

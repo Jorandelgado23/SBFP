@@ -25,6 +25,12 @@
     <link rel="stylesheet" href="css/app-light.css" id="lightTheme">
     <link rel="stylesheet" href="css/app-dark.css" id="darkTheme" disabled>
   </head>
+<style>
+body{
+  
+}
+</style>
+  
   <body class="vertical  light  ">
     <div class="wrapper">
       <nav class="topnav navbar navbar-light">
@@ -147,14 +153,14 @@ $conn->close();
                 <span class="ml-3 item-text">SBFP-FORM</span>
               </a>
               <ul class="collapse list-unstyled pl-4 w-100" id="ui-elements">
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <a class="nav-link pl-3" href="form1.php"><span class="ml-1 item-text">SBFP-FORM 1</span>
                   </a>
-                </li>
+                </li> -->
                 <li class="nav-item">
                   <a class="nav-link pl-3" href="form2.php"><span class="ml-1 item-text">SBFP-FORM 2</span></a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <a class="nav-link pl-3" href="./ui-icons.html"><span class="ml-1 item-text">SBFP-FORM 3</span></a>
                 </li>
                 <li class="nav-item">
@@ -171,7 +177,7 @@ $conn->close();
                 </li>
                 <li class="nav-item">
                   <a class="nav-link pl-3" href="./ui-progress.html"><span class="ml-1 item-text">SBFP-FORM 8</span></a>
-                </li>
+                </li> -->
               </ul>
             </li>
            
@@ -204,13 +210,13 @@ $conn->close();
                 </a>
               </li>
 
-              <ul class="navbar-nav flex-fill w-100 mb-2">
+              <!-- <ul class="navbar-nav flex-fill w-100 mb-2">
               <li class="nav-item w-100">
                 <a class="nav-link" href="adanalytics.php">
                   <i class="fe fe-calendar fe-16"></i>
                   <span class="ml-3 item-text">Analytics</span>
                 </a>
-              </li>
+              </li> -->
 
               <ul class="navbar-nav flex-fill w-100 mb-2">
               <li class="nav-item w-100">
@@ -232,83 +238,151 @@ $conn->close();
                     
         </nav>
       </aside>
+      <?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Query to get the number of users
+$sql_users = "SELECT COUNT(*) as total_users FROM users";
+$result_users = $conn->query($sql_users);
+$total_users = $result_users->fetch_assoc()['total_users'];
+
+// Query to get the total number of beneficiaries
+$sql_beneficiaries = "SELECT SUM(total_beneficiaries) as total_beneficiaries FROM schools";
+$result_beneficiaries = $conn->query($sql_beneficiaries);
+$total_beneficiaries = $result_beneficiaries->fetch_assoc()['total_beneficiaries'];
+
+// Query to get the number of schools
+$sql_schools = "SELECT COUNT(*) as total_schools FROM schools";
+$result_schools = $conn->query($sql_schools);
+$total_schools = $result_schools->fetch_assoc()['total_schools'];
+
+$conn->close();
+?>
       <main role="main" class="main-content">
         <div class="container-fluid">
           <div class="row justify-content-center">
             <div class="col-12">
-              <div class="row">
-                <div class="col-md-6 col-xl-3 mb-4">
-                  <div class="card shadow bg-primary text-white border-0">
+            <div class="row">
+            <div class="col-md-6 col-xl-3 mb-4">
+                  <div class="card shadow border-0">
                     <div class="card-body">
                       <div class="row align-items-center">
                         <div class="col-3 text-center">
-                          <span class="circle circle-sm bg-primary-light">
-                          <i class="fe fe-user fe-16"></i>
-                          </span>
-                        </div>
-                        <div class="col pr-0">
-                          <p class="small text-muted mb-0">USERS ACCOUNT</p>
-                          <span class="h3 mb-0 text-white">1250</span>
-                          <!-- <span class="small text-muted">+5.5%</span> -->
-                        </div>
-                      </div>
+                          <span class="circle circle-sm bg-primary">
+                            <i class="fe fe-user fe-16"></i>
+                        </span>
                     </div>
-                  </div>
+                    <div class="col pr-0">
+                        <p class="small text-muted mb-0">USERS ACCOUNT</p>
+                        <span class="h3 mb-0"><?php echo $total_users; ?></span>
+                    </div>
                 </div>
-                <div class="col-md-6 col-xl-3 mb-4">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3 mb-4">
                   <div class="card shadow border-0">
                     <div class="card-body">
                       <div class="row align-items-center">
                         <div class="col-3 text-center">
                           <span class="circle circle-sm bg-primary">
                             <i class="fe fe-24 fe-users"></i>
-                          </span>
-                        </div>
-                        <div class="col pr-0">
-                          <p class="small text-muted mb-0">TOTAL BENEFICIARIES</p>
-                          <span class="h3 mb-0">1,869</span>
-                          <!-- <span class="small text-success">+16.5%</span> -->
-                        </div>
-                      </div>
+                        </span>
                     </div>
-                  </div>
+                    <div class="col pr-0">
+                        <p class="small text-muted mb-0">OVERALL BENEFICIARIES</p>
+                        <span class="h3 mb-0"><?php echo $total_beneficiaries; ?></span>
+                    </div>
                 </div>
-                <div class="col-md-6 col-xl-3 mb-4">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3 mb-4">
                   <div class="card shadow border-0">
                     <div class="card-body">
                       <div class="row align-items-center">
                         <div class="col-3 text-center">
                           <span class="circle circle-sm bg-primary">
                             <i class="fe fe-24 fe-database"></i>
-                          </span>
-                        </div>
-                        <div class="col pr-0">
-                          <p class="small text-muted mb-0">NUMBER OF SCHOOLS</p>
-                          <span class="h3 mb-0">26</span>
-                          <!-- <span class="small text-success">+16.5%</span> -->
-                        </div>
-                      </div>
+                        </span>
                     </div>
-                  </div>
-                </div>
-                <div class="col-md-6 col-xl-3 mb-4">
-                  <div class="card shadow border-0">
-                    <div class="card-body">
-                      <div class="row align-items-center">
-                        <div class="col-3 text-center">
-                          <span class="circle circle-sm bg-primary">
-                            <i class="fe fe-16 fe-activity text-white mb-0"></i>
-                          </span>
-                        </div>
-                        <div class="col">
-                          <p class="small text-muted mb-0">AVG Orders</p>
-                          <span class="h3 mb-0">$80</span>
-                        </div>
-                      </div>
+                    <div class="col pr-0">
+                        <p class="small text-muted mb-0">NUMBER OF SCHOOLS</p>
+                        <span class="h3 mb-0"><?php echo $total_schools; ?></span>
                     </div>
-                  </div>
                 </div>
-              </div> <!-- end section -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- School table with total beneficiaries -->
+    <div class="col-md-12">
+        <h6 class="mb-3">Schools with Total Beneficiaries</h6>
+        <table class="table table-borderless table-striped">
+            <thead>
+                <tr role="row">
+                    <th>ID</th>
+                    <th>School Name</th>
+                    <th>Total Beneficiaries</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                // Connect to the database
+                $servername = "localhost";
+                $username = "root";
+                $password = "";
+                $dbname = "sbfp";
+
+                // Create connection
+                $conn = new mysqli($servername, $username, $password, $dbname);
+
+                // Check connection
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
+                // Query to fetch school names and total beneficiaries per school
+                $sql = "SELECT id, school_name, total_beneficiaries FROM schools";
+
+                $result = $conn->query($sql);
+
+                // Check if there are any results
+                if ($result->num_rows > 0) {
+                    // Output data of each row
+                    while ($row = $result->fetch_assoc()) {
+                        echo '<tr>
+                                <td>' . $row["id"] . '</td>
+                                <td>' . $row["school_name"] . '</td>
+                                <td>' . $row["total_beneficiaries"] . '</td>
+                              </tr>';
+                    }
+                } else {
+                    echo "<tr><td colspan='3'>No schools found</td></tr>";
+                }
+                $conn->close();
+                ?>
+            </tbody>
+        </table>
+    </div> <!-- / .col-md-12 -->
+</div> <!-- end section -->
+
+        
+
+                
               <div class="row align-items-center my-2">
                 <div class="col-auto ml-auto">
                   <form class="form-inline">
@@ -383,40 +457,9 @@ $conn->close();
                     </div> <!-- .card-body -->
                   </div> <!-- .card -->
                 </div> <!-- .col -->
+                
                 <div class="col-md-4">
-                  <div class="card shadow mb-4">
-                    <div class="card-body">
-                      <p class="mb-0"><strong class="mb-0 text-uppercase text-muted">Today</strong></p>
-                      <h3 class="mb-0">$2,562.30</h3>
-                      <p class="text-muted">+18.9% Last week</p>
-                      <div class="chart-box mt-n5">
-                        <div id="lineChartWidget"></div>
-                      </div>
-                      <div class="row">
-                        <div class="col-4 text-center mt-3">
-                          <p class="mb-1 text-muted">Completions</p>
-                          <h6 class="mb-0">26</h6>
-                          <span class="small text-muted">+20%</span>
-                          <span class="fe fe-arrow-up text-success fe-12"></span>
-                        </div>
-                        <div class="col-4 text-center mt-3">
-                          <p class="mb-1 text-muted">Goal Value</p>
-                          <h6 class="mb-0">$260</h6>
-                          <span class="small text-muted">+6%</span>
-                          <span class="fe fe-arrow-up text-success fe-12"></span>
-                        </div>
-                        <div class="col-4 text-center mt-3">
-                          <p class="mb-1 text-muted">Conversion</p>
-                          <h6 class="mb-0">6%</h6>
-                          <span class="small text-muted">-2%</span>
-                          <span class="fe fe-arrow-down text-danger fe-12"></span>
-                        </div>
-                      </div>
-                    </div> <!-- .card-body -->
-                  </div> <!-- .card -->
-                </div> <!-- .col-md -->
-                <div class="col-md-6">
-                  <div class="card shadow mb-4">
+                  <div class="card shadow mb-2">
                     <div class="card-body">
                       <div class="card-title">
                         <strong>Products</strong>
@@ -476,247 +519,8 @@ $conn->close();
                     </div> <!-- .card-body -->
                   </div> <!-- .card -->
                 </div> <!-- .col-md -->
-                <div class="col-md-6">
-                  <div class="card shadow mb-4">
-                    <div class="card-body">
-                      <div class="card-title">
-                        <strong>Region</strong>
-                        <a class="float-right small text-muted" href="#!">View all</a>
-                      </div>
-                      <div class="map-box" style="position: relative; width: 350px; min-height: 130px; margin:0 auto;">
-                        <div id="dataMapUSA"></div>
-                      </div>
-                      <div class="row align-items-center h-100 my-2">
-                        <div class="col">
-                          <p class="mb-0">France</p>
-                          <span class="my-0 text-muted small">+10%</span>
-                        </div>
-                        <div class="col-auto text-right">
-                          <span>118</span><br />
-                          <div class="progress mt-2" style="height: 4px;">
-                            <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row align-items-center my-2">
-                        <div class="col">
-                          <p class="mb-0">Netherlands</p>
-                          <span class="my-0 text-muted small">+0.6%</span>
-                        </div>
-                        <div class="col-auto text-right">
-                          <span>1008</span><br />
-                          <div class="progress mt-2" style="height: 4px;">
-                            <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row align-items-center my-2">
-                        <div class="col">
-                          <p class="mb-0">Italy</p>
-                          <span class="my-0 text-muted small">+1.6%</span>
-                        </div>
-                        <div class="col-auto text-right">
-                          <span>67</span><br />
-                          <div class="progress mt-2" style="height: 4px;">
-                            <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row align-items-center my-2">
-                        <div class="col">
-                          <p class="mb-0">Spain</p>
-                          <span class="my-0 text-muted small">+118%</span>
-                        </div>
-                        <div class="col-auto text-right">
-                          <span>186</span><br />
-                          <div class="progress mt-2" style="height: 4px;">
-                            <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> <!-- .col -->
-              </div> <!-- / .row -->
-              <div class="row">
-                <!-- Recent orders -->
-                <div class="col-md-12">
-                  <h6 class="mb-3">Last orders</h6>
-                  <table class="table table-borderless table-striped">
-                    <thead>
-                      <tr role="row">
-                        <th>ID</th>
-                        <th>Purchase Date</th>
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Address</th>
-                        <th>Total</th>
-                        <th>Payment</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="col">1331</th>
-                        <td>2020-12-26 01:32:21</td>
-                        <td>Kasimir Lindsey</td>
-                        <td>(697) 486-2101</td>
-                        <td>996-3523 Et Ave</td>
-                        <td>$3.64</td>
-                        <td> Paypal</td>
-                        <td>Shipped</td>
-                        <td>
-                          <div class="dropdown">
-                            <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <span class="text-muted sr-only">Action</span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                              <a class="dropdown-item" href="#">Edit</a>
-                              <a class="dropdown-item" href="#">Remove</a>
-                              <a class="dropdown-item" href="#">Assign</a>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="col">1156</th>
-                        <td>2020-04-21 00:38:38</td>
-                        <td>Melinda Levy</td>
-                        <td>(748) 927-4423</td>
-                        <td>Ap #516-8821 Vitae Street</td>
-                        <td>$4.18</td>
-                        <td> Paypal</td>
-                        <td>Pending</td>
-                        <td>
-                          <div class="dropdown">
-                            <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <span class="text-muted sr-only">Action</span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                              <a class="dropdown-item" href="#">Edit</a>
-                              <a class="dropdown-item" href="#">Remove</a>
-                              <a class="dropdown-item" href="#">Assign</a>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="col">1038</th>
-                        <td>2019-06-25 19:13:36</td>
-                        <td>Aubrey Sweeney</td>
-                        <td>(422) 405-2736</td>
-                        <td>Ap #598-7581 Tellus Av.</td>
-                        <td>$4.98</td>
-                        <td>Credit Card </td>
-                        <td>Processing</td>
-                        <td>
-                          <div class="dropdown">
-                            <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <span class="text-muted sr-only">Action</span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                              <a class="dropdown-item" href="#">Edit</a>
-                              <a class="dropdown-item" href="#">Remove</a>
-                              <a class="dropdown-item" href="#">Assign</a>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="col">1227</th>
-                        <td>2021-01-22 13:28:00</td>
-                        <td>Timon Bauer</td>
-                        <td>(690) 965-1551</td>
-                        <td>840-2188 Placerat, Rd.</td>
-                        <td>$3.46</td>
-                        <td> Paypal</td>
-                        <td>Processing</td>
-                        <td>
-                          <div class="dropdown">
-                            <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <span class="text-muted sr-only">Action</span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                              <a class="dropdown-item" href="#">Edit</a>
-                              <a class="dropdown-item" href="#">Remove</a>
-                              <a class="dropdown-item" href="#">Assign</a>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="col">1956</th>
-                        <td>2019-11-11 16:23:17</td>
-                        <td>Kelly Barrera</td>
-                        <td>(117) 625-6737</td>
-                        <td>816 Ornare, Street</td>
-                        <td>$4.16</td>
-                        <td>Credit Card </td>
-                        <td>Shipped</td>
-                        <td>
-                          <div class="dropdown">
-                            <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <span class="text-muted sr-only">Action</span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                              <a class="dropdown-item" href="#">Edit</a>
-                              <a class="dropdown-item" href="#">Remove</a>
-                              <a class="dropdown-item" href="#">Assign</a>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="col">1669</th>
-                        <td>2021-04-12 07:07:13</td>
-                        <td>Kellie Roach</td>
-                        <td>(422) 748-1761</td>
-                        <td>5432 A St.</td>
-                        <td>$3.53</td>
-                        <td> Paypal</td>
-                        <td>Shipped</td>
-                        <td>
-                          <div class="dropdown">
-                            <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <span class="text-muted sr-only">Action</span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                              <a class="dropdown-item" href="#">Edit</a>
-                              <a class="dropdown-item" href="#">Remove</a>
-                              <a class="dropdown-item" href="#">Assign</a>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="col">1909</th>
-                        <td>2020-05-14 00:23:11</td>
-                        <td>Lani Diaz</td>
-                        <td>(767) 486-2253</td>
-                        <td>3328 Ut Street</td>
-                        <td>$4.29</td>
-                        <td> Paypal</td>
-                        <td>Pending</td>
-                        <td>
-                          <div class="dropdown">
-                            <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <span class="text-muted sr-only">Action</span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                              <a class="dropdown-item" href="#">Edit</a>
-                              <a class="dropdown-item" href="#">Remove</a>
-                              <a class="dropdown-item" href="#">Assign</a>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div> <!-- / .col-md-3 -->
-              </div> <!-- end section -->
-            </div>
-          </div> <!-- .row -->
+               
+           
         </div> <!-- .container-fluid -->
         <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-sm" role="document">

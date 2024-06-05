@@ -155,11 +155,11 @@ $conn->close();
              
             </li>
             <li class="nav-item">
-            <a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">SBFP-FORM 4</span></a>
+            <a class="nav-link pl-3" href="form4.php"><span class="ml-1 item-text">SBFP-FORM 4</span></a>
             <i class="fe fe-file fe-16"></i>
             </li>
             <li class="nav-item">
-            <a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">SBFP-FORM 5</span></a>
+            <a class="nav-link pl-3" href="form5.php"><span class="ml-1 item-text">SBFP-FORM 5</span></a>
             <i class="fe fe-file fe-16"></i>
           </li>
           <li class="nav-item">
@@ -167,7 +167,7 @@ $conn->close();
             <i class="fe fe-file fe-16"></i>
           </li>
           <li class="nav-item">
-            <a class="nav-link pl-3" href="./form6.php"><span class="ml-1 item-text">SBFP-FORM 7</span></a>
+            <a class="nav-link pl-3" href="./form7.php"><span class="ml-1 item-text">SBFP-FORM 7</span></a>
             <i class="fe fe-file fe-16"></i>
           </li>
           <li class="nav-item">
@@ -175,7 +175,13 @@ $conn->close();
             <i class="fe fe-file fe-16"></i>
           </li>
           </ul>
-         
+          <ul class="navbar-nav flex-fill w-100 mb-2">
+              <li class="nav-item w-100">
+              <a class="nav-link" href="usersetting.php">
+                  <i class="fe fe-calendar fe-16"></i>
+                  <span class="ml-3 item-text">Settings</span>
+                </a>
+              </li>
           </div>
         </nav>
       </aside>
@@ -183,7 +189,7 @@ $conn->close();
         <div class="container-fluid">
           <div class="row justify-content-center">
           <div class="col-12">
-            <!-- <h1 class="page-title">Let's start</h1> -->
+            <h1 class="page-title">SCHOOL-BASED FEEDING PROGRAM MONTHLY/QUARTERLY REPORT</h1>
             
         </div> <!-- .col-12 -->
           </div> <!-- .row -->

@@ -156,19 +156,34 @@ $conn->close();
              
             </li>
             <li class="nav-item">
-            <a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">SBFP-FORM 4</span></a>
+            <a class="nav-link pl-3" href="form4.php"><span class="ml-1 item-text">SBFP-FORM 4</span></a>
             <i class="fe fe-file fe-16"></i>
             </li>
             <li class="nav-item">
-            <a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">SBFP-FORM 5</span></a>
+            <a class="nav-link pl-3" href="form5.php"><span class="ml-1 item-text">SBFP-FORM 5</span></a>
             <i class="fe fe-file fe-16"></i>
           </li>
           <li class="nav-item">
             <a class="nav-link pl-3" href="./form6.php"><span class="ml-1 item-text">SBFP-FORM 6</span></a>
             <i class="fe fe-file fe-16"></i>
           </li>
+          <li class="nav-item">
+            <a class="nav-link pl-3" href="./form7.php"><span class="ml-1 item-text">SBFP-FORM 7</span></a>
+            <i class="fe fe-file fe-16"></i>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link pl-3" href="./form8.php"><span class="ml-1 item-text">SBFP-FORM 8</span></a>
+            <i class="fe fe-file fe-16"></i>
+          </li>
           </ul>
          
+          <ul class="navbar-nav flex-fill w-100 mb-2">
+              <li class="nav-item w-100">
+              <a class="nav-link" href="usersetting.php">
+                  <i class="fe fe-calendar fe-16"></i>
+                  <span class="ml-3 item-text">Settings</span>
+                </a>
+              </li>
           </div>
         </nav>
       </aside>
@@ -176,293 +191,11 @@ $conn->close();
         <div class="container-fluid">
           <div class="row justify-content-center">
             <div class="col-12">
-              <h1 class="page-title">Let's start</h1>
+              <h1 class="page-title">SCHOOL-BASED FEEDING PROGRAM (SBFP) SUMMARY OF BENEFICIARIES & START OF FEEDING</h1>
             </div> <!-- .col-12 -->
           </div> <!-- .row -->
         </div> <!-- .container-fluid -->
-        <section class="section">
-<div class="row">
- <div class="col-lg-5">
-<div class="card">
-    <div class="card-body">
-    <h1>Master List Beneficiaries for SBFP</h1>
-    <form class="row g-3" action="submit.php" method="post">
-    <div class="col-md-6">
-        <label>Division/Province:</label>
-        <input class="form-control" type="text" name="division_province" required><br>
-        </div>
-        <div class="col-md-6">
-        <label>City/Municipality/Barangay:</label>
-        <input class="form-control" type="text" name="city_municipality_barangay" required><br>
-        </div>
-        <div class="col-md-6">
-        <label>Name of School / School District:</label>
-        <input class="form-control" type="text" name="name_of_school" required><br>
-        </div>
-        <div class="col-md-6">
-        <label>School ID Number:</label>
-        <input class="form-control" type="text" name="school_id_number" required><br>
-        </div>
-        <div class="col-md-6">
-        <label>Name of Principal:</label>
-        <input class="form-control" type="text" name="name_of_principal" required><br>
-        </div>
-        <div class="col-md-6">
-        <label>Name of Feeding Focal Person:</label>
-        <input class="form-control" type="text" name="name_of_feeding_focal_person" required><br>
-        </div>
-        
-        <h2>Beneficiary Details</h2>
-        <div id="beneficiary_details">
-            <div class="beneficiary">
-            <div class="col-md-6">
-                <label>No.:</label>
-                <input class="form-control" type="text" name="beneficiary_no[]" required><br>
-                </div>
-                <div class="col-md-6">
-                <label>Name:</label>
-                <input class="form-control" type="text" name="beneficiary_name[]" required><br>
-                </div>
-
-                <div class="col-md-6">
-                <label>Sex:</label>
-                <select class="form-select" name="beneficiary_sex[]" required>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                </select><br>
-                </div>
-
-                <div class="col-md-6">
-                <label>Grade/Section:</label>
-                <input class="form-control" type="text" name="beneficiary_grade_section[]" required><br>
-                </div>
-                <div class="col-md-6">
-                <label>Date of Birth (MM/DD/YYYY):</label>
-                <input class="form-control" type="date" name="beneficiary_dob[]" required onchange="calculateAgeAndBMI(this)"><br>
-                </div>
-                <div class="col-md-6">
-                <label>Date of Weighing/Measuring (MM/DD/YYYY):</label>
-                <input class="form-control" type="date" name="beneficiary_dow[]" required onchange="calculateAgeAndBMI(this)"><br>
-                </div>
-                <div class="col-md-6">
-                <label>Age:</label>
-                <input class="form-control" type="text" name="beneficiary_age[]" readonly required><br>
-                </div>
-                <div class="col-md-6">
-                <label>Weight (Kg):</label>
-                <input  class="form-control" type="number" step="0.01" name="beneficiary_weight[]" required oninput="calculateBMI(this)"><br>
-                </div>
-                <div class="col-md-6">
-                <label>Height (cm):</label>
-                <input class="form-control" type="number" step="0.01" name="beneficiary_height[]" required oninput="calculateBMI(this)"><br>
-                </div>
-                <div class="col-md-6">
-                <label>BMI for 6 y.o. and above:</label>
-                <input class="form-control" type="text" name="beneficiary_bmi[]" readonly required><br>
-                </div>
-                <div class="col-md-6">
-                <label>Nutritional Status (BMI-A):</label>
-                <input class="form-control" type="text" name="nutritional_status_bmia[]" readonly required><br>
-                </div>
-                <div class="col-md-6">
-                <label>Nutritional Status (HFA):</label>
-                <input  class="form-control" type="text" name="nutritional_status_hfa[]" readonly required><br>
-                </div>
-                <div class="col-md-6">
-                <label>Dewormed?</label>
-                <select class="form-select" name="dewormed[]" required>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                </select><br>
-                </div>
-                <div class="col-md-6">
-                <label>Parent's consent for milk?</label>
-                <select class="form-select" name="parents_consent_for_milk[]" required>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                </select><br>
-                </div>
-                <div class="col-md-6">
-                <label>Participation in 4Ps?</label>
-                <select class="form-select" name="participation_in_4ps[]" required>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                </select><br>
-                </div>
-                <div class="col-md-6">
-                <label>Beneficiary of SBFP in Previous Years?</label>
-                <select class="form-select" name="beneficiary_of_sbfp_in_previous_years[]" required>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                </select><br>
-                </div>
-            </div>
-        </div>
-        <!-- <button type="button" onclick="addBeneficiary()">Add Another Beneficiary</button><br> -->
-        <button type="submit" class="btn btn-primary" >Submit</button>
-        </div>
-      </div>
-    </form>
-</section>
-
-<section class="section">
-      <div class="row">
-        <div class="col-lg-13">
-        <div class="card">
-            <div class="card-body">
-            <h2>List Beneficiaries for SBFP</h2>
-            <table class="table datatable">
-            <thead>
-                <tr>
-                    <th>No.</th>
-                    <th>Name</th>
-                    <th>Sex</th>
-                    <th>Grade/Section</th>
-                    <th>Date of Birth</th>
-                    <th>Date of Weighing</th>
-                    <th>Age</th>
-                    <th>Weight (Kg)</th>
-                    <th>Height (cm)</th>
-                    <th>BMI</th>
-                    <th>Nutritional Status (BMI-A)</th>
-                    <th>Nutritional Status (HFA)</th>
-                    <th>Dewormed?</th>
-                    <th>Parent's consent for milk?</th>
-                    <th>Participation in 4Ps?</th>
-                    <th>Beneficiary of SBFP in Previous Years?</th>
-                </tr>
-            </thead>
-            <tbody>
-            </div>
-            </div>
-
-        </section>
-        <?php
-        // Connect to database
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "sbfp";
-        $conn = new mysqli($servername, $username, $password, $dbname);
-
-        // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-
-        // Fetch submitted data
-        $sql = "SELECT * FROM beneficiary_details";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
-            $count = 1;
-            // Output data of each row
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . $count++ . "</td>";
-                echo "<td>" . $row["name"] . "</td>";
-                echo "<td>" . $row["sex"] . "</td>";
-                echo "<td>" . $row["grade_section"] . "</td>";
-                echo "<td>" . $row["date_of_birth"] . "</td>";
-                echo "<td>" . $row["date_of_weighing"] . "</td>";
-                echo "<td>" . $row["age"] . "</td>";
-                echo "<td>" . $row["weight"] . "</td>";
-                echo "<td>" . $row["height"] . "</td>";
-                echo "<td>" . $row["bmi"] . "</td>";
-                echo "<td>" . $row["nutritional_status_bmia"] . "</td>";
-                echo "<td>" . $row["nutritional_status_hfa"] . "</td>";
-                echo "<td>" . $row["dewormed"] . "</td>";
-                echo "<td>" . $row["parents_consent_for_milk"] . "</td>";
-                echo "<td>" . $row["participation_in_4ps"] . "</td>";
-                echo "<td>" . $row["beneficiary_of_sbfp_in_previous_years"] . "</td>";
-                echo "</tr>";
-            }
-        } else {
-            echo "<tr><td colspan='16'>No data available</td></tr>";
-        }
-        $conn->close();
-        ?>
-        </tbody>
-    </table>
-
-    <script>
-        function addBeneficiary() {
-            let beneficiaryDetails = document.getElementById('beneficiary_details');
-            let newBeneficiary = beneficiaryDetails.children[0].cloneNode(true);
-            beneficiaryDetails.appendChild(newBeneficiary);
-        }
-
-        function calculateAgeAndBMI(element) {
-            const beneficiary = element.closest('.beneficiary');
-            const dob = beneficiary.querySelector('[name="beneficiary_dob[]"]').value;
-            const dow = beneficiary.querySelector('[name="beneficiary_dow[]"]').value;
-            if (dob && dow) {
-                const birthDate = new Date(dob);
-                const weighingDate = new Date(dow);
-                let ageYears = weighingDate.getFullYear() - birthDate.getFullYear();
-                let ageMonths = weighingDate.getMonth() - birthDate.getMonth();
-                if (ageMonths < 0) {
-                    ageYears--;
-                    ageMonths += 12;
-                }
-                beneficiary.querySelector('[name="beneficiary_age[]"]').value = `${ageYears} years, ${ageMonths} months`;
-            }
-            calculateBMI(element);
-        }
-
-        function calculateBMI(element) {
-            const beneficiary = element.closest('.beneficiary');
-            const weight = beneficiary.querySelector('[name="beneficiary_weight[]"]').value;
-            const height = beneficiary.querySelector('[name="beneficiary_height[]"]').value;
-            if (weight && height) {
-                const heightInMeters = height / 100;
-                const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
-                beneficiary.querySelector('[name="beneficiary_bmi[]"]').value = bmi;
-                calculateNutritionalStatus(bmi, beneficiary);
-            }
-        }
-
-        function calculateNutritionalStatus(bmi, beneficiary) {
-            // Calculate BMI-A
-            let nutritionalStatusBMI = "Normal";
-            if (bmi < 16) {
-                nutritionalStatusBMI = "Severely Wasted";
-            } else if (bmi < 18.5) {
-                nutritionalStatusBMI = "Wasted";
-            } else if (bmi >= 25 && bmi < 30) {
-                nutritionalStatusBMI = "Overweight";
-            } else if (bmi >= 30) {
-                nutritionalStatusBMI = "Obese";
-            }
-            beneficiary.querySelector('[name="nutritional_status_bmia[]"]').value = nutritionalStatusBMI;
-
-            // Calculate HFA
-            const height = beneficiary.querySelector('[name="beneficiary_height[]"]').value;
-            const dob = beneficiary.querySelector('[name="beneficiary_dob[]"]').value;
-            if (height && dob) {
-                const birthDate = new Date(dob);
-                const now = new Date();
-                const ageMonths = (now.getFullYear() - birthDate.getFullYear()) * 12 + now.getMonth() - birthDate.getMonth();
-                let nutritionalStatusHFA = "Normal";
-
-                // Example thresholds, replace with your actual criteria
-                if (ageMonths < 60 && height < 90) {
-                    nutritionalStatusHFA = "Stunted";
-                } else if (ageMonths >= 60 && ageMonths < 120 && height < 115) {
-                    nutritionalStatusHFA = "Stunted";
-                } else if (ageMonths >= 120 && height < 130) {
-                    nutritionalStatusHFA = "Stunted";
-                } else if (ageMonths < 60 && height > 110) {
-                    nutritionalStatusHFA = "Tall";
-                } else if (ageMonths >= 60 && ageMonths < 120 && height > 140) {
-                    nutritionalStatusHFA = "Tall";
-                } else if (ageMonths >= 120 && height > 160) {
-                    nutritionalStatusHFA = "Tall";
-                }
-                beneficiary.querySelector('[name="nutritional_status_hfa[]"]').value = nutritionalStatusHFA;
-            }
-        }
-    </script>
+     
         <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">

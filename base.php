@@ -18,10 +18,7 @@
     <!-- App CSS -->
     <link rel="stylesheet" href="css/app-light.css" id="lightTheme">
     <link rel="stylesheet" href="css/app-dark.css" id="darkTheme" disabled>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
- 
   <body class="vertical  light  ">
     <div class="wrapper">
       <nav class="topnav navbar navbar-light">
@@ -102,8 +99,6 @@ $conn->close();
               <a class="dropdown-item" href="#">Profile</a>
               <a class="dropdown-item" href="#">Settings</a>
               <a class="dropdown-item" href="#">Activities</a>
-              <a class="dropdown-item" href="logout.php">logout</a>
-
             </div>
           </li>
         </ul>
@@ -201,13 +196,13 @@ $conn->close();
                 </a>
               </li>
 
-              <ul class="navbar-nav flex-fill w-100 mb-2">
+              <!-- <ul class="navbar-nav flex-fill w-100 mb-2">
               <li class="nav-item w-100">
                 <a class="nav-link" href="adanalytics.php">
                   <i class="fe fe-calendar fe-16"></i>
                   <span class="ml-3 item-text">Analytics</span>
                 </a>
-              </li>
+              </li> -->
 
               <ul class="navbar-nav flex-fill w-100 mb-2">
               <li class="nav-item w-100">
@@ -224,121 +219,25 @@ $conn->close();
                   <span class="ml-3 item-text">Archieves</span>
                 </a>
               </li>
+              <ul class="navbar-nav flex-fill w-100 mb-2">
+              <li class="nav-item w-100">
+                <a class="nav-link" href="attendance.php">
+                  <i class="fe fe-calendar fe-16"></i>
+                  <span class="ml-3 item-text">Attendance</span>
+                </a>
+              </li>
 
           </div>
                     
         </nav>
       </aside>
-      
-      <main role="main" class="main-content">
-        <div class="container-fluid">
-          <div class="row justify-content-center">
-          <div class="col-12">
-            <!-- <h1 class="page-title">Let's start</h1> -->
-            
-        </div> <!-- .col-12 -->
-          </div> <!-- .row -->
-        </div> <!-- .container-fluid -->
 
-        <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
+    
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Fetch list of schools with their session IDs
-$sql_schools = "SELECT DISTINCT session_id, name_of_school, school_id_number FROM beneficiaries";
-$result_schools = $conn->query($sql_schools);
-
-// Group schools by session ID
-$schools_by_session = array();
-if ($result_schools->num_rows > 0) {
-    while ($row_schools = $result_schools->fetch_assoc()) {
-        $session_id = $row_schools['session_id'];
-        $school_name = $row_schools['name_of_school'];
-        $schools_by_session[$session_id][$school_name][] = $row_schools;
-    }
-}
-
-// Filtering functionality
-if (isset($_GET['search'])) {
-  $search_term = $_GET['search'];
-  $filtered_schools = array_filter($schools_by_session, function ($schools) use ($search_term) {
-      foreach ($schools as $school_name => $school_data) {
-          if (stripos($school_name, $search_term) !== false) {
-              return true;
-          }
-      }
-      return false;
-  });
-} else {
-  $filtered_schools = $schools_by_session;
-}
-?>
-
-<div class="col-md-12 my-4">
-    <h2 class="h4 mb-1">BENEFICIARIES LIST</h2>
-    <!-- Search form -->
-    <form method="get" class="mb-3">
-        <div class="form-group">
-            <input type="text" class="form-control" name="search" placeholder="Search by school name" value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
-        </div>
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-    <div class="card shadow">
-        <div class="card-body">
-            <!-- table -->
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Name of School</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    foreach ($filtered_schools as $session_id => $schools) {
-                        foreach ($schools as $school_name => $school_data) {
-                            echo "<tr>
-                                    <td>$school_name</td>"; // School name cell
-                            echo "<td><a href='view_details.php?session_id=$session_id' class='btn btn-primary'>View</a></td>
-                                </tr>";
-                        }
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<?php
-$conn->close(); // Close database connection
-?>
+<!-- Step 3: Display the school names in clickable cards -->
 
 
 
-                      <nav aria-label="Table Paging" class="mb-0 text-muted">
-                        <ul class="pagination justify-content-end mb-0">
-                          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                          <li class="page-item"><a class="page-link" href="#">1</a></li>
-                          <li class="page-item"><a class="page-link" href="#">2</a></li>
-                          <li class="page-item"><a class="page-link" href="#">3</a></li>
-                          <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                        </ul>
-                      </nav>
-                    </div>
-                  </div>
-                </div> <!-- simple table -->
-              </div> <!-- end section -->
         <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
@@ -462,162 +361,6 @@ $conn->close(); // Close database connection
             </div>
           </div>
         </div>
-
-        
-        <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$sql_schools = "SELECT DISTINCT session_id, name_of_school FROM beneficiaries";
-$result_schools = $conn->query($sql_schools);
-
-$schools_by_session = array();
-if ($result_schools->num_rows > 0) {
-    while ($row_schools = $result_schools->fetch_assoc()) {
-        $session_id = $row_schools['session_id'];
-        $school_name = $row_schools['name_of_school'];
-        $schools_by_session[$session_id][$school_name] = true;
-    }
-}
-?>
-
-<div class="col-md-12 my-4">
-    <h1 class="h4 mb-1">BENEFICIARIES</h1>
-    <p>Choose School</p>
-    <div class="form-group col-2 p-0">
-        <label class="my-1 mr-2 sr-only" for="inlineFormCustomSelectPref">Status</label>
-        <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-            <option selected>Choose...</option>
-            <?php
-            foreach ($schools_by_session as $session_id => $schools) {
-                foreach ($schools as $school_name => $value) {
-                    echo "<option value='$session_id'>$school_name</option>";
-                }
-            }
-            ?>
-        </select>
-    </div>
-    <div class="card shadow">
-        <div class="card-body">
-            <div class="toolbar row mb-3">
-                <div class="col">
-                    <form class="form-inline">
-                        <div class="form-row">
-                            <div class="form-group col-auto">
-                                <label for="search" class="sr-only">Search</label>
-                                <input type="text" class="form-control" id="search" value="" placeholder="Search">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="col ml-auto">
-                    <div class="dropdown float-right">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="actionMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Download PDF </button>
-                    </div>
-                </div>
-            </div>
-            <table class="table table-bordered">
-                <thead>
-                    <tr role="row">
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Sex</th>
-                        <th>Grade/Section</th>
-                        <th>Date of Weighing / Measuring (MM/DD/YYYY)</th>
-                        <th>Age in Years / Months</th>
-                        <th>Weight (Kg)</th>
-                        <th>Height (cm)</th>
-                        <th>BMI for 6 y.o. and above</th>
-                        <th>BMI-A</th>
-                        <th>HFA</th>
-                        <th>Dewormed?</th>
-                        <th>Parent's consent for milk?</th>
-                        <th>Participation in 4Ps</th>
-                        <th>Beneficiary of SBFP in Previous Years</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <?php
-                    $sql_beneficiaries = "SELECT * FROM beneficiaries";
-                    $result_beneficiaries = $conn->query($sql_beneficiaries);
-                    
-                    if ($result_beneficiaries->num_rows > 0) {
-                        while ($row = $result_beneficiaries->fetch_assoc()) {
-                            echo "<tr>";
-                            echo "<td>" . $row["id"] . "</td>";
-                            echo "<td>" . (isset($row["name"]) ? $row["name"] : "") . "</td>";
-                            echo "<td>" . (isset($row["sex"]) ? $row["sex"] : "") . "</td>";
-                            echo "<td>" . (isset($row["grade_section"]) ? $row["grade_section"] : "") . "</td>";
-                            echo "<td>" . (isset($row["date_of_weighing"]) ? $row["date_of_weighing"] : "") . "</td>";
-                            echo "<td>" . (isset($row["age_years_months"]) ? $row["age_years_months"] : "") . "</td>";
-                            echo "<td>" . (isset($row["weight_kg"]) ? $row["weight_kg"] : "") . "</td>";
-                            echo "<td>" . (isset($row["height_cm"]) ? $row["height_cm"] : "") . "</td>";
-                            echo "<td>" . (isset($row["bmi_above_6_years"]) ? $row["bmi_above_6_years"] : "") . "</td>";
-                            echo "<td>" . (isset($row["bmi_a"]) ? $row["bmi_a"] : "") . "</td>";
-                            echo "<td>" . (isset($row["hfa"]) ? $row["hfa"] : "") . "</td>";
-                            echo "<td>" . (isset($row["dewormed"]) ? $row["dewormed"] : "") . "</td>";
-                            echo "<td>" . (isset($row["parent_consent_milk"]) ? $row["parent_consent_milk"] : "") . "</td>";
-                            echo "<td>" . (isset($row["participation_4ps"]) ? $row["participation_4ps"] : "") . "</td>";
-                            echo "<td>" . (isset($row["beneficiary_sbfp_previous_years"]) ? $row["beneficiary_sbfp_previous_years"] : "") . "</td>";
-                            echo "</tr  ";
-                          }
-                      } else {
-                          echo "<tr><td colspan='15'>No beneficiaries found</td></tr>";
-                      }
-                      ?>
-                  </tbody>
-              </table>
-          </div>
-      </div>
-  </div>
-  
-  <script>
-  $(document).ready(function(){
-      $('#inlineFormCustomSelectPref').change(function(){
-          var selectedSchool = $(this).val();
-          $.ajax({
-              url: 'get_filtered_data.php',
-              type: 'POST',
-              data: {school_id: selectedSchool},
-              success: function(response){
-                  $('#tableBody').html(response);
-              },
-              error: function(xhr, status, error) {
-                  console.error(xhr.responseText);
-              }
-          });
-      });
-  });
-  </script>
-
-<?php
-$conn->close();
-?>
-
-
-
-
-        <nav aria-label="Table Paging" class="mb-0 text-muted">
-          <ul class="pagination justify-content-end mb-0">
-            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-  </div> <!-- simple table -->
-
       </main> <!-- main -->
     </div> <!-- .wrapper -->
     <script src="js/jquery.min.js"></script>

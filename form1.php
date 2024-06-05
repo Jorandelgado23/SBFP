@@ -237,28 +237,87 @@ echo "Welcome, $user_firstname $user_lastname!";
                 </div>
                 <div class="modal-body">
                     <form id="sbfpForm" class="needs-validation" novalidate action="submit.php" method="post">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="division_province" class="form-label">Division/Province:</label>
-                                <input type="text" class="form-control" id="division_province" name="division_province" required>
-                                <div class="invalid-feedback">
-                                    Please provide a division/province.
-                                </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="division_province" class="form-label">Division/Province:</label>
+                            <select class="form-control" id="division_province" name="division_province" required>
+                                <option value="" disabled selected>Choose...</option>
+                                <option value="Santa Cruz, Laguna">Santa Cruz, Laguna</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please provide a division/province.
                             </div>
-                            <div class="col-md-6">
-                                <label for="city_municipality_barangay" class="form-label">City/Municipality/Barangay:</label>
-                                <input type="text" class="form-control" id="city_municipality_barangay" name="city_municipality_barangay" required>
-                                <div class="invalid-feedback">
-                                    Please provide city/municipality/barangay.
-                                </div>
+                        </div>
+                            <div class="form-group col-md-6">
+                            <label for="city_municipality_barangay" class="form-label">City/Municipality/Barangay:</label>
+                            <select class="form-control" id="city_municipality_barangay" name="city_municipality_barangay" required>
+                                <option value="" disabled selected>Choose...</option>
+                                <option value="Bagumbayan">Bagumbayan</option>
+                                <option value="Calios">Calios</option>
+                                <option value="Duhat">Duhat</option>
+                                <option value="Gatid">Gatid</option>
+                                <option value="Jasaaan">Jasaaan</option>
+                                <option value="Labuin">Labuin</option>
+                                <option value="Malinao">Malinao</option>
+                                <option value="Oogong">Oogong</option>
+                                <option value="Pagsawitan">Pagsawitan</option>
+                                <option value="Palasan">Palasan</option>
+                                <option value="Patimbao">Patimbao</option>
+                                <option value="Poblacion I">Poblacion I</option>
+                                <option value="Poblacion II">Poblacion II</option>
+                                <option value="Poblacion III">Poblacion III</option>
+                                <option value="San Juan">San Juan</option>
+                                <option value="Santisima Cruz">Santisima Cruz</option>
+                                <option value="Santo Angel">Santo Angel</option>
+                                <option value="Santo Cristo">Santo Cristo</option>
+                                <option value="Santo Domingo">Santo Domingo</option>
+                                <option value="Sinalhan">Sinalhan</option>
+                                <option value="Tagumpay">Tagumpay</option>
+                                <option value="Tibig">Tibig</option>
+                                <option value="Tranca">Tranca</option>
+                                <option value="Victoria">Victoria</option>
+                                <option value="Villa Apolonia">Villa Apolonia</option>
+                                <option value="Yakal">Yakal</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please provide city/municipality/barangay.
                             </div>
-                            <div class="col-md-6">
-                                <label for="name_of_school" class="form-label">Name of School / School District:</label>
-                                <input type="text" class="form-control" id="name_of_school" name="name_of_school" required>
-                                <div class="invalid-feedback">
-                                    Please provide the name of the school/school district.
-                                </div>
+                        </div>
+                            <div class="form-group col-md-6">
+                            <label for="name_of_school" class="form-label">Name of School / School District:</label>
+                            <select class="form-control" id="name_of_school" name="name_of_school" required>
+                                <option value="" disabled selected>Choose...</option>
+                                <option value="Bagumbayan Elementary School">Bagumbayan Elementary School</option>
+                                <option value="Calios Elementary School">Calios Elementary School</option>
+                                <option value="Duhat Elementary School">Duhat Elementary School</option>
+                                <option value="Gatid Elementary School">Gatid Elementary School</option>
+                                <option value="Jasaaan Elementary School">Jasaaan Elementary School</option>
+                                <option value="Labuin Elementary School">Labuin Elementary School</option>
+                                <option value="Malinao Elementary School">Malinao Elementary School</option>
+                                <option value="Oogong Elementary School">Oogong Elementary School</option>
+                                <option value="Pagsawitan Elementary School">Pagsawitan Elementary School</option>
+                                <option value="Palasan Elementary School">Palasan Elementary School</option>
+                                <option value="Patimbao Elementary School">Patimbao Elementary School</option>
+                                <option value="Poblacion I Elementary School">Poblacion I Elementary School</option>
+                                <option value="Poblacion II Elementary School">Poblacion II Elementary School</option>
+                                <option value="Poblacion III Elementary School">Poblacion III Elementary School</option>
+                                <option value="San Juan Elementary School">San Juan Elementary School</option>
+                                <option value="Santisima Cruz Elementary School">Santisima Cruz Elementary School</option>
+                                <option value="Santo Angel Elementary School">Santo Angel Elementary School</option>
+                                <option value="Santo Cristo Elementary School">Santo Cristo Elementary School</option>
+                                <option value="Santo Domingo Elementary School">Santo Domingo Elementary School</option>
+                                <option value="Sinalhan Elementary School">Sinalhan Elementary School</option>
+                                <option value="Tagumpay Elementary School">Tagumpay Elementary School</option>
+                                <option value="Tibig Elementary School">Tibig Elementary School</option>
+                                <option value="Tranca Elementary School">Tranca Elementary School</option>
+                                <option value="Victoria Elementary School">Victoria Elementary School</option>
+                                <option value="Villa Apolonia Elementary School">Villa Apolonia Elementary School</option>
+                                <option value="Yakal Elementary School">Yakal Elementary School</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please provide the name of the school/school district.
                             </div>
+                        </div>
                             <div class="col-md-6">
                                 <label for="school_id_number" class="form-label">School ID Number:</label>
                                 <input type="text" class="form-control" id="school_id_number" name="school_id_number" required>
@@ -298,16 +357,17 @@ echo "Welcome, $user_firstname $user_lastname!";
                                         Please provide the beneficiary name.
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="beneficiary_sex" class="form-label">Sex:</label>
-                                    <select class="form-select" id="beneficiary_sex" name="beneficiary_sex[]" required>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        Please select the sex of the beneficiary.
-                                    </div>
+                                <div class="form-group col-md-6">
+                                <label for="beneficiary_sex" class="form-label">Sex:</label>
+                                <select class="form-control" id="beneficiary_sex" name="beneficiary_sex[]" required>
+                                    <option value="" disabled selected>Choose...</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select the sex of the beneficiary.
                                 </div>
+                            </div>
                                 <div class="col-md-6">
                                     <label for="beneficiary_grade_section" class="form-label">Grade/Section:</label>
                                     <input type="text" class="form-control" id="beneficiary_grade_section" name="beneficiary_grade_section[]" required>
@@ -359,46 +419,51 @@ echo "Welcome, $user_firstname $user_lastname!";
                                     <label for="nutritional_status_hfa" class="form-label">Nutritional Status (HFA):</label>
                                     <input type="text" class="form-control" id="nutritional_status_hfa" name="nutritional_status_hfa[]" readonly required>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="dewormed" class="form-label">Dewormed?</label>
-                                    <select class="form-select" id="dewormed" name="dewormed[]" required>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        Please select if the beneficiary was dewormed.
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="parents_consent_for_milk" class="form-label">Parent's consent for milk?</label>
-                                    <select class="form-select" id="parents_consent_for_milk" name="parents_consent_for_milk[]" required>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        Please select if parent's consent for milk is given.
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="participation_in_4ps" class="form-label">Participation in 4Ps?</label>
-                                    <select class="form-select" id="participation_in_4ps" name="participation_in_4ps[]" required>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        Please select if there is participation in 4Ps.
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="beneficiary_of_sbfp_in_previous_years" class="form-label">Beneficiary of SBFP in Previous Years?</label>
-                                    <select class="form-select" id="beneficiary_of_sbfp_in_previous_years" name="beneficiary_of_sbfp_in_previous_years[]" required>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        Please select if the beneficiary was part of SBFP in previous years.
-                                    </div>
-                                </div>
+                                <div class="form-group col-md-6">
+    <label for="dewormed" class="form-label">Dewormed?</label>
+    <select class="form-control" id="dewormed" name="dewormed[]" required>
+        <option selected disabled>Choose...</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+    <div class="invalid-feedback">
+        Please select if the beneficiary was dewormed.
+    </div>
+</div>
+<div class="form-group col-md-6">
+    <label for="parents_consent_for_milk" class="form-label">Parent's consent for milk?</label>
+    <select class="form-control" id="parents_consent_for_milk" name="parents_consent_for_milk[]" required>
+        <option selected disabled>Choose...</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+    <div class="invalid-feedback">
+        Please select if parent's consent for milk is given.
+    </div>
+</div>
+<div class="form-group col-md-6">
+    <label for="participation_in_4ps" class="form-label">Participation in 4Ps?</label>
+    <select class="form-control" id="participation_in_4ps" name="participation_in_4ps[]" required>
+        <option selected disabled>Choose...</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+    <div class="invalid-feedback">
+        Please select if there is participation in 4Ps.
+    </div>
+</div>
+<div class="form-group col-md-6">
+    <label for="beneficiary_of_sbfp_in_previous_years" class="form-label">Beneficiary of SBFP in Previous Years?</label>
+    <select class="form-control" id="beneficiary_of_sbfp_in_previous_years" name="beneficiary_of_sbfp_in_previous_years[]" required>
+        <option selected disabled>Choose...</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+    <div class="invalid-feedback">
+        Please select if the beneficiary was part of SBFP in previous years.
+    </div>
+</div>
+
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary mt-3">Submit</button>
@@ -570,6 +635,7 @@ $result = $stmt->get_result();
     </div>
   </div>
 </div>
+
 
 
 

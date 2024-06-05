@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="css/app-dark.css" id="darkTheme" disabled>
 </head>
 
+
+
 <body class="light">
 
 <?php
@@ -54,7 +56,7 @@ if (isset($_GET['session_id'])) {
     // Check if there are any results
     if ($result_details->num_rows > 0) {
         // Display the beneficiary details in a table
-        echo "<div class='col-md-12 my-4'>
+        echo "<div id='print-content' class='col-md-12 my-4'>
                 <h2 class='h4 mb-1'>Beneficiary Details</h2>
                 <div class='card shadow'>
                     <div class='card-body'>
@@ -116,6 +118,28 @@ if (isset($_GET['session_id'])) {
     <button type="submit" class="btn btn-primary">Back</button>
 </form>
 
+<!-- Print Button -->
+<button onclick="printTable()" class="btn btn-primary">Print Table</button>
+
+<script>
+    function printTable() {
+        var content = document.getElementById('print-content').innerHTML;
+        var printWindow = window.open('', '', 'height=400,width=1000');
+        printWindow.document.write('<html><head><title>Print Table</title>');
+        printWindow.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">');
+        printWindow.document.write('<style>');
+        printWindow.document.write('body { font-family: Arial, sans-serif; }');
+        printWindow.document.write('.table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }');
+        printWindow.document.write('.table th, .table td { border: 1px solid #dee2e6; padding: 8px; }');
+        printWindow.document.write('.table thead th { background-color: #f8f9fa; }');
+        printWindow.document.write('</style></head><body>');
+        printWindow.document.write(content);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+    }
+</script>
+
 <script src="js/jquery.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/moment.min.js"></script>
@@ -126,6 +150,7 @@ if (isset($_GET['session_id'])) {
     <script src="js/tinycolor-min.js"></script>
     <script src="js/config.js"></script>
     <script src="js/apps.js"></script>
+    
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56159088-1"></script>
     <script>

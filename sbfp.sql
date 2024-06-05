@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 05, 2024 at 04:50 PM
+-- Generation Time: Jun 05, 2024 at 09:44 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -43,12 +43,9 @@ CREATE TABLE `beneficiaries` (
 --
 
 INSERT INTO `beneficiaries` (`id`, `division_province`, `city_municipality_barangay`, `name_of_school`, `school_id_number`, `name_of_principal`, `name_of_feeding_focal_person`, `session_id`) VALUES
-(60, 'santa cruz laguna', 'sta cruz, laguna, oogong', 'oogong elementary school', '102283', 'jd malasin', 'bill jeff', '8aLYb1fv'),
-(61, 'santa cruz laguna', 'sta cruz, laguna, oogong', 'oogong elementary school', '102283', 'jd malasin', 'bill jeff', '8aLYb1fv'),
-(62, 'santa cruz laguna', 'sta cruz, laguna, duhat', 'duhat elementary school', '0909', 'cyrus gaza', 'jd malasin', 'cT4TmFpX'),
-(63, '4564', 'sta cruz, laguna, oogong', 'mojon elementary school', '10945', 'ropdolf', 'sample person', '8aLYb1fv'),
-(64, 'santa cruz laguna', 'sta cruz, laguna, oogong', 'oogong elementary school', '102345', 'sample ', 'bill jeff', '8aLYb1fv'),
-(65, 'sample ', 'sta cruz, laguna, oogong', 'brgy oogong sta cruz laguna', '102345', 'ropdolf', 'bill jeff', '8aLYb1fv');
+(68, 'santa cruz laguna', 'sta cruz, laguna, Bubukal', 'Bubukal ES', '108437', 'LOREVIE K. RIVERA', 'sample person', 'cT4TmFpX'),
+(69, 'santa cruz laguna', 'sta cruz, laguna, Callos (Escolapia)', 'Callos (Escolapia) ES', '108438', 'MARIFE F. DUMA', 'sample person', 'sKcTTJ3x'),
+(70, 'Santa Cruz, Laguna', 'Bagumbayan', 'Bagumbayan Elementary School', '108436', 'CARMELITA D. REODICA', 'bill jeff', '8aLYb1fv');
 
 -- --------------------------------------------------------
 
@@ -82,12 +79,9 @@ CREATE TABLE `beneficiary_details` (
 --
 
 INSERT INTO `beneficiary_details` (`id`, `beneficiary_id`, `name`, `sex`, `grade_section`, `date_of_birth`, `date_of_weighing`, `age`, `weight`, `height`, `bmi`, `nutritional_status_bmia`, `nutritional_status_hfa`, `dewormed`, `parents_consent_for_milk`, `participation_in_4ps`, `beneficiary_of_sbfp_in_previous_years`, `session_id`) VALUES
-(35, 60, 'jelo dikitanan', 'Male', 'grade 6', '2018-07-19', '2024-06-05', '5', 45.00, 110.00, 37.19, 'Obese', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes', '8aLYb1fv'),
-(36, 61, 'cyrus gaza', 'Female', 'grade 6', '2018-03-15', '2024-06-05', '6', 45.00, 120.00, 31.25, 'Obese', 'Normal', 'Yes', 'Yes', 'Yes', 'Yes', '8aLYb1fv'),
-(37, 62, 'jelo dikitanan', 'Male', 'grade 6', '2021-07-23', '2024-06-05', '2', 34.00, 110.00, 28.10, 'Overweight', 'Normal', 'Yes', 'Yes', 'Yes', 'Yes', 'cT4TmFpX'),
-(38, 63, 'sample name', 'Male', 'grade 6', '2021-07-21', '2024-06-05', '2', 34.00, 111.00, 27.60, 'Overweight', 'Tall', 'Yes', 'Yes', 'Yes', 'Yes', '8aLYb1fv'),
-(39, 64, 'jelo dikitanan', 'Female', 'grade 6', '2019-10-09', '2024-06-05', '4', 43.00, 112.00, 34.28, 'Obese', 'Tall', 'Yes', 'Yes', 'Yes', 'Yes', '8aLYb1fv'),
-(40, 65, 'sample name', 'Female', 'grade 6', '2019-03-21', '2024-06-05', '5', 46.00, 113.00, 36.02, 'Obese', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes', '8aLYb1fv');
+(43, 68, 'cyrus gaza', 'Male', 'grade 6', '2015-07-09', '2024-06-06', '8', 43.00, 110.00, 35.54, 'Obese', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes', 'cT4TmFpX'),
+(44, 69, 'araza adrian', 'Male', 'grade 6', '2016-06-23', '2024-06-06', '8', 34.00, 120.00, 23.61, 'Normal', 'Normal', 'Yes', 'Yes', 'Yes', 'Yes', 'sKcTTJ3x'),
+(45, 70, 'jelo dikitanan', 'Female', 'grade 6', '2014-06-20', '2024-06-06', '9', 34.00, 123.00, 22.47, 'Normal', 'Tall', 'Yes', 'Yes', 'Yes', 'Yes', '8aLYb1fv');
 
 -- --------------------------------------------------------
 
@@ -174,9 +168,9 @@ CREATE TABLE `schools` (
 --
 
 INSERT INTO `schools` (`id`, `division_province`, `school_district_municipality`, `school_name`, `beis_id`, `school_address`, `barangay_name`, `supervisor_principal_name`, `contact_number`, `email_address`, `total_beneficiaries`, `session_id`) VALUES
-(21, 'santa cruz laguna', 'santa cruz', 'laguna state polytechnic University', '108436', 'brgy. bubukal sta cruz laguna', 'bubukal', 'LOREVIE K. RIVERA', '503-6752', 'sample@gmail.com', 2000, '8aLYb1fv'),
-(25, 'santa cruz laguna', 'oogong elementary school', 'laguna state polytechnic University', '108436', 'brgy. oogong sta cruz laguna', 'bagumbayan ', 'CARMELITA D. REODICA', '557-2898', 'sample@gmail.com', 3453, '8aLYb1fv'),
-(26, 'sample ', 'oogong elementary school', 'oogong elementary school', '126502', 'brgy. bubukal sta cruz laguna', 'bubukal', 'CARMELITA D. REODICA', '09234223', 'sample@gmail.com', 345, '8aLYb1fv');
+(27, 'santa cruz laguna', 'santa cruz', 'Bagumbayan ES', '108436', 'brgy. bagumbayan sta cruz laguna', 'brgy.bubukal', 'CARMELITA D. REODICA', '5239410', 'sample@gmail.com', 282, '8aLYb1fv'),
+(28, 'santa cruz laguna', 'santa cruz', 'Bubukal ES', '108437	', 'brgy. bubukal sta cruz laguna', 'brgy.bubukal', 'LOREVIE K. RIVERA', '503-6752', 'sample@gmail.com', 234, 'sKcTTJ3x'),
+(29, 'santa cruz laguna', 'santa cruz', 'Callos (Escolapia) ES', '108438', 'brgy. Callos sta cruz laguna', 'brgy. Callos ', 'MARIFE F. DUMA', '557-2898', 'sample@gmail.com', 145, 'cT4TmFpX');
 
 -- --------------------------------------------------------
 
@@ -268,13 +262,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `beneficiaries`
 --
 ALTER TABLE `beneficiaries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT for table `beneficiary_details`
 --
 ALTER TABLE `beneficiary_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `division_schools`
@@ -298,7 +292,7 @@ ALTER TABLE `quarterly_reportform8`
 -- AUTO_INCREMENT for table `schools`
 --
 ALTER TABLE `schools`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `users`

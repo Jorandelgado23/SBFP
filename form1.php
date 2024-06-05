@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="favicon.ico">
+   <link rel="icon" href="images/logo.png" type="image/x-icon">
     <title>SBFP FORM 1</title>
     <!-- Simple bar CSS -->
     <link rel="stylesheet" href="css/simplebar.css">
@@ -236,7 +236,8 @@ echo "Welcome, $user_firstname $user_lastname!";
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form class="row g-3" action="submit.php" method="post">
+                    <form id="sbfpForm" class="row g-3" action="submit.php" method="post">
+
                             <div class="col-md-6">
                                 <label>Division/Province:</label>
                                 <input class="form-control" type="text" name="division_province" required><br>
@@ -356,6 +357,49 @@ echo "Welcome, $user_firstname $user_lastname!";
             </div>
         </div>
     </div>
+
+    <script>
+// Intercept form submission
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('sbfpForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Submit form data asynchronously using AJAX
+        var formData = new FormData(this);
+        fetch('submit.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            // Display SweetAlert notification upon successful submission
+            Swal.fire({
+                title: 'Success!',
+                text: data,
+                icon: 'success',
+                showConfirmButton: false, // Hide the "OK" button
+                timer: 2000 // Timer for auto-close (3 seconds)
+            });
+            // Optionally, you can reset the form after successful submission
+            document.getElementById('sbfpForm').reset();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Display SweetAlert notification for error handling
+            Swal.fire({
+                title: 'Error!',
+                text: 'An error occurred while submitting the form.',
+                icon: 'error'
+            });
+        });
+    });
+});
+</script>
+
+<!-- Include SweetAlert library from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
 </section>
 
 <?php

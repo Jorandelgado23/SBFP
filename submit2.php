@@ -41,12 +41,33 @@ $supervisor_principal_name = $_POST['supervisor_principal_name'];
 $contact_number = $_POST['contact_number'];
 $email_address = $_POST['email_address'];
 $total_beneficiaries = $_POST['total_beneficiaries'];
-$stmt->execute();
 
-echo "New record created successfully";
+if ($stmt->execute()) {
+    echo '<script>
+            window.onload = function() {
+                swal({
+                    title: "Success!",
+                    text: "New record created successfully",
+                    icon: "success"
+                }).then(function() {
+                    window.location = "form2.php";
+                });
+            }
+          </script>';
+} else {
+    echo '<script>
+            window.onload = function() {
+                swal({
+                    title: "Error!",
+                    text: "Failed to create new record",
+                    icon: "error"
+                }).then(function() {
+                    window.location = "form2.php";
+                });
+            }
+          </script>';
+}
 
 $stmt->close();
 $conn->close();
-header("Location: form2.php");
-
 ?>

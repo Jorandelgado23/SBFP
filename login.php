@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <meta name="author" content="">
-  <link rel="icon" href="favicon.ico">
+  <link rel="icon" href="images/logo.png" type="image/x-icon">
+
   <title>LOGIN PAGE</title>
   <!-- Simple bar CSS -->
   <link rel="stylesheet" href="css/simplebar.css">
@@ -64,7 +65,7 @@
       </div>
       <div class="col-lg-6">
         <div class="w-50 mx-auto form-container">
-          <form class="text-center" action="loginauth.php" method="post">
+          <form class="text-center" id="loginForm" method="post">
             <h1 class="h6 mb-3">Sign in</h1>
             <div class="form-group">
               <label for="inputEmail" class="sr-only">Email address</label>
@@ -95,15 +96,55 @@
   <script src="js/tinycolor-min.js"></script>
   <script src="js/config.js"></script>
   <script src="js/apps.js"></script>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56159088-1"></script>
+  <!-- SweetAlert2 library -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag('js', new Date());
-    gtag('config', 'UA-56159088-1');
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent the form from submitting
+
+      // Get form data
+      const formData = new FormData(this);
+
+      // Send form data to login authentication script
+      fetch('loginauth.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Redirect based on role
+          if (data.role === 'admin') {
+            window.location.href = 'admindashboard.php';
+          } else if (data.role === 'sbfp') {
+            window.location.href = 'dashboard.php';
+          } else {
+            // Invalid role
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Invalid role!'
+            });
+          }
+        } else {
+          // Display error message
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: data.message
+          });
+        }
+      })
+      .catch(error => {
+        // Handle network error
+        console.error('Error:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'An error occurred. Please try again later.'
+        });
+      });
+    });
   </script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 if (!isset($_SESSION['email'])) {
     header("Location: login.php");
     exit();
@@ -66,7 +67,13 @@ foreach ($_POST['beneficiary_name'] as $index => $beneficiary_name) {
 $stmt->close();
 $conn->close();
 
-echo "Data submitted successfully!";
-header("Location: form1.php");
+// Return JSON response
+$response = array(
+    'success' => true,
+    'message' => 'Data submitted successfully!'
+);
 
+header('Content-Type: application/json');
+echo json_encode($response);
+exit;
 ?>

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 03, 2024 at 10:14 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: Jun 05, 2024 at 04:50 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -34,30 +34,21 @@ CREATE TABLE `beneficiaries` (
   `name_of_school` varchar(255) DEFAULT NULL,
   `school_id_number` varchar(50) DEFAULT NULL,
   `name_of_principal` varchar(255) DEFAULT NULL,
-  `name_of_feeding_focal_person` varchar(255) DEFAULT NULL
+  `name_of_feeding_focal_person` varchar(255) DEFAULT NULL,
+  `session_id` varchar(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `beneficiaries`
 --
 
-INSERT INTO `beneficiaries` (`id`, `division_province`, `city_municipality_barangay`, `name_of_school`, `school_id_number`, `name_of_principal`, `name_of_feeding_focal_person`) VALUES
-(18, 'laguna', 'sta cruz, laguna, oogong', 'brgy oogong sta cruz laguna', '1003343253', 'sample', 'sample person'),
-(19, 'laguna', 'sta cruz, laguna, oogong', 'brgy oogong sta cruz laguna', '1003343253', 'sample', 'sample person'),
-(20, 'laguna', 'sta cruz, laguna, oogong', 'brgy oogong sta cruz laguna', '1003343253', 'sample', 'sample person'),
-(21, 'laguna', 'sta cruz, laguna, oogong', 'brgy oogong sta cruz laguna', '1003343253', 'sample', 'sample person'),
-(22, 'laguna', 'sta cruz, laguna, oogong', 'brgy oogong sta cruz laguna', '1003343253', 'sample', 'sample person'),
-(26, 'laguna', 'sta cruz, laguna, oogong', 'brgy oogong sta cruz laguna', '1003343253', 'sample', 'sample person'),
-(27, 'laguna', 'sta cruz, laguna, oogong', 'brgy oogong sta cruz laguna', '1003343253', 'sample', 'sample person'),
-(28, 'laguna', 'sta cruz, laguna, oogong', 'brgy oogong sta cruz laguna', '1003343253', 'sample', 'sample person'),
-(29, 'laguna', 'sta cruz, laguna, oogong', 'brgy oogong sta cruz laguna', '1003343253', 'sample', 'sample person'),
-(30, 'laguna', 'sta cruz, laguna, oogong', 'brgy oogong sta cruz laguna', '1003343253', 'sample', 'sample person'),
-(35, 'laguna', 'sta cruz, laguna, oogong', 'brgy oogong sta cruz laguna', '1003343253', 'sample', 'sample person'),
-(36, 'laguna', 'sta cruz, laguna, oogong', 'brgy oogong sta cruz laguna', '1003343253', 'sample', 'sample person'),
-(37, 'laguna', 'sta cruz, laguna, oogong', 'oogong elementary school', '102345', 'ropdolf', 'bill jeff'),
-(38, 'laguna', 'sta cruz, laguna, oogong', 'oogong elementary school', '1003343253', 'ropdolf', 'bill jeff'),
-(39, 'laguna', 'sta cruz, laguna, oogong', 'brgy oogong sta cruz laguna', '1003343253', 'sample', 'sample person'),
-(40, 'laguna', 'sta cruz, laguna, oogong', 'brgy oogong sta cruz laguna', '1003343253', 'sample', 'sample person');
+INSERT INTO `beneficiaries` (`id`, `division_province`, `city_municipality_barangay`, `name_of_school`, `school_id_number`, `name_of_principal`, `name_of_feeding_focal_person`, `session_id`) VALUES
+(60, 'santa cruz laguna', 'sta cruz, laguna, oogong', 'oogong elementary school', '102283', 'jd malasin', 'bill jeff', '8aLYb1fv'),
+(61, 'santa cruz laguna', 'sta cruz, laguna, oogong', 'oogong elementary school', '102283', 'jd malasin', 'bill jeff', '8aLYb1fv'),
+(62, 'santa cruz laguna', 'sta cruz, laguna, duhat', 'duhat elementary school', '0909', 'cyrus gaza', 'jd malasin', 'cT4TmFpX'),
+(63, '4564', 'sta cruz, laguna, oogong', 'mojon elementary school', '10945', 'ropdolf', 'sample person', '8aLYb1fv'),
+(64, 'santa cruz laguna', 'sta cruz, laguna, oogong', 'oogong elementary school', '102345', 'sample ', 'bill jeff', '8aLYb1fv'),
+(65, 'sample ', 'sta cruz, laguna, oogong', 'brgy oogong sta cruz laguna', '102345', 'ropdolf', 'bill jeff', '8aLYb1fv');
 
 -- --------------------------------------------------------
 
@@ -82,24 +73,21 @@ CREATE TABLE `beneficiary_details` (
   `dewormed` enum('Yes','No') NOT NULL,
   `parents_consent_for_milk` enum('Yes','No') NOT NULL,
   `participation_in_4ps` enum('Yes','No') NOT NULL,
-  `beneficiary_of_sbfp_in_previous_years` enum('Yes','No') NOT NULL
+  `beneficiary_of_sbfp_in_previous_years` enum('Yes','No') NOT NULL,
+  `session_id` varchar(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `beneficiary_details`
 --
 
-INSERT INTO `beneficiary_details` (`id`, `beneficiary_id`, `name`, `sex`, `grade_section`, `date_of_birth`, `date_of_weighing`, `age`, `weight`, `height`, `bmi`, `nutritional_status_bmia`, `nutritional_status_hfa`, `dewormed`, `parents_consent_for_milk`, `participation_in_4ps`, `beneficiary_of_sbfp_in_previous_years`) VALUES
-(1, 21, 'sample name', 'Female', 'grade 6', '2009-10-14', '2024-05-16', '14', 34.00, 120.00, 23.61, 'Wasted', 'Normal', 'Yes', 'No', 'Yes', 'Yes'),
-(2, 22, 'sample name', 'Female', 'grade 6', '2002-10-26', '2024-05-18', '21', 23.00, 129.00, 13.82, 'Severely Wasted', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes'),
-(3, 26, 'sample name', 'Male', 'grade 6', '2004-07-07', '2024-05-18', '19', 34.00, 128.00, 20.75, 'Normal', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes'),
-(7, 30, 'sample name', 'Male', 'grade 1', '2021-11-15', '2024-05-19', '2', 23.00, 120.00, 15.97, 'Severely Wasted', 'Tall', 'Yes', 'Yes', 'Yes', 'Yes'),
-(12, 35, 'sample name', 'Female', 'grade 1', '2020-10-19', '2024-05-19', '3', 34.00, 111.00, 27.60, 'Overweight', 'Tall', 'Yes', 'Yes', 'Yes', 'Yes'),
-(13, 36, 'sample name', 'Female', 'grade 6', '2001-10-16', '2024-05-21', '22', 34.00, 110.00, 28.10, 'Overweight', 'Stunted', 'No', 'No', 'Yes', 'Yes'),
-(14, 37, 'jelo dikitanan', 'Female', 'grade 6', '2002-06-21', '2024-05-21', '21', 50.00, 172.00, 16.90, 'Wasted', 'Tall', 'Yes', 'Yes', 'Yes', 'Yes'),
-(15, 38, 'jelo dikitanan', 'Female', 'grade 1', '2003-10-15', '2024-05-21', '20', 50.00, 172.00, 16.90, 'Wasted', 'Tall', 'Yes', 'Yes', 'Yes', 'Yes'),
-(16, 39, 'sample name', 'Female', 'grade 6', '2008-10-21', '2024-05-21', '15', 34.00, 120.00, 23.61, 'Normal', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes'),
-(17, 40, 'sample name', 'Female', 'grade 6', '2008-10-21', '2024-05-21', '15', 34.00, 120.00, 23.61, 'Normal', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes');
+INSERT INTO `beneficiary_details` (`id`, `beneficiary_id`, `name`, `sex`, `grade_section`, `date_of_birth`, `date_of_weighing`, `age`, `weight`, `height`, `bmi`, `nutritional_status_bmia`, `nutritional_status_hfa`, `dewormed`, `parents_consent_for_milk`, `participation_in_4ps`, `beneficiary_of_sbfp_in_previous_years`, `session_id`) VALUES
+(35, 60, 'jelo dikitanan', 'Male', 'grade 6', '2018-07-19', '2024-06-05', '5', 45.00, 110.00, 37.19, 'Obese', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes', '8aLYb1fv'),
+(36, 61, 'cyrus gaza', 'Female', 'grade 6', '2018-03-15', '2024-06-05', '6', 45.00, 120.00, 31.25, 'Obese', 'Normal', 'Yes', 'Yes', 'Yes', 'Yes', '8aLYb1fv'),
+(37, 62, 'jelo dikitanan', 'Male', 'grade 6', '2021-07-23', '2024-06-05', '2', 34.00, 110.00, 28.10, 'Overweight', 'Normal', 'Yes', 'Yes', 'Yes', 'Yes', 'cT4TmFpX'),
+(38, 63, 'sample name', 'Male', 'grade 6', '2021-07-21', '2024-06-05', '2', 34.00, 111.00, 27.60, 'Overweight', 'Tall', 'Yes', 'Yes', 'Yes', 'Yes', '8aLYb1fv'),
+(39, 64, 'jelo dikitanan', 'Female', 'grade 6', '2019-10-09', '2024-06-05', '4', 43.00, 112.00, 34.28, 'Obese', 'Tall', 'Yes', 'Yes', 'Yes', 'Yes', '8aLYb1fv'),
+(40, 65, 'sample name', 'Female', 'grade 6', '2019-03-21', '2024-06-05', '5', 46.00, 113.00, 36.02, 'Obese', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes', '8aLYb1fv');
 
 -- --------------------------------------------------------
 
@@ -115,16 +103,9 @@ CREATE TABLE `division_schools` (
   `target_sbfp_school` int(11) NOT NULL,
   `actual_sbfp_school` int(11) NOT NULL,
   `percent` decimal(5,2) DEFAULT NULL,
-  `status` varchar(255) DEFAULT NULL
+  `status` varchar(255) DEFAULT NULL,
+  `session_id` varchar(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `division_schools`
---
-
-INSERT INTO `division_schools` (`id`, `report_id`, `division_school`, `sdo_school`, `target_sbfp_school`, `actual_sbfp_school`, `percent`, `status`) VALUES
-(1, 2, 'oogong sta cruz laguna ', '23', 213, 123, 123.00, '23423'),
-(2, 3, 'school', '1234', 234, 345, 234.00, 'fthtf');
 
 -- --------------------------------------------------------
 
@@ -139,21 +120,16 @@ CREATE TABLE `milkcomponent` (
   `school_id_number` varchar(255) NOT NULL,
   `student_name` varchar(255) NOT NULL,
   `grade_section` varchar(255) NOT NULL,
-  `milk_tolerance` enum('Without milk intolerance and will participate in milk feeding','With milk intolerance but willing to participate in milk feeding','Not allowed by parents to participate in milk feeding') NOT NULL
+  `milk_tolerance` enum('Without milk intolerance and will participate in milk feeding','With milk intolerance but willing to participate in milk feeding','Not allowed by parents to participate in milk feeding') NOT NULL,
+  `session_id` varchar(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `milkcomponent`
 --
 
-INSERT INTO `milkcomponent` (`id`, `region_division_district`, `name_of_school`, `school_id_number`, `student_name`, `grade_section`, `milk_tolerance`) VALUES
-(1, 'laguna', 'oogong elementary school', '1003343253', 'joranm', 'grade 6', 'With milk intolerance but willing to participate in milk feeding'),
-(2, 'laguna', 'oogong elementary school', '1003343253', 'joranm', 'grade 6', 'Without milk intolerance and will participate in milk feeding'),
-(3, 'laguna', 'oogong elementary school', '1003343253', 'jelo', 'grade 7', 'Without milk intolerance and will participate in milk feeding'),
-(4, 'laguna', 'oogong elementary school', '1003343253', 'bill jeff ', 'grade 1', 'With milk intolerance but willing to participate in milk feeding'),
-(5, 'laguna', 'oogong elementary school', '102345', 'shyla delgado', 'grade 6 kamagong', 'Without milk intolerance and will participate in milk feeding'),
-(6, 'laguna', 'oogong elementary school', '102345', 'joran delgado', 'grade 6 ewan', 'With milk intolerance but willing to participate in milk feeding'),
-(7, 'laguna sta cruz', 'oogong elementary school', '102345', 'bill jeff', 'grade 5', 'With milk intolerance but willing to participate in milk feeding');
+INSERT INTO `milkcomponent` (`id`, `region_division_district`, `name_of_school`, `school_id_number`, `student_name`, `grade_section`, `milk_tolerance`, `session_id`) VALUES
+(16, 'laguna sta cruz', 'oogong elementary school', '102345', 'joranm', 'grade 5', 'With milk intolerance but willing to participate in milk feeding', '8aLYb1fv');
 
 -- --------------------------------------------------------
 
@@ -168,17 +144,9 @@ CREATE TABLE `quarterly_reportform8` (
   `first_liquidation` varchar(255) DEFAULT NULL,
   `second_liquidation` varchar(255) DEFAULT NULL,
   `remarks` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `session_id` varchar(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `quarterly_reportform8`
---
-
-INSERT INTO `quarterly_reportform8` (`report_id`, `region_division`, `amount_allocated`, `first_liquidation`, `second_liquidation`, `remarks`, `created_at`) VALUES
-(1, 'laguna', 435.00, '435', '34534', '34534', '2024-05-24 10:45:06'),
-(2, 'laguna', 23423.00, '2342', '2342', '2342', '2024-05-24 10:47:23'),
-(3, 'sample', 473.00, '565', '6767', 'ewan', '2024-06-03 02:40:41');
 
 -- --------------------------------------------------------
 
@@ -197,17 +165,18 @@ CREATE TABLE `schools` (
   `supervisor_principal_name` varchar(255) DEFAULT NULL,
   `contact_number` varchar(20) DEFAULT NULL,
   `email_address` varchar(100) DEFAULT NULL,
-  `total_beneficiaries` int(11) DEFAULT NULL
+  `total_beneficiaries` int(11) DEFAULT NULL,
+  `session_id` varchar(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `schools`
 --
 
-INSERT INTO `schools` (`id`, `division_province`, `school_district_municipality`, `school_name`, `beis_id`, `school_address`, `barangay_name`, `supervisor_principal_name`, `contact_number`, `email_address`, `total_beneficiaries`) VALUES
-(13, 'laguna', 'oogong elementary school', 'oogong elementary school', '126502', 'brgy. oogong sta cruz laguna', 'oogong', 'example name', '09207569581', 'sample@gmail.com', 47),
-(14, 'laguna', 'oogong elementary school', 'oogong elementary school', '126502', 'brgy. bubukal sta cruz laguna', 'oogong', 'example name', '09234223', 'sample@gmail.com', 100),
-(15, 'laguna', 'sta cruz', 'bagumbayan elementary school', '108436', 'bagumbayan sta cruz laguna', 'bagumbayan ', 'CARMELITA D. REODICA', '5239410', 'test1@gmail.com', 120);
+INSERT INTO `schools` (`id`, `division_province`, `school_district_municipality`, `school_name`, `beis_id`, `school_address`, `barangay_name`, `supervisor_principal_name`, `contact_number`, `email_address`, `total_beneficiaries`, `session_id`) VALUES
+(21, 'santa cruz laguna', 'santa cruz', 'laguna state polytechnic University', '108436', 'brgy. bubukal sta cruz laguna', 'bubukal', 'LOREVIE K. RIVERA', '503-6752', 'sample@gmail.com', 2000, '8aLYb1fv'),
+(25, 'santa cruz laguna', 'oogong elementary school', 'laguna state polytechnic University', '108436', 'brgy. oogong sta cruz laguna', 'bagumbayan ', 'CARMELITA D. REODICA', '557-2898', 'sample@gmail.com', 3453, '8aLYb1fv'),
+(26, 'sample ', 'oogong elementary school', 'oogong elementary school', '126502', 'brgy. bubukal sta cruz laguna', 'bubukal', 'CARMELITA D. REODICA', '09234223', 'sample@gmail.com', 345, '8aLYb1fv');
 
 -- --------------------------------------------------------
 
@@ -224,17 +193,23 @@ CREATE TABLE `users` (
   `phone_number` varchar(15) DEFAULT NULL,
   `birthday` date DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `role` varchar(50) DEFAULT NULL
+  `role` varchar(50) DEFAULT NULL,
+  `profile_picture` varchar(255) DEFAULT NULL,
+  `session_id` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `phone_number`, `birthday`, `created_at`, `role`) VALUES
-(6, 'prince joran', 'delgado', 'jorandelgado23@gmail.com', '$2y$10$XmCvMr8.O7GqE7//bH49Fe.GGghfuQ1kbLZkKn0MLxJEsGt0DK11i', '09272484827', '2009-10-14', '2024-06-03 07:48:55', 'admin'),
-(7, 'jeri', 'palasin', 'jdmalasin@gmail.com', '$2y$10$av2WrfnRJyEHXDMPLh/2n.Dg.8vLEWtXz.RxXesAnPMMwlGSBtJBi', '09123345435', '2014-07-04', '2024-06-03 07:50:03', 'sbfp'),
-(9, 'jeri dominic', 'palasin', 'jdpalasin@gmail.com', '$2y$10$4j3cOc0FWr143A9zRkM51.9um6nPgi6qR36NEqs9ziuu/DsN69fMG', '09123345435', '2006-02-03', '2024-06-03 08:05:52', 'admin');
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `phone_number`, `birthday`, `created_at`, `role`, `profile_picture`, `session_id`) VALUES
+(6, 'prince joran', 'delgado', 'jorandelgado23@gmail.com', '$2y$10$XmCvMr8.O7GqE7//bH49Fe.GGghfuQ1kbLZkKn0MLxJEsGt0DK11i', '09272484827', '2009-10-14', '2024-06-03 07:48:55', 'admin', NULL, ''),
+(9, 'jeri dominic', 'palasin', 'jdpalasin@gmail.com', '$2y$10$4j3cOc0FWr143A9zRkM51.9um6nPgi6qR36NEqs9ziuu/DsN69fMG', '09123345435', '2006-02-03', '2024-06-03 08:05:52', 'admin', NULL, ''),
+(11, 'jovin', 'delgado', 'jovindelgado@gmail.com', '$2y$10$U2TzdInX.sQIlrvo3VO9Fua2YsYC/O.tzTbOWO3kCS36w2exHvAdy', '09123345353', '2019-06-13', '2024-06-05 09:39:06', 'sbfp', NULL, 'cT4TmFpX'),
+(12, 'jayvee', 'corollo', 'jayvee@gmail.com', '$2y$10$1rR18cvmLqIajSyd9X8.0ukBKHR01DpyN8ck.EgAREQPUis1INW06', '09207569581', '2011-06-15', '2024-06-05 10:31:00', 'sbfp', NULL, '8aLYb1fv'),
+(13, 'cyrus', 'dominic', 'cyrusgaza@gmail.com', '$2y$10$mlSzPg2auWUU4z2hqdyHYuRqZCfk5Z8l2YXKIsL2BHoz515hvRVJe', '0954654654', '2002-10-17', '2024-06-05 12:36:50', 'admin', NULL, '7yE5xxCj'),
+(14, 'jayvee', 'corollo', 'jayvee23@gmail.com', '$2y$10$FiAHjnpmXris.sCwAxQ3EOflSrCtNjTsOfkiLxPyKIcMmkiM13Poi', '09207569581', '2010-11-17', '2024-06-05 12:39:00', 'admin', NULL, ''),
+(15, 'adrian', 'araza', 'araza1@gmail.com', '$2y$10$2T.T9//FJ71WfHqn7WRXAORMQYOT0.Jnb7GYHGFM2LoJC8bVCeT/a', '09123345353', '2012-10-05', '2024-06-05 12:39:34', 'sbfp', NULL, 'sKcTTJ3x');
 
 --
 -- Indexes for dumped tables
@@ -293,13 +268,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `beneficiaries`
 --
 ALTER TABLE `beneficiaries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `beneficiary_details`
 --
 ALTER TABLE `beneficiary_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `division_schools`
@@ -311,7 +286,7 @@ ALTER TABLE `division_schools`
 -- AUTO_INCREMENT for table `milkcomponent`
 --
 ALTER TABLE `milkcomponent`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `quarterly_reportform8`
@@ -323,13 +298,13 @@ ALTER TABLE `quarterly_reportform8`
 -- AUTO_INCREMENT for table `schools`
 --
 ALTER TABLE `schools`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables

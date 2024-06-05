@@ -37,24 +37,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['email'] = $email; // Store email in session
             $_SESSION['role'] = $role;
 
-            // Redirect based on role
-            if ($role == 'admin') {
-                header("Location: admindashboard.php");
-            } else if ($role == 'sbfp') {
-                header("Location: dashboard.php");
-            } else {
-                echo "Invalid role.";
-            }
+            // Return JSON response indicating success
+            echo json_encode(array('success' => true, 'role' => $role));
             exit();
         } else {
-            echo "Invalid password.";
+            // Invalid password
+            echo json_encode(array('success' => false, 'message' => 'Invalid password.'));
+            exit();
         }
     } else {
-        echo "No user found with that email address.";
+        // No user found with that email address
+        echo json_encode(array('success' => false, 'message' => 'No user found with that email address.'));
+        exit();
     }
 
     $stmt->close();
 }
 
+// Close connection
 $conn->close();
 ?>

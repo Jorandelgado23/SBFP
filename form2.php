@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="favicon.ico">
+    <link rel="icon" href="images/logo.png" type="image/x-icon">
     <title>SBFP FORM 2</title>
     <!-- Simple bar CSS -->
     <link rel="stylesheet" href="css/simplebar.css">
@@ -206,62 +206,94 @@ $conn->close();
 
     <!-- The Modal -->
     <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="formModalLabel">Beneficiary Form</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="submit2.php" method="post">
-                        <div class="form-group">
-                            <label>Division/Province:</label>
-                            <input type="text" class="form-control" name="division_province" required>
-                        </div>
-                        <div class="form-group">
-                            <label>School District/City/Municipality:</label>
-                            <input type="text" class="form-control" name="school_district_municipality" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Name of School:</label>
-                            <input type="text" class="form-control" name="school_name" required>
-                        </div>
-                        <div class="form-group">
-                            <label>BEIS ID No.:</label>
-                            <input type="text" class="form-control" name="beis_id">
-                        </div>
-                        <div class="form-group">
-                            <label>School Address:</label>
-                            <input type="text" class="form-control" name="school_address">
-                        </div>
-                        <div class="form-group">
-                            <label>Name of Barangay:</label>
-                            <input type="text" class="form-control" name="barangay_name">
-                        </div>
-                        <div class="form-group">
-                            <label>Name of District Supervisors/School Principal or OICs:</label>
-                            <input type="text" class="form-control" name="supervisor_principal_name">
-                        </div>
-                        <div class="form-group">
-                            <label>Contact Number:</label>
-                            <input type="text" class="form-control" name="contact_number">
-                        </div>
-                        <div class="form-group">
-                            <label>Email Address:</label>
-                            <input type="text" class="form-control" name="email_address">
-                        </div>
-                        <div class="form-group">
-                            <label>Total Beneficiaries:</label>
-                            <input type="number" class="form-control" name="total_beneficiaries" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="formModalLabel">Beneficiary Form</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="submitForm" method="post">
+                    <div class="form-group">
+                        <label>Division/Province:</label>
+                        <input type="text" class="form-control" name="division_province" required>
+                    </div>
+                    <div class="form-group">
+                        <label>School District/City/Municipality:</label>
+                        <input type="text" class="form-control" name="school_district_municipality" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Name of School:</label>
+                        <input type="text" class="form-control" name="school_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>BEIS ID No.:</label>
+                        <input type="text" class="form-control" name="beis_id">
+                    </div>
+                    <div class="form-group">
+                        <label>School Address:</label>
+                        <input type="text" class="form-control" name="school_address">
+                    </div>
+                    <div class="form-group">
+                        <label>Name of Barangay:</label>
+                        <input type="text" class="form-control" name="barangay_name">
+                    </div>
+                    <div class="form-group">
+                        <label>Name of District Supervisors/School Principal or OICs:</label>
+                        <input type="text" class="form-control" name="supervisor_principal_name">
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Number:</label>
+                        <input type="text" class="form-control" name="contact_number">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address:</label>
+                        <input type="text" class="form-control" name="email_address">
+                    </div>
+                    <div class="form-group">
+                        <label>Total Beneficiaries:</label>
+                        <input type="number" class="form-control" name="total_beneficiaries" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
+
+<!-- Include SweetAlert library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Add JavaScript to handle form submission -->
+<script>
+    document.getElementById('submitForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        fetch('submit2.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            Swal.fire({
+                title: 'Success!',
+                text: data,
+                icon: 'success',
+                timer: 2000, // 2 seconds
+                showConfirmButton: false
+            }).then(() => {
+                $('#formModal').modal('hide'); // Close modal after notification is closed
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
+
+    
     
       <?php
 

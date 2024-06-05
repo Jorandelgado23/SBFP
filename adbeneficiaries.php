@@ -252,9 +252,20 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch list of schools
-$sql_schools = "SELECT DISTINCT name_of_school, school_id_number FROM beneficiaries";
+// Fetch list of schools with their session IDs
+$sql_schools = "SELECT DISTINCT session_id, name_of_school, school_id_number FROM beneficiaries";
 $result_schools = $conn->query($sql_schools);
+
+// Group schools by session ID
+$schools_by_session = array();
+if ($result_schools->num_rows > 0) {
+    while ($row_schools = $result_schools->fetch_assoc()) {
+        $session_id = $row_schools['session_id'];
+        $school_name = $row_schools['name_of_school'];
+        $schools_by_session[$session_id][$school_name][] = $row_schools;
+    }
+}
+
 ?>
 
 <div class="col-md-12 my-4">
@@ -271,15 +282,13 @@ $result_schools = $conn->query($sql_schools);
                 </thead>
                 <tbody>
                     <?php
-                    if ($result_schools->num_rows > 0) {
-                        while ($row_schools = $result_schools->fetch_assoc()) {
+                    foreach ($schools_by_session as $session_id => $schools) {
+                        foreach ($schools as $school_name => $school_data) {
                             echo "<tr>
-                                    <td>{$row_schools['name_of_school']}</td>
-                                    <td><a href='view_details.php?school_id={$row_schools['school_id_number']}' class='btn btn-primary'>View</a></td>
+                                    <td>$school_name</td>"; // School name cell
+                            echo "<td><a href='view_details.php?session_id=$session_id' class='btn btn-primary'>View</a></td>
                                 </tr>";
                         }
-                    } else {
-                        echo "<tr><td colspan='2'>No schools found</td></tr>";
                     }
                     ?>
                 </tbody>
@@ -291,6 +300,7 @@ $result_schools = $conn->query($sql_schools);
 <?php
 $conn->close(); // Close database connection
 ?>
+
 
                       <nav aria-label="Table Paging" class="mb-0 text-muted">
                         <ul class="pagination justify-content-end mb-0">

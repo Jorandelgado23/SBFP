@@ -251,7 +251,7 @@ $result = $conn->query($sql);
         <div class="col-12">
             <div class="row align-items-center my-4">
                 <div class="col">
-                    <h2 class="h3 mb-0 page-title">Contacts</h2>
+                    <h2 class="h3 mb-0 page-title">SCHOOL LIST WITH TOTAL BENEFICIARIES</h2>
                 </div>
                 <div class="col-auto">
                     <!-- <button type="button" class="btn btn-secondary"><span class="fe fe-trash fe-12 mr-2"></span>Delete</button> -->

@@ -227,135 +227,196 @@ echo "Welcome, $user_firstname $user_lastname!";
 
         <!-- Modal -->
         <div class="modal fade" id="sbfpModal" tabindex="-1" role="dialog" aria-labelledby="sbfpModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="sbfpModalLabel">School-Based Feeding Program Form</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                    <form id="sbfpForm" class="row g-3" action="submit.php" method="post">
-
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-light">
+                    <h5 class="modal-title" id="sbfpModalLabel">School-Based Feeding Program Form</h5>
+                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="sbfpForm" class="needs-validation" novalidate action="submit.php" method="post">
+                        <div class="row">
                             <div class="col-md-6">
-                                <label>Division/Province:</label>
-                                <input class="form-control" type="text" name="division_province" required><br>
-                            </div>
-                            <div class="col-md-6">
-                                <label>City/Municipality/Barangay:</label>
-                                <input class="form-control" type="text" name="city_municipality_barangay" required><br>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Name of School / School District:</label>
-                                <input class="form-control" type="text" name="name_of_school" required><br>
-                            </div>
-                            <div class="col-md-6">
-                                <label>School ID Number:</label>
-                                <input class="form-control" type="text" name="school_id_number" required><br>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Name of Principal:</label>
-                                <input class="form-control" type="text" name="name_of_principal" required><br>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Name of Feeding Focal Person:</label>
-                                <input class="form-control" type="text" name="name_of_feeding_focal_person" required><br>
-                            </div>
-                            
-                            <h2>Beneficiary Details</h2>
-                            <div id="beneficiary_details">
-                                <div class="beneficiary">
-                                    <div class="col-md-6">
-                                        <label>No.:</label>
-                                        <input class="form-control" type="text" name="beneficiary_no[]" required><br>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Name:</label>
-                                        <input class="form-control" type="text" name="beneficiary_name[]" required><br>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Sex:</label>
-                                        <select class="form-select" name="beneficiary_sex[]" required>
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
-                                        </select><br>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Grade/Section:</label>
-                                        <input class="form-control" type="text" name="beneficiary_grade_section[]" required><br>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Date of Birth (MM/DD/YYYY):</label>
-                                        <input class="form-control" type="date" name="beneficiary_dob[]" required onchange="calculateAgeAndBMI(this)"><br>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Date of Weighing/Measuring (MM/DD/YYYY):</label>
-                                        <input class="form-control" type="date" name="beneficiary_dow[]" required onchange="calculateAgeAndBMI(this)"><br>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Age:</label>
-                                        <input class="form-control" type="text" name="beneficiary_age[]" readonly required><br>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Weight (Kg):</label>
-                                        <input class="form-control" type="number" step="0.01" name="beneficiary_weight[]" required oninput="calculateBMI(this)"><br>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Height (cm):</label>
-                                        <input class="form-control" type="number" step="0.01" name="beneficiary_height[]" required oninput="calculateBMI(this)"><br>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>BMI for 6 y.o. and above:</label>
-                                        <input class="form-control" type="text" name="beneficiary_bmi[]" readonly required><br>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Nutritional Status (BMI-A):</label>
-                                        <input class="form-control" type="text" name="nutritional_status_bmia[]" readonly required><br>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Nutritional Status (HFA):</label>
-                                        <input class="form-control" type="text" name="nutritional_status_hfa[]" readonly required><br>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Dewormed?</label>
-                                        <select class="form-select" name="dewormed[]" required>
-                                            <option value="Yes">Yes</option>
-                                            <option value="No">No</option>
-                                        </select><br>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Parent's consent for milk?</label>
-                                        <select class="form-select" name="parents_consent_for_milk[]" required>
-                                            <option value="Yes">Yes</option>
-                                            <option value="No">No</option>
-                                        </select><br>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Participation in 4Ps?</label>
-                                        <select class="form-select" name="participation_in_4ps[]" required>
-                                            <option value="Yes">Yes</option>
-                                            <option value="No">No</option>
-                                        </select><br>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Beneficiary of SBFP in Previous Years?</label>
-                                        <select class="form-select" name="beneficiary_of_sbfp_in_previous_years[]" required>
-                                            <option value="Yes">Yes</option>
-                                            <option value="No">No</option>
-                                        </select><br>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                <label for="division_province" class="form-label">Division/Province:</label>
+                                <input type="text" class="form-control" id="division_province" name="division_province" required>
+                                <div class="invalid-feedback">
+                                    Please provide a division/province.
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
+                            <div class="col-md-6">
+                                <label for="city_municipality_barangay" class="form-label">City/Municipality/Barangay:</label>
+                                <input type="text" class="form-control" id="city_municipality_barangay" name="city_municipality_barangay" required>
+                                <div class="invalid-feedback">
+                                    Please provide city/municipality/barangay.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="name_of_school" class="form-label">Name of School / School District:</label>
+                                <input type="text" class="form-control" id="name_of_school" name="name_of_school" required>
+                                <div class="invalid-feedback">
+                                    Please provide the name of the school/school district.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="school_id_number" class="form-label">School ID Number:</label>
+                                <input type="text" class="form-control" id="school_id_number" name="school_id_number" required>
+                                <div class="invalid-feedback">
+                                    Please provide the school ID number.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="name_of_principal" class="form-label">Name of Principal:</label>
+                                <input type="text" class="form-control" id="name_of_principal" name="name_of_principal" required>
+                                <div class="invalid-feedback">
+                                    Please provide the name of the principal.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="name_of_feeding_focal_person" class="form-label">Name of Feeding Focal Person:</label>
+                                <input type="text" class="form-control" id="name_of_feeding_focal_person" name="name_of_feeding_focal_person" required>
+                                <div class="invalid-feedback">
+                                    Please provide the name of the feeding focal person.
+                                </div>
+                            </div>
+                        </div>
+                        <h2 class="mt-4">Beneficiary Details</h2>
+                        <div id="beneficiary_details">
+                            <div class="beneficiary mt-3 border rounded p-3">
+                                <div class="col-md-6">
+                                    <label for="beneficiary_no" class="form-label">No.:</label>
+                                    <input type="text" class="form-control" id="beneficiary_no" name="beneficiary_no[]" required>
+                                    <div class="invalid-feedback">
+                                        Please provide the beneficiary number.
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="beneficiary_name" class="form-label">Name:</label>
+                                    <input type="text" class="form-control" id="beneficiary_name" name="beneficiary_name[]" required>
+                                    <div class="invalid-feedback">
+                                        Please provide the beneficiary name.
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="beneficiary_sex" class="form-label">Sex:</label>
+                                    <select class="form-select" id="beneficiary_sex" name="beneficiary_sex[]" required>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please select the sex of the beneficiary.
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="beneficiary_grade_section" class="form-label">Grade/Section:</label>
+                                    <input type="text" class="form-control" id="beneficiary_grade_section" name="beneficiary_grade_section[]" required>
+                                    <div class="invalid-feedback">
+                                        Please provide the grade/section of the beneficiary.
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="beneficiary_dob" class="form-label">Date of Birth (MM/DD/YYYY):</label>
+                                    <input type="date" class="form-control" id="beneficiary_dob" name="beneficiary_dob[]" required onchange="calculateAgeAndBMI(this)">
+                                    <div class="invalid-feedback">
+                                        Please provide the date of birth of the beneficiary.
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="beneficiary_dow" class="form-label">Date of Weighing/Measuring (MM/DD/YYYY):</label>
+                                    <input type="date" class="form-control" id="beneficiary_dow" name="beneficiary_dow[]" required onchange="calculateAgeAndBMI(this)">
+                                    <div class="invalid-feedback">
+                                        Please provide the date of weighing/measuring of the beneficiary.
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="beneficiary_age" class="form-label">Age:</label>
+                                    <input type="text" class="form-control" id="beneficiary_age" name="beneficiary_age[]" readonly required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="beneficiary_weight" class="form-label">Weight (Kg):</label>
+                                    <input type="number" step="0.01" class="form-control" id="beneficiary_weight" name="beneficiary_weight[]" required oninput="calculateBMI(this)">
+                                    <div class="invalid-feedback">
+                                        Please provide the weight of the beneficiary.
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="beneficiary_height" class="form-label">Height (cm):</label>
+                                    <input type="number" step="0.01" class="form-control" id="beneficiary_height" name="beneficiary_height[]" required oninput="calculateBMI(this)">
+                                    <div class="invalid-feedback">
+                                        Please provide the height of the beneficiary.
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="beneficiary_bmi" class="form-label">BMI for 6 y.o. and above:</label>
+                                    <input type="text" class="form-control" id="beneficiary_bmi" name="beneficiary_bmi[]" readonly required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="nutritional_status_bmia" class="form-label">Nutritional Status (BMI-A):</label>
+                                    <input type="text" class="form-control" id="nutritional_status_bmia" name="nutritional_status_bmia[]" readonly required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="nutritional_status_hfa" class="form-label">Nutritional Status (HFA):</label>
+                                    <input type="text" class="form-control" id="nutritional_status_hfa" name="nutritional_status_hfa[]" readonly required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="dewormed" class="form-label">Dewormed?</label>
+                                    <select class="form-select" id="dewormed" name="dewormed[]" required>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please select if the beneficiary was dewormed.
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="parents_consent_for_milk" class="form-label">Parent's consent for milk?</label>
+                                    <select class="form-select" id="parents_consent_for_milk" name="parents_consent_for_milk[]" required>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please select if parent's consent for milk is given.
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="participation_in_4ps" class="form-label">Participation in 4Ps?</label>
+                                    <select class="form-select" id="participation_in_4ps" name="participation_in_4ps[]" required>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please select if there is participation in 4Ps.
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="beneficiary_of_sbfp_in_previous_years" class="form-label">Beneficiary of SBFP in Previous Years?</label>
+                                    <select class="form-select" id="beneficiary_of_sbfp_in_previous_years" name="beneficiary_of_sbfp_in_previous_years[]" required>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please select if the beneficiary was part of SBFP in previous years.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
+
     </div>
 
     <script>

@@ -1,24 +1,195 @@
+<?php
+session_start();
 
-<div class="content">
-        <?php include('base.php'); ?>
+if (!isset($_SESSION['email'])) {
+    header("Location: login.php"); // Redirect to login if not logged in
+    exit();
+}
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$email = $_SESSION['email'];
+
+// Prepare and bind
+$stmt = $conn->prepare("SELECT firstname, lastname, role FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($user_firstname, $user_lastname, $user_role);
+
+if ($stmt->num_rows > 0) {
+    $stmt->fetch();
+} else {
+    echo "No user found with that email address.";
+    exit();
+}
+
+$stmt->close();
+$conn->close();
+?>
+
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+   <head>
+      <!-- basic -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!-- mobile metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+      <!-- site metas -->
+      <title>Pluto - Responsive Bootstrap Admin Panel Templates</title>
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <!-- site icon -->
+      <link rel="icon" href="images/LOGO.png" type="image/png" />
+
+      <!-- bootstrap css -->
+      <link rel="stylesheet" href="css/bootstrap.min.css" />
+      <!-- site css -->
+      <link rel="stylesheet" href="style.css" />
+      <!-- responsive css -->
+      <link rel="stylesheet" href="css/responsive.css" />
+      <!-- color css -->
+      <link rel="stylesheet" href="css/color_2.css" />
+      <!-- select bootstrap -->
+      <link rel="stylesheet" href="css/bootstrap-select.css" />
+      <!-- scrollbar css -->
+      <link rel="stylesheet" href="css/perfect-scrollbar.css" />
+      <!-- custom css -->
+      <link rel="stylesheet" href="css/custom.css" />
+
+      
+
+      <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+   </head>
+
+<body class="dashboard dashboard_2">
+    <div class="full_container">
+        <div class="inner_container">
+            <!-- Sidebar -->
+            <nav id="sidebar">
+                <div class="sidebar_blog_1">
+                    <div class="sidebar-header">
+                        <div class="logo_section">
+                        <a href="admindashboard.php"><img class="logo_icon img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
+
+                        </div>
+                    </div>
+                    <div class="sidebar_user_info">
+    <div class="icon_setting"></div>
+    <div class="user_profle_side">
+    <div class="user_img"><img class="img-responsive" src="images/layout_img/user_img.jpg" alt="#" /></div>
+    <div class="user_info">
+    <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
+        
+        <p><span class="online_animation"></span> Online</p>
+    </div>
+</div>
 </div>
 
-
-<main role="main" class="main-content">
-        <div class="container-fluid">
-          <div class="row justify-content-center">
-            <div class="col-12">
-              <div class="row align-items-center my-4">
-                <div class="col">
-                  <h2 class="h3 mb-0 page-title">ACCOUNT MANAGEMENT</h2>
                 </div>
-                <div class="col-auto">
-                  <!-- <button type="button" class="btn btn-secondary"><span class="fe fe-trash fe-12 mr-2"></span>Delete</button> -->
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUserModal"><span class="fe fe-filter fe-12 mr-2"></span>Create</button>
-                </div>
-              </div>
+                <div class="sidebar_blog_2">
+                    <h4>General</h4>
+                    <ul class="list-unstyled components">
+                    <li>
+                            <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
+                        </li>
 
-            <!-- Create User Modal -->
+                        <li>
+                            <a href="adaccountmanagement.php"><i class="fa fa-group"></i> <span>Account Management</span></a>
+                        </li>
+                        <li>
+                            <a href="adbeneficiaries.php"><i class="fa fa-university""></i> <span>All School Beneficiaries</span></a>
+                        </li>
+
+                        <li>
+                            <a href="adschoollist.php"><i class="fa fa-pie-chart"></i> <span>School List Of Laguna</span></a>
+                        </li>
+                       
+                       
+                      
+                      
+            
+                        
+                        <li>
+                            <a href="adsettings.php"><i class="fa fa-cog yellow_color"></i> <span>Settings</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!-- End Sidebar -->
+            <!-- Right Content -->
+            <div id="content">
+                <!-- Topbar -->
+                <div class="topbar">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <div class="full">
+                            <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
+                            <div class="logo_section">
+                            <a href="admindashboard.php"><img class="img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
+
+                            </div>
+                            <div class="right_topbar">
+                                <div class="icon_info">
+                                    <ul>
+                                        <li><a href="#"><i class="fa fa-bell-o"></i><span class="badge">2</span></a></li>
+                                        <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+                                    </ul>
+                                    <ul class="user_profile_dd">
+                                        <li>
+                                            
+                                        <a class="dropdown-toggle" data-toggle="dropdown">
+    <img class="img-responsive rounded-circle" src="images/layout_img/user_img.jpg" alt="#" />
+    <span class="name_user"><?php echo $user_role; ?></span>
+</a>
+
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="usersetting.php">My Profile</a>
+                                                <a class="dropdown-item" href="settings.html">Settings</a>
+                                                <a class="dropdown-item" href="help.html">Help</a>
+                                                <a class="dropdown-item" href="logout.php"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+                <!-- End Topbar -->
+                <!-- Dashboard Inner -->
+                <div class="midde_cont">
+                    <div class="container-fluid">
+                        <div class="row column_title">
+                        <div class="col-md-12">
+                                <div class="page_title">
+                                    <h2>ALL SCHOOL BENEFICIARIES</h2>
+                                </div>
+                            </div>
+                        </div>
+           
+
+                 <!-- Create User Modal -->
 <div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -68,276 +239,7 @@
         </div>
     </div>
 </div>
-              <!-- table -->
-              <!-- <div class="card shadow">
-                <div class="card-body">
-                  <table class="table table-borderless table-hover">
-                    <thead>
-                      <tr>
-                        <th>
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="all2">
-                            <label class="custom-control-label" for="all2"></label>
-                          </div>
-                        </th>
-                        <th>ID</th>
-                        <th>User</th>
-                        <th>Company</th>
-                        <th>Country</th>
-                        <th>Date</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="2474">
-                            <label class="custom-control-label" for="2474"></label>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="avatar avatar-sm">
-                            <img src="./assets/avatars/face-3.jpg" alt="..." class="avatar-img rounded-circle">
-                          </div>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted"><strong>Brown, Asher D.</strong></p>
-                          <small class="mb-0 text-muted">2474</small>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted">Accumsan Consulting</p>
-                          <small class="mb-0 text-muted">Ap #331-7123 Lobortis Avenue</small>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted"><a href="#" class="text-muted">(958) 421-0798</a></p>
-                          <small class="mb-0 text-muted">Nigeria</small>
-                        </td>
-                        <td class="text-muted">13/09/2020</td>
-                        <td><button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="text-muted sr-only">Action</span>
-                          </button>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#">Edit</a>
-                            <a class="dropdown-item" href="#">Remove</a>
-                            <a class="dropdown-item" href="#">Assign</a>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="2786">
-                            <label class="custom-control-label" for="2786"></label>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="avatar avatar-sm">
-                            <img src="./assets/avatars/face-1.jpg" alt="..." class="avatar-img rounded-circle">
-                          </div>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted"><strong>Leblanc, Yoshio V.</strong></p>
-                          <small class="mb-0 text-muted">2786</small>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted">Fringilla Ornare Placerat Consulting</p>
-                          <small class="mb-0 text-muted">287-8300 Nisl. St</small>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted"><a href="#" class="text-muted">(899) 881-3833</a></p>
-                          <small class="mb-0 text-muted">Papua New Guinea</small>
-                        </td>
-                        <td class="text-muted">04/05/2019</td>
-                        <td><button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="text-muted sr-only">Action</span>
-                          </button>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#">Edit</a>
-                            <a class="dropdown-item" href="#">Remove</a>
-                            <a class="dropdown-item" href="#">Assign</a>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="2747">
-                            <label class="custom-control-label" for="2747"></label>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="avatar avatar-sm">
-                            <img src="./assets/avatars/face-2.jpg" alt="..." class="avatar-img rounded-circle">
-                          </div>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted"><strong>Hester, Nissim L.</strong></p>
-                          <small class="mb-0 text-muted">2747</small>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted">Tristique Ltd</p>
-                          <small class="mb-0 text-muted">4577 Cras St.</small>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted"><a href="#" class="text-muted">(977) 220-6518</a></p>
-                          <small class="mb-0 text-muted">Central African Republic</small>
-                        </td>
-                        <td class="text-muted">21/08/2019</td>
-                        <td><button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="text-muted sr-only">Action</span>
-                          </button>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#">Edit</a>
-                            <a class="dropdown-item" href="#">Remove</a>
-                            <a class="dropdown-item" href="#">Assign</a>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="2639">
-                            <label class="custom-control-label" for="2639"></label>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="avatar avatar-sm">
-                            <img src="./assets/avatars/face-4.jpg" alt="..." class="avatar-img rounded-circle">
-                          </div>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted"><strong>Gardner, Leigh S.</strong></p>
-                          <small class="mb-0 text-muted">2639</small>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted">Orci Luctus Et Inc.</p>
-                          <small class="mb-0 text-muted">P.O. Box 228, 7512 Lectus Ave</small>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted"><a href="#" class="text-muted">(537) 315-1481</a></p>
-                          <small class="mb-0 text-muted">United Kingdom</small>
-                        </td>
-                        <td class="text-muted">04/08/2019</td>
-                        <td><button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="text-muted sr-only">Action</span>
-                          </button>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#">Edit</a>
-                            <a class="dropdown-item" href="#">Remove</a>
-                            <a class="dropdown-item" href="#">Assign</a>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="2238">
-                            <label class="custom-control-label" for="2238"></label>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="avatar avatar-sm">
-                            <img src="./assets/avatars/face-5.jpg" alt="..." class="avatar-img rounded-circle">
-                          </div>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted"><strong>Higgins, Uriah L.</strong></p>
-                          <small class="mb-0 text-muted">2238</small>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted">Sit Amet Lorem Industries</p>
-                          <small class="mb-0 text-muted">Ap #377-5357 Sed Road</small>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted"><a href="#" class="text-muted">(238) 386-0247</a></p>
-                          <small class="mb-0 text-muted">Canada</small>
-                        </td>
-                        <td class="text-muted">26/07/2020</td>
-                        <td><button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="text-muted sr-only">Action</span>
-                          </button>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#">Edit</a>
-                            <a class="dropdown-item" href="#">Remove</a>
-                            <a class="dropdown-item" href="#">Assign</a>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="2152">
-                            <label class="custom-control-label" for="2152"></label>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="avatar avatar-sm">
-                            <img src="./assets/avatars/face-6.jpg" alt="..." class="avatar-img rounded-circle">
-                          </div>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted"><strong>Wheeler, Ralph F.</strong></p>
-                          <small class="mb-0 text-muted">2152</small>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted">Suspendisse LLC</p>
-                          <small class="mb-0 text-muted">Ap #410-5363 Non, Avenue</small>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted"><a href="#" class="text-muted">(587) 675-3258</a></p>
-                          <small class="mb-0 text-muted">Chad</small>
-                        </td>
-                        <td class="text-muted">11/09/2019</td>
-                        <td><button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="text-muted sr-only">Action</span>
-                          </button>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#">Edit</a>
-                            <a class="dropdown-item" href="#">Remove</a>
-                            <a class="dropdown-item" href="#">Assign</a>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="2488">
-                            <label class="custom-control-label" for="2488"></label>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="avatar avatar-sm">
-                            <img src="./assets/avatars/face-7.jpg" alt="..." class="avatar-img rounded-circle">
-                          </div>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted"><strong>Kelley, Sonya Y.</strong></p>
-                          <small class="mb-0 text-muted">2488</small>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted">Dolor Incorporated</p>
-                          <small class="mb-0 text-muted">8250 Molestie St.</small>
-                        </td>
-                        <td>
-                          <p class="mb-0 text-muted"><a href="#" class="text-muted">(934) 582-9495</a></p>
-                          <small class="mb-0 text-muted">British Indian Ocean Territory</small>
-                        </td>
-                        <td class="text-muted">30/03/2021</td>
-                        <td><button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="text-muted sr-only">Action</span>
-                          </button>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#">Edit</a>
-                            <a class="dropdown-item" href="#">Remove</a>
-                            <a class="dropdown-item" href="#">Assign</a>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div> -->
+   
 
               <?php
 $servername = "localhost";
@@ -353,121 +255,118 @@ if ($conn->connect_error) {
 }
 ?>
 
-<div class="container mt-5">
-    <div class="card shadow">
-        <div class="card-body"> 
-            <table class="table table-borderless table-hover">
-                <thead>
-                <!-- <tr>
-                    <th>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="all2">
-                            <label class="custom-control-label" for="all2"></label>
-                        </div>
-                    </th>
-                    <th>ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Phone Number</th>
-                    <th>Birthday</th>
-                    <th>Role</th>
-                    <th>Action</th>
-                </tr>
-                </thead> -->
-                <tbody>
-                <?php
-include 'accountconnection.php';
+<div class="container-fluid">
+    <div class="row justify-content-between mb-4"> <!-- Added justify-content-between class for right alignment -->
+        <div class="col-md-12">
+            <div class="text-right"> <!-- Align button to the right -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUserModal">
+                    <span class="fe fe-filter fe-12 mr-2"></span>Create
+                </button>
+            </div>
+        </div>
+    </div>
 
-// Fetch Admin Accounts
-$sql_admin = "SELECT id, firstname, lastname, email, phone_number, birthday, role FROM users WHERE role = 'admin'";
-$result_admin = $conn->query($sql_admin);
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="white_shd full margin_bottom_30">
+                        <?php
+                        include 'accountconnection.php';
 
-// Display Admin Accounts
-if ($result_admin->num_rows > 0) {
-    echo "<h2>Admin Accounts</h2>";
-    echo "<table class='table table-borderless table-hover'>";
-    echo "<thead>";
-    echo "<tr>";
-    echo "<th>ID</th>";
-    echo "<th>First Name</th>";
-    echo "<th>Last Name</th>";
-    echo "<th>Email</th>";
-    echo "<th>Phone Number</th>";
-    echo "<th>Birthday</th>";
-    echo "<th>Role</th>";
-    echo "<th>Action</th>";
-    echo "</tr>";
-    echo "</thead>";
-    echo "<tbody>";
-    while ($row = $result_admin->fetch_assoc()) {
-        echo "<tr>";
-        echo "<td>" . $row["id"] . "</td>";
-        echo "<td>" . $row["firstname"] . "</td>";
-        echo "<td>" . $row["lastname"] . "</td>";
-        echo "<td>" . $row["email"] . "</td>";
-        echo "<td>" . $row["phone_number"] . "</td>";
-        echo "<td>" . $row["birthday"] . "</td>";
-        echo "<td>" . $row["role"] . "</td>";
-        echo "<td>
-                <button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '" . $row['birthday'] . "', '" . $row['role'] . "')\">Edit</button>
-                <button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\">Remove</button>
-              </td>";
-        echo "</tr>";
-    }
-    echo "</tbody>";
-    echo "</table>";
-} else {
-    echo "<p>No admin accounts found</p>";
-}
+                        // Fetch Admin Accounts
+                        $sql_admin = "SELECT id, firstname, lastname, email, phone_number, birthday, role FROM users WHERE role = 'admin'";
+                        $result_admin = $conn->query($sql_admin);
 
-// Fetch SBFP Accounts
-$sql_sbfp = "SELECT id, firstname, lastname, email, phone_number, birthday, role FROM users WHERE role = 'sbfp'";
-$result_sbfp = $conn->query($sql_sbfp);
+                        // Display Admin Accounts
+                        if ($result_admin->num_rows > 0) {
+                            echo "<h2>Admin Accounts</h2>";
+                            echo "<table class='table table-borderless table-hover'>";
+                            echo "<thead>";
+                            echo "<tr>";
+                            echo "<th>ID</th>";
+                            echo "<th>First Name</th>";
+                            echo "<th>Last Name</th>";
+                            echo "<th>Email</th>";
+                            echo "<th>Phone Number</th>";
+                            echo "<th>Birthday</th>";
+                            echo "<th>Role</th>";
+                            echo "<th>Action</th>";
+                            echo "</tr>";
+                            echo "</thead>";
+                            echo "<tbody>";
+                            while ($row = $result_admin->fetch_assoc()) {
+                                echo "<tr>";
+                                echo "<td>" . $row["id"] . "</td>";
+                                echo "<td>" . $row["firstname"] . "</td>";
+                                echo "<td>" . $row["lastname"] . "</td>";
+                                echo "<td>" . $row["email"] . "</td>";
+                                echo "<td>" . $row["phone_number"] . "</td>";
+                                echo "<td>" . $row["birthday"] . "</td>";
+                                echo "<td>" . $row["role"] . "</td>";
+                                echo "<td>
+                                        <button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '" . $row['birthday'] . "', '" . $row['role'] . "')\">Edit</button>
+                                        <button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\">Remove</button>
+                                      </td>";
+                                echo "</tr>";
+                            }
+                            echo "</tbody>";
+                            echo "</table>";
+                        } else {
+                            echo "<p>No admin accounts found</p>";
+                        }
 
-// Display SBFP Accounts
-if ($result_sbfp->num_rows > 0) {
-    echo "<h2>SBFP Accounts</h2>";
-    echo "<table class='table table-borderless table-hover'>";
-    echo "<thead>";
-    echo "<tr>";
-    echo "<th>ID</th>";
-    echo "<th>First Name</th>";
-    echo "<th>Last Name</th>";
-    echo "<th>Email</th>";
-    echo "<th>Phone Number</th>";
-    echo "<th>Birthday</th>";
-    echo "<th>Role</th>";
-    echo "<th>Action</th>";
-    echo "</tr>";
-    echo "</thead>";
-    echo "<tbody>";
-    while ($row = $result_sbfp->fetch_assoc()) {
-        echo "<tr>";
-        echo "<td>" . $row["id"] . "</td>";
-        echo "<td>" . $row["firstname"] . "</td>";
-        echo "<td>" . $row["lastname"] . "</td>";
-        echo "<td>" . $row["email"] . "</td>";
-        echo "<td>" . $row["phone_number"] . "</td>";
-        echo "<td>" . $row["birthday"] . "</td>";
-        echo "<td>" . $row["role"] . "</td>";
-        echo "<td>
-                <button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '" . $row['birthday'] . "', '" . $row['role'] . "')\">Edit</button>
-                <button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\">Remove</button>
-              </td>";
-        echo "</tr>";
-    }
-    echo "</tbody>";
-    echo "</table>";
-} else {
-    echo "<p>No SBFP accounts found</p>";
-}
+                        // Fetch SBFP Accounts
+                        $sql_sbfp = "SELECT id, firstname, lastname, email, phone_number, birthday, role FROM users WHERE role = 'sbfp'";
+                        $result_sbfp = $conn->query($sql_sbfp);
 
-$conn->close();
-?>
+                        // Display SBFP Accounts
+                        if ($result_sbfp->num_rows > 0) {
+                            echo "<h2>SBFP Accounts</h2>";
+                            echo "<table class='table table-borderless table-hover'>";
+                            echo "<thead>";
+                            echo "<tr>";
+                            echo "<th>ID</th>";
+                            echo "<th>First Name</th>";
+                            echo "<th>Last Name</th>";
+                            echo "<th>Email</th>";
+                            echo "<th>Phone Number</th>";
+                            echo "<th>Birthday</th>";
+                            echo "<th>Role</th>";
+                            echo "<th>Action</th>";
+                            echo "</tr>";
+                            echo "</thead>";
+                            echo "<tbody>";
+                            while ($row = $result_sbfp->fetch_assoc()) {
+                                echo "<tr>";
+                                echo "<td>" . $row["id"] . "</td>";
+                                echo "<td>" . $row["firstname"] . "</td>";
+                                echo "<td>" . $row["lastname"] . "</td>";
+                                echo "<td>" . $row["email"] . "</td>";
+                                echo "<td>" . $row["phone_number"] . "</td>";
+                                echo "<td>" . $row["birthday"] . "</td>";
+                                echo "<td>" . $row["role"] . "</td>";
+                                echo "<td>
+                                        <button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '" . $row['birthday'] . "', '" . $row['role'] . "')\">Edit</button>
+                                        <button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\">Remove</button>
+                                      </td>";
+                                echo "</tr>";
+                            }
+                            echo "</tbody>";
+                            echo "</table>";
+                        } else {
+                            echo "<p>No SBFP accounts found</p>";
+                        }
 
-                </tbody>
-            </table>
+                        $conn->close();
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
         </div>
     </div>
 </div>
@@ -610,143 +509,63 @@ $conn->close();
         });
     });
 </script>
-
-
-
-
-              <nav aria-label="Table Paging" class="my-3">
-                <ul class="pagination justify-content-end mb-0">
-                  <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                  <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                  <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                </ul>
-              </nav>
-            </div> <!-- .col-12 -->
-          </div> <!-- .row -->
-        </div> <!-- .container-fluid -->
-        <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="defaultModalLabel">Notifications</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <div class="list-group list-group-flush my-n3">
-                  <div class="list-group-item bg-transparent">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="fe fe-box fe-24"></span>
-                      </div>
-                      <div class="col">
-                        <small><strong>Package has uploaded successfull</strong></small>
-                        <div class="my-0 text-muted small">Package is zipped and uploaded</div>
-                        <small class="badge badge-pill badge-light text-muted">1m ago</small>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="list-group-item bg-transparent">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="fe fe-download fe-24"></span>
-                      </div>
-                      <div class="col">
-                        <small><strong>Widgets are updated successfull</strong></small>
-                        <div class="my-0 text-muted small">Just create new layout Index, form, table</div>
-                        <small class="badge badge-pill badge-light text-muted">2m ago</small>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="list-group-item bg-transparent">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="fe fe-inbox fe-24"></span>
-                      </div>
-                      <div class="col">
-                        <small><strong>Notifications have been sent</strong></small>
-                        <div class="my-0 text-muted small">Fusce dapibus, tellus ac cursus commodo</div>
-                        <small class="badge badge-pill badge-light text-muted">30m ago</small>
-                      </div>
-                    </div> <!-- / .row -->
-                  </div>
-                  <div class="list-group-item bg-transparent">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="fe fe-link fe-24"></span>
-                      </div>
-                      <div class="col">
-                        <small><strong>Link was attached to menu</strong></small>
-                        <div class="my-0 text-muted small">New layout has been attached to the menu</div>
-                        <small class="badge badge-pill badge-light text-muted">1h ago</small>
-                      </div>
-                    </div>
-                  </div> <!-- / .row -->
-                </div> <!-- / .list-group -->
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
-              </div>
             </div>
-          </div>
         </div>
-        <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body px-5">
-                <div class="row align-items-center">
-                  <div class="col-6 text-center">
-                    <div class="squircle bg-success justify-content-center">
-                      <i class="fe fe-cpu fe-32 align-self-center text-white"></i>
-                    </div>
-                    <p>Control area</p>
-                  </div>
-                  <div class="col-6 text-center">
-                    <div class="squircle bg-primary justify-content-center">
-                      <i class="fe fe-activity fe-32 align-self-center text-white"></i>
-                    </div>
-                    <p>Activity</p>
-                  </div>
-                </div>
-                <div class="row align-items-center">
-                  <div class="col-6 text-center">
-                    <div class="squircle bg-primary justify-content-center">
-                      <i class="fe fe-droplet fe-32 align-self-center text-white"></i>
-                    </div>
-                    <p>Droplet</p>
-                  </div>
-                  <div class="col-6 text-center">
-                    <div class="squircle bg-primary justify-content-center">
-                      <i class="fe fe-upload-cloud fe-32 align-self-center text-white"></i>
-                    </div>
-                    <p>Upload</p>
-                  </div>
-                </div>
-                <div class="row align-items-center">
-                  <div class="col-6 text-center">
-                    <div class="squircle bg-primary justify-content-center">
-                      <i class="fe fe-users fe-32 align-self-center text-white"></i>
-                    </div>
-                    <p>Users</p>
-                  </div>
-                  <div class="col-6 text-center">
-                    <div class="squircle bg-primary justify-content-center">
-                      <i class="fe fe-settings fe-32 align-self-center text-white"></i>
-                    </div>
-                    <p>Settings</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main> <!-- main -->
+    </div>
+    <!-- jQuery -->
+    <script src="js/jquery.min.js"></script>
+    <!-- Bootstrap Bundle JavaScript -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <!-- Custom Scripts -->
+    <script src="js/custom.js"></script>
+    <!-- Chart Plugins -->
+    <script src="js/Chart.min.js"></script>
+    <!-- Init Charts -->
+    <script>
+        var ctx = document.getElementById('chartjs_area').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: 'Dataset 1',
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    data: [0, 10, 5, 2, 20, 30, 45]
+                }]
+            },
+            options: {}
+        });
+
+        var ctx = document.getElementById('chartjs_bar').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: 'Dataset 1',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: [0, 10, 5, 2, 20, 30, 45]
+                }]
+            },
+            options: {}
+        });
+
+        var ctx = document.getElementById('chartjs_line').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: 'Dataset 1',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: [0, 10, 5, 2, 20, 30, 45]
+                }]
+            },
+            options: {}
+        });
+    </script>
+</body>
+
+</html>

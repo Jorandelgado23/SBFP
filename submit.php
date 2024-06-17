@@ -70,7 +70,7 @@ $conn->close();
 // Return JSON response
 $response = array(
     'success' => true,
-    'message' => 'Data submitted successfully!'
+    'message' => 'Beneficiaries data submitted successfully!'
 );
 
 header('Content-Type: application/json');

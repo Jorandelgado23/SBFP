@@ -65,14 +65,16 @@ $mail->Body = '
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background: rgb(10,10,10);
+            background: radial-gradient(circle, rgba(10,10,10,0.5717884565935749) 0%, rgba(0,0,0,0.8575027423078606) 100%);
             margin: 0;
             padding: 20px;
         }
         .container {
             max-width: 600px;
             margin: auto;
-            background-color: #ffffff;
+            background: rgb(10,10,10);
+background: radial-gradient(circle, rgba(10,10,10,0.5717884565935749) 0%, rgba(0,0,0,0.8575027423078606) 100%);
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
@@ -88,18 +90,18 @@ $mail->Body = '
             text-align: center;
         }
         .content h1 {
-            color: #333;
+            color: #fff;
         }
         .content p {
             font-size: 16px;
-            color: #666;
+            color: #fff;
         }
         .button {
             display: inline-block;
             padding: 10px 20px;
             font-size: 16px;
             color: #ffffff;
-            background-color: #007bff;
+            background-color: #fff;
             text-decoration: none;
             border-radius: 5px;
             margin-top: 20px;
@@ -148,7 +150,8 @@ $mail->AltBody = 'Click on this link to reset your password: ' . $reset_link;
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background: rgb(10,10,10);
+background: radial-gradient(circle, rgba(10,10,10,0.5717884565935749) 0%, rgba(0,0,0,0.8575027423078606) 100%);
             margin: 0;
             padding: 0;
             display: flex;
@@ -158,7 +161,8 @@ $mail->AltBody = 'Click on this link to reset your password: ' . $reset_link;
         }
         .container {
             text-align: center;
-            background-color: #fff;
+            background: rgb(10,10,10);
+background: radial-gradient(circle, rgba(10,10,10,0.5717884565935749) 0%, rgba(0,0,0,0.8575027423078606) 100%);
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

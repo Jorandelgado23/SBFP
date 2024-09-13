@@ -3298,8 +3298,8 @@ table.projects tr td:first-child {
     padding: 50px 50px;
     float: left;
     width: 100%;
-     background: rgb(137,200,64);
-background: linear-gradient(84deg, rgba(137,200,64,1) 0%, rgba(138,200,64,1) 100%);
+    background: rgb(10,10,10);
+            background: radial-gradient(circle, rgba(10,10,10,0.5717884565935749) 0%, rgba(0,0,0,0.8575027423078606) 100%);
 }
 
 .login_form form {

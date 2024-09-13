@@ -36,30 +36,80 @@
     <![endif]-->
     <style>
         body {
-            background: url('images/background.jpg') no-repeat center center fixed;
-            background-size: cover; /* Ensure the image covers the entire container */
-            opacity: 0; /* Initially hide the body */
-            transition: opacity 1s ease; /* Transition effect for the opacity */
+            background: url('images/bg3.jpg') no-repeat center center fixed;
+            background-size: cover;
+            opacity: 0;
+            transition: opacity 2s ease;
         }
 
         body.fade-in {
-            opacity: 1; /* Set opacity to 1 when the page loads */
+            opacity: 1;
         }
 
-        .logo_login {
-            background: rgba(255, 255, 255, 0.8); /* Semi-transparent background for logo */
-            width: 100%;
-            height: 250px;
+        .full_container {
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
+        }
+
+        .login_section {
+            background: rgb(10,10,10);
+background: radial-gradient(circle, rgba(10,10,10,0.5717884565935749) 0%, rgba(0,0,0,0.8575027423078606) 100%);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .login_form {
+            background: rgb(10,10,10);
+background: radial-gradient(circle, rgba(10,10,10,0.7622646470697654) 0%, rgba(0,0,0,0.7790713697588411) 100%);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-radius: 10px;
+        }
+
+        .signin-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: rgb(10,10,10);
+background: radial-gradient(circle, rgba(10,10,10,0.7622646470697654) 0%, rgba(0,0,0,0.7790713697588411) 100%);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .signin-image figure {
+            margin: 0;
+        }
+
+        .signin-image img {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .signin-image .signup-image-link {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .form-container {
+            width: 100%;
         }
 
         .form-container input[type="email"],
         .form-container input[type="password"] {
-            margin: 0 auto; /* Center the inputs */
-            display: block; /* Ensure the inputs are block-level elements */
-            max-width: 300px; /* Limit the input width */
+            margin: 20px auto;
+            display: block;
+            max-width: 270px;
         }
 
         .main_bt {
@@ -72,19 +122,19 @@
 </head>
 
 <body>
-<div class="full_container">
+<div>
     <div class="container">
         <div class="center verticle_center full_height">
             <div class="login_section">
-                <div class="logo_login">
-                    <div class="center">
-                        <img width="250" src="images/LOGO.png" alt="#" />
-                    </div>
+                <!-- Image section -->
+                <div class="signin-image">
+                    <figure><img src="images/LOGO.png" alt="sign up image"></figure>
                 </div>
+                <!-- Form section -->
                 <div class="login_form">
-                    <div class="w-50 mx-auto form-container">
+                    <div class="w-75 mx-auto form-container">
                         <form class="text-center" id="resetPasswordForm" method="post" action="update_password.php">
-                            <h1 class="h6 mb-3">Reset Password</h1>
+                            <h1 class="h6 mb-3" style="color: #fff;">Reset Password</h1>
                             <fieldset>
                                 <input type="hidden" name="token" value="<?php echo $_GET['token']; ?>">
                                 <div class="field form-group">
@@ -107,6 +157,7 @@
         </div>
     </div>
 </div>
+
 
     <!-- jQuery -->
     <script src="js/jquery.min.js"></script>

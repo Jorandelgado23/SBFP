@@ -51,8 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: rgb(255,255,255);
-background: linear-gradient(96deg, rgba(255,255,255,1) 0%, rgba(231,233,235,1) 97%);
+            background: rgb(10,10,10);
+background: radial-gradient(circle, rgba(10,10,10,0.5717884565935749) 0%, rgba(0,0,0,0.8575027423078606) 100%);
             margin: 0;
             padding: 0;
             display: flex;
@@ -62,7 +62,8 @@ background: linear-gradient(96deg, rgba(255,255,255,1) 0%, rgba(231,233,235,1) 9
         }
         .container {
             text-align: center;
-            background-color: #fff;
+            background: rgb(10,10,10);
+background: radial-gradient(circle, rgba(10,10,10,0.5717884565935749) 0%, rgba(0,0,0,0.8575027423078606) 100%);
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

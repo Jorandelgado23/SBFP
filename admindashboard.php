@@ -137,9 +137,10 @@ $conn->close();
             width: 20%; /* Adjust this width to fit your design */
             max-width: 200px; /* Max width to ensure the image does not exceed this size */
             height: auto; /* Maintain aspect ratio */
-            display: block; Ensure it behaves as a block element
+            display: block; 
             margin: 0 auto; /* Center the image horizontally */
         }
+        
 
 
         .active {

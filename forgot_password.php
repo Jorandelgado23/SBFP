@@ -54,8 +54,8 @@
         }
 
         .login_section {
-            background: rgb(255,255,255);
-background: linear-gradient(96deg, rgba(255,255,255,1) 0%, rgba(231,233,235,1) 97%);
+            background: rgb(10,10,10);
+background: radial-gradient(circle, rgba(10,10,10,0.5717884565935749) 0%, rgba(0,0,0,0.8575027423078606) 100%);
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -65,8 +65,8 @@ background: linear-gradient(96deg, rgba(255,255,255,1) 0%, rgba(231,233,235,1) 9
         }
 
         .login_form {
-            background: rgb(33,33,33);
-background: linear-gradient(96deg, rgba(33,33,33,1) 0%, rgba(0,0,0,0.5073626862854517) 100%);
+            background: rgb(10,10,10);
+background: radial-gradient(circle, rgba(10,10,10,0.7622646470697654) 0%, rgba(0,0,0,0.7790713697588411) 100%);
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -80,8 +80,8 @@ background: linear-gradient(96deg, rgba(33,33,33,1) 0%, rgba(0,0,0,0.50736268628
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            background: rgb(33,33,33);
-background: linear-gradient(96deg, rgba(33,33,33,1) 0%, rgba(33,33,33,1) 100%, rgba(33,33,33,1) 100%);
+            background: rgb(10,10,10);
+background: radial-gradient(circle, rgba(10,10,10,0.7622646470697654) 0%, rgba(0,0,0,0.7790713697588411) 100%);
             padding: 20px;
             border-radius: 10px;
         }
@@ -107,9 +107,9 @@ background: linear-gradient(96deg, rgba(33,33,33,1) 0%, rgba(33,33,33,1) 100%, r
 
         .form-container input[type="email"],
         .form-container input[type="password"] {
-            margin: 20px auto;
+           
             display: block;
-            max-width: 270px;
+            max-width: 200px;
         }
 
         .main_bt {
@@ -132,7 +132,7 @@ background: linear-gradient(96deg, rgba(33,33,33,1) 0%, rgba(33,33,33,1) 100%, r
                 <div class="login_form">
                     <div class="w-50 mx-auto form-container">
                         <form class="text-center" id="resetRequestForm" method="post" action="send_reset_link.php">
-                            <h1 class="h6 mb-3">Reset Password</h1>
+                            <h1 class="h6 mb-3" style="color: white;">Reset Password</h1>
                             <fieldset>
                                 <div class="field form-group">
                                     <label class="label_field sr-only" for="inputEmail">Email Address</label>

@@ -124,7 +124,7 @@ background: radial-gradient(circle, rgba(10,10,10,0.7622646470697654) 0%, rgba(0
 <body>
 
 
-<div class="full_container">
+<div>
         <div class="container">
             <div class="center verticle_center full_height">
                 <div class="login_section">

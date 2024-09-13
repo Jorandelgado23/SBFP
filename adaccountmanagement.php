@@ -759,52 +759,7 @@ function updateSchoolDetails() {
     <!-- Chart Plugins -->
     <script src="js/Chart.min.js"></script>
     <!-- Init Charts -->
-    <script>
-        var ctx = document.getElementById('chartjs_area').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-
-        var ctx = document.getElementById('chartjs_bar').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-
-        var ctx = document.getElementById('chartjs_line').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-    </script>
-
+  
     
 </body>
 

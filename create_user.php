@@ -17,6 +17,13 @@ $email = $_POST['email'];
 $phone_number = $_POST['phone_number'];
 $birthday = $_POST['birthday'];
 $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password before storing
+$division_province = $_POST['division_province'];
+$school_district_municipality = $_POST['school_district_municipality'];
+$school_name = $_POST['school_name'];
+$beis_id = $_POST['beis_id'];
+$school_address = $_POST['school_address'];
+$barangay_name = $_POST['barangay_name'];
+$supervisor_principal_name = $_POST['supervisor_principal_name'];
 
 // Check if the role is not 'admin' before generating session ID
 if ($role != 'admin') {
@@ -25,9 +32,9 @@ if ($role != 'admin') {
     $session_id = ''; // Set session ID to empty for 'admin' role
 }
 
-$sql = "INSERT INTO users (role, firstname, lastname, email, phone_number, birthday, password, session_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO users (role, firstname, lastname, email, phone_number, birthday, password, session_id, `Division/Province`, school_district_municipality, school_name, beis_id, school_address, barangay_name, supervisor_principal_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssssssss", $role, $firstname, $lastname, $email, $phone_number, $birthday, $password, $session_id);
+$stmt->bind_param("sssssssssssssss", $role, $firstname, $lastname, $email, $phone_number, $birthday, $password, $session_id, $division_province, $school_district_municipality, $school_name, $beis_id, $school_address, $barangay_name, $supervisor_principal_name);
 
 $response = array();
 

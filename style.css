@@ -79,7 +79,7 @@
 
 html,
 body {
-    color: #898989;
+    color: #0b0b0b;
     font-size: 14px;
     font-family: 'Poppins', sans-serif;
     line-height: normal;
@@ -603,16 +603,7 @@ a:focus {
     4. header
 -------------------------------------------------------------------*/
 
-.full_container {
-    width: 100%;
-    max-width: 100%;
-    padding: 0;
-    margin: 0;
-   background-color: #00aced;
-    background-size: cover;
-    opacity: 0; /* Initially hide the body */
-    animation: fadeIn 1s ease forwards; /* Fade-in animation */
-}
+
 
 .inner_container {
     padding: 0;
@@ -2949,7 +2940,7 @@ ul.inbox-pagination li {
 
 .table-hover tbody tr:hover,
 .table-hover tbody tr:focus {
-    background-color: #1ed085 !important;
+    background-color: lightblue !important;
     color: #fff;
 }
 

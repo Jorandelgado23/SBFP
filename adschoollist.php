@@ -52,7 +52,7 @@ $conn->close();
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>Pluto - Responsive Bootstrap Admin Panel Templates</title>
+      <title>SCHOOL LIST</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -82,6 +82,19 @@ $conn->close();
       <![endif]-->
    </head>
 
+   <style>
+    .active {
+        background-color: lightblue; /* Background color */
+        color: #fff; /* Text color */
+        font-weight: bold; /* Bold text */
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+        transition: transform 0.3s ease-in-out;
+    }
+</style>
+
 <body class="dashboard dashboard_2">
     <div class="full_container">
         <div class="inner_container">
@@ -90,14 +103,15 @@ $conn->close();
                 <div class="sidebar_blog_1">
                     <div class="sidebar-header">
                         <div class="logo_section">
-                            <a href="admindashboard.php"><img class="logo_icon img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
+                        <a href="admindashboard.php"><img class="logo_icon img-responsive" src="images/LOGO.png" alt="#" /></a>
+
                         </div>
                     </div>
                     <div class="sidebar_user_info">
                     <div class="icon_setting"></div>
                     <div class="icon_setting"></div>
 <div class="user_profle_side">
-    <div class="user_img"><img class="img-responsive" src="images/layout_img/user_img.jpg" alt="#" /></div>
+    <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
     <div class="user_info">
     <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
         
@@ -114,15 +128,21 @@ $conn->close();
                             <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
                         </li>
 
-                        <li>
-                            <a href="adaccountmanagement.php"><i class="fa fa-group"></i> <span>Account Management</span></a>
-                        </li>
+                        <!-- <li>
+                            <a href="attendance.php"><i class="fa fa-calendar"></i> <span>Attendance</span></a>
+                        </li> -->
+
+                       
                         <li>
                             <a href="adbeneficiaries.php"><i class="fa fa-university""></i> <span>All School Beneficiaries</span></a>
                         </li>
 
+                        <li class="active">
+    <a href="adschoollist.php"><i class="fa fa-pie-chart"></i> <span>School List Of Laguna</span></a>
+</li>
+
                         <li>
-                            <a href="adschoollist.php"><i class="fa fa-pie-chart"></i> <span>School List Of Laguna</span></a>
+                            <a href="adaccountmanagement.php"><i class="fa fa-group"></i> <span>Account Management</span></a>
                         </li>
                        
                        
@@ -150,15 +170,57 @@ $conn->close();
                             <div class="right_topbar">
                                 <div class="icon_info">
                                     <ul>
-                                        <li><a href="#"><i class="fa fa-bell-o"></i><span class="badge">2</span></a></li>
-                                        <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
+                                    <li>
+
+                                    <?php
+// Fetch recent activities from database
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Query recent activities count with status 'new'
+$sql = "SELECT COUNT(*) AS activity_count FROM recent_activity WHERE status = 'new'";
+$result = $conn->query($sql);
+
+// Get activity count
+$activity_count = 0;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $activity_count = $row['activity_count'];
+}
+
+// Close connection
+$conn->close();
+?>
+
+
+<a href="allactivities.php?mark_read=true">
+    <i class="fa fa-bell-o"></i>
+    <?php if ($activity_count > 0): ?>
+        <span class="badge"><?php echo $activity_count; ?></span>
+    <?php endif; ?>
+</a>
+
+</li>
+
+                                        
                                         <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
                                             
                                         <a class="dropdown-toggle" data-toggle="dropdown">
-    <img class="img-responsive rounded-circle" src="images/layout_img/user_img.jpg" alt="#" />
+       <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
+
     <span class="name_user"><?php echo $user_role; ?></span>
 </a>
 
@@ -187,6 +249,7 @@ $conn->close();
                             </div>
                         </div>
 
+
                         <?php
 // Step 1: Connect to the database
 $servername = "localhost";
@@ -200,14 +263,57 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
-// Step 2: Fetch school details from the schools table based on the search query
+// Step 2: Fetch school details from the beneficiaries table based on the search query
 $search_query = isset($_GET['search']) ? $_GET['search'] : '';
-$sql = "SELECT id, school_name, division_province, school_district_municipality, beis_id, school_address, barangay_name, supervisor_principal_name, contact_number, email_address, total_beneficiaries FROM schools WHERE school_name LIKE '%$search_query%'";
+$sql = "SELECT id, name_of_school, division_province, city_municipality_barangay, school_id_number, name_of_principal, name_of_feeding_focal_person, session_id FROM beneficiaries WHERE name_of_school LIKE '%$search_query%' GROUP BY session_id";
 $result = $conn->query($sql);
+
+
+
+
+// Step 2: Retrieve all schools from the database with correct total beneficiaries count
+$sql = "SELECT b.id, b.name_of_school, b.division_province, b.city_municipality_barangay AS school_district_municipality, b.school_id_number AS beis_id, b.name_of_principal AS supervisor_principal_name, b.name_of_feeding_focal_person AS barangay_name,
+        u.phone_number AS contact_number, u.school_address, u.barangay_name AS user_barangay_name,
+        COUNT(d.session_id) AS total_beneficiaries
+        FROM beneficiaries b
+        LEFT JOIN users u ON b.session_id = u.session_id
+        LEFT JOIN beneficiary_details d ON b.id = d.beneficiary_id
+        GROUP BY b.name_of_school";
+
+$result = $conn->query($sql);
+
+$schools = array();
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $school = array(
+            'id' => $row['id'],
+            'name' => $row['name_of_school'],
+            'division_province' => $row['division_province'],
+            'school_district_municipality' => $row['school_district_municipality'],
+            'beis_id' => $row['beis_id'],
+            'supervisor_principal_name' => $row['supervisor_principal_name'],
+            'barangay_name' => $row['barangay_name'],
+            'contact_number' => $row['contact_number'] ?: 'N/A',
+            'school_address' => $row['school_address'] ?: 'N/A',
+            'total_beneficiaries' => $row['total_beneficiaries']
+        );
+
+        // Use user's barangay_name if it's available and not 'N/A'
+        if ($row['user_barangay_name'] && $row['user_barangay_name'] !== 'N/A') {
+            $school['barangay_name'] = $row['user_barangay_name'];
+        }
+
+        $schools[] = $school;
+    }
+} else {
+    echo "No schools found.";
+    exit;
+}
+
+$conn->close();
 ?>
 
-<!-- Step 3: Display the school names in clickable cards -->
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-12">
@@ -225,6 +331,95 @@ $result = $conn->query($sql);
                     </form>
                 </div>
             </div>
+
+            <div class="col-md-12">
+                <div class="white_shd full margin_bottom_30">
+                    <div class="full graph_head">
+                        <div class="heading1 margin_0">
+                            <h2 class="text-center mb-4">School Details</h2>
+                        </div>
+                    </div>
+                    <div class="table_section padding_infor_info">
+                        <div class="table-responsive-sm">
+                            <table class="table table-bordered">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th class="text-nowrap">School Name</th>
+                                        <th class="text-nowrap">Division/Province</th>
+                                        <th class="text-nowrap">School District/Municipality</th>
+                                        <th class="text-nowrap">BEIS ID</th>
+                                        <th class="text-nowrap">School Address</th>
+                                        <th class="text-nowrap">Barangay Name</th>
+                                        <th class="text-nowrap">Supervisor/Principal Name</th>
+                                        <th class="text-nowrap">Contact Number</th>
+                                        <th class="text-nowrap">Total Beneficiaries</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($schools as $school): ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($school['name']); ?></td>
+                                        <td><?php echo htmlspecialchars($school['division_province']); ?></td>
+                                        <td><?php echo htmlspecialchars($school['school_district_municipality']); ?></td>
+                                        <td><?php echo htmlspecialchars($school['beis_id']); ?></td>
+                                        <td><?php echo htmlspecialchars($school['school_address']); ?></td>
+                                        <td><?php echo htmlspecialchars($school['barangay_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($school['supervisor_principal_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($school['contact_number']); ?></td>
+                                        <td><?php echo htmlspecialchars($school['total_beneficiaries']); ?></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Add buttons for generating Excel and PDF -->
+    <div class="text-center mt-4">
+        <form action="schoollist_pdf_excel.php" method="post" target="_blank" style="display: inline;">
+            <input type="hidden" name="action" value="excel">
+            <button type="submit" class="btn btn-success">Generate Excel</button>
+        </form>
+        <form action="schoollist_pdf_excel.php" method="post" target="_blank" style="display: inline;">
+            <input type="hidden" name="action" value="pdf">
+            <button type="submit" class="btn btn-danger">Generate PDF</button>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+                        <?php
+// Step 1: Connect to the database
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Step 2: Fetch school details from the beneficiaries table based on the search query
+$search_query = isset($_GET['search']) ? $_GET['search'] : '';
+$sql = "SELECT id, name_of_school, division_province, city_municipality_barangay, school_id_number, name_of_principal, name_of_feeding_focal_person, session_id FROM beneficiaries WHERE name_of_school LIKE '%$search_query%' GROUP BY session_id";
+$result = $conn->query($sql);
+?>
+
+
+
+
             <div class="row">
                 <?php
                 // Loop through fetched data and display school names in clickable cards
@@ -233,9 +428,9 @@ $result = $conn->query($sql);
                         echo '<div class="col-md-3">';
                         echo '<a href="school_details.php?id=' . $row["id"] . '" style="text-decoration: none;">'; // Link to another PHP page
                         echo '<div class="card shadow mb-4">';
-                        echo '<img src="images/SDOLOGO.png" class="card-img-top" alt="School Image" style="height: 200px; object-fit: cover;">'; // Add your image here with CSS for height and object-fit
+                        echo '<img src="images/origlogo.jpg" class="card-img-top" alt="School Image" style="height: 250px; object-fit: cover;">'; // Add your image here with CSS for height and object-fit
                         echo '<div class="card-body">';
-                        echo '<strong class="card-title my-0">' . $row["school_name"] . '</strong>';
+                        echo '<strong class="card-title my-0">' . $row["name_of_school"] . '</strong>';
                         echo '</div>'; // ./card-body
                         echo '</div>'; // ./card
                         echo '</a>';
@@ -254,6 +449,78 @@ $result = $conn->query($sql);
 // Close the database connection
 $conn->close();
 ?>
+
+
+
+
+
+<script>
+    function printTable() {
+        var tableContent = document.querySelector('#print-content .table-responsive').innerHTML;
+        var printWindow = window.open('', '', 'height=600,width=1000');
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>School Details</title>
+                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            margin: 20px;
+                        }
+                        .table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-bottom: 20px;
+                        }
+                        .table th, .table td {
+                            border: 1px solid #dee2e6;
+                            padding: 12px;
+                            text-align: left;
+                        }
+                        .table thead th {
+                            background-color: #343a40;
+                            color: #fff;
+                            font-weight: bold;
+                        }
+                        .table tbody tr:nth-child(even) {
+                            background-color: #f2f2f2;
+                        }
+                        @media print {
+                            .btn {
+                                display: none;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            ${tableContent}
+                        </table>
+                    </div>
+                </body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.print();
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                        
     </div> <!-- / .col-md-12 -->
 </div> <!-- end section -->

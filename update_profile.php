@@ -14,15 +14,26 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Initialize variables to store user data
+$user_id = "";
+$user_firstname = "";
+$user_lastname = "";
+$email = "";
+$user_profile_picture = "";
+
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Sanitize and validate email (if necessary)
     $email = $_POST['email']; // Assuming email is not changed
     
+    // Initialize variables for recent activity logging
+    $activity = "";
+    $activity_type = "";
+    
     // Handle profile picture upload
     if ($_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = './uploads/'; // Directory where you store uploads
+        $upload_dir = 'uploads/'; // Directory where you store uploads
         $tmp_name = $_FILES['profile_picture']['tmp_name'];
         $profile_picture = $_FILES['profile_picture']['name'];
         
@@ -32,13 +43,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql = "UPDATE users SET profile_picture = '$profile_picture' WHERE email = '$email'";
             
             if ($conn->query($sql) === TRUE) {
-                echo "Profile picture updated successfully.";
+                $activity = "Updated profile picture";
+                $activity_type = "profile_picture_update";
+                $user_profile_picture = $profile_picture; // Update user_profile_picture variable
             } else {
                 echo "Error updating profile picture: " . $conn->error;
             }
         } else {
             echo "Failed to move uploaded file.";
         }
+    }
+    
+    // Fetch user data including profile picture
+    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $result = $conn->query($sql);
+    
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $user_id = $row['id'];
+        $user_firstname = $row['firstname'];
+        $user_lastname = $row['lastname'];
+        $email = $row['email'];
+        $user_profile_picture = $row['profile_picture']; // Retrieve profile picture filename
+    } else {
+        echo "Error: User not found.";
     }
     
     // Handle other profile information updates
@@ -51,7 +79,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Update firstname and lastname
     $sql = "UPDATE users SET firstname = '$firstname', lastname = '$lastname' WHERE email = '$email'";
     if ($conn->query($sql) === TRUE) {
-        echo "Firstname and lastname updated successfully.";
+        $activity = "Updated firstname and lastname";
+        $activity_type = "name_update";
     } else {
         echo "Error updating firstname and lastname: " . $conn->error;
     }
@@ -73,7 +102,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Update password in the database
                 $sql = "UPDATE users SET password = '$hashed_new_password' WHERE email = '$email'";
                 if ($conn->query($sql) === TRUE) {
-                    echo "Password updated successfully.";
+                    $activity = "Changed password";
+                    $activity_type = "password_change";
                 } else {
                     echo "Error updating password: " . $conn->error;
                 }
@@ -84,7 +114,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Error: User not found.";
         }
     }
+    
+    // Log the recent activity
+    if (!empty($activity) && !empty($activity_type)) {
+        $timestamp = date("Y-m-d H:i:s");
+        $log_sql = "INSERT INTO recent_activity (activity, email, activity_type, timestamp) VALUES ('$activity', '$email', '$activity_type', '$timestamp')";
+        
+        if ($conn->query($log_sql) === TRUE) {
+            echo "Recent activity logged successfully.";
+        } else {
+            echo "Error logging recent activity: " . $conn->error;
+        }
+    }
 }
+
+// Redirect back to settings page
+header("Location: adsettings.php");
+exit();
 
 $conn->close();
 ?>

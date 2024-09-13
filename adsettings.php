@@ -52,7 +52,7 @@ $conn->close();
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>Pluto - Responsive Bootstrap Admin Panel Templates</title>
+      <title>Admin Setting</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -81,6 +81,13 @@ $conn->close();
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
       <![endif]-->
    </head>
+<style>
+     .active {
+        background-color: lightblue; /* Background color */
+        color: #fff; /* Text color */
+        font-weight: bold; /* Bold text */
+    }
+</style>
 
 <body class="dashboard dashboard_2">
     <div class="full_container">
@@ -90,14 +97,15 @@ $conn->close();
                 <div class="sidebar_blog_1">
                     <div class="sidebar-header">
                         <div class="logo_section">
-                            <a href="admindashboard.php"><img class="logo_icon img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
+                        <a href="admindashboard.php"><img class="logo_icon img-responsive" src="images/LOGO.png" alt="#" /></a>
+
                         </div>
                     </div>
                     <div class="sidebar_user_info">
                     <div class="icon_setting"></div>
                     <div class="icon_setting"></div>
 <div class="user_profle_side">
-    <div class="user_img"><img class="img-responsive" src="images/layout_img/user_img.jpg" alt="#" /></div>
+    <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
     <div class="user_info">
     <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
         
@@ -114,9 +122,11 @@ $conn->close();
                             <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
                         </li>
 
-                        <li>
-                            <a href="adaccountmanagement.php"><i class="fa fa-group"></i> <span>Account Management</span></a>
-                        </li>
+                        <!-- <li>
+                            <a href="attendance.php"><i class="fa fa-calendar"></i> <span>Attendance</span></a>
+                        </li> -->
+
+                       
                         <li>
                             <a href="adbeneficiaries.php"><i class="fa fa-university""></i> <span>All School Beneficiaries</span></a>
                         </li>
@@ -124,13 +134,17 @@ $conn->close();
                         <li>
                             <a href="adschoollist.php"><i class="fa fa-pie-chart"></i> <span>School List Of Laguna</span></a>
                         </li>
+
+                        <li>
+                            <a href="adaccountmanagement.php"><i class="fa fa-group"></i> <span>Account Management</span></a>
+                        </li>
                        
                        
                       
                       
             
                         
-                        <li>
+                        <li class="active">
                             <a href="adsettings.php"><i class="fa fa-cog yellow_color"></i> <span>Settings</span></a>
                         </li>
                     </ul>
@@ -139,8 +153,8 @@ $conn->close();
             <!-- End Sidebar -->
             <!-- Right Content -->
             <div id="content">
-                <!-- Topbar -->
-                <div class="topbar">
+                 <!-- Topbar -->
+                 <div class="topbar">
                     <nav class="navbar navbar-expand-lg navbar-light">
                         <div class="full">
                             <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
@@ -150,15 +164,57 @@ $conn->close();
                             <div class="right_topbar">
                                 <div class="icon_info">
                                     <ul>
-                                        <li><a href="#"><i class="fa fa-bell-o"></i><span class="badge">2</span></a></li>
-                                        <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
+                                    <li>
+
+                                    <?php
+// Fetch recent activities from database
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Query recent activities count with status 'new'
+$sql = "SELECT COUNT(*) AS activity_count FROM recent_activity WHERE status = 'new'";
+$result = $conn->query($sql);
+
+// Get activity count
+$activity_count = 0;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $activity_count = $row['activity_count'];
+}
+
+// Close connection
+$conn->close();
+?>
+
+
+<a href="allactivities.php?mark_read=true">
+    <i class="fa fa-bell-o"></i>
+    <?php if ($activity_count > 0): ?>
+        <span class="badge"><?php echo $activity_count; ?></span>
+    <?php endif; ?>
+</a>
+
+</li>
+
+                                        
                                         <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
                                             
                                         <a class="dropdown-toggle" data-toggle="dropdown">
-    <img class="img-responsive rounded-circle" src="images/layout_img/user_img.jpg" alt="#" />
+        <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
+
     <span class="name_user"><?php echo $user_role; ?></span>
 </a>
 
@@ -204,73 +260,117 @@ $conn->close();
             </div>
         </div>
         <div class="row column1">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
-                <div class="white_shd full margin_bottom_30">
-                    <div class="full graph_head">
-                        <div class="heading1 margin_0">
-                            <h2>User profile</h2>
-                        </div>
-                    </div>
-                    <div class="full price_table padding_infor_info">
-                        <form action="update_profile.php" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="id" value="<?php echo $user_id; ?>">
-                            <div class="row align-items-center">
-                                <div class="col-lg-3">
-                                    <div class="profile_img">
-                                        <img width="180" class="rounded-circle" src="./assets/avatars/<?php echo $user_profile_picture; ?>" alt="...">
-                                        <input type="file" name="profile_picture" class="form-control mt-3">
-                                    </div>
-                                </div>
-                                <div class="col-lg-9">
-                                    <div class="profile_contant">
-                                        <h3><?php echo $user_firstname . ' ' . $user_lastname; ?></h3>
-                                       
-                                        <ul class="list-unstyled">
-                                            <li><i class="fa fa-envelope-o"></i> : <?php echo $email; ?></li>
-                                            <!-- Add more user details as needed -->
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr class="my-4">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="firstname">Firstname:</label>
-                                        <input type="text" name="firstname" class="form-control" value="<?php echo $user_firstname; ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="lastname">Lastname:</label>
-                                        <input type="text" name="lastname" class="form-control" value="<?php echo $user_lastname; ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="email">Email:</label>
-                                        <input type="email" name="email" class="form-control" value="<?php echo $email; ?>">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="old_password">Old Password</label>
-                                        <input type="password" name="old_password" class="form-control" id="old_password">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="new_password">New Password</label>
-                                        <input type="password" name="new_password" class="form-control" id="new_password">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="confirm_password">Confirm Password</label>
-                                        <input type="password" name="confirm_password" class="form-control" id="confirm_password">
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                        </form>
-                    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="white_shd full margin_bottom_30">
+            <div class="full graph_head">
+                <div class="heading1 margin_0">
+                    <h2>Admin Profile Setting</h2>
                 </div>
             </div>
-            <div class="col-md-2"></div>
+            <div class="full price_table padding_infor_info">
+                <form action="update_profile.php" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($user_id); ?>">
+                    <div class="row align-items-center">
+                      
+                        <div class="col-lg-9">
+                            <div class="profile_contant">
+                                <h3><?php echo htmlspecialchars($user_firstname . ' ' . $user_lastname); ?></h3>
+                                <ul class="list-unstyled">
+                                    <li><i class="fa fa-envelope-o"></i> <?php echo htmlspecialchars($email); ?></li>
+                                    <!-- Add more user details as needed -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="firstname">Firstname:</label>
+                                <input type="text" name="firstname" class="form-control" value="<?php echo htmlspecialchars($user_firstname); ?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastname">Lastname:</label>
+                                <input type="text" name="lastname" class="form-control" value="<?php echo htmlspecialchars($user_lastname); ?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($email); ?>">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+    <div class="form-group">
+        <label for="old_password">Old Password:</label>
+        <div class="input-group">
+            <input type="password" name="old_password" class="form-control" id="old_password">
+            <div class="input-group-append">
+                <button class="btn toggle-password show-password btn-primary" type="button" data-target="old_password">
+                    <i class="fa fa-eye"></i>
+                </button>
+            </div>
         </div>
+    </div>
+    <div class="form-group">
+        <label for="new_password">New Password:</label>
+        <div class="input-group">
+            <input type="password" name="new_password" class="form-control" id="new_password">
+            <div class="input-group-append">
+                <button class="btn toggle-password show-password btn-primary" type="button" data-target="new_password">
+                    <i class="fa fa-eye"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="confirm_password">Confirm Password:</label>
+        <div class="input-group">
+            <input type="password" name="confirm_password" class="form-control" id="confirm_password">
+            <div class="input-group-append">
+                <button class="btn toggle-password show-password btn-primary" type="button" data-target="confirm_password">
+                    <i class="fa fa-eye"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Function to toggle password visibility
+    document.addEventListener('DOMContentLoaded', function () {
+        const togglePasswordButtons = document.querySelectorAll('.toggle-password');
+        togglePasswordButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const targetId = this.dataset.target;
+                const targetInput = document.getElementById(targetId);
+                if (targetInput.type === 'password') {
+                    targetInput.type = 'text';
+                    this.innerHTML = '<i class="fa fa-eye-slash"></i>';
+                    this.classList.remove('btn-secondary');
+                    this.classList.add('btn-primary');
+                } else {
+                    targetInput.type = 'password';
+                    this.innerHTML = '<i class="fa fa-eye"></i>';
+                    this.classList.remove('btn-primary');
+                    this.classList.add('btn-secondary');
+                }
+            });
+        });
+    });
+</script>
+
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+
+
+
+
        
     </div>
 </div>

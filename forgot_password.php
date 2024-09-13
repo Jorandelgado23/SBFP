@@ -35,7 +35,7 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <style>
-        body {
+         body {
             background: url('images/bg3.jpg') no-repeat center center fixed;
             background-size: cover;
             opacity: 0;
@@ -54,8 +54,8 @@
         }
 
         .login_section {
-            background: rgb(10,10,10);
-background: radial-gradient(circle, rgba(10,10,10,0.5717884565935749) 0%, rgba(0,0,0,0.8575027423078606) 100%);
+            background: rgb(255,255,255);
+background: linear-gradient(96deg, rgba(255,255,255,1) 0%, rgba(231,233,235,1) 97%);
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -65,8 +65,8 @@ background: radial-gradient(circle, rgba(10,10,10,0.5717884565935749) 0%, rgba(0
         }
 
         .login_form {
-            background: rgb(10,10,10);
-background: radial-gradient(circle, rgba(10,10,10,0.7622646470697654) 0%, rgba(0,0,0,0.7790713697588411) 100%);
+            background: rgb(33,33,33);
+background: linear-gradient(96deg, rgba(33,33,33,1) 0%, rgba(0,0,0,0.5073626862854517) 100%);
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -80,8 +80,8 @@ background: radial-gradient(circle, rgba(10,10,10,0.7622646470697654) 0%, rgba(0
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            background: rgb(10,10,10);
-background: radial-gradient(circle, rgba(10,10,10,0.7622646470697654) 0%, rgba(0,0,0,0.7790713697588411) 100%);
+            background: rgb(33,33,33);
+background: linear-gradient(96deg, rgba(33,33,33,1) 0%, rgba(33,33,33,1) 100%, rgba(33,33,33,1) 100%);
             padding: 20px;
             border-radius: 10px;
         }
@@ -122,63 +122,34 @@ background: radial-gradient(circle, rgba(10,10,10,0.7622646470697654) 0%, rgba(0
 </head>
 
 <body>
-
-
 <div class="full_container">
-        <div class="container">
-            <div class="center verticle_center full_height">
-                <div class="login_section">
-                    <div class="signin-image">
-                        <figure><img src="images/LOGO.png" alt="sign up image"></figure>
-                    </div>
-                    <div class="login_form">
-                        <div class="w-75 mx-auto form-container">
-                            <form class="text-center" id="loginForm" method="post">
-                                <h1 class="h6 mb-3">SIGN IN</h1>
-                                <fieldset>
-                                    <div class="field form-group">
-                                        <label class="label_field sr-only" for="inputEmail">Email Address</label>
-                                        <input type="email" id="inputEmail" name="email" class="form-control form-control-lg" placeholder="Email address" required autofocus>
-                                    </div>
-                                    <div class="field form-group">
-                                        <label class="label_field sr-only" for="inputPassword">Password</label>
-                                        <input type="password" id="inputPassword" name="password" class="form-control form-control-lg" placeholder="Password" required>
-                                    </div>
-                                    <div class="field margin_0">
-                                        <label class="label_field hidden">hidden label</label>
-                                        <button class="btn btn-lg btn-primary btn-block main_bt" type="submit">LOGIN</button>
-                                    </div>
-                                    <div class="field margin_0 mt-3">
-                                        <a href="forgot_password.php">Forgot Password?</a>
-                                    </div>
-                                </fieldset>
-                            </form>
-                        </div>
+    <div class="container">
+        <div class="center verticle_center full_height">
+            <div class="login_section">
+                <div class="signin-image">
+                    <figure><img src="images/LOGO.png" alt="sign up image"></figure>
+                </div>
+                <div class="login_form">
+                    <div class="w-50 mx-auto form-container">
+                        <form class="text-center" id="resetRequestForm" method="post" action="send_reset_link.php">
+                            <h1 class="h6 mb-3">Reset Password</h1>
+                            <fieldset>
+                                <div class="field form-group">
+                                    <label class="label_field sr-only" for="inputEmail">Email Address</label>
+                                    <input type="email" id="inputEmail" name="email" class="form-control form-control-lg" placeholder="Email address" required autofocus>
+                                </div>
+                                <div class="field margin_0">
+                                    <label class="label_field hidden">hidden label</label>
+                                    <button class="btn btn-lg btn-primary btn-block main_bt" type="submit">Send Reset Link</button>
+                                </div>
+                            </fieldset>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-<script>
-        // Function to save email to localStorage
-        function saveEmail() {
-            const emailInput = document.getElementById('inputEmail');
-            localStorage.setItem('email', emailInput.value);
-        }
-
-        // Function to load email from localStorage
-        function loadEmail() {
-            const savedEmail = localStorage.getItem('email');
-            if (savedEmail) {
-                document.getElementById('inputEmail').value = savedEmail;
-            }
-        }
-
-        // Event listener to save email on form submit
-        document.addEventListener('DOMContentLoaded', loadEmail);
-        window.addEventListener('beforeunload', saveEmail);
-    </script>
+</div>
 
     <!-- jQuery -->
     <script src="js/jquery.min.js"></script>

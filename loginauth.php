@@ -37,6 +37,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['email'] = $email; // Store email in session
             $_SESSION['role'] = $role;
 
+            // Log the activity for users with role 'sbfp' only
+            if ($role === 'sbfp') {
+                $activity = "User logged in";
+                $activity_type = "login";
+                $timestamp = date("Y-m-d H:i:s");
+                $log_stmt = $conn->prepare("INSERT INTO recent_activity (activity, email, activity_type, timestamp) VALUES (?, ?, ?, ?)");
+                $log_stmt->bind_param("ssss", $activity, $email, $activity_type, $timestamp);
+                $log_stmt->execute();
+                $log_stmt->close();
+            }
+
             // Return JSON response indicating success
             echo json_encode(array('success' => true, 'role' => $role));
             exit();

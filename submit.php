@@ -27,6 +27,21 @@ $stmt->bind_result($session_id);
 $stmt->fetch();
 $stmt->close();
 
+// Validate required fields for beneficiaries table
+$required_fields = ['division_province', 'city_municipality_barangay', 'name_of_school', 'school_id_number', 'name_of_principal', 'name_of_feeding_focal_person'];
+
+foreach ($required_fields as $field) {
+    if (empty($_POST[$field])) {
+        $response = array(
+            'success' => false,
+            'message' => 'Please complete all required fields.'
+        );
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit;
+    }
+}
+
 // Insert into beneficiaries table
 $stmt = $conn->prepare("INSERT INTO beneficiaries (session_id, division_province, city_municipality_barangay, name_of_school, school_id_number, name_of_principal, name_of_feeding_focal_person) VALUES (?, ?, ?, ?, ?, ?, ?)");
 $stmt->bind_param("sssssss", $session_id, $division_province, $city_municipality_barangay, $name_of_school, $school_id_number, $name_of_principal, $name_of_feeding_focal_person);
@@ -41,7 +56,17 @@ $stmt->execute();
 $beneficiary_id = $stmt->insert_id;
 $stmt->close();
 
-// Insert into beneficiary_details table
+// Validate beneficiary details
+if (!isset($_POST['beneficiary_name']) || !is_array($_POST['beneficiary_name'])) {
+    $response = array(
+        'success' => false,
+        'message' => 'Beneficiary details are missing.'
+    );
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
+}
+
 $stmt = $conn->prepare("INSERT INTO beneficiary_details (session_id, beneficiary_id, name, sex, grade_section, date_of_birth, date_of_weighing, age, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa, dewormed, parents_consent_for_milk, participation_in_4ps, beneficiary_of_sbfp_in_previous_years) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 foreach ($_POST['beneficiary_name'] as $index => $beneficiary_name) {
@@ -60,11 +85,33 @@ foreach ($_POST['beneficiary_name'] as $index => $beneficiary_name) {
     $participation_in_4ps = $_POST['participation_in_4ps'][$index];
     $beneficiary_of_sbfp_in_previous_years = $_POST['beneficiary_of_sbfp_in_previous_years'][$index];
 
+    // Validate each beneficiary detail
+    if (empty($beneficiary_name) || empty($beneficiary_sex) || empty($beneficiary_grade_section) || empty($beneficiary_dob)) {
+        $response = array(
+            'success' => false,
+            'message' => 'Please complete all beneficiary details.'
+        );
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit;
+    }
+
     $stmt->bind_param("sisssssdddsssssss", $session_id, $beneficiary_id, $beneficiary_name, $beneficiary_sex, $beneficiary_grade_section, $beneficiary_dob, $beneficiary_dow, $beneficiary_age, $beneficiary_weight, $beneficiary_height, $beneficiary_bmi, $nutritional_status_bmia, $nutritional_status_hfa, $dewormed, $parents_consent_for_milk, $participation_in_4ps, $beneficiary_of_sbfp_in_previous_years);
     $stmt->execute();
 }
 
 $stmt->close();
+
+// Log activity into recent_activity table
+$activity = "Inserted beneficiaries data";
+$activity_type = "data_insert";
+$timestamp = date("Y-m-d H:i:s");
+
+$log_stmt = $conn->prepare("INSERT INTO recent_activity (activity, email, activity_type, timestamp) VALUES (?, ?, ?, ?)");
+$log_stmt->bind_param("ssss", $activity, $email, $activity_type, $timestamp);
+$log_stmt->execute();
+$log_stmt->close();
+
 $conn->close();
 
 // Return JSON response

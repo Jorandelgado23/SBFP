@@ -22,11 +22,11 @@ if ($conn->connect_error) {
 $email = $_SESSION['email'];
 
 // Prepare and bind
-$stmt = $conn->prepare("SELECT firstname, lastname FROM users WHERE email = ?");
+$stmt = $conn->prepare("SELECT firstname, lastname, role FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $stmt->store_result();
-$stmt->bind_result($user_firstname, $user_lastname);
+$stmt->bind_result($user_firstname, $user_lastname, $user_role);
 
 if ($stmt->num_rows > 0) {
     $stmt->fetch();
@@ -38,7 +38,6 @@ if ($stmt->num_rows > 0) {
 $stmt->close();
 $conn->close();
 ?>
-
 
 
 <!DOCTYPE html>
@@ -57,7 +56,8 @@ $conn->close();
       <meta name="description" content="">
       <meta name="author" content="">
       <!-- site icon -->
-      <link rel="icon" href="images/fevicon.png" type="image/png" />
+      <link rel="icon" href="images/LOGO.png" type="image/png" />
+
       <!-- bootstrap css -->
       <link rel="stylesheet" href="css/bootstrap.min.css" />
       <!-- site css -->
@@ -89,18 +89,19 @@ $conn->close();
                 <div class="sidebar_blog_1">
                     <div class="sidebar-header">
                         <div class="logo_section">
-                            <a href="dashboard.html"><img class="logo_icon img-responsive" src="images/logo/logo_icon.png" alt="#" /></a>
+                        <a href="dashboard.php"><img class="logo_icon img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
                         </div>
                     </div>
                     <div class="sidebar_user_info">
     <div class="icon_setting"></div>
     <div class="user_profle_side">
-        <div class="user_img"><img class="img-responsive" src="images/layout_img/user_img.jpg" alt="#" /></div>
-        <div class="user_info">
-            <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
-            <p><span class="online_animation"></span> Online</p>
-        </div>
+    <div class="user_img"><img class="img-responsive" src="images/layout_img/user_img.jpg" alt="#" /></div>
+    <div class="user_info">
+    <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
+        
+        <p><span class="online_animation"></span> Online</p>
     </div>
+</div>
 </div>
 
                 </div>
@@ -108,40 +109,34 @@ $conn->close();
                     <h4>General</h4>
                     <ul class="list-unstyled components">
                     <li>
-                            <a href="dashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
+                            <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
                         </li>
 
                         <li>
-                            <a href="form1.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 1</span></a>
+                            <a href="adaccountmanagement.php"><i class="fa fa-group"></i> <span>Account Management</span></a>
                         </li>
                         <li>
-                            <a href="form2.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 2</span></a>
+                            <a href="adbeneficiaries.php"><i class="fa fa-university""></i> <span>All School Beneficiaries</span></a>
+                        </li>
+
+                        <li>
+                            <a href="adschoollist.php"><i class="fa fa-pie-chart"></i> <span>School List Of Laguna</span></a>
+                        </li>
+
+                        <li>
+                            <a href="form2.php"><i class="fa fa-plus-circle"></i> <span>Add School</span></a>
                         </li>
                         <li>
-                            <a href="form3.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 3</span></a>
+                            <a href="attendance.php"><i class="fa fa-calendar"></i> <span>Attendance</span></a>
                         </li>
-                        <li>
-                            <a href="form4.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 4</span></a>
-                        </li>
-                        <li>
-                            <a href="form5.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 5</span></a>
-                        </li>
-                        <li>
-                            <a href="form6.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 6</span></a>
-                        </li>
-                        <li>
-                            <a href="form7.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 7</span></a>
-                        </li>
-                        <li>
-                            <a href="form8.php"><i class="fa fa-file-excel-o "></i> <span>SBFP-FORM 8</span></a>
-                        </li>
+                       
                        
                       
                       
             
                         
                         <li>
-                            <a href="usersetting.php"><i class="fa fa-cog yellow_color"></i> <span>Settings</span></a>
+                            <a href="adsettings.php"><i class="fa fa-cog yellow_color"></i> <span>Settings</span></a>
                         </li>
                     </ul>
                 </div>
@@ -155,8 +150,9 @@ $conn->close();
                         <div class="full">
                             <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
                             <div class="logo_section">
-                                <a href="dashboard.html"><img class="img-responsive" src="images/logo/logo_black.png" alt="#" /></a>
+                            <a href="admindashboard.php"><img class="img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
                             </div>
+                           
                             <div class="right_topbar">
                                 <div class="icon_info">
                                     <ul>
@@ -168,8 +164,10 @@ $conn->close();
                                         <li>
                                             
                                         <a class="dropdown-toggle" data-toggle="dropdown">
-    <img class="img-responsive rounded-circle" src="images/layout_img/user_img.jpg" alt="#" />
-    <span class="name_user"><?php echo $user_firstname . ' ' . $user_lastname; ?></span>
+      <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
+
+    <span class="name_user"><?php echo $user_role; ?></span>
+
 </a>
 
                                             <div class="dropdown-menu">

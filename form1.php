@@ -22,11 +22,11 @@ if ($conn->connect_error) {
 $email = $_SESSION['email'];
 
 // Prepare and bind
-$stmt = $conn->prepare("SELECT firstname, lastname FROM users WHERE email = ?");
+$stmt = $conn->prepare("SELECT firstname, lastname, role FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $stmt->store_result();
-$stmt->bind_result($user_firstname, $user_lastname);
+$stmt->bind_result($user_firstname, $user_lastname, $user_role);
 
 if ($stmt->num_rows > 0) {
     $stmt->fetch();
@@ -52,7 +52,7 @@ $conn->close();
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>Pluto - Responsive Bootstrap Admin Panel Templates</title>
+      <title>Master List Of Beneficiaries</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -73,7 +73,7 @@ $conn->close();
       <!-- custom css -->
       <link rel="stylesheet" href="css/custom.css" />
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
@@ -85,6 +85,14 @@ $conn->close();
       <![endif]-->
    </head>
 
+   <style>
+     .active {
+        background-color: lightblue; /* Background color */
+        color: #fff; /* Text color */
+        font-weight: bold; /* Bold text */
+    }
+   </style>
+
 <body class="dashboard dashboard_2">
     <div class="full_container">
         <div class="inner_container">
@@ -93,18 +101,20 @@ $conn->close();
                 <div class="sidebar_blog_1">
                     <div class="sidebar-header">
                         <div class="logo_section">
-                            <a href="dashboard.html"><img class="logo_icon img-responsive" src="images/logo/logo_icon.png" alt="#" /></a>
+                        <a href="dashboard.php"><img class="logo_icon img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
                         </div>
                     </div>
                     <div class="sidebar_user_info">
     <div class="icon_setting"></div>
     <div class="user_profle_side">
-        <div class="user_img"><img class="img-responsive" src="images/layout_img/user_img.jpg" alt="#" /></div>
-        <div class="user_info">
-            <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
-            <p><span class="online_animation"></span> Online</p>
-        </div>
+    <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
+
+    <div class="user_info">
+    <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
+        
+        <p><span class="online_animation"></span> Online</p>
     </div>
+</div>
 </div>
 
                 </div>
@@ -115,29 +125,29 @@ $conn->close();
                             <a href="dashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
                         </li>
 
-                        <li>
-                            <a href="form1.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 1</span></a>
+                        <li class="active">
+                            <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
                         </li>
                         <li>
-                            <a href="form2.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 2</span></a>
+                            <!-- <a href="form2.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 2</span></a> -->
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="form3.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 3</span></a>
-                        </li>
+                        </li> -->
                         <li>
-                            <a href="form4.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 4</span></a>
+                            <a href="student_attendance.php"><i class="fa fa-calendar"></i> <span>Student Attendance</span></a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="form5.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 5</span></a>
-                        </li>
+                        </li> -->
                         <li>
-                            <a href="form6.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 6</span></a>
+                            <a href="form6.php"><i class="fa fa-flask"></i> <span>Milk Component Data</span></a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="form7.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 7</span></a>
-                        </li>
+                        </li> -->
                         <li>
-                            <a href="form8.php"><i class="fa fa-file-excel-o "></i> <span>SBFP-FORM 8</span></a>
+                            <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>QUARTERLY REPORT</span></a>
                         </li>
                        
                       
@@ -159,7 +169,7 @@ $conn->close();
                         <div class="full">
                             <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
                             <div class="logo_section">
-                                <a href="dashboard.html"><img class="img-responsive" src="images/logo/logo_black.png" alt="#" /></a>
+                            <a href="dashboard.php"><img class="img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
                             </div>
                             <div class="right_topbar">
                                 <div class="icon_info">
@@ -172,9 +182,12 @@ $conn->close();
                                         <li>
                                             
                                         <a class="dropdown-toggle" data-toggle="dropdown">
-    <img class="img-responsive rounded-circle" src="images/layout_img/user_img.jpg" alt="#" />
-    <span class="name_user"><?php echo $user_firstname . ' ' . $user_lastname; ?></span>
+        <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
+
+    <span class="name_user"><?php echo $user_role; ?></span>
+
 </a>
+
 
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="profile.html">My Profile</a>
@@ -196,7 +209,7 @@ $conn->close();
                         <div class="row column_title">
                             <div class="col-md-12">
                                 <div class="page_title">
-                                    <h2>Dashboard</h2>
+                                    <h2>Master List Of Beneficiaries</h2>
                                 </div>
                             </div>
                         </div>
@@ -206,7 +219,7 @@ $conn->close();
     <div class="card-body">
     <h1>School-Based Feeding Program Form</h1>
     <div class="container mt-5">
-        <div class="col-md-12 mb-12">
+        <div class="col-md-10 mb-10">
             <div class="card shadow">
                 <div class="card-body">
                     <p class="card-title"><strong>Master List Beneficiaries for School-Based Feeding Program (SBFP)</strong></p>
@@ -216,132 +229,99 @@ $conn->close();
             </div>
         </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="sbfpModal" tabindex="-1" role="dialog" aria-labelledby="sbfpModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-light">
-                    <h5 class="modal-title" id="sbfpModalLabel">School-Based Feeding Program Form</h5>
-                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="sbfpForm" class="needs-validation" novalidate action="submit.php" method="post">
+        <?php
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Retrieve session_id of the logged-in user and necessary fields
+$email = $_SESSION['email'];
+$stmt = $conn->prepare("SELECT session_id, `Division/Province`, `school_district_municipality`, `school_name`, `beis_id`, `firstname`, `lastname`, `supervisor_principal_name` FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($session_id, $division_province, $city_municipality_barangay, $name_of_school, $beis_id, $firstname, $lastname, $name_of_principal);
+$stmt->fetch();
+$stmt->close();
+?>
+
+<!-- HTML and Form -->
+<!-- Modal -->
+<div class="modal fade" id="sbfpModal" tabindex="-1" role="dialog" aria-labelledby="sbfpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-light">
+                <h5 class="modal-title" id="sbfpModalLabel">School-Based Feeding Program Form</h5>
+                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="sbfpForm" class="needs-validation" novalidate action="submit.php" method="post">
                     <div class="row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6" hidden>
                             <label for="division_province" class="form-label">Division/Province:</label>
-                            <select class="form-control" id="division_province" name="division_province" required>
-                                <option value="" disabled selected>Choose...</option>
-                                <option value="Santa Cruz, Laguna">Santa Cruz, Laguna</option>
-                            </select>
+                            <input type="text" class="form-control" id="division_province" name="division_province" value="<?= htmlspecialchars($division_province) ?>" required readonly>
                             <div class="invalid-feedback">
                                 Please provide a division/province.
                             </div>
                         </div>
-                            <div class="form-group col-md-6">
+                        <div class="form-group col-md-6" hidden>
                             <label for="city_municipality_barangay" class="form-label">City/Municipality/Barangay:</label>
-                            <select class="form-control" id="city_municipality_barangay" name="city_municipality_barangay" required>
-                                <option value="" disabled selected>Choose...</option>
-                                <option value="Bagumbayan">Bagumbayan</option>
-                                <option value="Calios">Calios</option>
-                                <option value="Duhat">Duhat</option>
-                                <option value="Gatid">Gatid</option>
-                                <option value="Jasaaan">Jasaaan</option>
-                                <option value="Labuin">Labuin</option>
-                                <option value="Malinao">Malinao</option>
-                                <option value="Oogong">Oogong</option>
-                                <option value="Pagsawitan">Pagsawitan</option>
-                                <option value="Palasan">Palasan</option>
-                                <option value="Patimbao">Patimbao</option>
-                                <option value="Poblacion I">Poblacion I</option>
-                                <option value="Poblacion II">Poblacion II</option>
-                                <option value="Poblacion III">Poblacion III</option>
-                                <option value="San Juan">San Juan</option>
-                                <option value="Santisima Cruz">Santisima Cruz</option>
-                                <option value="Santo Angel">Santo Angel</option>
-                                <option value="Santo Cristo">Santo Cristo</option>
-                                <option value="Santo Domingo">Santo Domingo</option>
-                                <option value="Sinalhan">Sinalhan</option>
-                                <option value="Tagumpay">Tagumpay</option>
-                                <option value="Tibig">Tibig</option>
-                                <option value="Tranca">Tranca</option>
-                                <option value="Victoria">Victoria</option>
-                                <option value="Villa Apolonia">Villa Apolonia</option>
-                                <option value="Yakal">Yakal</option>
-                            </select>
+                            <input type="text" class="form-control" id="city_municipality_barangay" name="city_municipality_barangay" value="<?= htmlspecialchars($city_municipality_barangay) ?>" required readonly>
                             <div class="invalid-feedback">
                                 Please provide city/municipality/barangay.
                             </div>
                         </div>
-                            <div class="form-group col-md-6">
+                        <div class="form-group col-md-6" hidden>
                             <label for="name_of_school" class="form-label">Name of School / School District:</label>
-                            <select class="form-control" id="name_of_school" name="name_of_school" required>
-                                <option value="" disabled selected>Choose...</option>
-                                <option value="Bagumbayan Elementary School">Bagumbayan Elementary School</option>
-                                <option value="Calios Elementary School">Calios Elementary School</option>
-                                <option value="Duhat Elementary School">Duhat Elementary School</option>
-                                <option value="Gatid Elementary School">Gatid Elementary School</option>
-                                <option value="Jasaaan Elementary School">Jasaaan Elementary School</option>
-                                <option value="Labuin Elementary School">Labuin Elementary School</option>
-                                <option value="Malinao Elementary School">Malinao Elementary School</option>
-                                <option value="Oogong Elementary School">Oogong Elementary School</option>
-                                <option value="Pagsawitan Elementary School">Pagsawitan Elementary School</option>
-                                <option value="Palasan Elementary School">Palasan Elementary School</option>
-                                <option value="Patimbao Elementary School">Patimbao Elementary School</option>
-                                <option value="Poblacion I Elementary School">Poblacion I Elementary School</option>
-                                <option value="Poblacion II Elementary School">Poblacion II Elementary School</option>
-                                <option value="Poblacion III Elementary School">Poblacion III Elementary School</option>
-                                <option value="San Juan Elementary School">San Juan Elementary School</option>
-                                <option value="Santisima Cruz Elementary School">Santisima Cruz Elementary School</option>
-                                <option value="Santo Angel Elementary School">Santo Angel Elementary School</option>
-                                <option value="Santo Cristo Elementary School">Santo Cristo Elementary School</option>
-                                <option value="Santo Domingo Elementary School">Santo Domingo Elementary School</option>
-                                <option value="Sinalhan Elementary School">Sinalhan Elementary School</option>
-                                <option value="Tagumpay Elementary School">Tagumpay Elementary School</option>
-                                <option value="Tibig Elementary School">Tibig Elementary School</option>
-                                <option value="Tranca Elementary School">Tranca Elementary School</option>
-                                <option value="Victoria Elementary School">Victoria Elementary School</option>
-                                <option value="Villa Apolonia Elementary School">Villa Apolonia Elementary School</option>
-                                <option value="Yakal Elementary School">Yakal Elementary School</option>
-                            </select>
+                            <input type="text" class="form-control" id="name_of_school" name="name_of_school" value="<?= htmlspecialchars($name_of_school) ?>" required readonly>
                             <div class="invalid-feedback">
                                 Please provide the name of the school/school district.
                             </div>
                         </div>
-                            <div class="col-md-6">
-                                <label for="school_id_number" class="form-label">School ID Number:</label>
-                                <input type="text" class="form-control" id="school_id_number" name="school_id_number" required>
-                                <div class="invalid-feedback">
-                                    Please provide the school ID number.
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="name_of_principal" class="form-label">Name of Principal:</label>
-                                <input type="text" class="form-control" id="name_of_principal" name="name_of_principal" required>
-                                <div class="invalid-feedback">
-                                    Please provide the name of the principal.
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="name_of_feeding_focal_person" class="form-label">Name of Feeding Focal Person:</label>
-                                <input type="text" class="form-control" id="name_of_feeding_focal_person" name="name_of_feeding_focal_person" required>
-                                <div class="invalid-feedback">
-                                    Please provide the name of the feeding focal person.
-                                </div>
+                        <div class="form-group col-md-6" hidden>
+                            <label for="school_id_number" class="form-label">School ID Number (BEIS ID):</label>
+                            <input type="text" class="form-control" id="school_id_number" name="school_id_number" value="<?= htmlspecialchars($beis_id) ?>" required readonly>
+                            <div class="invalid-feedback">
+                                Please provide the school ID number.
                             </div>
                         </div>
-                        <h2 class="mt-4">Beneficiary Details</h2>
-                        <div id="beneficiary_details">
-                            <div class="beneficiary mt-3 border rounded p-3">
-                                <div class="col-md-6">
+                        <div class="form-group col-md-6" hidden>
+                            <label for="name_of_principal" class="form-label">Name of Principal:</label>
+                            <input type="text" class="form-control" id="name_of_principal" name="name_of_principal" value="<?= htmlspecialchars($name_of_principal) ?>" required readonly>
+                            <div class="invalid-feedback">
+                                Please provide the name of the principal.
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6" hidden>
+                            <label for="name_of_feeding_focal_person" class="form-label">Name of Feeding Focal Person:</label>
+                            <input type="text" class="form-control" id="name_of_feeding_focal_person" name="name_of_feeding_focal_person" value="<?= htmlspecialchars($firstname . ' ' . $lastname) ?>" required readonly>
+                            <div class="invalid-feedback">
+                                Please provide the name of the feeding focal person.
+                            </div>
+                        </div>
+                    </div>
+                    <h2 class="mt-4">Beneficiary Details</h2>
+                    <div id="beneficiary_details">
+                        <div class="beneficiary mt-3 border rounded p-3">
+                            <div class="row">
+                                <div class="form-group col-md-6">
                                     <label for="beneficiary_no" class="form-label">No.:</label>
                                     <input type="text" class="form-control" id="beneficiary_no" name="beneficiary_no[]" required>
                                     <div class="invalid-feedback">
                                         Please provide the beneficiary number.
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="form-group col-md-6">
                                     <label for="beneficiary_name" class="form-label">Name:</label>
                                     <input type="text" class="form-control" id="beneficiary_name" name="beneficiary_name[]" required>
                                     <div class="invalid-feedback">
@@ -349,123 +329,132 @@ $conn->close();
                                     </div>
                                 </div>
                                 <div class="form-group col-md-6">
-                                <label for="beneficiary_sex" class="form-label">Sex:</label>
-                                <select class="form-control" id="beneficiary_sex" name="beneficiary_sex[]" required>
-                                    <option value="" disabled selected>Choose...</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select>
-                                <div class="invalid-feedback">
-                                    Please select the sex of the beneficiary.
+                                    <label for="beneficiary_sex" class="form-label">Sex:</label>
+                                    <select class="form-control" id="beneficiary_sex" name="beneficiary_sex[]" required>
+                                        <option value="" disabled selected>Choose...</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please select the sex of the beneficiary.
+                                    </div>
                                 </div>
-                            </div>
-                                <div class="col-md-6">
+                                <div class="form-group col-md-6">
                                     <label for="beneficiary_grade_section" class="form-label">Grade/Section:</label>
-                                    <input type="text" class="form-control" id="beneficiary_grade_section" name="beneficiary_grade_section[]" required>
+                                    <select class="form-control" id="beneficiary_grade_section" name="beneficiary_grade_section[]" required>
+                                        <option value="" disabled selected>Choose...</option>
+                                        <option value="Kinder">Kinder</option>
+                                        <option value="Grade 1">Grade 1</option>
+                                        <option value="Grade 2">Grade 2</option>
+                                        <option value="Grade 3">Grade 3</option>
+                                        <option value="Grade 4">Grade 4</option>
+                                        <option value="Grade 5">Grade 5</option>
+                                        <option value="Grade 6">Grade 6</option>
+                                    </select>
                                     <div class="invalid-feedback">
                                         Please provide the grade/section of the beneficiary.
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="form-group col-md-6">
                                     <label for="beneficiary_dob" class="form-label">Date of Birth (MM/DD/YYYY):</label>
                                     <input type="date" class="form-control" id="beneficiary_dob" name="beneficiary_dob[]" required onchange="calculateAgeAndBMI(this)">
                                     <div class="invalid-feedback">
                                         Please provide the date of birth of the beneficiary.
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="form-group col-md-6">
                                     <label for="beneficiary_dow" class="form-label">Date of Weighing/Measuring (MM/DD/YYYY):</label>
                                     <input type="date" class="form-control" id="beneficiary_dow" name="beneficiary_dow[]" required onchange="calculateAgeAndBMI(this)">
                                     <div class="invalid-feedback">
                                         Please provide the date of weighing/measuring of the beneficiary.
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="form-group col-md-6">
                                     <label for="beneficiary_age" class="form-label">Age:</label>
                                     <input type="text" class="form-control" id="beneficiary_age" name="beneficiary_age[]" readonly required>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="form-group col-md-6">
                                     <label for="beneficiary_weight" class="form-label">Weight (Kg):</label>
                                     <input type="number" step="0.01" class="form-control" id="beneficiary_weight" name="beneficiary_weight[]" required oninput="calculateBMI(this)">
                                     <div class="invalid-feedback">
                                         Please provide the weight of the beneficiary.
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="form-group col-md-6">
                                     <label for="beneficiary_height" class="form-label">Height (cm):</label>
                                     <input type="number" step="0.01" class="form-control" id="beneficiary_height" name="beneficiary_height[]" required oninput="calculateBMI(this)">
                                     <div class="invalid-feedback">
                                         Please provide the height of the beneficiary.
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="form-group col-md-6">
                                     <label for="beneficiary_bmi" class="form-label">BMI for 6 y.o. and above:</label>
                                     <input type="text" class="form-control" id="beneficiary_bmi" name="beneficiary_bmi[]" readonly required>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="form-group col-md-6">
                                     <label for="nutritional_status_bmia" class="form-label">Nutritional Status (BMI-A):</label>
                                     <input type="text" class="form-control" id="nutritional_status_bmia" name="nutritional_status_bmia[]" readonly required>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="form-group col-md-6">
                                     <label for="nutritional_status_hfa" class="form-label">Nutritional Status (HFA):</label>
                                     <input type="text" class="form-control" id="nutritional_status_hfa" name="nutritional_status_hfa[]" readonly required>
+                                    <div class="invalid-feedback">
+                                        Please provide the nutritional status (HFA) of the beneficiary.
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-6">
-    <label for="dewormed" class="form-label">Dewormed?</label>
-    <select class="form-control" id="dewormed" name="dewormed[]" required>
-        <option selected disabled>Choose...</option>
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
-    </select>
-    <div class="invalid-feedback">
-        Please select if the beneficiary was dewormed.
-    </div>
-</div>
-<div class="form-group col-md-6">
-    <label for="parents_consent_for_milk" class="form-label">Parent's consent for milk?</label>
-    <select class="form-control" id="parents_consent_for_milk" name="parents_consent_for_milk[]" required>
-        <option selected disabled>Choose...</option>
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
-    </select>
-    <div class="invalid-feedback">
-        Please select if parent's consent for milk is given.
-    </div>
-</div>
-<div class="form-group col-md-6">
-    <label for="participation_in_4ps" class="form-label">Participation in 4Ps?</label>
-    <select class="form-control" id="participation_in_4ps" name="participation_in_4ps[]" required>
-        <option selected disabled>Choose...</option>
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
-    </select>
-    <div class="invalid-feedback">
-        Please select if there is participation in 4Ps.
-    </div>
-</div>
-<div class="form-group col-md-6">
-    <label for="beneficiary_of_sbfp_in_previous_years" class="form-label">Beneficiary of SBFP in Previous Years?</label>
-    <select class="form-control" id="beneficiary_of_sbfp_in_previous_years" name="beneficiary_of_sbfp_in_previous_years[]" required>
-        <option selected disabled>Choose...</option>
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
-    </select>
-    <div class="invalid-feedback">
-        Please select if the beneficiary was part of SBFP in previous years.
-    </div>
-</div>
-
+                                    <label for="dewormed" class="form-label">Dewormed (Yes/No):</label>
+                                    <select class="form-control" id="dewormed" name="dewormed[]" required>
+                                        <option value="" disabled selected>Choose...</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please specify if the beneficiary is dewormed.
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="parents_consent_for_milk" class="form-label">Parent's Consent for Milk (Yes/No):</label>
+                                    <select class="form-control" id="parents_consent_for_milk" name="parents_consent_for_milk[]" required>
+                                        <option value="" disabled selected>Choose...</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please specify if there is parent's consent for milk.
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="participation_in_4ps" class="form-label">Participation in 4Ps (Yes/No):</label>
+                                    <select class="form-control" id="participation_in_4ps" name="participation_in_4ps[]" required>
+                                        <option value="" disabled selected>Choose...</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please specify if there is participation in 4Ps.
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="beneficiary_of_sbfp_in_previous_years" class="form-label">Beneficiary of SBFP in Previous Years (Yes/No):</label>
+                                    <select class="form-control" id="beneficiary_of_sbfp_in_previous_years" name="beneficiary_of_sbfp_in_previous_years[]" required>
+                                        <option value="" disabled selected>Choose...</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please specify if the beneficiary was part of SBFP in previous years.
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary mt-3">Submit</button>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3 float-right">Submit</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
 
 </body>
@@ -577,9 +566,21 @@ $stmt->fetch();
 $stmt->close();
 
 // Fetch submitted data for the logged-in user only
+$selected_grade = isset($_POST['grade_level']) ? $_POST['grade_level'] : '';
+
 $sql = "SELECT * FROM beneficiary_details WHERE session_id = ?";
+
+if (!empty($selected_grade)) {
+    $sql .= " AND grade_section LIKE ?";
+    $selected_grade = "%$selected_grade%";
+}
+
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $session_id);
+if (!empty($selected_grade)) {
+    $stmt->bind_param("ss", $session_id, $selected_grade);
+} else {
+    $stmt->bind_param("s", $session_id);
+}
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -596,64 +597,80 @@ $result = $stmt->get_result();
                 <h2>Master List Beneficiaries</h2>
               </div>
             </div>
+            <div class="mb-3">
+              <form method="POST" id="filterForm">
+                <label for="grade_level">Filter by Grade Level:</label>
+                <select name="grade_level" id="grade_level" class="form-control" onchange="document.getElementById('filterForm').submit();">
+                  <option value="">All</option>
+                  <?php
+                  $grades = array("Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6");
+                  foreach ($grades as $grade) {
+                      echo "<option value=\"$grade\"" . ($selected_grade == "%$grade%" ? " selected" : "") . ">$grade</option>";
+                  }
+                  ?>
+                </select>
+              </form>
+            </div>
             <div class="table_section padding_infor_info">
-              <div class="table-responsive-sm">
-                <table class="table">
-              <thead>
-                <tr>
-                  <th>No.</th>
-                  <th>Name</th>
-                  <th>Sex</th>
-                  <th>Grade/Section</th>
-                  <th>Date of Birth</th>
-                  <th>Date of Weighing</th>
-                  <th>Age</th>
-                  <th>Weight (Kg)</th>
-                  <th>Height (cm)</th>
-                  <th>BMI</th>
-                  <th>Nutritional Status (BMI-A)</th>
-                  <th>Nutritional Status (HFA)</th>
-                  <th>Dewormed?</th>
-                  <th>Parent's consent for milk?</th>
-                  <th>Participation in 4Ps?</th>
-                  <th>Beneficiary of SBFP in Previous Years?</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php
-                if ($result->num_rows > 0) {
-                    $count = 1;
-                    // Output data of each row
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . $count++ . "</td>";
-                        echo "<td>" . $row["name"] . "</td>";
-                        echo "<td>" . $row["sex"] . "</td>";
-                        echo "<td>" . $row["grade_section"] . "</td>";
-                        echo "<td>" . $row["date_of_birth"] . "</td>";
-                        echo "<td>" . $row["date_of_weighing"] . "</td>";
-                        echo "<td>" . $row["age"] . "</td>";
-                        echo "<td>" . $row["weight"] . "</td>";
-                        echo "<td>" . $row["height"] . "</td>";
-                        echo "<td>" . $row["bmi"] . "</td>";
-                        echo "<td>" . $row["nutritional_status_bmia"] . "</td>";
-                        echo "<td>" . $row["nutritional_status_hfa"] . "</td>";
-                        echo "<td>" . $row["dewormed"] . "</td>";
-                        echo "<td>" . $row["parents_consent_for_milk"] . "</td>";
-                        echo "<td>" . $row["participation_in_4ps"] . "</td>";
-                        echo "<td>" . $row["beneficiary_of_sbfp_in_previous_years"] . "</td>";
-                        echo "<td><button class='btn btn-primary edit-btn' data-id='" . $row["id"] . "'>Edit</button> <button class='btn btn-danger remove-btn' data-id='" . $row["id"] . "'>Remove</button></td>";
-                        echo "</tr>";
+                                 <div class="table-responsive-sm">
+                                    <table class="table table-bordered">
+                  <thead class='thead-light'>
+                    <tr>
+                      <th>No.</th>
+                      <th>Name</th>
+                      <th>Sex</th>
+                      <th>Grade/Section</th>
+                      <th>Date of Birth</th>
+                      <th>Date of Weighing</th>
+                      <th>Age</th>
+                      <th>Weight (Kg)</th>
+                      <th>Height (cm)</th>
+                      <th>BMI</th>
+                      <th>Nutritional Status (BMI-A)</th>
+                      <th>Nutritional Status (HFA)</th>
+                      <th>Dewormed?</th>
+                      <th>Parent's consent for milk?</th>
+                      <th>Participation in 4Ps?</th>
+                      <th>Beneficiary of SBFP in Previous Years?</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                    if ($result->num_rows > 0) {
+                        $count = 1;
+                        // Output data of each row
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . $count++ . "</td>";
+                            echo "<td>" . $row["name"] . "</td>";
+                            echo "<td>" . $row["sex"] . "</td>";
+                            echo "<td>" . $row["grade_section"] . "</td>";
+                            echo "<td>" . $row["date_of_birth"] . "</td>";
+                            echo "<td>" . $row["date_of_weighing"] . "</td>";
+                            echo "<td>" . $row["age"] . "</td>";
+                            echo "<td>" . $row["weight"] . "</td>";
+                            echo "<td>" . $row["height"] . "</td>";
+                            echo "<td>" . $row["bmi"] . "</td>";
+                            echo "<td>" . $row["nutritional_status_bmia"] . "</td>";
+                            echo "<td>" . $row["nutritional_status_hfa"] . "</td>";
+                            echo "<td>" . $row["dewormed"] . "</td>";
+                            echo "<td>" . $row["parents_consent_for_milk"] . "</td>";
+                            echo "<td>" . $row["participation_in_4ps"] . "</td>";
+                            echo "<td>" . $row["beneficiary_of_sbfp_in_previous_years"] . "</td>";
+                            echo "<td><button class='btn btn-primary edit-btn' data-id='" . $row["id"] . "'>Edit</button> <button class='btn btn-danger remove-btn' data-id='" . $row["id"] . "'>Remove</button></td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='17'>No data available</td></tr>";
                     }
-                } else {
-                    echo "<tr><td colspan='17'>No data available</td></tr>";
-                }
-                $stmt->close();
-                $conn->close();
-                ?>
-              </tbody>
-            </table>
+                    $stmt->close();
+                    $conn->close();
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -964,66 +981,10 @@ $(document).ready(function() {
             </div>
         </div>
     </div>
-<!-- Bootstrap JS and jQuery (assuming you use Bootstrap) -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>  
+ 
 
-    <!-- jQuery -->
-    <script src="js/jquery.min.js"></script>
-    <!-- Bootstrap Bundle JavaScript -->
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <!-- Custom Scripts -->
-    <script src="js/custom.js"></script>
-    <!-- Chart Plugins -->
-    <script src="js/Chart.min.js"></script>
-    <!-- Init Charts -->
+  
     
-    <script>
-        var ctx = document.getElementById('chartjs_area').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-
-        var ctx = document.getElementById('chartjs_bar').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-
-        var ctx = document.getElementById('chartjs_line').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-    </script>
 </body>
 
 </html>

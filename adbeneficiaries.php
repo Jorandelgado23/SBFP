@@ -52,7 +52,7 @@ $conn->close();
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>Pluto - Responsive Bootstrap Admin Panel Templates</title>
+      <title>SCHOOL BENEFICIARIES</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -82,6 +82,14 @@ $conn->close();
       <![endif]-->
    </head>
 
+   <style>
+     .active {
+        background-color: lightblue; /* Background color */
+        color: #fff; /* Text color */
+        font-weight: bold; /* Bold text */
+    }
+   </style>
+
 <body class="dashboard dashboard_2">
     <div class="full_container">
         <div class="inner_container">
@@ -90,13 +98,14 @@ $conn->close();
                 <div class="sidebar_blog_1">
                     <div class="sidebar-header">
                         <div class="logo_section">
-                        <a href="admindashboard.php"><img class="logo_icon img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
+                        <a href="admindashboard.php"><img class="logo_icon img-responsive" src="images/LOGO.png" alt="#" /></a>
+
 
                         </div>
                     </div>
                     <div class="sidebar_user_info">
                     <div class="user_profle_side">
-    <div class="user_img"><img class="img-responsive" src="images/layout_img/user_img.jpg" alt="#" /></div>
+    <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
     <div class="user_info">
     <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
         
@@ -112,15 +121,21 @@ $conn->close();
                             <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
                         </li>
 
-                        <li>
-                            <a href="adaccountmanagement.php"><i class="fa fa-group"></i> <span>Account Management</span></a>
-                        </li>
-                        <li>
+                        <!-- <li>
+                            <a href="attendance.php"><i class="fa fa-calendar"></i> <span>Attendance</span></a>
+                        </li> -->
+
+                       
+                        <li class="active">
                             <a href="adbeneficiaries.php"><i class="fa fa-university""></i> <span>All School Beneficiaries</span></a>
                         </li>
 
                         <li>
                             <a href="adschoollist.php"><i class="fa fa-pie-chart"></i> <span>School List Of Laguna</span></a>
+                        </li>
+
+                        <li>
+                            <a href="adaccountmanagement.php"><i class="fa fa-group"></i> <span>Account Management</span></a>
                         </li>
                        
                        
@@ -131,33 +146,75 @@ $conn->close();
                         <li>
                             <a href="adsettings.php"><i class="fa fa-cog yellow_color"></i> <span>Settings</span></a>
                         </li>
+                
                 </div>
             </nav>
             <!-- End Sidebar -->
             <!-- Right Content -->
             <div id="content">
-                <!-- Topbar -->
-                <div class="topbar">
+              <!-- Topbar -->
+              <div class="topbar">
                     <nav class="navbar navbar-expand-lg navbar-light">
                         <div class="full">
                             <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
                             <div class="logo_section">
-                            <a href="admindashboard.php"><img class="img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
-
+                                <a href="admindashboard.php"><img class="img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
                             </div>
                             <div class="right_topbar">
                                 <div class="icon_info">
                                     <ul>
-                                        <li><a href="#"><i class="fa fa-bell-o"></i><span class="badge">2</span></a></li>
-                                        <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
+                                    <li>
+
+                                    <?php
+// Fetch recent activities from database
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Query recent activities count with status 'new'
+$sql = "SELECT COUNT(*) AS activity_count FROM recent_activity WHERE status = 'new'";
+$result = $conn->query($sql);
+
+// Get activity count
+$activity_count = 0;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $activity_count = $row['activity_count'];
+}
+
+// Close connection
+$conn->close();
+?>
+
+
+<a href="allactivities.php?mark_read=true">
+    <i class="fa fa-bell-o"></i>
+    <?php if ($activity_count > 0): ?>
+        <span class="badge"><?php echo $activity_count; ?></span>
+    <?php endif; ?>
+</a>
+
+</li>
+
+                                        
                                         <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
                                             
                                         <a class="dropdown-toggle" data-toggle="dropdown">
-    <img class="img-responsive rounded-circle" src="images/layout_img/user_img.jpg" alt="#" />
-    <span class="name_user"><?php echo $user_role ?></span>
+        <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
+
+    <span class="name_user"><?php echo $user_role; ?></span>
 </a>
 
                                             <div class="dropdown-menu">
@@ -213,177 +270,62 @@ if ($result_schools->num_rows > 0) {
 }
 
 // Filtering functionality
-if (isset($_GET['search'])) {
-  $search_term = $_GET['search'];
-  $filtered_schools = array_filter($schools_by_session, function ($schools) use ($search_term) {
-      foreach ($schools as $school_name => $school_data) {
-          if (stripos($school_name, $search_term) !== false) {
-              return true;
-          }
-      }
-      return false;
-  });
-} else {
-  $filtered_schools = $schools_by_session;
-}
-?>
-
-<div class="col-md-12 my-4">
-    <h2 class="h4 mb-1">BENEFICIARIES LIST</h2>
-    <!-- Search form -->
-    <form method="get" class="mb-3">
-        <div class="form-group">
-            <input type="text" class="form-control" name="search" placeholder="Search by school name" value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
-        </div>
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-    <div class="card shadow">
-        <div class="card-body">
-            <!-- table -->
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Name of School</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    foreach ($filtered_schools as $session_id => $schools) {
-                        foreach ($schools as $school_name => $school_data) {
-                            echo "<tr>
-                                    <td>$school_name</td>"; // School name cell
-                            echo "<td><a href='view_details.php?session_id=$session_id' class='btn btn-primary'>View</a></td>
-                                </tr>";
-                        }
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<?php
-$conn->close(); // Close database connection
-?>
-
-
- <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$sql_schools = "SELECT DISTINCT session_id, name_of_school FROM beneficiaries";
-$result_schools = $conn->query($sql_schools);
-
-$schools_by_session = array();
-if ($result_schools->num_rows > 0) {
-    while ($row_schools = $result_schools->fetch_assoc()) {
-        $session_id = $row_schools['session_id'];
-        $school_name = $row_schools['name_of_school'];
-        $schools_by_session[$session_id][$school_name] = true;
-    }
-}
-?>
-
-<div class="col-md-12 my-4">
-    <h1 class="h4 mb-1">BENEFICIARIES</h1>
-    <p>Choose School</p>
-    <div class="form-group col-2 p-0">
-        <label class="my-1 mr-2 sr-only" for="inlineFormCustomSelectPref">Status</label>
-        <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-            <option selected>Choose...</option>
-            <?php
-            foreach ($schools_by_session as $session_id => $schools) {
-                foreach ($schools as $school_name => $value) {
-                    echo "<option value='$session_id'>$school_name</option>";
-                }
+$search_term = isset($_GET['search']) ? $_GET['search'] : '';
+if (!empty($search_term)) {
+    $filtered_schools = array_filter($schools_by_session, function ($schools) use ($search_term) {
+        foreach ($schools as $school_name => $school_data) {
+            if (stripos($school_name, $search_term) !== false) {
+                return true;
             }
-            ?>
-        </select>
-    </div>
-    <div class="card shadow">
-        <div class="card-body">
-            <div class="toolbar row mb-3">
-                <div class="col">
-                    <form class="form-inline">
-                        <div class="form-row">
-                            <div class="form-group col-auto">
-                                <label for="search" class="sr-only">Search</label>
-                                <input type="text" class="form-control" id="search" value="" placeholder="Search">
-                            </div>
+        }
+        return false;
+    });
+} else {
+    $filtered_schools = $schools_by_session;
+}
+?>
+
+<div class="container mt-4">
+        <div class="row">
+            <div class="col-md-10">
+                <h2 class="h4 mb-4">Beneficiaries List</h2>
+                <!-- Search form -->
+                <form method="get" class="mb-3">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="search" placeholder="Search by school name" value="<?php echo htmlspecialchars($search_term); ?>">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+                <div class="card shadow">
+                    <div class="card-body">
+                        <!-- Table -->
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name of School</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($filtered_schools as $session_id => $schools) : ?>
+                                        <?php foreach ($schools as $school_name => $school_data) : ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars($school_name); ?></td>
+                                                <td><a href="view_details.php?session_id=<?php echo urlencode($session_id); ?>" class="btn btn-primary">View</a></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
                         </div>
-                    </form>
-                </div>
-                <div class="col ml-auto">
-                    <div class="dropdown float-right">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="actionMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Download PDF </button>
                     </div>
                 </div>
             </div>
-            <table class="table table-bordered">
-                <thead>
-                    <tr role="row">
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Sex</th>
-                        <th>Grade/Section</th>
-                        <th>Date of Weighing / Measuring (MM/DD/YYYY)</th>
-                        <th>Age in Years / Months</th>
-                        <th>Weight (Kg)</th>
-                        <th>Height (cm)</th>
-                        <th>BMI for 6 y.o. and above</th>
-                        <th>BMI-A</th>
-                        <th>HFA</th>
-                        <th>Dewormed?</th>
-                        <th>Parent's consent for milk?</th>
-                        <th>Participation in 4Ps</th>
-                        <th>Beneficiary of SBFP in Previous Years</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <?php
-                    $sql_beneficiaries = "SELECT * FROM beneficiaries";
-                    $result_beneficiaries = $conn->query($sql_beneficiaries);
-                    
-                    if ($result_beneficiaries->num_rows > 0) {
-                        while ($row = $result_beneficiaries->fetch_assoc()) {
-                            echo "<tr>";
-                            echo "<td>" . $row["id"] . "</td>";
-                            echo "<td>" . (isset($row["name"]) ? $row["name"] : "") . "</td>";
-                            echo "<td>" . (isset($row["sex"]) ? $row["sex"] : "") . "</td>";
-                            echo "<td>" . (isset($row["grade_section"]) ? $row["grade_section"] : "") . "</td>";
-                            echo "<td>" . (isset($row["date_of_weighing"]) ? $row["date_of_weighing"] : "") . "</td>";
-                            echo "<td>" . (isset($row["age_years_months"]) ? $row["age_years_months"] : "") . "</td>";
-                            echo "<td>" . (isset($row["weight_kg"]) ? $row["weight_kg"] : "") . "</td>";
-                            echo "<td>" . (isset($row["height_cm"]) ? $row["height_cm"] : "") . "</td>";
-                            echo "<td>" . (isset($row["bmi_above_6_years"]) ? $row["bmi_above_6_years"] : "") . "</td>";
-                            echo "<td>" . (isset($row["bmi_a"]) ? $row["bmi_a"] : "") . "</td>";
-                            echo "<td>" . (isset($row["hfa"]) ? $row["hfa"] : "") . "</td>";
-                            echo "<td>" . (isset($row["dewormed"]) ? $row["dewormed"] : "") . "</td>";
-                            echo "<td>" . (isset($row["parent_consent_milk"]) ? $row["parent_consent_milk"] : "") . "</td>";
-                            echo "<td>" . (isset($row["participation_4ps"]) ? $row["participation_4ps"] : "") . "</td>";
-                            echo "<td>" . (isset($row["beneficiary_sbfp_previous_years"]) ? $row["beneficiary_sbfp_previous_years"] : "") . "</td>";
-                            echo "</tr  ";
-                          }
-                      } else {
-                          echo "<tr><td colspan='15'>No beneficiaries found</td></tr>";
-                      }
-                      ?>
-                  </tbody>
-              </table>
-          </div>
-      </div>
-  </div>
-  
+        </div>
+    </div>
+
+
   <script>
   $(document).ready(function(){
       $('#inlineFormCustomSelectPref').change(function(){

@@ -22,11 +22,11 @@ if ($conn->connect_error) {
 $email = $_SESSION['email'];
 
 // Prepare and bind
-$stmt = $conn->prepare("SELECT firstname, lastname FROM users WHERE email = ?");
+$stmt = $conn->prepare("SELECT firstname, lastname, role FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $stmt->store_result();
-$stmt->bind_result($user_firstname, $user_lastname);
+$stmt->bind_result($user_firstname, $user_lastname, $user_role);
 
 if ($stmt->num_rows > 0) {
     $stmt->fetch();
@@ -52,12 +52,13 @@ $conn->close();
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>Pluto - Responsive Bootstrap Admin Panel Templates</title>
+      <title>MONTHLY/QUARTERLY REPORT</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
       <!-- site icon -->
-      <link rel="icon" href="images/fevicon.png" type="image/png" />
+      <link rel="icon" href="images/LOGO.png" type="image/png" />
+
       <!-- bootstrap css -->
       <link rel="stylesheet" href="css/bootstrap.min.css" />
       <!-- site css -->
@@ -80,6 +81,13 @@ $conn->close();
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
       <![endif]-->
    </head>
+   <style>
+    .active {
+        background-color: lightblue; /* Background color */
+        color: #fff; /* Text color */
+        font-weight: bold; /* Bold text */
+    }
+</style>
 
 <body class="dashboard dashboard_2">
     <div class="full_container">
@@ -89,18 +97,20 @@ $conn->close();
                 <div class="sidebar_blog_1">
                     <div class="sidebar-header">
                         <div class="logo_section">
-                            <a href="dashboard.html"><img class="logo_icon img-responsive" src="images/logo/logo_icon.png" alt="#" /></a>
+                            <a href="dashboard.php"><img class="logo_icon img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
                         </div>
                     </div>
                     <div class="sidebar_user_info">
     <div class="icon_setting"></div>
     <div class="user_profle_side">
-        <div class="user_img"><img class="img-responsive" src="images/layout_img/user_img.jpg" alt="#" /></div>
-        <div class="user_info">
-            <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
-            <p><span class="online_animation"></span> Online</p>
-        </div>
+    <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
+
+    <div class="user_info">
+    <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
+        
+        <p><span class="online_animation"></span> Online</p>
     </div>
+</div>
 </div>
 
                 </div>
@@ -112,28 +122,28 @@ $conn->close();
                         </li>
 
                         <li>
-                            <a href="form1.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 1</span></a>
+                            <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
                         </li>
                         <li>
-                            <a href="form2.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 2</span></a>
+                            <!-- <a href="form2.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 2</span></a> -->
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="form3.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 3</span></a>
-                        </li>
+                        </li> -->
                         <li>
-                            <a href="form4.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 4</span></a>
+                            <a href="student_attendance.php"><i class="fa fa-calendar"></i> <span>Student Attendance</span></a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="form5.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 5</span></a>
-                        </li>
+                        </li> -->
                         <li>
-                            <a href="form6.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 6</span></a>
+                            <a href="form6.php"><i class="fa fa-flask"></i> <span>Milk Component Data</span></a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="form7.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 7</span></a>
-                        </li>
-                        <li>
-                            <a href="form8.php"><i class="fa fa-file-excel-o "></i> <span>SBFP-FORM 8</span></a>
+                        </li> -->
+                        <li class="active">
+                            <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>QUARTERLY REPORT</span></a>
                         </li>
                        
                       
@@ -155,7 +165,7 @@ $conn->close();
                         <div class="full">
                             <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
                             <div class="logo_section">
-                                <a href="dashboard.html"><img class="img-responsive" src="images/logo/logo_black.png" alt="#" /></a>
+                            <a href="dashboard.php"><img class="img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
                             </div>
                             <div class="right_topbar">
                                 <div class="icon_info">
@@ -168,8 +178,10 @@ $conn->close();
                                         <li>
                                             
                                         <a class="dropdown-toggle" data-toggle="dropdown">
-    <img class="img-responsive rounded-circle" src="images/layout_img/user_img.jpg" alt="#" />
-    <span class="name_user"><?php echo $user_firstname . ' ' . $user_lastname; ?></span>
+       <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
+
+    <span class="name_user"><?php echo $user_role; ?></span>
+
 </a>
 
                                             <div class="dropdown-menu">
@@ -192,7 +204,7 @@ $conn->close();
                         <div class="row column_title">
                             <div class="col-md-12">
                                 <div class="page_title">
-                                    <h2>Dashboard</h2>
+                                    <h2>MONTHLY/QUARTERLY REPORT</h2>
                                 </div>
                             </div>
                         </div>
@@ -205,8 +217,11 @@ $conn->close();
         </div> <!-- .col-12 -->
           </div> <!-- .row -->
         </div> <!-- .container-fluid -->
-        <div class="container mt-5">
-        <h2 class="mb-4">Monthly/Quarterly Report</h2>
+        <div class="col-md-12">
+                           <div class="white_shd full margin_bottom_30">
+                              <div class="full graph_head">
+                                 <div class="heading1 margin_0">
+        <!-- <h2 class="mb-4">Monthly/Quarterly Report</h2> -->
         <form action="submit8.php" method="POST">
             <div class="form-group">
                 <label for="region_division">Region/Division:</label>

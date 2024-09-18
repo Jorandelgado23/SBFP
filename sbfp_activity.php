@@ -41,7 +41,6 @@ $conn->close();
 
 
 
-
 <!DOCTYPE html>
 
 <html lang="en">
@@ -53,13 +52,12 @@ $conn->close();
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>My Setting</title>
+      <title>ACTIVITY</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
       <!-- site icon -->
       <link rel="icon" href="images/LOGO.png" type="image/png" />
-
       <!-- bootstrap css -->
       <link rel="stylesheet" href="css/bootstrap.min.css" />
       <!-- site css -->
@@ -75,6 +73,8 @@ $conn->close();
       <!-- custom css -->
       <link rel="stylesheet" href="css/custom.css" />
 
+
+
       
 
       <!--[if lt IE 9]>
@@ -89,7 +89,7 @@ $conn->close();
         color: #fff; /* Text color */
         font-weight: bold; /* Bold text */
     }
-</style>
+   </style>
 
 <body class="dashboard dashboard_2">
     <div class="full_container">
@@ -152,7 +152,7 @@ $conn->close();
                       
             
                         
-                        <li class="active">
+                        <li>
                             <a href="usersetting.php"><i class="fa fa-cog yellow_color"></i> <span>Settings</span></a>
                         </li>
                     </ul>
@@ -169,13 +169,12 @@ $conn->close();
                             <div class="logo_section">
                                 <a href="dashboard.php"><img class="img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
                             </div>
-                            
                             <div class="right_topbar">
                                 <div class="icon_info">
                                     <ul>
                                     <li>
 
-<?php
+                                    <?php
 // Database connection details
 $servername = "localhost";
 $username = "root";
@@ -187,44 +186,63 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
-die("Connection failed: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Query recent activities count with status 'new'
-$sql = "SELECT COUNT(*) AS activity_count FROM sbfp_recent_activity WHERE status = 'new'";
-$result = $conn->query($sql);
+// Initialize message for marking notifications as read
+$mark_read_message = "";
+
+// Check if 'mark_read' parameter is set in the URL
+if (isset($_GET['mark_read']) && $_GET['mark_read'] === 'true') {
+    // Update query to mark notifications as read
+    $sql_update = "UPDATE sbfp_recent_activity SET status = 'read' WHERE status = 'new'";
+    
+    if ($conn->query($sql_update) === TRUE) {
+        // Successfully marked notifications as read
+        $mark_read_message = "Notifications marked as read.";
+    } else {
+        // Failed to update, show error message
+        $mark_read_message = "Error updating notifications: " . $conn->error;
+    }
+}
+
+// Query to get recent activities with status 'new'
+$sql_count = "SELECT COUNT(*) AS activity_count FROM sbfp_recent_activity WHERE status = 'new'";
+$result_count = $conn->query($sql_count);
 
 // Initialize activity count
 $activity_count = 0;
 
-// Fetch activity count if available
-if ($result && $result->num_rows > 0) {
-$row = $result->fetch_assoc();
-$activity_count = $row['activity_count'];
+// Check if there are results and get the count
+if ($result_count && $result_count->num_rows > 0) {
+    $row_count = $result_count->fetch_assoc();
+    $activity_count = $row_count['activity_count'];
 }
 
-// Close the connection after query execution
+// Close the connection
 $conn->close();
 ?>
 
 <!-- Notification Icon with Activity Count -->
 <a href="sbfp_activity.php?mark_read=true">
-<i class="fa fa-bell-o"></i>
-<?php if ($activity_count > 0): ?>
-<span class="badge"><?php echo htmlspecialchars($activity_count); ?></span>
-<?php endif; ?>
+    <i class="fa fa-bell-o"></i>
+    <?php if ($activity_count > 0): ?>
+                <span class="badge"><?php echo htmlspecialchars($activity_count); ?></span>
+
+    <?php endif; ?>
 </a>
 
-    <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+
+
+                                        
+<li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
                                             
                                         <a class="dropdown-toggle" data-toggle="dropdown">
-        <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
-
+    <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
     <span class="name_user"><?php echo $user_role; ?></span>
-
 </a>
 
                                             <div class="dropdown-menu">
@@ -241,130 +259,157 @@ $conn->close();
                     </nav>
                 </div>
                 <!-- End Topbar -->
-                <!-- Dashboard Inner -->
-                <div class="midde_cont">
+            <!-- Dashboard Inner -->
+<div class="midde_cont">
     <div class="container-fluid">
         <div class="row column_title">
             <div class="col-md-12">
                 <div class="page_title">
-                    <h2>Profile</h2>
+                    <h2>ALL ACTIVITIES</h2>
                 </div>
             </div>
         </div>
-        <div class="row column1">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
-        <div class="white_shd full margin_bottom_30">
-            <div class="full graph_head">
-                <div class="heading1 margin_0">
-                    <h2>User Profile</h2>
+
+        <?php
+       
+
+        // Assuming logged-in user's email is stored in session
+        $logged_in_email = $_SESSION['email'];
+
+        // Establish database connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $mark_read_message = "";
+
+       
+
+        // Query recent activities count with status 'new' for the logged-in user
+        $sql_count = "SELECT COUNT(*) AS activity_count FROM sbfp_recent_activity WHERE status = 'new' AND email = '$logged_in_email'";
+        $result_count = $conn->query($sql_count);
+
+        // Initialize activity count
+        $activity_count = 0;
+
+        // Check if query was successful
+        if ($result_count->num_rows > 0) {
+            // Fetch the row as associative array
+            $row_count = $result_count->fetch_assoc();
+            // Get the activity count from the fetched row
+            $activity_count = $row_count['activity_count'];
+        } else {
+            // Handle database query error (optional)
+            $mark_read_message = "Error fetching activity count: " . $conn->error;
+        }
+
+        // Pagination logic
+        $limit = 10; // Number of activities per page
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $offset = ($page - 1) * $limit;
+
+        // Fetch activities for the logged-in user for the current page
+        $sql_activities = "SELECT * FROM sbfp_recent_activity WHERE email = '$logged_in_email' ORDER BY timestamp DESC LIMIT $limit OFFSET $offset";
+        $result_activities = $conn->query($sql_activities);
+
+        // Fetch total activities count for pagination for the logged-in user
+        $sql_total = "SELECT COUNT(*) AS total FROM sbfp_recent_activity WHERE email = '$logged_in_email'";
+        $result_total = $conn->query($sql_total);
+        $row_total = $result_total->fetch_assoc();
+        $total_activities = $row_total['total'];
+        $total_pages = ceil($total_activities / $limit);
+
+        // Close connection (always a good practice)
+        $conn->close();
+        ?>
+
+        <div class="container">
+            <?php if ($mark_read_message): ?>
+                <div id="mark-read-message" class="alert alert-info">
+                    <?php echo htmlspecialchars($mark_read_message); ?>
                 </div>
-            </div>
-            <div class="full price_table padding_infor_info">
-                <form action="update_profile.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($user_id); ?>">
-                    <div class="row align-items-center">
-                        <!-- <div class="col-lg-3">
-                            <div class="profile_img text-center mb-3">
-                                <img width="180" class="rounded-circle mb-2" src="./uploads/<?php echo htmlspecialchars($user_profile_picture); ?>" alt="Profile Picture">
-                                <div class="custom-file">
-                                    <input type="file" name="profile_picture" class="custom-file-input" id="customFile">
-                                    <label class="custom-file-label" for="customFile">Choose new picture</label>
+            <?php endif; ?>
+            <div class="row column1">
+                <div class="col-md-11">
+                    <div class="white_shd full margin_bottom_30">
+                        <div class="full graph_head">
+                            <div class="heading1 margin_0">
+                                <h2>ALL ACTIVITIES</h2>
+                            </div>
+                        </div>
+                        <div class="full price_table padding_infor_info">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive-sm">
+                                        <table class="table table-striped projects">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th style="width: 2%">No</th>
+                                                    <th style="width: 30%">Activity</th>
+                                                    <th>User</th>
+                                                    <th>Timestamp</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                // Display activities for the logged-in user
+                                                $no = $offset + 1;
+                                                if ($result_activities->num_rows > 0) {
+                                                    while ($row = $result_activities->fetch_assoc()) {
+                                                        echo '<tr>';
+                                                        echo '<td>' . $no . '</td>';
+                                                        echo '<td>' . htmlspecialchars($row["activity"]) . '</td>';
+                                                        echo '<td>' . htmlspecialchars($row["email"]) . '</td>';
+                                                        echo '<td>' . htmlspecialchars($row["timestamp"]) . '</td>';
+                                                        echo '</tr>';
+                                                        $no++;
+                                                    }
+                                                } else {
+                                                    echo '<tr><td colspan="4">No activities found.</td></tr>';
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination justify-content-center">
+                                            <?php if ($page > 1): ?>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page=<?php echo $page - 1; ?>" aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                            <?php endif; ?>
+                                            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                                <li class="page-item <?php if ($i == $page) echo 'active'; ?>">
+                                                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                                </li>
+                                            <?php endfor; ?>
+                                            <?php if ($page < $total_pages): ?>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page=<?php echo $page + 1; ?>" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            <?php endif; ?>
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
-                        </div> -->
-                        <div class="col-lg-9">
-                            <div class="profile_contant">
-                                <h3><?php echo htmlspecialchars($user_firstname . ' ' . $user_lastname); ?></h3>
-                                <ul class="list-unstyled">
-                                    <li><i class="fa fa-envelope-o"></i> <?php echo htmlspecialchars($email); ?></li>
-                                    <!-- Add more user details as needed -->
-                                </ul>
-                            </div>
                         </div>
                     </div>
-                    <hr class="my-4">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="firstname">Firstname:</label>
-                                <input type="text" name="firstname" class="form-control" value="<?php echo htmlspecialchars($user_firstname); ?>">
-                            </div>
-                            <div class="form-group">
-                                <label for="lastname">Lastname:</label>
-                                <input type="text" name="lastname" class="form-control" value="<?php echo htmlspecialchars($user_lastname); ?>">
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email:</label>
-                                <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($email); ?>">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-    <div class="form-group">
-        <label for="old_password">Old Password:</label>
-        <div class="input-group">
-            <input type="password" name="old_password" class="form-control" id="old_password">
-            <div class="input-group-append">
-                <button class="btn toggle-password show-password btn-primary" type="button" data-target="old_password">
-                    <i class="fa fa-eye-slash"></i>
-                </button>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="new_password">New Password:</label>
-        <div class="input-group">
-            <input type="password" name="new_password" class="form-control" id="new_password">
-            <div class="input-group-append">
-                <button class="btn toggle-password show-password btn-primary" type="button" data-target="new_password">
-                    <i class="fa fa-eye-slash"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="confirm_password">Confirm Password:</label>
-        <div class="input-group">
-            <input type="password" name="confirm_password" class="form-control" id="confirm_password">
-            <div class="input-group-append">
-                <button class="btn toggle-password show-password btn-primary" type="button" data-target="confirm_password">
-                    <i class="fa fa-eye-slash"></i>
-                </button>
-            </div>
+            <!-- end row -->
+
         </div>
     </div>
 </div>
-
-<script>
-    // Function to toggle password visibility
-    document.addEventListener('DOMContentLoaded', function () {
-        const togglePasswordButtons = document.querySelectorAll('.toggle-password');
-        togglePasswordButtons.forEach(button => {
-            const targetId = button.dataset.target;
-            const targetInput = document.getElementById(targetId);
-            
-            button.addEventListener('click', function () {
-                if (targetInput.type === 'password') {
-                    targetInput.type = 'text';
-                    button.innerHTML = '<i class="fa fa-eye"></i>';
-                } else {
-                    targetInput.type = 'password';
-                    button.innerHTML = '<i class="fa fa-eye-slash"></i>';
-                }
-            });
-        });
-    });
-</script>
-
-
-                    </div>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-2"></div>
 </div>
+
             </div>
         </div>
     </div>
@@ -422,6 +467,8 @@ $conn->close();
             options: {}
         });
     </script>
+
+
 </body>
 
 </html>

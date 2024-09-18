@@ -148,6 +148,8 @@ $conn->close();
         color: #fff; /* Text color */
         font-weight: bold; /* Bold text */
     }
+
+
     </style>
 
 <body class="dashboard dashboard_2">
@@ -161,7 +163,7 @@ $conn->close();
                 <div class="sidebar_blog_1">
                     <div class="sidebar-header">
                         <div class="logo_section">
-                            <a href="admindashboard.php"><img class="logo_icon img-responsive" src="images/LOGO.png" alt="#" /></a>
+                            <a href="admindashboard.php"><img class="logo_icon img-responsive" src="images/origlogo.jpg" alt="#" /></a>
                         </div>
                     </div>
                     <div class="sidebar_user_info">
@@ -270,7 +272,7 @@ $conn->close();
 </li>
 
                                         
-                                        <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+                                       
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
@@ -282,8 +284,6 @@ $conn->close();
 
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="usersetting.php">My Profile</a>
-                                                <a class="dropdown-item" href="settings.html">Settings</a>
-                                                <a class="dropdown-item" href="help.html">Help</a>
                                                 <a class="dropdown-item" href="logout.php"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
                                             </div>
                                         </li>
@@ -351,62 +351,69 @@ $conn->close();
     <div class="row justify-content-center">
         <div class="col-12">
             <div class="row column1">
+                <!-- ADMIN ACCOUNT -->
                 <div class="col-md-6 col-lg-6">
-                    <div class="full counter_section margin_bottom_30 yellow_bg">
+                    <div class="full counter_section margin_bottom_30">
                         <div class="couter_icon">
                             <div>
-                                <i class="fa fa-user"></i>
+                                <i class="fa fa-user yellow_color"></i>
                             </div>
                         </div>
                         <div class="counter_no">
                             <div>
-                                <p class="total_no"><?php echo $total_admin_users; ?></p>
-                                <p class="head_couter">ADMIN ACCOUNT</p>
+                                <p class="total_no" style="color: black;"><?php echo $total_admin_users; ?></p>
+                                <p class="head_couter" style="color: #99abb4;">ADMIN ACCOUNT</p>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- SBFP PERSONNEL -->
                 <div class="col-md-6 col-lg-6">
-                    <div class="full counter_section margin_bottom_30 red_bg">
+                    <div class="full counter_section margin_bottom_30">
                         <div class="couter_icon">
                             <div>
-                                <i class="fa fa-user"></i>
+                                <i class="fa fa-user blue1_color"></i>
                             </div>
                         </div>
                         <div class="counter_no">
                             <div>
-                                <p class="total_no"><?php echo $total_sbfp_users; ?></p>
-                                <p class="head_couter">SBFP PERSONNEL</p>
+                                <p class="total_no" style="color: black;"><?php echo $total_sbfp_users; ?></p>
+                                <p class="head_couter" style="color: #99abb4;">SBFP PERSONNEL</p>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- OVERALL BENEFICIARIES -->
                 <div class="col-md-6 col-lg-6">
-                    <div class="full counter_section margin_bottom_30 green_bg">
+                    <div class="full counter_section margin_bottom_30">
                         <div class="couter_icon">
                             <div>
-                                <i class="fa fa-users"></i>
+                                <i class="fa fa-users green_color"></i>
                             </div>
                         </div>
                         <div class="counter_no">
                             <div>
-                                <p class="total_no"><?php echo $total_beneficiaries; ?></p>
-                                <p class="head_couter">OVERALL BENEFICIARIES</p>
+                                <p class="total_no" style="color: black;"><?php echo $total_beneficiaries; ?></p>
+                                <p class="head_couter" style="color: #99abb4;">OVERALL BENEFICIARIES</p>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- NUMBER OF SCHOOLS -->
                 <div class="col-md-6 col-lg-6">
-                    <div class="full counter_section margin_bottom_30 blue1_bg">
+                    <div class="full counter_section margin_bottom_30">
                         <div class="couter_icon">
                             <div>
-                                <i class="fa fa-graduation-cap"></i>
+                                <i class="fa fa-graduation-cap red_color"></i>
                             </div>
                         </div>
                         <div class="counter_no">
                             <div>
-                                <p class="total_no"><?php echo $total_schools; ?></p>
-                                <p class="head_couter">NUMBER OF SCHOOLS</p>
+                                <p class="total_no" style="color: black;"><?php echo $total_schools; ?></p>
+                                <p class="head_couter" style="color: #99abb4;">NUMBER OF SCHOOLS</p>
                             </div>
                         </div>
                     </div>
@@ -415,6 +422,7 @@ $conn->close();
         </div>
     </div>
 </div>
+
 
 
 

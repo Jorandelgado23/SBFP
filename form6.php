@@ -174,9 +174,49 @@ $conn->close();
                             <div class="right_topbar">
                                 <div class="icon_info">
                                     <ul>
-                                        <li><a href="#"><i class="fa fa-bell-o"></i><span class="badge">2</span></a></li>
-                                        <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+                                    <li>
+
+<?php
+// Database connection details
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+die("Connection failed: " . $conn->connect_error);
+}
+
+// Query recent activities count with status 'new'
+$sql = "SELECT COUNT(*) AS activity_count FROM sbfp_recent_activity WHERE status = 'new'";
+$result = $conn->query($sql);
+
+// Initialize activity count
+$activity_count = 0;
+
+// Fetch activity count if available
+if ($result && $result->num_rows > 0) {
+$row = $result->fetch_assoc();
+$activity_count = $row['activity_count'];
+}
+
+// Close the connection after query execution
+$conn->close();
+?>
+
+<!-- Notification Icon with Activity Count -->
+<a href="sbfp_activity.php?mark_read=true">
+<i class="fa fa-bell-o"></i>
+<?php if ($activity_count > 0): ?>
+<span class="badge"><?php echo htmlspecialchars($activity_count); ?></span>
+<?php endif; ?>
+</a>
+
+    <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
@@ -188,10 +228,8 @@ $conn->close();
 
 </a>
 
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="profile.html">My Profile</a>
-                                                <a class="dropdown-item" href="settings.html">Settings</a>
-                                                <a class="dropdown-item" href="help.html">Help</a>
+<div class="dropdown-menu">
+                                                <a class="dropdown-item" href="usersetting.php">My Profile</a>
                                                 <a class="dropdown-item" href="logout.php"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
                                             </div>
                                         </li>

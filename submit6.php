@@ -21,13 +21,13 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Retrieve session_id of the logged-in user
+// Retrieve session_id and role of the logged-in user
 $email = $_SESSION['email'];
-$stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+$stmt = $conn->prepare("SELECT session_id, role FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $stmt->store_result();
-$stmt->bind_result($session_id);
+$stmt->bind_result($session_id, $role);
 $stmt->fetch();
 $stmt->close();
 
@@ -63,6 +63,14 @@ $log_stmt = $conn->prepare("INSERT INTO recent_activity (activity, email, activi
 $log_stmt->bind_param("ssss", $activity, $email, $activity_type, $timestamp);
 $log_stmt->execute();
 $log_stmt->close();
+
+// Insert into sbfp_recent_activity for SBFP role only
+if ($role === 'sbfp') {
+    $sbfp_activity_stmt = $conn->prepare("INSERT INTO sbfp_recent_activity (activity, email, activity_type, timestamp) VALUES (?, ?, ?, ?)");
+    $log_stmt->bind_param("ssss", $activity, $email, $activity_type, $timestamp);
+    $sbfp_activity_stmt->execute();
+    $sbfp_activity_stmt->close();
+}
 
 // Close connection
 $conn->close();

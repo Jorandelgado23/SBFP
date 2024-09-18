@@ -826,7 +826,7 @@ span {
     box-shadow: 0 0 3px 0px rgba(0, 0, 0, 0.4);
     float: left;
     width: 100%;
-    background-image: url('images/layout_img/pattern_h.png');
+    background-image: url('images/layout_img/pattern.png');
     position: fixed;
     height: 100%;
     overflow: auto;
@@ -912,7 +912,6 @@ a[data-toggle="collapse"] {
     transition: ease all 0.3s;
     position: relative;
     padding: 60px 25px 25px 305px;
-    background: #f8f8f8;
 }
 
 .page_title {

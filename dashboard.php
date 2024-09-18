@@ -129,7 +129,7 @@ $conn->close();
             width: 20%; /* Adjust this width to fit your design */
             max-width: 200px; /* Max width to ensure the image does not exceed this size */
             height: auto; /* Maintain aspect ratio */
-            display: block; Ensure it behaves as a block element
+            display: block;
             margin: 0 auto; /* Center the image horizontally */
         }
         .active {
@@ -230,8 +230,48 @@ $conn->close();
                             <div class="right_topbar">
                                 <div class="icon_info">
                                     <ul>
-                                        <li><a href="#"><i class="fa fa-bell-o"></i><span class="badge">2</span></a></li>
-                                        <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
+                                    <li>
+
+                                    <?php
+// Database connection details
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Query recent activities count with status 'new'
+$sql = "SELECT COUNT(*) AS activity_count FROM sbfp_recent_activity WHERE status = 'new'";
+$result = $conn->query($sql);
+
+// Initialize activity count
+$activity_count = 0;
+
+// Fetch activity count if available
+if ($result && $result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $activity_count = $row['activity_count'];
+}
+
+// Close the connection after query execution
+$conn->close();
+?>
+
+<!-- Notification Icon with Activity Count -->
+<a href="sbfp_activity.php?mark_read=true">
+    <i class="fa fa-bell-o"></i>
+    <?php if ($activity_count > 0): ?>
+        <span class="badge"><?php echo htmlspecialchars($activity_count); ?></span>
+    <?php endif; ?>
+</a>
+
                                         <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
                                     </ul>
                                     <ul class="user_profile_dd">
@@ -246,8 +286,6 @@ $conn->close();
 
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="usersetting.php">My Profile</a>
-                                                <a class="dropdown-item" href="settings.html">Settings</a>
-                                                <a class="dropdown-item" href="help.html">Help</a>
                                                 <a class="dropdown-item" href="logout.php"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
                                             </div>
                                         </li>
@@ -278,7 +316,6 @@ $conn->close();
                                 
                             </div>
                         </div>
-                        <div class="row column1">
                         <?php
 
 $servername = "localhost";
@@ -378,68 +415,109 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
 
 
 <!-- HTML Part -->
-<div class="col-md-6 col-lg-3">
-    <div class="full counter_section margin_bottom_30 yellow_bg">
-        <div class="couter_icon">
-            <div>
-                <i class="fa fa-child"></i>
-            </div>
-        </div>
-        <div class="counter_no">
-                <div>
-                    <p class="total_no"><?php echo $total_beneficiaries; ?></p>
-                    <p class="head_couter">Beneficiaries</p>
+<div class="row column1">
+    <!-- First Row: Beneficiaries, Normal Students, Severely Wasted Students -->
+    <div class="col-md-4 col-lg-4">
+        <div class="full counter_section margin_bottom_30">
+            <div class="couter_icon">
+                <div> 
+                    <i class="fa fa-child yellow_color"></i>
                 </div>
             </div>
+            <div class="counter_no">
+                <div>
+                    <p class="total_no" style="color: black;"><?php echo $total_beneficiaries; ?></p>
+                    <p class="head_couter" style="color: #99abb4;">Beneficiaries</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-lg-4">
+        <div class="full counter_section margin_bottom_30">
+            <div class="couter_icon">
+                <div> 
+                    <i class="fa fa-smile-o blue1_color"></i>
+                </div>
+            </div>
+            <div class="counter_no">
+                <div>
+                    <p class="total_no" style="color: black;"><?php echo $status_counts_bmi['Normal']; ?></p>
+                    <p class="head_couter" style="color: #99abb4;">Normal</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-lg-4">
+        <div class="full counter_section margin_bottom_30">
+            <div class="couter_icon">
+                <div> 
+                    <i class="fa fa-exclamation-triangle green_color"></i>
+                </div>
+            </div>
+            <div class="counter_no">
+                <div>
+                    <p class="total_no" style="color: black;"><?php echo $status_counts_bmi['Severely Wasted']; ?></p>
+                    <p class="head_couter" style="color: #99abb4;">Severely Wasted</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-                            <div class="col-md-6 col-lg-3">
-                                <div class="full counter_section margin_bottom_30 blue1_bg">
-                                    <div class="couter_icon">
-                                        <div>
-                                            <i class="fa fa-clock-o"></i>
-                                        </div>
-                                    </div>
-                                    <div class="counter_no">
-                                        <div>
-                                            <p class="total_no">123.50</p>
-                                            <p class="head_couter">Average Time</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-3">
-                                <div class="full counter_section margin_bottom_30 green_bg">
-                                    <div class="couter_icon">
-                                        <div>
-                                            <i class="fa fa-cloud-download"></i>
-                                        </div>
-                                    </div>
-                                    <div class="counter_no">
-                                        <div>
-                                            <p class="total_no">100%</p>
-                                            <p class="head_couter">Completion</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-3">
-                                <div class="full counter_section margin_bottom_30 red_bg">
-                                    <div class="couter_icon">
-                                        <div>
-                                            <i class="fa fa-comments-o"></i>
-                                        </div>
-                                    </div>
-                                    <div class="counter_no">
-                                        <div>
-                                            <p class="total_no">500</p>
-                                            <p class="head_couter">Comments</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+<div class="row column1">
+    <!-- Second Row: Wasted Students, Overweight Students, Obese Students -->
+    <div class="col-md-4 col-lg-4">
+        <div class="full counter_section margin_bottom_30">
+            <div class="couter_icon">
+                <div> 
+                    <i class="fa fa-exclamation-circle red_color"></i>
+                </div>
+            </div>
+            <div class="counter_no">
+                <div>
+                    <p class="total_no" style="color: black;"><?php echo $status_counts_bmi['Wasted']; ?></p>
+                    <p class="head_couter" style="color: #99abb4;">Wasted</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-lg-4">
+        <div class="full counter_section margin_bottom_30">
+            <div class="couter_icon">
+                <div> 
+                    <i class="fa fa-balance-scale orange_color"></i>
+                </div>
+            </div>
+            <div class="counter_no">
+                <div>
+                    <p class="total_no" style="color: black;"><?php echo $status_counts_bmi['Overweight']; ?></p>
+                    <p class="head_couter" style="color: #99abb4;">Overweight</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-lg-4">
+        <div class="full counter_section margin_bottom_30">
+            <div class="couter_icon">
+                <div> 
+                    <i class="fa fa-heartbeat purple_color"></i>
+                </div>
+            </div>
+            <div class="counter_no">
+                <div>
+                    <p class="total_no" style="color: black;"><?php echo $status_counts_bmi['Obese']; ?></p>
+                    <p class="head_couter" style="color: #99abb4;">Obese</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
                      
 
                  
@@ -477,6 +555,86 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
 
 
 
+
+
+
+</script>
+    <div class="col-lg-6">
+        <div class="white_shd full margin_bottom_30">
+            <div class="full graph_head">
+                <div class="heading1 margin_0">
+                    <h2>Recent Activity</h2>
+                </div>
+            </div>
+            <div class="full progress_bar_inner">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="msg_list_main">
+                            <ul class="msg_list">
+                            <?php
+
+
+// Fetch recent activities from database
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Retrieve email of the logged-in user
+$email = $_SESSION['email'];
+
+// Prepare and execute the query for recent activities
+$sql = "SELECT * FROM sbfp_recent_activity WHERE email = ? ORDER BY timestamp DESC LIMIT 10";
+$stmt = $conn->prepare($sql);
+
+if ($stmt === false) {
+    die('Prepare failed: ' . htmlspecialchars($conn->error));
+}
+
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Display activities
+$activity_count = 0;
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        if ($activity_count < 3) {
+            echo '<li>';
+            echo '<span>';
+            echo '<span class="name_user">' . htmlspecialchars($row["email"]) . '</span>';
+            echo '<span class="msg_user">' . htmlspecialchars($row["activity"]) . '</span>';
+            echo '<span class="time_ago">' . htmlspecialchars($row["timestamp"]) . '</span>';
+            echo '</span>';
+            echo '</li>';
+        }
+        $activity_count++;
+    }
+    // Check if there are more than 5 activities
+    if ($activity_count > 5) {
+        echo '<li><a href="sbfp_activity.php?mark_read=true">See More</a></li>';
+    }
+} else {
+    echo '<li>No recent activities found.</li>';
+}
+
+// Close statement and connection
+$stmt->close();
+$conn->close();
+?>
+
+
+
+    <!-- Include Bootstrap JS (adjust the path as necessary) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
 

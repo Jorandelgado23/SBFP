@@ -37,15 +37,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['email'] = $email; // Store email in session
             $_SESSION['role'] = $role;
 
-            // Log the activity for users with role 'sbfp' only
+            // Log the activity
+            $activity = "User logged in";
+            $activity_type = "login"; // Define the activity type
+            $timestamp = date("Y-m-d H:i:s");
+
+            // Insert into recent_activity
+            $recent_activity_stmt = $conn->prepare("INSERT INTO recent_activity (activity, email, activity_type, timestamp) VALUES (?, ?, ?, ?)");
+            $recent_activity_stmt->bind_param("ssss", $activity, $email, $activity_type, $timestamp);
+            $recent_activity_stmt->execute();
+            $recent_activity_stmt->close();
+
+            // Insert into sbfp_recent_activity for SBFP role only
             if ($role === 'sbfp') {
-                $activity = "User logged in";
-                $activity_type = "login";
-                $timestamp = date("Y-m-d H:i:s");
-                $log_stmt = $conn->prepare("INSERT INTO recent_activity (activity, email, activity_type, timestamp) VALUES (?, ?, ?, ?)");
-                $log_stmt->bind_param("ssss", $activity, $email, $activity_type, $timestamp);
-                $log_stmt->execute();
-                $log_stmt->close();
+                $sbfp_activity_stmt = $conn->prepare("INSERT INTO sbfp_recent_activity (email, activity, activity_type, timestamp) VALUES (?, ?, ?, ?)");
+                $sbfp_activity_stmt->bind_param("ssss", $email, $activity, $activity_type, $timestamp);
+                $sbfp_activity_stmt->execute();
+                $sbfp_activity_stmt->close();
             }
 
             // Return JSON response indicating success

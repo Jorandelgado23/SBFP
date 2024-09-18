@@ -105,7 +105,7 @@ $conn->close();
             width: 20%; /* Adjust this width to fit your design */
             max-width: 200px; /* Max width to ensure the image does not exceed this size */
             height: auto; /* Maintain aspect ratio */
-            display: block; Ensure it behaves as a block element
+            display: block; 
             margin: 0 auto; /* Center the image horizontally */
         }
 </style>
@@ -255,10 +255,8 @@ $conn->close();
     <span class="name_user"><?php echo $user_role; ?></span>
 </a>
 
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="usersetting.php">My Profile</a>
-                                                <a class="dropdown-item" href="settings.html">Settings</a>
-                                                <a class="dropdown-item" href="help.html">Help</a>
+<div class="dropdown-menu">
+                                                <a class="dropdown-item" href="adsettings.php">My Profile</a>
                                                 <a class="dropdown-item" href="logout.php"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
                                             </div>
                                         </li>
@@ -353,7 +351,7 @@ $conn->close();
         </div>
     <?php endif; ?>
     <div class="row column1">
-        <div class="col-md-12">
+        <div class="col-md-11">
             <div class="white_shd full margin_bottom_30">
                 <div class="full graph_head">
                     <div class="heading1 margin_0">

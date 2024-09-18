@@ -224,10 +224,8 @@ $conn->close();
     <span class="name_user"><?php echo $user_role; ?></span>
 </a>
 
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="usersetting.php">My Profile</a>
-                                                <a class="dropdown-item" href="settings.html">Settings</a>
-                                                <a class="dropdown-item" href="help.html">Help</a>
+<div class="dropdown-menu">
+                                                <a class="dropdown-item" href="adsettings.php">My Profile</a>
                                                 <a class="dropdown-item" href="logout.php"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
                                             </div>
                                         </li>

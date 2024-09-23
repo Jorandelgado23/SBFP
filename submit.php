@@ -77,9 +77,11 @@ if (!isset($_POST['beneficiary_name']) || !is_array($_POST['beneficiary_name']))
 }
 
 // Prepare statement for inserting beneficiary details
-$stmt = $conn->prepare("INSERT INTO beneficiary_details (session_id, beneficiary_id, name, sex, grade_section, date_of_birth, date_of_weighing, age, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa, dewormed, parents_consent_for_milk, participation_in_4ps, beneficiary_of_sbfp_in_previous_years) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt = $conn->prepare("INSERT INTO beneficiary_details (session_id, beneficiary_id, name, lrn_no, student_section, sex, grade_section, date_of_birth, date_of_weighing, age, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa, dewormed, parents_consent_for_milk, participation_in_4ps, beneficiary_of_sbfp_in_previous_years) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 foreach ($_POST['beneficiary_name'] as $index => $beneficiary_name) {
+    $lrn_no = $_POST['lrn_no'][$index];
+    $student_section = $_POST['student_section'][$index]; // New student_section field
     $beneficiary_sex = $_POST['beneficiary_sex'][$index];
     $beneficiary_grade_section = $_POST['beneficiary_grade_section'][$index];
     $beneficiary_dob = $_POST['beneficiary_dob'][$index];
@@ -96,17 +98,17 @@ foreach ($_POST['beneficiary_name'] as $index => $beneficiary_name) {
     $beneficiary_of_sbfp_in_previous_years = $_POST['beneficiary_of_sbfp_in_previous_years'][$index];
 
     // Validate each beneficiary detail
-    if (empty($beneficiary_name) || empty($beneficiary_sex) || empty($beneficiary_grade_section) || empty($beneficiary_dob)) {
+    if (empty($beneficiary_name) || empty($lrn_no) || empty($student_section) || empty($beneficiary_sex) || empty($beneficiary_grade_section) || empty($beneficiary_dob)) {
         $response = [
             'success' => false,
-            'message' => 'Please complete all beneficiary details.'
+            'message' => 'Please complete all beneficiary details, including LRN number and student section.'
         ];
         header('Content-Type: application/json');
         echo json_encode($response);
         exit;
     }
 
-    $stmt->bind_param("sisssssdddsssssss", $session_id, $beneficiary_id, $beneficiary_name, $beneficiary_sex, $beneficiary_grade_section, $beneficiary_dob, $beneficiary_dow, $beneficiary_age, $beneficiary_weight, $beneficiary_height, $beneficiary_bmi, $nutritional_status_bmia, $nutritional_status_hfa, $dewormed, $parents_consent_for_milk, $participation_in_4ps, $beneficiary_of_sbfp_in_previous_years);
+    $stmt->bind_param("sissssssdddsssssss", $session_id, $beneficiary_id, $beneficiary_name, $lrn_no, $student_section, $beneficiary_sex, $beneficiary_grade_section, $beneficiary_dob, $beneficiary_dow, $beneficiary_age, $beneficiary_weight, $beneficiary_height, $beneficiary_bmi, $nutritional_status_bmia, $nutritional_status_hfa, $dewormed, $parents_consent_for_milk, $participation_in_4ps, $beneficiary_of_sbfp_in_previous_years);
     $stmt->execute();
 }
 

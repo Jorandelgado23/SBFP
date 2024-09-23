@@ -86,32 +86,51 @@ $conn->close();
 
    <style>
         /* Custom styles for the attendance table */
-        .attendance-box {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 1px solid #ccc;
-            cursor: pointer;
-            text-align: center;
-            vertical-align: middle;
-            background-color: #fff;
-        }
-        .attendance-box.checked {
-            background-color: #007bff;
-            color: #fff;
-        }
-        .attendance-box::before {
-            content: "";
-        }
-        .attendance-box.checked::before {
-            content: "✔";
-        }
+       
 
         .active {
         background-color: lightblue; /* Background color */
         color: #fff; /* Text color */
         font-weight: bold; /* Bold text */
     }
+
+    .input-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+        .input-group div {
+            flex: 1;
+            margin-right: 10px;
+            min-width: 150px; /* Set a minimum width for smaller screens */
+        }
+        .input-group div:last-child {
+            margin-right: 0;
+        }
+        table {
+            width: 100%; /* Ensure the table fits within the screen width */
+            border-collapse: collapse;
+            margin-top: 20px;
+            overflow-x: auto; /* Enable horizontal scrolling if needed */
+            display: block; /* Block layout to manage overflow */
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px; /* Reduce padding to fit more data */
+            text-align: center;
+            font-size: 12px; /* Decrease font size */
+        }
+        
+
+        /* Styling for horizontal scrolling */
+        .table-wrapper {
+            overflow-x: auto; /* Horizontal scrollbar */
+            margin-top: 20px;
+        }
+
     
     </style>
 
@@ -272,197 +291,100 @@ $conn->close();
                                 </div>
                             </div>
                         </div>
-                        <div class="container my-4">
-    <h2 class="h4 mb-4">Attendance & Meal Monitoring</h2>
-    <p>SELECT GRADE LEVEL</p>
-    <div class="form-group col-md-4 p-0">
-        <label class="sr-only" for="studentgrade">Status</label>
-        <select class="custom-select" id="schoolSelect">
-            <option selected>CHOOSE GRADE LEVEL.....</option>
-            <option value="kinder">kinder</option>
-            <option value="Grade1">Grade 1</option>
-            <option value="Grade2">Grade 2</option>
-            <option value="Grade3">Grade 3</option>
-            <option value="Grade4">Grade 4</option>
-            <option value="Grade5">Grade 5</option>
-            <option value="Grade6">Grade 6</option>
-        </select>
-    </div>
+                        <h2 class="h4 mb-4">Attendance & Meal Monitoring</h2>
+                        <form method="post" action="download.php">
+    <button type="submit" name="action" value="excel" class="btn btn-success">Download Excel</button>
+    <button type="submit" name="action" value="pdf" class="btn btn-danger">Download PDF</button>
+</form>
 
-    <div class="col-md-10">
-                           <div class="white_shd full margin_bottom_30">
-                              <div class="full graph_head">
-                                 <div class="heading1 margin_0">
-                <button class="btn btn-primary float-right ml-3" type="button">Add more +</button>
-                <button class="btn btn-secondary dropdown-toggle float-right" type="button" id="actionMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
-                <div class="dropdown-menu" aria-labelledby="actionMenuButton">
-                    <a class="dropdown-item" href="#">Export</a>
-                    <a class="dropdown-item" href="#">Delete</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-            </div>
-
-           <!-- Attendance Table -->
-<form id="attendanceForm" method="post" action="save_attendance.php">
-    <div class="table-responsive">
-        <table class="table table-bordered">
-           
+<div class="table_section padding_infor_info">
+    <div class="table-responsive-sm">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th rowspan="2">Name of Pupil</th>
+                    <th colspan="31">Actual Feeding</th>
+                </tr>
+                <tr>
+                    <!-- Days of the month (1 to 31) -->
+                    <?php for ($i = 1; $i <= 31; $i++) { echo "<th>$i</th>"; } ?>
+                </tr>
+            </thead>
             <tbody>
-            <?php
-            $servername = "localhost";
-            $username = "root";
-            $password = "";
-            $dbname = "sbfp";
+                <?php
+                $servername = "localhost";
+                $username = "root";
+                $password = "";
+                $dbname = "sbfp";
 
-            $conn = new mysqli($servername, $username, $password, $dbname);
+                // Create connection
+                $conn = new mysqli($servername, $username, $password, $dbname);
 
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
-
-            // Retrieve session_id of the logged-in user
-        
-            $email = $_SESSION['email'];
-            $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
-            $stmt->bind_param("s", $email);
-            $stmt->execute();
-            $stmt->store_result();
-            $stmt->bind_result($session_id);
-            $stmt->fetch();
-            $stmt->close();
-
-            $grades = [
-                'Kinder' => [],
-                'Grade 1' => [],
-                'Grade 2' => [],
-                'Grade 3' => [],
-                'Grade 4' => [],
-                'Grade 5' => [],
-                'Grade 6' => []
-            ];
-
-            // Fetch submitted data for the logged-in user only
-            $sql = "SELECT * FROM beneficiary_details WHERE session_id = ? ORDER BY grade_section";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("s", $session_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    $grades[$row['grade_section']][] = $row;
+                // Check connection
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
                 }
-            }
 
-            $totalDays = 120;
+                // Retrieve session_id of the logged-in user
+                $email = $_SESSION['email'];
+                $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+                $stmt->bind_param("s", $email);
+                $stmt->execute();
+                $stmt->store_result();
+                $stmt->bind_result($session_id);
+                $stmt->fetch();
+                $stmt->close();
 
-            foreach ($grades as $grade => $students) {
-                echo "<h3>$grade</h3>";
-                echo '<div class="table-responsive">';
-                echo '<table class="table table-bordered">';
-                echo '<thead>';
-                echo '<tr>';
-                echo '<th>NAME OF PUPIL</th>';
-                for ($i = 1; $i <= $totalDays; $i++) {
-                    echo '<th>' . $i . '</th>';
-                }
-                echo '</tr>';
-                echo '</thead>';
-                echo '<tbody>';
+                // Fetch submitted data for the logged-in user
+                $sql = "SELECT * FROM beneficiary_details WHERE session_id = ? ORDER BY name";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("s", $session_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
 
-                if (count($students) > 0) {
-                    foreach ($students as $row) {
+                if ($result->num_rows > 0) {
+                    // Loop through each student
+                    while ($row = $result->fetch_assoc()) {
                         echo '<tr>';
+                        // Display student name
                         echo '<td>' . $row['name'] . '</td>';
-                        for ($i = 1; $i <= $totalDays; $i++) {
-                            $selectId = 'attendance-' . $row['id'] . '-' . $i;
-                            $selectedValue = isset($_POST['attendance'][$row['id']][$i]) ? $_POST['attendance'][$row['id']][$i] : '';
-                            echo '<td><select class="attendance-select" id="' . $selectId . '" name="attendance[' . $row['id'] . '][' . $i . ']">
-                                    <option value=""></option>
-                                    <option value="H"' . ($selectedValue == 'H' ? ' selected' : '') . '>H</option>
-                                    <option value="M"' . ($selectedValue == 'M' ? ' selected' : '') . '>M</option>
-                                    <option value="H/M"' . ($selectedValue == 'H/M' ? ' selected' : '') . '>H/M</option>
-                                    <option value="A"' . ($selectedValue == 'A' ? ' selected' : '') . '>A</option>
-                                    <option value="H2"' . ($selectedValue == 'H2' ? ' selected' : '') . '>H2</option>
-                                    <option value="M2"' . ($selectedValue == 'M2' ? ' selected' : '') . '>M2</option>
-                                    <option value="H/M2"' . ($selectedValue == 'H/M2' ? ' selected' : '') . '>H/M2</option>
-                                </select></td>';
+                        // Display 31 columns for feeding days
+                        for ($i = 1; $i <= 31; $i++) {
+                            echo '<td></td>'; // Empty cells for each day
                         }
                         echo '</tr>';
                     }
                 } else {
-                    echo '<tr><td colspan="' . (2 + $totalDays) . '">No records found for ' . $grade . '</td></tr>';
+                    // Placeholder rows if no data is found
+                    for ($i = 1; $i <= 25; $i++) {
+                        echo '<tr>';
+                        echo '<td>Pupil ' . $i . '</td>';
+                        echo '<td colspan="31"></td>';
+                        echo '</tr>';
+                    }
                 }
-
-                echo '</tbody>';
-                echo '</table>';
-                echo '</div>';
-            }
-
-            $conn->close();
-            ?>
-            <button type="submit" class="btn btn-primary">Save Attendance</button>
-        </form>
-
-
-            <!-- Total Present and Total Absent Tables -->
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <h4>Total Present</h4>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                // Assuming $presentStudents is an array of students present
-                                // Adjust this logic based on your actual database and attendance marking
-                                $presentStudents = []; // Initialize array
-                                foreach ($presentStudents as $student) {
-                                    echo '<tr>';
-                                    echo '<td>' . $student['id'] . '</td>';
-                                    echo '<td>' . $student['name'] . '</td>';
-                                    echo '</tr>';
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <h4>Total Absent</h4>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                // Assuming $absentStudents is an array of students absent
-                                // Adjust this logic based on your actual database and attendance marking
-                                $absentStudents = []; // Initialize array
-                                foreach ($absentStudents as $student) {
-                                    echo '<tr>';
-                                    echo '<td>' . $student['id'] . '</td>';
-                                    echo '<td>' . $student['name'] . '</td>';
-                                    echo '</tr>';
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+                $conn->close();
+                ?>
+                <!-- Total row with non-editable boxes -->
+                <tr>
+                    <td>Total</td>
+                    <?php for ($i = 1; $i <= 31; $i++): ?>
+                        <td style="border: 1px solid #000; padding: 5px; text-align: center;"></td>
+                    <?php endfor; ?>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
+
+
+
+
+
+
+
+
+        
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
@@ -505,51 +427,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <!-- Chart Plugins -->
     <script src="js/Chart.min.js"></script>
     <!-- Init Charts -->
-    <script>
-        var ctx = document.getElementById('chartjs_area').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-
-        var ctx = document.getElementById('chartjs_bar').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-
-        var ctx = document.getElementById('chartjs_line').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-    </script>
+  
 </body>
 
 </html>

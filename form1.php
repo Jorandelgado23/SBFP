@@ -253,14 +253,11 @@ $conn->close();
                         </div>
                         <div class="row">
  <div class="col-lg-12">
-<div class="card">
-    <div class="card-body">
-    <h1>School-Based Feeding Program Form</h1>
+<div>
     <div class="container mt-5">
         <div class="col-md-10 mb-10">
-            <div class="card shadow">
-                <div class="card-body">
-                    <p class="card-title"><strong>Master List Beneficiaries for School-Based Feeding Program (SBFP)</strong></p>
+            <div>
+                <div>
                     <p class="card-text">Click the button below to fill out the form.</p>
                     <button type="button" class="btn mb-2 btn-outline-secondary" data-toggle="modal" data-target="#sbfpModal" data-whatever="@mdo">Open Form</button>
                 </div>
@@ -352,13 +349,23 @@ $stmt->close();
                     <div id="beneficiary_details">
                         <div class="beneficiary mt-3 border rounded p-3">
                             <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="beneficiary_no" class="form-label">No.:</label>
-                                    <input type="text" class="form-control" id="beneficiary_no" name="beneficiary_no[]" required>
-                                    <div class="invalid-feedback">
-                                        Please provide the beneficiary number.
-                                    </div>
-                                </div>
+                            <div class="form-group col-md-6">
+    <label for="lrn_no" class="form-label">LRN Number:</label>
+    <input type="text" class="form-control" id="lrn_no" name="lrn_no[]" required>
+    <div class="invalid-feedback">
+        Please provide the LRN number.
+    </div>
+</div>
+
+<div class="form-group col-md-6">
+    <label for="student_section" class="form-label">Student Section:</label>
+    <input type="text" class="form-control" id="student_section" name="student_section[]" required>
+    <div class="invalid-feedback">
+        Please provide the student section.
+    </div>
+</div>
+
+
                                 <div class="form-group col-md-6">
                                     <label for="beneficiary_name" class="form-label">Name:</label>
                                     <input type="text" class="form-control" id="beneficiary_name" name="beneficiary_name[]" required>
@@ -393,6 +400,9 @@ $stmt->close();
                                         Please provide the grade/section of the beneficiary.
                                     </div>
                                 </div>
+
+                                
+
                                 <div class="form-group col-md-6">
                                     <label for="beneficiary_dob" class="form-label">Date of Birth (MM/DD/YYYY):</label>
                                     <input type="date" class="form-control" id="beneficiary_dob" name="beneficiary_dob[]" required onchange="calculateAgeAndBMI(this)">

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 13, 2024 at 08:04 AM
+-- Generation Time: Sep 22, 2024 at 01:28 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -76,7 +76,36 @@ INSERT INTO `beneficiaries` (`id`, `division_province`, `city_municipality_baran
 (101, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
 (102, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
 (103, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
-(104, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg');
+(104, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(105, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'example name', 'bill jeff dominic', 'xSlPK41e'),
+(106, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'example name', 'bill jeff dominic', 'xSlPK41e'),
+(107, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'example name', 'bill jeff dominic', 'xSlPK41e'),
+(108, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'example name', 'bill jeff dominic', 'xSlPK41e'),
+(109, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'example name', 'bill jeff dominic', 'xSlPK41e'),
+(110, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'example name', 'bill jeff dominic', 'xSlPK41e'),
+(111, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'example name', 'bill jeff dominic', 'xSlPK41e'),
+(112, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'example name', 'bill jeff dominic', 'xSlPK41e'),
+(113, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'example name', 'bill jeff dominic', 'xSlPK41e'),
+(114, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(115, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(116, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(117, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(118, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(119, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(120, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(121, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(122, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(123, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(124, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(125, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(126, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(127, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(128, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(129, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(130, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(131, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(132, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg'),
+(133, 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'example name', 'araza palasin', 'FNgfOkmg');
 
 -- --------------------------------------------------------
 
@@ -87,10 +116,11 @@ INSERT INTO `beneficiaries` (`id`, `division_province`, `city_municipality_baran
 CREATE TABLE `beneficiary_details` (
   `id` int(11) NOT NULL,
   `beneficiary_id` int(11) DEFAULT NULL,
+  `lrn_no` varchar(12) NOT NULL,
+  `student_section` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `sex` enum('Male','Female') NOT NULL,
   `grade_section` varchar(255) NOT NULL,
-  `section` varchar(50) DEFAULT NULL,
   `date_of_birth` date NOT NULL,
   `date_of_weighing` date NOT NULL,
   `age` varchar(20) NOT NULL,
@@ -111,11 +141,18 @@ CREATE TABLE `beneficiary_details` (
 -- Dumping data for table `beneficiary_details`
 --
 
-INSERT INTO `beneficiary_details` (`id`, `beneficiary_id`, `name`, `sex`, `grade_section`, `section`, `date_of_birth`, `date_of_weighing`, `age`, `weight`, `height`, `bmi`, `nutritional_status_bmia`, `nutritional_status_hfa`, `dewormed`, `parents_consent_for_milk`, `participation_in_4ps`, `beneficiary_of_sbfp_in_previous_years`, `session_id`, `selected`) VALUES
-(71, 101, 'cyrus gaza', 'Male', 'Grade 3', NULL, '2021-02-11', '2024-07-23', '3', 23.00, 112.00, 18.34, 'Wasted', 'Tall', 'Yes', 'Yes', 'Yes', 'Yes', 'FNgfOkmg', 1),
-(72, 102, 'sample name', 'Female', 'Grade 2', NULL, '2019-02-06', '2024-07-23', '5', 56.00, 155.00, 23.31, 'Normal', 'Tall', 'Yes', 'No', 'Yes', 'Yes', 'FNgfOkmg', 0),
-(73, 103, 'shedrick', 'Male', 'Grade 6', NULL, '2024-08-16', '2024-08-16', '0', 34.00, 122.00, 22.84, 'Normal', 'Tall', 'Yes', 'Yes', 'Yes', 'Yes', 'FNgfOkmg', 0),
-(74, 104, 'shy', 'Male', 'Grade 6', NULL, '2010-06-24', '2024-09-13', '14', 34.00, 112.00, 27.10, 'Overweight', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes', 'FNgfOkmg', 0);
+INSERT INTO `beneficiary_details` (`id`, `beneficiary_id`, `lrn_no`, `student_section`, `name`, `sex`, `grade_section`, `date_of_birth`, `date_of_weighing`, `age`, `weight`, `height`, `bmi`, `nutritional_status_bmia`, `nutritional_status_hfa`, `dewormed`, `parents_consent_for_milk`, `participation_in_4ps`, `beneficiary_of_sbfp_in_previous_years`, `session_id`, `selected`) VALUES
+(71, 101, '', '', 'cyrus gaza', 'Male', 'Grade 3', '2021-02-11', '2024-07-23', '3', 23.00, 112.00, 18.34, 'Wasted', 'Tall', 'Yes', 'Yes', 'Yes', 'Yes', 'FNgfOkmg', 1),
+(72, 102, '', '', 'sample name', 'Female', 'Grade 2', '2019-02-06', '2024-07-23', '5', 56.00, 155.00, 23.31, 'Normal', 'Tall', 'Yes', 'No', 'Yes', 'Yes', 'FNgfOkmg', 0),
+(73, 103, '', '', 'shedrick', 'Male', 'Grade 6', '2024-08-16', '2024-08-16', '0', 34.00, 122.00, 22.84, 'Normal', 'Tall', 'Yes', 'Yes', 'Yes', 'Yes', 'FNgfOkmg', 0),
+(74, 104, '', '', 'shy', 'Male', 'Grade 6', '2010-06-24', '2024-09-13', '14', 34.00, 112.00, 27.10, 'Overweight', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes', 'FNgfOkmg', 0),
+(79, 110, '', '', 'sample name', 'Male', 'Grade 4', '2017-03-08', '2024-09-15', '7', 34.00, 111.00, 27.60, 'Overweight', 'Tall', 'Yes', 'Yes', 'Yes', 'Yes', 'xSlPK41e', 1),
+(80, 111, '', '', 'gaza', 'Male', 'Grade 5', '2019-02-15', '2024-09-15', '5', 34.00, 112.00, 27.10, 'Overweight', 'Stunted', 'No', 'Yes', 'No', 'No', 'xSlPK41e', 0),
+(81, 112, '', '', 'jd', 'Male', 'Grade 4', '2016-02-16', '2024-09-15', '8', 34.00, 112.00, 27.10, 'Overweight', 'Stunted', 'No', 'No', 'Yes', 'Yes', 'xSlPK41e', 0),
+(82, 113, '', '', 'killer', 'Female', 'Grade 6', '2016-03-16', '2024-09-16', '8', 56.00, 112.00, 44.64, 'Obese', 'Stunted', 'Yes', 'No', 'Yes', 'Yes', 'xSlPK41e', 0),
+(83, 114, '', '', 'ty', 'Male', 'Grade 4', '2018-06-19', '2024-09-20', '6', 56.00, 111.00, 45.45, 'Obese', 'Stunted', 'Yes', 'No', 'Yes', 'Yes', 'FNgfOkmg', 0),
+(84, 115, '12131312', '', 'try ko lang', 'Male', 'Grade 5', '2019-06-13', '2024-09-20', '5', 45.00, 112.00, 35.87, 'Obese', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes', 'FNgfOkmg', 0),
+(85, 123, '4342324234', '', 'try ko lang', 'Male', 'Grade 3', '2018-02-16', '2024-09-20', '6', 34.00, 112.00, 27.10, 'Overweight', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes', 'FNgfOkmg', 0);
 
 -- --------------------------------------------------------
 
@@ -157,7 +194,8 @@ CREATE TABLE `milkcomponent` (
 --
 
 INSERT INTO `milkcomponent` (`id`, `region_division_district`, `name_of_school`, `school_id_number`, `student_name`, `grade_section`, `milk_tolerance`, `session_id`) VALUES
-(42, 'Laguna', 'Oogong Elementary School', '123465', 'cyrus gaza', 'Grade 3', 'Without milk intolerance and will participate in milk feeding', 'FNgfOkmg');
+(42, 'Laguna', 'Oogong Elementary School', '123465', 'cyrus gaza', 'Grade 3', 'Without milk intolerance and will participate in milk feeding', 'FNgfOkmg'),
+(43, 'Laguna', 'Gatid Elementary School', '123461', 'sample name', 'Grade 4', 'Without milk intolerance and will participate in milk feeding', 'xSlPK41e');
 
 -- --------------------------------------------------------
 
@@ -357,7 +395,199 @@ INSERT INTO `recent_activity` (`id`, `email`, `activity`, `activity_type`, `time
 (285, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-12 21:29:27', 'read'),
 (286, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-12 21:39:19', 'read'),
 (287, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-12 21:39:42', 'read'),
-(288, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-13 00:01:55', 'new');
+(288, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-13 00:01:55', 'read'),
+(289, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-13 00:05:20', 'read'),
+(290, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-13 01:19:48', 'read'),
+(291, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-13 01:25:38', 'read'),
+(292, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-13 06:25:27', 'read'),
+(293, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-13 06:27:36', 'read'),
+(294, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-13 06:31:56', 'read'),
+(295, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-13 06:32:12', 'read'),
+(296, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-13 06:32:21', 'read'),
+(297, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-13 06:33:13', 'read'),
+(298, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-14 18:50:38', 'read'),
+(299, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-14 22:34:41', 'read'),
+(300, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-14 22:50:40', 'read'),
+(301, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-14 22:51:22', 'read'),
+(302, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-14 22:51:26', 'read'),
+(303, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-14 22:58:06', 'read'),
+(304, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-14 22:58:09', 'read'),
+(305, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-14 23:04:41', 'read'),
+(306, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-14 23:04:47', 'read'),
+(307, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-14 23:05:15', 'read'),
+(308, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-14 23:05:18', 'read'),
+(309, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-14 23:12:00', 'read'),
+(310, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-14 23:12:04', 'read'),
+(311, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-14 23:28:48', 'read'),
+(312, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-14 23:29:07', 'read'),
+(313, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-14 23:29:12', 'read'),
+(314, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-14 23:32:58', 'read'),
+(315, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-14 23:33:06', 'read'),
+(316, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-14 23:34:12', 'read'),
+(317, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-14 23:34:17', 'read'),
+(318, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-14 23:36:53', 'read'),
+(319, 'sample1@gmail.com', 'Inserted beneficiaries data', 'login', '2024-09-14 23:43:40', 'read'),
+(320, 'sample1@gmail.com', 'Inserted beneficiaries data', 'login', '2024-09-14 23:43:55', 'read'),
+(321, 'sample1@gmail.com', 'Inserted beneficiaries data', 'data_insert', '2024-09-14 23:44:39', 'read'),
+(322, 'sample1@gmail.com', 'Inserted beneficiaries data', 'login', '2024-09-14 23:46:11', 'read'),
+(323, 'sample1@gmail.com', 'Inserted beneficiaries data', 'data_insert', '2024-09-14 23:49:45', 'read'),
+(324, 'sample1@gmail.com', 'Inserted milkcomponent data', 'data_insert', '2024-09-14 23:57:09', 'read'),
+(325, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 00:05:01', 'read'),
+(326, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:05:05', 'read'),
+(327, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 00:05:09', 'read'),
+(328, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:05:13', 'read'),
+(329, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 00:06:17', 'read'),
+(330, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:06:19', 'read'),
+(331, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 00:06:25', 'read'),
+(332, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:06:27', 'read'),
+(333, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 00:06:33', 'read'),
+(334, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:06:35', 'read'),
+(335, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 00:06:42', 'read'),
+(336, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-15 00:06:53', 'read'),
+(337, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-15 00:09:58', 'read'),
+(338, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:10:06', 'read'),
+(339, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 00:14:40', 'read'),
+(340, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:14:44', 'read'),
+(341, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 00:17:07', 'read'),
+(342, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:17:10', 'read'),
+(343, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:17:13', 'read'),
+(344, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:17:21', 'read'),
+(345, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:17:41', 'read'),
+(346, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:17:54', 'read'),
+(347, 'sample1@gmail.com', 'Inserted beneficiaries data', 'data_insert', '2024-09-15 00:18:53', 'read'),
+(348, 'sample1@gmail.com', 'Inserted beneficiaries data', 'data_insert', '2024-09-15 00:20:41', 'read'),
+(349, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 00:22:24', 'read'),
+(350, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:22:43', 'read'),
+(351, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 00:36:53', 'read'),
+(352, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:36:59', 'read'),
+(353, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:38:55', 'read'),
+(354, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 00:39:52', 'read'),
+(355, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-09-15 23:06:14', 'read'),
+(356, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-15 23:07:36', 'read'),
+(357, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-15 23:08:31', 'read'),
+(358, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-15 23:14:25', 'read'),
+(359, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 23:14:31', 'read'),
+(360, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 23:20:29', 'read'),
+(361, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 23:20:32', 'read'),
+(362, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 23:23:17', 'read'),
+(363, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 23:23:19', 'read'),
+(364, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-15 23:26:58', 'read'),
+(365, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-15 23:27:05', 'read'),
+(366, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-15 23:27:09', 'read'),
+(367, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 23:32:42', 'read'),
+(368, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 23:32:45', 'read'),
+(369, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 23:32:55', 'read'),
+(370, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 23:33:28', 'read'),
+(371, 'sample1@gmail.com', 'Inserted beneficiaries data', 'data_insert', '2024-09-15 23:34:16', 'read'),
+(372, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-09-16 00:05:49', 'read'),
+(373, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-16 00:19:28', 'read'),
+(374, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-16 00:27:31', 'read'),
+(375, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-09-16 00:27:37', 'read'),
+(376, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-16 00:29:29', 'read'),
+(377, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-16 00:29:40', 'read'),
+(378, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-09-16 00:29:46', 'read'),
+(379, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-18 00:53:26', 'read'),
+(380, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-18 01:25:40', 'read'),
+(381, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-09-18 01:25:56', 'read'),
+(382, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-09-18 01:33:11', 'read'),
+(383, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-09-18 01:46:48', 'read'),
+(384, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-09-18 07:10:42', 'read'),
+(385, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-18 07:13:57', 'read'),
+(386, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-18 07:18:32', 'read'),
+(387, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-18 07:19:46', 'read'),
+(388, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-18 07:32:05', 'read'),
+(389, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-18 07:55:17', 'read'),
+(390, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-09-18 07:55:24', 'read'),
+(391, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-18 08:08:01', 'new'),
+(392, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-18 08:12:19', 'new'),
+(393, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-09-18 08:12:32', 'new'),
+(394, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-09-19 22:42:57', 'new'),
+(395, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-19 22:46:47', 'new'),
+(396, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-20 00:40:35', 'new'),
+(397, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-09-20 00:41:04', 'new'),
+(398, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-20 00:41:49', 'new'),
+(399, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-20 01:41:21', 'new'),
+(400, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-09-20 01:41:29', 'new'),
+(401, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-20 01:42:07', 'new'),
+(402, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-20 02:00:52', 'new'),
+(403, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-09-20 02:27:10', 'new'),
+(404, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-20 02:44:06', 'new'),
+(405, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-09-20 06:09:32', 'new'),
+(406, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-20 06:09:46', 'new'),
+(407, 'sample2@gmail.com', 'Inserted beneficiaries data', 'data_insert', '2024-09-20 06:11:14', 'new'),
+(408, 'sample2@gmail.com', 'Inserted beneficiaries data', 'data_insert', '2024-09-20 06:25:06', 'new'),
+(409, 'sample2@gmail.com', 'Inserted beneficiaries data', 'data_insert', '2024-09-20 06:48:46', 'new');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sbfp_recent_activity`
+--
+
+CREATE TABLE `sbfp_recent_activity` (
+  `id` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `activity` varchar(255) NOT NULL,
+  `activity_type` varchar(50) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` enum('new','read') DEFAULT 'new'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `sbfp_recent_activity`
+--
+
+INSERT INTO `sbfp_recent_activity` (`id`, `email`, `activity`, `activity_type`, `timestamp`, `status`) VALUES
+(1, 'sample1@gmail.com', 'User logged in', '', '2024-09-15 00:14:44', 'read'),
+(2, 'sample1@gmail.com', 'User logged in', '', '2024-09-15 00:17:54', 'read'),
+(3, 'sample1@gmail.com', 'Inserted beneficiaries data', '', '2024-09-15 00:18:53', 'read'),
+(4, 'sample1@gmail.com', 'Inserted beneficiaries data', 'data_insert', '2024-09-15 00:20:41', 'read'),
+(5, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 00:22:24', 'read'),
+(6, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:22:43', 'read'),
+(7, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 00:36:53', 'read'),
+(8, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:36:59', 'read'),
+(9, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 00:38:55', 'read'),
+(10, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 00:39:52', 'read'),
+(11, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-15 23:07:36', 'read'),
+(12, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-15 23:08:31', 'read'),
+(13, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-15 23:14:25', 'read'),
+(14, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 23:14:31', 'read'),
+(15, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 23:20:29', 'read'),
+(16, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 23:20:32', 'read'),
+(17, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 23:23:17', 'read'),
+(18, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 23:23:19', 'read'),
+(19, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-15 23:26:58', 'read'),
+(20, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-15 23:27:05', 'read'),
+(21, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-15 23:27:09', 'read'),
+(22, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 23:32:42', 'read'),
+(23, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 23:32:45', 'read'),
+(24, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-15 23:32:55', 'read'),
+(25, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-15 23:33:28', 'read'),
+(26, 'sample1@gmail.com', 'Inserted beneficiaries data', 'data_insert', '2024-09-15 23:34:16', 'read'),
+(27, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-16 00:19:28', 'read'),
+(28, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-16 00:27:31', 'read'),
+(29, 'sample1@gmail.com', 'User logged in', 'login', '2024-09-16 00:29:29', 'read'),
+(30, 'sample1@gmail.com', 'User logged out', 'logout', '2024-09-16 00:29:40', 'read'),
+(31, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-18 00:53:26', 'read'),
+(32, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-18 01:25:40', 'read'),
+(33, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-18 07:13:57', 'read'),
+(34, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-18 07:18:32', 'read'),
+(35, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-18 07:19:46', 'read'),
+(36, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-18 07:32:05', 'read'),
+(37, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-18 07:55:17', 'read'),
+(38, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-18 08:08:01', 'read'),
+(39, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-18 08:12:19', 'read'),
+(40, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-19 22:46:47', 'read'),
+(41, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-20 00:40:35', 'read'),
+(42, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-20 00:41:49', 'read'),
+(43, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-20 01:41:21', 'read'),
+(44, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-20 01:42:07', 'read'),
+(45, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-20 02:00:52', 'read'),
+(46, 'sample2@gmail.com', 'User logged out', 'logout', '2024-09-20 02:44:06', 'read'),
+(47, 'sample2@gmail.com', 'User logged in', 'login', '2024-09-20 06:09:46', 'read'),
+(48, 'sample2@gmail.com', 'Inserted beneficiaries data', 'data_insert', '2024-09-20 06:11:14', 'read'),
+(49, 'sample2@gmail.com', 'Inserted beneficiaries data', 'data_insert', '2024-09-20 06:25:06', 'new'),
+(50, 'sample2@gmail.com', 'Inserted beneficiaries data', 'data_insert', '2024-09-20 06:48:46', 'new');
 
 -- --------------------------------------------------------
 
@@ -415,8 +645,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `phone_number`, `birthday`, `created_at`, `role`, `profile_picture`, `session_id`, `Division/Province`, `school_district_municipality`, `school_name`, `beis_id`, `school_address`, `barangay_name`, `supervisor_principal_name`, `reset_token`, `reset_token_expiry`) VALUES
 (9, 'jeri dominic', 'palasin', 'jdpalasin@gmail.com', '$2y$10$koG.6KAwDpAj/ss9HFnZ.u7f8mksqmG/40SNjLh7ZSzHyEpbL8YyO', '09123345435', '2006-02-03', '2024-06-03 08:05:52', 'admin', NULL, '', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', NULL, NULL),
-(13, 'cyrus', 'dominic', 'cyrusgaza@gmail.com', '$2y$10$mlSzPg2auWUU4z2hqdyHYuRqZCfk5Z8l2YXKIsL2BHoz515hvRVJe', '0954654654', '2002-10-17', '2024-06-05 12:36:50', 'admin', NULL, '7yE5xxCj', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(16, 'prince jorani', 'solano', 'jorandelgado23@gmail.com', '$2y$10$YBIkCnKp/OwLsRXUirQVfun2yedWBJhy77c8wzFM3dQzyKV09vf1u', '09277321745', '2016-11-17', '2024-06-17 13:02:10', 'admin', 'LOGO.jpg', '', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', NULL, NULL),
+(16, 'prince jorani', 'solano', 'jorandelgado23@gmail.com', '$2y$10$8eIS1qzzYG.S8fF.ExRWc.CQVCvcqY7dyUHrjWZVLKD9C6bvfPUMq', '09277321745', '2016-11-17', '2024-06-17 13:02:10', 'admin', 'LOGO.jpg', '', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', NULL, NULL),
 (45, 'araza', 'palasin', 'sample2@gmail.com', '$2y$10$Sa8Om1W0jRyUh26qlifjneAeokkKTdwHubDQhD/D58pqSfEmAkv8S', '09277321745', '2013-06-05', '2024-07-05 11:16:37', 'sbfp', NULL, 'FNgfOkmg', 'Laguna', 'Santa Cruz', 'Oogong Elementary School', '123465', 'Oogong, Santa Cruz, Laguna', 'Barangay Oogong', 'example name', NULL, NULL),
 (46, 'bill jeff', 'dominic', 'sample1@gmail.com', '$2y$10$drieUF2FVxSbbQjxEePL/ue9pX1aPQu7crdSn/F01IY9bvxVm.rPa', '09123345353', '2015-05-13', '2024-07-08 14:50:48', 'sbfp', NULL, 'xSlPK41e', 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'Gatid, Santa Cruz, Laguna', 'Barangay Gatid', 'example name', NULL, NULL),
 (47, 'jayvee', 'delgado', 'jorandelgado1@gmail.com', '$2y$10$.Uk8a7Sf6R3js9Zj7bJQLuaW3jfkqaXPssSVRUNS/mo5W2YCf.fKC', '09435567563', '2007-06-12', '2024-07-10 02:06:52', 'admin', NULL, '', 'Laguna', 'Santa Cruz', 'Bagumbayan Elementary School', '123458', 'Bagumbayan, Santa Cruz, Laguna', 'Barangay Bagumbayan', 'example name', NULL, NULL);
@@ -471,6 +700,12 @@ ALTER TABLE `recent_activity`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `sbfp_recent_activity`
+--
+ALTER TABLE `sbfp_recent_activity`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `schools`
 --
 ALTER TABLE `schools`
@@ -497,13 +732,13 @@ ALTER TABLE `attendance`
 -- AUTO_INCREMENT for table `beneficiaries`
 --
 ALTER TABLE `beneficiaries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
 
 --
 -- AUTO_INCREMENT for table `beneficiary_details`
 --
 ALTER TABLE `beneficiary_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
 -- AUTO_INCREMENT for table `division_schools`
@@ -515,7 +750,7 @@ ALTER TABLE `division_schools`
 -- AUTO_INCREMENT for table `milkcomponent`
 --
 ALTER TABLE `milkcomponent`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `quarterly_reportform8`
@@ -527,7 +762,13 @@ ALTER TABLE `quarterly_reportform8`
 -- AUTO_INCREMENT for table `recent_activity`
 --
 ALTER TABLE `recent_activity`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=289;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=410;
+
+--
+-- AUTO_INCREMENT for table `sbfp_recent_activity`
+--
+ALTER TABLE `sbfp_recent_activity`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `schools`

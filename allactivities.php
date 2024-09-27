@@ -244,12 +244,12 @@ $conn->close();
 </li>
 
                                         
-                                        <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+                                      
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
                                             
-                                        <a class="dropdown-toggle" data-toggle="dropdown">
+                                        <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>
     <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
 
     <span class="name_user"><?php echo $user_role; ?></span>

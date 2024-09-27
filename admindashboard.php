@@ -277,7 +277,7 @@ $conn->close();
                                     <ul class="user_profile_dd">
                                         <li>
                                             
-                                        <a class="dropdown-toggle" data-toggle="dropdown">
+                                        <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>
     <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
     <span class="name_user"><?php echo $user_role; ?></span>
 </a>
@@ -470,21 +470,26 @@ $values_json = json_encode($values);
 $conn->close(); // Close the database connection
 ?>
 
-
 <div class="row">
 <div class="col-lg-6">
-        <div class="white_shd full margin_bottom_30">
-            <div class="full graph_head">
-                <div class="heading1 margin_0">
-                    <h2>NUTRITIONAL STATUS OF ALL STUDENT</h2>
-                </div>
-            </div>
-            <div class="map_section padding_infor_info">
-                <canvas id="pie_chart"></canvas>
+    <div class="white_shd full margin_bottom_30">
+        <div class="full graph_head">
+            <div class="heading1 margin_0">
+                <h2>Nutritional Status of All Students</h2>
             </div>
         </div>
+        <div class="map_section padding_infor_info" style="background-color: white; padding: 20px;">
+            <canvas id="pie_chart"></canvas>
+        </div>
+        <!-- Button to download the chart -->
+        <div class="text-center mt-3">
+            <button onclick="downloadChart('pie_chart', 'Nutritional_Status_Chart.png', 3)" class="btn btn-success">Download Chart as Image</button>
+        </div>
     </div>
-    <script>
+</div>
+
+
+<script>
     var ctx = document.getElementById('pie_chart').getContext('2d');
     var myPieChart = new Chart(ctx, {
         type: 'pie',
@@ -503,10 +508,61 @@ $conn->close(); // Close the database connection
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw;
+                        }
+                    }
+                }
+            }
         }
     });
+
+    // Function to download chart as an image
+    function downloadChart(canvasId, filename, scale = 2) {
+        // Get the original canvas element
+        var canvas = document.getElementById(canvasId);
+        
+        // Create a new canvas element to draw the chart with a white background
+        var newCanvas = document.createElement('canvas');
+        newCanvas.width = canvas.width * scale;  // Scale the width
+        newCanvas.height = canvas.height * scale; // Scale the height
+        
+        // Get the context of the new canvas
+        var newContext = newCanvas.getContext('2d');
+        
+        // Set the scale for the new canvas
+        newContext.scale(scale, scale);
+        
+        // Fill the new canvas with a white background
+        newContext.fillStyle = 'white';
+        newContext.fillRect(0, 0, newCanvas.width / scale, newCanvas.height / scale);
+        
+        // Draw the original chart (canvas) onto the new canvas with the white background
+        newContext.drawImage(canvas, 0, 0);
+        
+        // Create a link to download the new canvas as an image
+        var link = document.createElement('a');
+        link.href = newCanvas.toDataURL('image/png');
+        link.download = filename;
+        
+        // Trigger the download
+        link.click();
+    }
+
+    // Event listener for the download button
+    document.getElementById('download_btn').addEventListener('click', function() {
+        downloadChart('pie_chart', 'nutrition_status_chart.png');
+    });
 </script>
+
+
     <div class="col-lg-6">
         <div class="white_shd full margin_bottom_30">
             <div class="full graph_head">

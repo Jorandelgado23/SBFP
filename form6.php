@@ -91,6 +91,29 @@ $conn->close();
         color: #fff; /* Text color */
         font-weight: bold; /* Bold text */
     }
+
+    table {
+            width: 100%; /* Ensure the table fits within the screen width */
+            border-collapse: collapse;
+            margin-top: 20px;
+            overflow-x: hidden; /* Enable horizontal scrolling if needed */
+            display: block; /* Block layout to manage overflow */
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px; /* Reduce padding to fit more data */
+            text-align: center;
+            font-size: 12px; /* Decrease font size */
+        }
+        
+
+        /* Styling for horizontal scrolling */
+        .table-wrapper {
+            overflow-x: auto; /* Horizontal scrollbar */
+            margin-top: 20px;
+        }
    </style>
 
 <body class="dashboard dashboard_2">
@@ -216,12 +239,12 @@ $conn->close();
 <?php endif; ?>
 </a>
 
-    <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
                                             
-                                        <a class="dropdown-toggle" data-toggle="dropdown">
+                                        <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>
         <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
 
     <span class="name_user"><?php echo $user_role; ?></span>
@@ -254,9 +277,7 @@ $conn->close();
                      <div class="container mt-5">
 <div class="container">
   <h1>Submit School and Student Information</h1>
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#formModal">
-    Open Form
-  </button>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#formModal"><i class="fa fa-plus"></i> Open Form</button>
 
   <?php
 
@@ -316,15 +337,15 @@ $conn->close();
           <h2>School Information</h2>
           <div class="mb-3">
             <label for="regionDivisionDistrict" class="form-label">REGION/DIVISION/DISTRICT:</label>
-            <input type="text" class="form-control" id="regionDivisionDistrict" name="region_division_district" value="<?php echo htmlspecialchars($division_province); ?>" required>
+            <input type="text" class="form-control" id="regionDivisionDistrict" name="region_division_district" value="<?php echo htmlspecialchars($division_province); ?>" readonly>
           </div>
           <div class="mb-3">
             <label for="nameOfSchool" class="form-label">NAME OF SCHOOL:</label>
-            <input type="text" class="form-control" id="nameOfSchool" name="name_of_school" value="<?php echo htmlspecialchars($school_name); ?>" required>
+            <input type="text" class="form-control" id="nameOfSchool" name="name_of_school" value="<?php echo htmlspecialchars($school_name); ?>" readonly>
           </div>
           <div class="mb-3">
             <label for="schoolIdNumber" class="form-label">School ID Number:</label>
-            <input type="text" class="form-control" id="schoolIdNumber" name="school_id_number" value="<?php echo htmlspecialchars($beis_id); ?>" required>
+            <input type="text" class="form-control" id="schoolIdNumber" name="school_id_number" value="<?php echo htmlspecialchars($beis_id); ?>" readonly>
           </div>
 
           <h2 class="mt-5">Student Information</h2>
@@ -458,6 +479,7 @@ $conn->close();
 <?php
 
 
+
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['email'])) {
     header("Location: login.php");
@@ -477,7 +499,103 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Retrieve session_id of the logged-in user
+// Function to fetch and display the milk data table
+function displayMilkData($conn, $session_id) {
+    $stmt = $conn->prepare("SELECT * FROM milkcomponent WHERE session_id = ?");
+    $stmt->bind_param("s", $session_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    ?>
+    <div class="table_section padding_infor_info">
+        <div class="table-responsive-sm">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Region/Division/District</th>
+                        <th>Name of School</th>
+                        <th>School ID Number</th>
+                        <th>Student Name</th>
+                        <th>Grade & Section</th>
+                        <th>Milk Tolerance</th>
+                       
+                    </tr>
+                </thead>
+                <tbody>
+                <?php
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>
+                <td>{$row['id']}</td>
+                <td>{$row['region_division_district']}</td>
+                <td>{$row['name_of_school']}</td>
+                <td>{$row['school_id_number']}</td>
+                <td>{$row['student_name']}</td>
+                <td>{$row['grade_section']}</td>
+                <td>{$row['milk_tolerance']}</td>
+                <td>
+                    <button class='btn btn-warning' onclick='showEditModal({$row['id']}, \"{$row['milk_tolerance']}\")'>
+                        <i class='fa fa-edit'></i>
+                    </button>
+                </td>
+                <td>
+                    <button class='btn btn-danger' onclick='confirmDelete({$row['id']});'>
+                        <i class='fa fa-trash'></i>
+                    </button>
+                </td>
+              </tr>";
+    }
+} else {
+    echo "<tr><td colspan='8'>No records found</td></tr>";
+}
+?>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <?php
+    $stmt->close();
+}
+
+// Function to display the modal for editing milk tolerance
+// Function to display the modal for editing milk tolerance
+function displayEditModal() {
+    ?>
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Milk Tolerance</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="editForm" method="POST" action="update_milk_tolerance.php">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="edit_id">
+                        <div class="form-group">
+                            <label for="milk_tolerance">Milk Tolerance</label>
+                            <select class="form-control" id="edit_milk_tolerance" name="milk_tolerance">
+                                <option value="Without milk intolerance and will participate in milk feeding">Without milk intolerance and will participate in milk feeding</option>
+                                <option value="With milk intolerance but willing to participate in milk feeding">With milk intolerance but willing to participate in milk feeding</option>
+                                <option value="Not allowed by parents to participate in milk feeding">Not allowed by parents to participate in milk feeding</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="saveChangesBtn">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php
+}
+
+// Fetch the session_id of the logged-in user
 $email = $_SESSION['email'];
 $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
@@ -486,164 +604,67 @@ $stmt->store_result();
 $stmt->bind_result($session_id);
 $stmt->fetch();
 $stmt->close();
-
-// Fetch data associated with the session_id of the logged-in user
-$stmt = $conn->prepare("SELECT * FROM milkcomponent WHERE session_id = ?");
-$stmt->bind_param("s", $session_id);
-$stmt->execute();
-$result = $stmt->get_result();
 ?>
 
-
-
-
-<div class="col-md-10">
-                           <div class="white_shd full margin_bottom_30">
-                              <div class="full graph_head">
-                                 <div class="heading1 margin_0">
-    <h1>School-Based Feeding Program - Milk Component Data</h1>
-    <form method="POST" action="milk_regenerate.php">
-        <button type="submit" name="action" value="pdf" class="btn btn-primary">Generate PDF</button>
-        <button type="submit" name="action" value="excel" class="btn btn-success">Generate Excel</button>
-    </form>
-    <div class="table_section padding_infor_info">
-                                 <div class="table-responsive-sm">
-                                    <table class="table table-bordered">
-        <thead class="thead-light">
-            <tr>
-                <th>ID</th>
-                <th>Region/Division/District</th>
-                <th>Name of School</th>
-                <th>School ID Number</th>
-                <th>Student Name</th>
-                <th>Grade & Section</th>
-                <th>Milk Tolerance</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>
-                            <td>{$row['id']}</td>
-                            <td>{$row['region_division_district']}</td>
-                            <td>{$row['name_of_school']}</td>
-                            <td>{$row['school_id_number']}</td>
-                            <td>{$row['student_name']}</td>
-                            <td>{$row['grade_section']}</td>
-                            <td>{$row['milk_tolerance']}</td>
-                            <td>
-                                <button class='btn btn-warning' data-toggle='modal' data-target='#editModal' data-id='{$row['id']}' data-rdd='{$row['region_division_district']}' data-ns='{$row['name_of_school']}' data-sid='{$row['school_id_number']}' data-sn='{$row['student_name']}' data-gs='{$row['grade_section']}' data-mt='{$row['milk_tolerance']}'>Edit</button>
-                                <a href='remove_milk.php?id={$row['id']}' class='btn btn-danger'>Remove</a>
-                            </td>
-                        </tr>";
-                }
-            } else {
-                echo "<tr><td colspan='8'>No records found</td></tr>";
-            }
-            ?>
-        </tbody>
-    </table>
-</div>
-
-
-
-
-<!-- Edit Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editModalLabel">Edit Student Information</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action="edit_milk.php" method="post" id="editForm">
-          <input type="hidden" name="id" id="edit-id">
-          <div class="mb-3">
-            <label for="edit-regionDivisionDistrict" class="form-label">REGION/DIVISION/DISTRICT:</label>
-            <input type="text" class="form-control" id="edit-regionDivisionDistrict" name="region_division_district" required>
-          </div>
-          <div class="mb-3">
-            <label for="edit-nameOfSchool" class="form-label">NAME OF SCHOOL:</label>
-            <input type="text" class="form-control" id="edit-nameOfSchool" name="name_of_school" required>
-          </div>
-          <div class="mb-3">
-            <label for="edit-schoolIdNumber" class="form-label">School ID Number:</label>
-            <input type="text" class="form-control" id="edit-schoolIdNumber" name="school_id_number" required>
-          </div>
-          <div class="mb-3">
-            <label for="edit-studentName" class="form-label">Name:</label>
-            <input type="text" class="form-control" id="edit-studentName" name="student_name" required>
-          </div>
-          <div class="mb-3">
-            <label for="edit-gradeSection" class="form-label">Grade & Section:</label>
-            <input type="text" class="form-control" id="edit-gradeSection" name="grade_section" required>
-          </div>
-          <div class="mb-3">
-            <label>Classification of Students in terms of Milk Tolerance (Please check one):</label>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="milk_tolerance" id="edit-milkTolerance1" value="Without milk intolerance and will participate in milk feeding" required>
-              <label class="form-check-label" for="edit-milkTolerance1">Without milk intolerance and will participate in milk feeding</label>
+<div class="col-md-11">
+    <div class="white_shd full margin_bottom_30">
+        <div class="full graph_head">
+            <div class="heading1 margin_0">
+                <h1>School-Based Feeding Program - Milk Component Data</h1>
+                <form method="POST" action="milk_regenerate.php">
+                    <button type="submit" name="action" value="pdf" class="btn btn-primary"><i class="fa fa-file-pdf-o"></i> Generate PDF</button>
+                    <button type="submit" name="action" value="excel" class="btn btn-success"><i class="fa fa-file-excel-o"> </i>Generate Excel</button>
+                </form>
+                <?php displayMilkData($conn, $session_id); ?>
+                <?php displayEditModal(); ?>
             </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="milk_tolerance" id="edit-milkTolerance2" value="With milk intolerance but willing to participate in milk feeding" required>
-              <label class="form-check-label" for="edit-milkTolerance2">With milk intolerance but willing to participate in milk feeding</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="milk_tolerance" id="edit-milkTolerance3" value="Not allowed by parents to participate in milk feeding" required>
-              <label class="form-check-label" for="edit-milkTolerance3">Not allowed by parents to participate in milk feeding</label>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary">Save Changes</button>
-        </form>
-      </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <script>
-  $('#editModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget);
-    var id = button.data('id');
-    var regionDivisionDistrict = button.data('rdd');
-    var nameOfSchool = button.data('ns');
-    var schoolIdNumber = button.data('sid');
-    var studentName = button.data('sn');
-    var gradeSection = button.data('gs');
-    var milkTolerance = button.data('mt');
+ function confirmDelete(id) {
+    console.log(id); // Log the ID to check if it's correct
 
-    var modal = $(this);
-    modal.find('#edit-id').val(id);
-    modal.find('#edit-regionDivisionDistrict').val(regionDivisionDistrict);
-    modal.find('#edit-nameOfSchool').val(nameOfSchool);
-    modal.find('#edit-schoolIdNumber').val(schoolIdNumber);
-    modal.find('#edit-studentName').val(studentName);
-    modal.find('#edit-gradeSection').val(gradeSection);
+    swal({
+        title: "Are you sure?",
+        text: "This action cannot be undone!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        closeOnConfirm: false,
+        closeOnCancel: true
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+            // Redirect to the PHP script to delete the item
+            window.location.href = 'remove_milk.php?id=' + id;
+        }
+    });
+}
 
-    // Check the correct radio button based on milk tolerance
-    if (milkTolerance === "Without milk intolerance and will participate in milk feeding") {
-      modal.find('#edit-milkTolerance1').prop('checked', true);
-    } else if (milkTolerance === "With milk intolerance but willing to participate in milk feeding") {
-      modal.find('#edit-milkTolerance2').prop('checked', true);
-    } else if (milkTolerance === "Not allowed by parents to participate in milk feeding") {
-      modal.find('#edit-milkTolerance3').prop('checked', true);
+
+
+    // Function to show the edit modal and populate the fields
+    function showEditModal(id, milkTolerance) {
+        $('#edit_id').val(id);
+        $('#edit_milk_tolerance').val(milkTolerance);
+        $('#editModal').modal('show');
     }
-  });
 </script>
-
-
-
-
 
 
 
 <?php
 $conn->close();
 ?>
+
+
+<!-- Include SweetAlert CSS and JS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
                         
                     </div>
                    

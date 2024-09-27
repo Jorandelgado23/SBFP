@@ -273,12 +273,12 @@ $conn->close();
     <?php endif; ?>
 </a>
 
-                                        <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+                                     
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
                                             
-                                        <a class="dropdown-toggle" data-toggle="dropdown">
+                                        <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>
        <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
 
     <span class="name_user"><?php echo $user_role; ?></span>
@@ -523,8 +523,7 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
 
                  
 
-
-                        <div class="row column1">
+<div class="row column1">
     <!-- BMI-A Bar Chart -->
     <div class="col-lg-6">
         <div class="white_shd full margin_bottom_30">
@@ -535,6 +534,8 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
             </div>
             <div class="map_section padding_infor_info">
                 <canvas id="bar_chart_bmi"></canvas>
+                <!-- Button to download the chart -->
+                <button onclick="downloadChart('bar_chart_bmi', 'BMI-A_Chart.png', 3)" class="btn btn-success">Download BMI-A Chart</button>
             </div>
         </div>
     </div>
@@ -549,10 +550,14 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
             </div>
             <div class="map_section padding_infor_info">
                 <canvas id="bar_chart_hfa"></canvas>
+                <!-- Button to download the chart -->
+                <button onclick="downloadChart('bar_chart_hfa', 'HFA_Chart.png', 3)" class="btn btn-success">Download HFA Chart</button>
             </div>
         </div>
     </div>
 </div>
+
+
 
 
 
@@ -737,6 +742,42 @@ const barChartHFA = new Chart(ctxHFA, {
         }
     }
 });
+</script>
+
+<script>
+
+function downloadChart(canvasId, filename, scale = 2) {
+    // Get the original canvas element
+    var canvas = document.getElementById(canvasId);
+    
+    // Create a new canvas element to draw the chart with a white background
+    var newCanvas = document.createElement('canvas');
+    newCanvas.width = canvas.width * scale;  // Scale the width
+    newCanvas.height = canvas.height * scale; // Scale the height
+    
+    // Get the context of the new canvas
+    var newContext = newCanvas.getContext('2d');
+    
+    // Set the scale for the new canvas
+    newContext.scale(scale, scale);
+    
+    // Fill the new canvas with a white background
+    newContext.fillStyle = 'white';
+    newContext.fillRect(0, 0, newCanvas.width / scale, newCanvas.height / scale);
+    
+    // Draw the original chart (canvas) onto the new canvas with the white background
+    newContext.drawImage(canvas, 0, 0);
+    
+    // Create a link to download the new canvas as an image
+    var link = document.createElement('a');
+    link.href = newCanvas.toDataURL('image/png');
+    link.download = filename;
+    
+    // Trigger the download
+    link.click();
+}
+
+
 </script>
 
 

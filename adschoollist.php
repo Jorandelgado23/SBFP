@@ -213,12 +213,12 @@ $conn->close();
 </li>
 
                                         
-                                        <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+                                       
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
                                             
-                                        <a class="dropdown-toggle" data-toggle="dropdown">
+                                        <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>
        <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
 
     <span class="name_user"><?php echo $user_role; ?></span>
@@ -381,15 +381,19 @@ $conn->close();
     <div class="text-center mt-4">
         <form action="schoollist_pdf_excel.php" method="post" target="_blank" style="display: inline;">
             <input type="hidden" name="action" value="excel">
-            <button type="submit" class="btn btn-success">Generate Excel</button>
+            <button type="submit" class="btn btn-success"><i class="fa fa-file-excel-o"> </i>Generate Excel</button>
         </form>
         <form action="schoollist_pdf_excel.php" method="post" target="_blank" style="display: inline;">
             <input type="hidden" name="action" value="pdf">
-            <button type="submit" class="btn btn-danger">Generate PDF</button>
+            <button type="submit" class="btn btn-danger"><i class="fa fa-file-pdf-o"> </i>Generate PDF</button>
         </form>
     </div>
 </div>
 
+
+
+<br>
+<br>
 
 
 

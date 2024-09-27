@@ -208,12 +208,12 @@ $conn->close();
 </li>
 
                                         
-                                        <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+                                       
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
                                             
-                                        <a class="dropdown-toggle" data-toggle="dropdown">
+                                        <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>
         <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
 
     <span class="name_user"><?php echo $user_role; ?></span>
@@ -237,7 +237,7 @@ $conn->close();
                         <div class="row column_title">
                         <div class="col-md-12">
                                 <div class="page_title">
-                                    <h2>ALL SCHOOL BENEFICIARIES</h2>
+                                    <h2>ACCOUNT MANAGEMENT</h2>
                                 </div>
                             </div>
                         </div>
@@ -410,7 +410,7 @@ function updateSchoolDetails() {
         <div class="col-md-12">
             <div class="text-right">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUserModal">
-                    <span class="fe fe-filter fe-12 mr-2"></span>Create
+                    <span class="fe fe-filter fe-12 mr-2"></span><i class="fa fa-pencil"></i>Create
                 </button>
             </div>
         </div>
@@ -435,40 +435,46 @@ function updateSchoolDetails() {
                                 <th>Phone Number</th>
                                 <th>Birthday</th>
                                 <th>Role</th>
-                                <th>Action</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-                            include 'accountconnection.php';
+                        <?php
+include 'accountconnection.php';
 
-                            // Fetch Admin Accounts
-                            $sql_admin = "SELECT id, firstname, lastname, email, phone_number, birthday, role FROM users WHERE role = 'admin'";
-                            $result_admin = $conn->query($sql_admin);
+// Fetch Admin Accounts
+$sql_admin = "SELECT id, firstname, lastname, email, phone_number, birthday, role FROM users WHERE role = 'admin'";
+$result_admin = $conn->query($sql_admin);
 
-                            // Display Admin Accounts
-                            if ($result_admin->num_rows > 0) {
-                                while ($row = $result_admin->fetch_assoc()) {
-                                    echo "<tr>";
-                                    echo "<td>" . $row["id"] . "</td>";
-                                    echo "<td>" . $row["firstname"] . "</td>";
-                                    echo "<td>" . $row["lastname"] . "</td>";
-                                    echo "<td>" . $row["email"] . "</td>";
-                                    echo "<td>" . $row["phone_number"] . "</td>";
-                                    echo "<td>" . $row["birthday"] . "</td>";
-                                    echo "<td>" . $row["role"] . "</td>";
-                                    echo "<td>
-                                            <button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '" . $row['birthday'] . "', '" . $row['role'] . "')\">Edit</button>
-                                            <button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\">Remove</button>
-                                          </td>";
-                                    echo "</tr>";
-                                }
-                            } else {
-                                echo "<tr><td colspan='8'>No admin accounts found</td></tr>";
-                            }
+// Display Admin Accounts
+if ($result_admin->num_rows > 0) {
+    while ($row = $result_admin->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>" . $row["id"] . "</td>";
+        echo "<td>" . $row["firstname"] . "</td>";
+        echo "<td>" . $row["lastname"] . "</td>";
+        echo "<td>" . $row["email"] . "</td>";
+        echo "<td>" . $row["phone_number"] . "</td>";
+        echo "<td>" . $row["birthday"] . "</td>";
+        echo "<td>" . $row["role"] . "</td>";
 
-                            $conn->close();
-                            ?>
+        // Separate Edit and Remove buttons into different cells
+        echo "<td>";
+        echo "<button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '" . $row['birthday'] . "', '" . $row['role'] . "')\"><i class='fa fa-edit'></i></button>";
+        echo "</td>";
+        echo "<td>";
+        echo "<button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\"><i class='fa fa-trash'></i></button>";
+        echo "</td>";
+
+        echo "</tr>";
+    }
+} else {
+    echo "<tr><td colspan='8'>No admin accounts found</td></tr>";
+}
+
+$conn->close();
+?>
+
                         </tbody>
                     </table>
                 </div>
@@ -503,47 +509,53 @@ function updateSchoolDetails() {
                             <th>School Address</th>
                             <th>Barangay Name</th>
                             <th>Supervisor/Principal Name</th>
-                            <th>Action</th>
+                           
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        include 'accountconnection.php';
+                    <?php
+include 'accountconnection.php';
 
-                        // Fetch SBFP Accounts
-                        $sql_sbfp = "SELECT id, firstname, lastname, email, phone_number, birthday, role, `Division/Province`, school_district_municipality, school_name, beis_id, school_address, barangay_name, supervisor_principal_name FROM users WHERE role = 'sbfp'";
-                        $result_sbfp = $conn->query($sql_sbfp);
+// Fetch SBFP Accounts
+$sql_sbfp = "SELECT id, firstname, lastname, email, phone_number, birthday, role, `Division/Province`, school_district_municipality, school_name, beis_id, school_address, barangay_name, supervisor_principal_name FROM users WHERE role = 'sbfp'";
+$result_sbfp = $conn->query($sql_sbfp);
 
-                        // Display SBFP Accounts
-                        if ($result_sbfp->num_rows > 0) {
-                            while ($row = $result_sbfp->fetch_assoc()) {
-                                echo "<tr>";
-                                echo "<td>" . $row["id"] . "</td>";
-                                echo "<td>" . $row["firstname"] . "</td>";
-                                echo "<td>" . $row["lastname"] . "</td>";
-                                echo "<td>" . $row["email"] . "</td>";
-                                echo "<td>" . $row["phone_number"] . "</td>";
-                                echo "<td>" . $row["birthday"] . "</td>";
-                                echo "<td>" . $row["role"] . "</td>";
-                                echo "<td>" . $row["Division/Province"] . "</td>";
-                                echo "<td>" . $row["school_district_municipality"] . "</td>";
-                                echo "<td>" . $row["school_name"] . "</td>";
-                                echo "<td>" . $row["beis_id"] . "</td>";
-                                echo "<td>" . $row["school_address"] . "</td>";
-                                echo "<td>" . $row["barangay_name"] . "</td>";
-                                echo "<td>" . $row["supervisor_principal_name"] . "</td>";
-                                echo "<td>
-                                        <button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '" . $row['birthday'] . "', '" . $row['role'] . "', '" . $row['Division/Province'] . "', '" . $row['school_district_municipality'] . "', '" . $row['school_name'] . "', '" . $row['beis_id'] . "', '" . $row['school_address'] . "', '" . $row['barangay_name'] . "', '" . $row['supervisor_principal_name'] . "')\">Edit</button>
-                                        <button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\">Remove</button>
-                                      </td>";
-                                echo "</tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='14'>No SBFP accounts found</td></tr>";
-                        }
+// Display SBFP Accounts
+if ($result_sbfp->num_rows > 0) {
+    while ($row = $result_sbfp->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>" . $row["id"] . "</td>";
+        echo "<td>" . $row["firstname"] . "</td>";
+        echo "<td>" . $row["lastname"] . "</td>";
+        echo "<td>" . $row["email"] . "</td>";
+        echo "<td>" . $row["phone_number"] . "</td>";
+        echo "<td>" . $row["birthday"] . "</td>";
+        echo "<td>" . $row["role"] . "</td>";
+        echo "<td>" . $row["Division/Province"] . "</td>";
+        echo "<td>" . $row["school_district_municipality"] . "</td>";
+        echo "<td>" . $row["school_name"] . "</td>";
+        echo "<td>" . $row["beis_id"] . "</td>";
+        echo "<td>" . $row["school_address"] . "</td>";
+        echo "<td>" . $row["barangay_name"] . "</td>";
+        echo "<td>" . $row["supervisor_principal_name"] . "</td>";
 
-                        $conn->close();
-                        ?>
+        // Separate Edit and Remove buttons into different cells
+        echo "<td>";
+        echo "<button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '" . $row['birthday'] . "', '" . $row['role'] . "', '" . $row['Division/Province'] . "', '" . $row['school_district_municipality'] . "', '" . $row['school_name'] . "', '" . $row['beis_id'] . "', '" . $row['school_address'] . "', '" . $row['barangay_name'] . "', '" . $row['supervisor_principal_name'] . "')\"><i class='fa fa-edit'></i></button>";
+        echo "</td>";
+        echo "<td>";
+        echo "<button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\"><i class='fa fa-trash'></button>";
+        echo "</td>";
+        
+        echo "</tr>";
+    }
+} else {
+    echo "<tr><td colspan='14'>No SBFP accounts found</td></tr>";
+}
+
+$conn->close();
+?>
+
                     </tbody>
                 </table>
             </div>

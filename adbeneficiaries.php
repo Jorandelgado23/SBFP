@@ -206,12 +206,12 @@ $conn->close();
 </li>
 
                                         
-                                        <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+                                        
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
                                             
-                                        <a class="dropdown-toggle" data-toggle="dropdown">
+                                        <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i></a>
         <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
 
     <span class="name_user"><?php echo $user_role; ?></span>
@@ -285,7 +285,7 @@ if (!empty($search_term)) {
 
 <div class="container mt-4">
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <h2 class="h4 mb-4">Beneficiaries List</h2>
                 <!-- Search form -->
                 <form method="get" class="mb-3">
@@ -310,7 +310,7 @@ if (!empty($search_term)) {
                                         <?php foreach ($schools as $school_name => $school_data) : ?>
                                             <tr>
                                                 <td><?php echo htmlspecialchars($school_name); ?></td>
-                                                <td><a href="view_details.php?session_id=<?php echo urlencode($session_id); ?>" class="btn btn-primary">View</a></td>
+                                                <td><a href="view_details.php?session_id=<?php echo urlencode($session_id); ?>" class="btn btn-primary"><i class="fa fa-eye"></a></td>
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php endforeach; ?>

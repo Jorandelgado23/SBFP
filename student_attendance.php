@@ -112,7 +112,7 @@ $conn->close();
             width: 100%; /* Ensure the table fits within the screen width */
             border-collapse: collapse;
             margin-top: 20px;
-            overflow-x: auto; /* Enable horizontal scrolling if needed */
+            overflow-x: hidden; /* Enable horizontal scrolling if needed */
             display: block; /* Block layout to manage overflow */
         }
         table, th, td {
@@ -258,12 +258,12 @@ $conn->close();
 <?php endif; ?>
 </a>
 
-    <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
                                             
-                                        <a class="dropdown-toggle" data-toggle="dropdown">
+                                        <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>
         <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
 
     <span class="name_user"><?php echo $user_role; ?></span>
@@ -293,89 +293,101 @@ $conn->close();
                         </div>
                         <h2 class="h4 mb-4">Attendance & Meal Monitoring</h2>
                         <form method="post" action="download.php">
-    <button type="submit" name="action" value="excel" class="btn btn-success">Download Excel</button>
-    <button type="submit" name="action" value="pdf" class="btn btn-danger">Download PDF</button>
+    <!-- <button type="submit" name="action" value="excel" class="btn btn-success">Download Excel</button> -->
+    <button type="submit" name="action" value="pdf" class="btn btn-danger"><i class="fa fa-file-pdf-o"></i> Download PDF</button>
 </form>
 
-<div class="table_section padding_infor_info">
-    <div class="table-responsive-sm">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th rowspan="2">Name of Pupil</th>
-                    <th colspan="31">Actual Feeding</th>
-                </tr>
-                <tr>
-                    <!-- Days of the month (1 to 31) -->
-                    <?php for ($i = 1; $i <= 31; $i++) { echo "<th>$i</th>"; } ?>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $servername = "localhost";
-                $username = "root";
-                $password = "";
-                $dbname = "sbfp";
+<div>
+   <!-- table section -->
+<div class="col-md-13">
+    <div class="white_shd full margin_bottom_30">
+        <div class="full graph_head">
+            <div class="heading1 margin_0">
+                <h2>Feeding Attendance Table</h2>
+            </div>
+        </div>
+        <div class="table_section padding_infor_info">
+            <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Name of Pupil</th>
+                            <th colspan="31">Actual Feeding</th>
+                        </tr>
+                        <tr>
+                            <!-- Days of the month (1 to 31) -->
+                            <?php for ($i = 1; $i <= 31; $i++) { echo "<th>$i</th>"; } ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $servername = "localhost";
+                        $username = "root";
+                        $password = "";
+                        $dbname = "sbfp";
 
-                // Create connection
-                $conn = new mysqli($servername, $username, $password, $dbname);
+                        // Create connection
+                        $conn = new mysqli($servername, $username, $password, $dbname);
 
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
-                }
-
-                // Retrieve session_id of the logged-in user
-                $email = $_SESSION['email'];
-                $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
-                $stmt->bind_param("s", $email);
-                $stmt->execute();
-                $stmt->store_result();
-                $stmt->bind_result($session_id);
-                $stmt->fetch();
-                $stmt->close();
-
-                // Fetch submitted data for the logged-in user
-                $sql = "SELECT * FROM beneficiary_details WHERE session_id = ? ORDER BY name";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("s", $session_id);
-                $stmt->execute();
-                $result = $stmt->get_result();
-
-                if ($result->num_rows > 0) {
-                    // Loop through each student
-                    while ($row = $result->fetch_assoc()) {
-                        echo '<tr>';
-                        // Display student name
-                        echo '<td>' . $row['name'] . '</td>';
-                        // Display 31 columns for feeding days
-                        for ($i = 1; $i <= 31; $i++) {
-                            echo '<td></td>'; // Empty cells for each day
+                        // Check connection
+                        if ($conn->connect_error) {
+                            die("Connection failed: " . $conn->connect_error);
                         }
-                        echo '</tr>';
-                    }
-                } else {
-                    // Placeholder rows if no data is found
-                    for ($i = 1; $i <= 25; $i++) {
-                        echo '<tr>';
-                        echo '<td>Pupil ' . $i . '</td>';
-                        echo '<td colspan="31"></td>';
-                        echo '</tr>';
-                    }
-                }
-                $conn->close();
-                ?>
-                <!-- Total row with non-editable boxes -->
-                <tr>
-                    <td>Total</td>
-                    <?php for ($i = 1; $i <= 31; $i++): ?>
-                        <td style="border: 1px solid #000; padding: 5px; text-align: center;"></td>
-                    <?php endfor; ?>
-                </tr>
-            </tbody>
-        </table>
+
+                        // Retrieve session_id of the logged-in user
+                        $email = $_SESSION['email'];
+                        $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+                        $stmt->bind_param("s", $email);
+                        $stmt->execute();
+                        $stmt->store_result();
+                        $stmt->bind_result($session_id);
+                        $stmt->fetch();
+                        $stmt->close();
+
+                        // Fetch submitted data for the logged-in user
+                        $sql = "SELECT * FROM beneficiary_details WHERE session_id = ? ORDER BY name";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->bind_param("s", $session_id);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+
+                        if ($result->num_rows > 0) {
+                            // Loop through each student
+                            while ($row = $result->fetch_assoc()) {
+                                echo '<tr>';
+                                // Display student name
+                                echo '<td>' . $row['name'] . '</td>';
+                                // Display 31 columns for feeding days
+                                for ($i = 1; $i <= 31; $i++) {
+                                    echo '<td></td>'; // Empty cells for each day
+                                }
+                                echo '</tr>';
+                            }
+                        } else {
+                            // Placeholder rows if no data is found
+                            for ($i = 1; $i <= 25; $i++) {
+                                echo '<tr>';
+                                echo '<td>Pupil ' . $i . '</td>';
+                                echo '<td colspan="31"></td>';
+                                echo '</tr>';
+                            }
+                        }
+                        $conn->close();
+                        ?>
+                        <!-- Total row with non-editable boxes -->
+                        <tr>
+                            <td>Total</td>
+                            <?php for ($i = 1; $i <= 31; $i++): ?>
+                                <td style="text-align: center;"></td>
+                            <?php endfor; ?>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
+
 
 
 

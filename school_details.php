@@ -260,7 +260,7 @@ $conn->close();
     </div>
 
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <div class="white_shd full margin_bottom_0">
                 <div class="full graph_head">
                     <div class="heading1 margin_0">

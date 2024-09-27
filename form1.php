@@ -216,12 +216,12 @@ $conn->close();
 <?php endif; ?>
 </a>
 
-    <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+  
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
                                             
-                                        <a class="dropdown-toggle" data-toggle="dropdown">
+                                        <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>
         <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
 
     <span class="name_user"><?php echo $user_role; ?></span>
@@ -259,7 +259,7 @@ $conn->close();
             <div>
                 <div>
                     <p class="card-text">Click the button below to fill out the form.</p>
-                    <button type="button" class="btn mb-2 btn-outline-secondary" data-toggle="modal" data-target="#sbfpModal" data-whatever="@mdo">Open Form</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sbfpModal" data-whatever="@mdo"><i class="fa fa-plus"> </i>Open Form</button>
                 </div>
             </div>
         </div>
@@ -347,59 +347,60 @@ $stmt->close();
                     </div>
                     <h2 class="mt-4">Beneficiary Details</h2>
                     <div id="beneficiary_details">
-                        <div class="beneficiary mt-3 border rounded p-3">
-                            <div class="row">
-                            <div class="form-group col-md-6">
-    <label for="lrn_no" class="form-label">LRN Number:</label>
-    <input type="text" class="form-control" id="lrn_no" name="lrn_no[]" required>
-    <div class="invalid-feedback">
-        Please provide the LRN number.
-    </div>
-</div>
+    <div class="beneficiary mt-3 border rounded p-3">
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="lrn_no" class="form-label">LRN Number:</label>
+                <input type="text" class="form-control" id="lrn_no" name="lrn_no[]" required>
+                <div class="invalid-feedback">
+                    Please provide the LRN number.
+                </div>
+            </div>
 
-<div class="form-group col-md-6">
-    <label for="student_section" class="form-label">Student Section:</label>
-    <input type="text" class="form-control" id="student_section" name="student_section[]" required>
-    <div class="invalid-feedback">
-        Please provide the student section.
-    </div>
-</div>
+            <div class="form-group col-md-6">
+                <label for="beneficiary_name" class="form-label">Name:</label>
+                <input type="text" class="form-control" id="beneficiary_name" name="beneficiary_name[]" required>
+                <div class="invalid-feedback">
+                    Please provide the beneficiary name.
+                </div>
+            </div>
 
+            <div class="form-group col-md-6">
+                <label for="student_section" class="form-label">Student Section:</label>
+                <input type="text" class="form-control" id="student_section" name="student_section[]" required>
+                <div class="invalid-feedback">
+                    Please provide the student section.
+                </div>
+            </div>
 
-                                <div class="form-group col-md-6">
-                                    <label for="beneficiary_name" class="form-label">Name:</label>
-                                    <input type="text" class="form-control" id="beneficiary_name" name="beneficiary_name[]" required>
-                                    <div class="invalid-feedback">
-                                        Please provide the beneficiary name.
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="beneficiary_sex" class="form-label">Sex:</label>
-                                    <select class="form-control" id="beneficiary_sex" name="beneficiary_sex[]" required>
-                                        <option value="" disabled selected>Choose...</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        Please select the sex of the beneficiary.
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="beneficiary_grade_section" class="form-label">Grade/Section:</label>
-                                    <select class="form-control" id="beneficiary_grade_section" name="beneficiary_grade_section[]" required>
-                                        <option value="" disabled selected>Choose...</option>
-                                        <option value="Kinder">Kinder</option>
-                                        <option value="Grade 1">Grade 1</option>
-                                        <option value="Grade 2">Grade 2</option>
-                                        <option value="Grade 3">Grade 3</option>
-                                        <option value="Grade 4">Grade 4</option>
-                                        <option value="Grade 5">Grade 5</option>
-                                        <option value="Grade 6">Grade 6</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        Please provide the grade/section of the beneficiary.
-                                    </div>
-                                </div>
+            <div class="form-group col-md-6">
+                <label for="beneficiary_sex" class="form-label">Sex:</label>
+                <select class="form-control" id="beneficiary_sex" name="beneficiary_sex[]" required>
+                    <option value="" disabled selected>Choose...</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+                <div class="invalid-feedback">
+                    Please select the sex of the beneficiary.
+                </div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="beneficiary_grade_section" class="form-label">Grade Level:</label>
+                <select class="form-control" id="beneficiary_grade_section" name="beneficiary_grade_section[]" required>
+                    <option value="" disabled selected>Choose...</option>
+                    <option value="Kinder">Kinder</option>
+                    <option value="Grade 1">Grade 1</option>
+                    <option value="Grade 2">Grade 2</option>
+                    <option value="Grade 3">Grade 3</option>
+                    <option value="Grade 4">Grade 4</option>
+                    <option value="Grade 5">Grade 5</option>
+                    <option value="Grade 6">Grade 6</option>
+                </select>
+                <div class="invalid-feedback">
+                    Please provide the grade/section of the beneficiary.
+                </div>
+            </div>
 
                                 
 
@@ -632,6 +633,28 @@ if (!empty($selected_grade)) {
 $stmt->execute();
 $result = $stmt->get_result();
 
+// Function to partially mask the student's name
+function maskName($name) {
+    $parts = explode(' ', $name);
+    $maskedName = '';
+
+    // Mask the first name
+    if (isset($parts[0])) {
+        $firstName = $parts[0];
+        $maskedFirstName = substr($firstName, 0, 1) . str_repeat('*', strlen($firstName) - 1);
+        $maskedName = $maskedFirstName;
+    }
+
+    // Mask the last name
+    if (isset($parts[1])) {
+        $lastName = $parts[1];
+        $maskedLastName = substr($lastName, 0, 1) . str_repeat('*', strlen($lastName) - 1);
+        $maskedName .= ' ' . $maskedLastName;
+    }
+
+    return $maskedName;
+}
+
 ?>
 
 <div class="container-fluid">
@@ -660,14 +683,16 @@ $result = $stmt->get_result();
               </form>
             </div>
             <div class="table_section padding_infor_info">
-                                 <div class="table-responsive-sm">
-                                    <table class="table table-bordered">
-                  <thead class='thead-light'>
+              <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                  <thead>
                     <tr>
-                      <th>No.</th>
+                      <th style="display:none;">No.</th> <!-- Hidden column -->
+                      <th>LRN No.</th>
                       <th>Name</th>
                       <th>Sex</th>
-                      <th>Grade/Section</th>
+                      <th>Grade Level</th>
+                      <th>Student Section</th>
                       <th>Date of Birth</th>
                       <th>Date of Weighing</th>
                       <th>Age</th>
@@ -680,41 +705,55 @@ $result = $stmt->get_result();
                       <th>Parent's consent for milk?</th>
                       <th>Participation in 4Ps?</th>
                       <th>Beneficiary of SBFP in Previous Years?</th>
-                      <th>Actions</th>
+                     
                     </tr>
                   </thead>
                   <tbody>
-                    <?php
-                    if ($result->num_rows > 0) {
-                        $count = 1;
-                        // Output data of each row
-                        while ($row = $result->fetch_assoc()) {
-                            echo "<tr>";
-                            echo "<td>" . $count++ . "</td>";
-                            echo "<td>" . $row["name"] . "</td>";
-                            echo "<td>" . $row["sex"] . "</td>";
-                            echo "<td>" . $row["grade_section"] . "</td>";
-                            echo "<td>" . $row["date_of_birth"] . "</td>";
-                            echo "<td>" . $row["date_of_weighing"] . "</td>";
-                            echo "<td>" . $row["age"] . "</td>";
-                            echo "<td>" . $row["weight"] . "</td>";
-                            echo "<td>" . $row["height"] . "</td>";
-                            echo "<td>" . $row["bmi"] . "</td>";
-                            echo "<td>" . $row["nutritional_status_bmia"] . "</td>";
-                            echo "<td>" . $row["nutritional_status_hfa"] . "</td>";
-                            echo "<td>" . $row["dewormed"] . "</td>";
-                            echo "<td>" . $row["parents_consent_for_milk"] . "</td>";
-                            echo "<td>" . $row["participation_in_4ps"] . "</td>";
-                            echo "<td>" . $row["beneficiary_of_sbfp_in_previous_years"] . "</td>";
-                            echo "<td><button class='btn btn-primary edit-btn' data-id='" . $row["id"] . "'>Edit</button> <button class='btn btn-danger remove-btn' data-id='" . $row["id"] . "'>Remove</button></td>";
-                            echo "</tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='17'>No data available</td></tr>";
-                    }
-                    $stmt->close();
-                    $conn->close();
-                    ?>
+                  <?php
+if ($result->num_rows > 0) {
+    $count = 1;
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td style='display:none;'>" . $count++ . "</td>"; // Hidden column
+        echo "<td>" . $row["lrn_no"] . "</td>";
+        echo "<td>" . maskName($row["name"]) . "</td>"; // Masked name
+        echo "<td>" . $row["sex"] . "</td>";
+        echo "<td>" . $row["grade_section"] . "</td>";
+        echo "<td>" . $row["student_section"] . "</td>";
+        echo "<td>" . $row["date_of_birth"] . "</td>";
+        echo "<td>" . $row["date_of_weighing"] . "</td>";
+        echo "<td>" . $row["age"] . "</td>";
+        echo "<td>" . $row["weight"] . "</td>";
+        echo "<td>" . $row["height"] . "</td>";
+        echo "<td>" . $row["bmi"] . "</td>";
+        echo "<td>" . $row["nutritional_status_bmia"] . "</td>";
+        echo "<td>" . $row["nutritional_status_hfa"] . "</td>";
+        echo "<td>" . $row["dewormed"] . "</td>";
+        echo "<td>" . $row["parents_consent_for_milk"] . "</td>";
+        echo "<td>" . $row["participation_in_4ps"] . "</td>";
+        echo "<td>" . $row["beneficiary_of_sbfp_in_previous_years"] . "</td>";
+        
+        // Separate Edit and Delete buttons into different cells
+        echo "<td>";
+        echo "<button class='btn btn-primary edit-btn' data-id='" . $row["id"] . "'>";
+        echo "<i class='fa fa-edit'></i> ";
+        echo "</button>";
+        echo "</td>";
+        echo "<td>";
+        echo "<button class='btn btn-danger remove-btn' data-id='" . $row["id"] . "'>";
+        echo "<i class='fa fa-trash'></i> ";
+        echo "</button>";
+        echo "</td>";
+
+        echo "</tr>";
+    }
+} else {
+    echo "<tr><td colspan='18'>No data available</td></tr>";
+}
+$stmt->close();
+$conn->close();
+?>
+
                   </tbody>
                 </table>
               </div>
@@ -725,6 +764,8 @@ $result = $stmt->get_result();
     </div>
   </div>
 </div>
+
+
 
 
 
@@ -742,10 +783,17 @@ $result = $stmt->get_result();
       <div class="modal-body">
         <form id="editForm">
           <input type="hidden" id="edit-id">
+
+          <div class="form-group">
+            <label for="edit-lrn_no">LRN (Learner Reference Number)</label>
+            <input type="text" class="form-control" id="edit-lrn_no" required>
+          </div>
+
           <div class="form-group">
             <label for="edit-name">Name</label>
             <input type="text" class="form-control" id="edit-name" required>
           </div>
+
           <div class="form-group">
             <label for="edit-sex">Sex</label>
             <select class="form-control" id="edit-sex" required>
@@ -753,55 +801,58 @@ $result = $stmt->get_result();
               <option value="Female">Female</option>
             </select>
           </div>
+
           <div class="form-group">
             <label for="edit-grade_section">Grade/Section</label>
             <input type="text" class="form-control" id="edit-grade_section" required>
           </div>
+
+          <div class="form-group">
+            <label for="edit-student_section">Student Section</label>
+            <input type="text" class="form-control" id="edit-student_section" required>
+          </div>
+
           <div class="form-group">
             <label for="edit-date_of_birth">Date of Birth</label>
             <input type="date" class="form-control" id="edit-date_of_birth" required>
           </div>
+
           <div class="form-group">
             <label for="edit-date_of_weighing">Date of Weighing</label>
             <input type="date" class="form-control" id="edit-date_of_weighing" required>
           </div>
+
           <div class="form-group">
             <label for="edit-age">Age</label>
             <input type="text" class="form-control" id="edit-age" readonly>
           </div>
+
           <div class="form-group">
             <label for="edit-weight">Weight (Kg)</label>
             <input type="number" class="form-control" id="edit-weight" step="0.01" required>
           </div>
+
           <div class="form-group">
             <label for="edit-height">Height (cm)</label>
             <input type="number" class="form-control" id="edit-height" step="0.01" required>
           </div>
+
           <div class="form-group">
             <label for="edit-bmi">BMI</label>
             <input type="text" class="form-control" id="edit-bmi" readonly>
           </div>
+
           <div class="form-group">
             <label for="edit-nutritional_status_bmia">Nutritional Status (BMI-A)</label>
-            <select class="form-control" id="edit-nutritional_status_bmia" required>
-              <option value="Severely Wasted">Severely Wasted</option>
-              <option value="Wasted">Wasted</option>
-              <option value="Normal">Normal</option>
-              <option value="Overweight">Overweight</option>
-              <option value="Obese">Obese</option>
-            </select>
+            <input type="text" class="form-control" id="edit-nutritional_status_bmia" readonly>
           </div>
+
           <div class="form-group">
             <label for="edit-nutritional_status_hfa">Nutritional Status (HFA)</label>
-            <select class="form-control" id="edit-nutritional_status_hfa" required>
-              <option value="Stunted">Stunted</option>
-              <option value="Normal">Normal</option>
-              <option value="Tall">Tall</option>
-            </select>
+            <input type="text" class="form-control" id="edit-nutritional_status_hfa" readonly>
           </div>
-          <button type="button" class="btn btn-primary" id="saveChanges">Save Changes</button>
 
-          
+          <button type="button" class="btn btn-primary" id="saveChanges">Save Changes</button>
         </form>
       </div>
     </div>
@@ -809,40 +860,96 @@ $result = $stmt->get_result();
 </div>
 
 
+
+
 <script>
 $(document).ready(function() {
-  // Handle Edit button click
-  $('.edit-btn').on('click', function() {
-    var id = $(this).data('id');
-    $.ajax({
-      url: 'fetch_beneficiary.php',
-      type: 'post',
-      data: { id: id },
-      success: function(response) {
-        response = JSON.parse(response);
-        $('#edit-id').val(response.id);
-        $('#edit-name').val(response.name);
-        $('#edit-sex').val(response.sex);
-        $('#edit-grade_section').val(response.grade_section);
-        $('#edit-date_of_birth').val(response.date_of_birth);
-        $('#edit-date_of_weighing').val(response.date_of_weighing);
-        $('#edit-age').val(response.age);
-        $('#edit-weight').val(response.weight);
-        $('#edit-height').val(response.height);
-        $('#edit-bmi').val(response.bmi);
-        $('#edit-nutritional_status_bmia').val(response.nutritional_status_bmia);
-        $('#edit-nutritional_status_hfa').val(response.nutritional_status_hfa);
-        $('#editModal').modal('show');
-      }
+    // Nutritional Status Calculation Function
+    function calculateNutritionalStatus(bmi, beneficiary) {
+        // Calculate BMI-A
+        let nutritionalStatusBMI = "Normal";
+        if (bmi < 16) {
+            nutritionalStatusBMI = "Severely Wasted";
+        } else if (bmi < 18.5) {
+            nutritionalStatusBMI = "Wasted";
+        } else if (bmi >= 25 && bmi < 30) {
+            nutritionalStatusBMI = "Overweight";
+        } else if (bmi >= 30) {
+            nutritionalStatusBMI = "Obese";
+        }
+        beneficiary.querySelector('#edit-nutritional_status_bmia').value = nutritionalStatusBMI;
+
+        // Calculate HFA
+        const height = parseFloat(beneficiary.querySelector('#edit-height').value);
+        const dob = beneficiary.querySelector('#edit-date_of_birth').value;
+        if (height && dob) {
+            const birthDate = new Date(dob);
+            const now = new Date();
+            const ageMonths = (now.getFullYear() - birthDate.getFullYear()) * 12 + now.getMonth() - birthDate.getMonth();
+            let nutritionalStatusHFA = "Normal";
+
+            // Example thresholds; replace with your actual criteria
+            if (ageMonths < 60 && height < 90) {
+                nutritionalStatusHFA = "Stunted";
+            } else if (ageMonths >= 60 && ageMonths < 120 && height < 115) {
+                nutritionalStatusHFA = "Stunted";
+            } else if (ageMonths >= 120 && height < 130) {
+                nutritionalStatusHFA = "Stunted";
+            } else if (ageMonths < 60 && height > 110) {
+                nutritionalStatusHFA = "Tall";
+            } else if (ageMonths >= 60 && ageMonths < 120 && height > 140) {
+                nutritionalStatusHFA = "Tall";
+            } else if (ageMonths >= 120 && height > 160) {
+                nutritionalStatusHFA = "Tall";
+            }
+            beneficiary.querySelector('#edit-nutritional_status_hfa').value = nutritionalStatusHFA;
+        }
+    }
+
+    // Handle Edit button click
+    $('.edit-btn').on('click', function() {
+        var id = $(this).data('id');
+        $.ajax({
+            url: 'fetch_beneficiary.php',
+            type: 'post',
+            data: { id: id },
+            success: function(response) {
+                response = JSON.parse(response);
+                $('#edit-id').val(response.id);
+                $('#edit-lrn_no').val(response.lrn_no);  // Add LRN field
+                $('#edit-name').val(response.name);
+                $('#edit-sex').val(response.sex);
+                $('#edit-grade_section').val(response.grade_section);
+                $('#edit-student_section').val(response.student_section);  // Add Student Section field
+                $('#edit-date_of_birth').val(response.date_of_birth);
+                $('#edit-date_of_weighing').val(response.date_of_weighing);
+                $('#edit-age').val(response.age);
+                $('#edit-weight').val(response.weight);
+                $('#edit-height').val(response.height);
+                
+                // Calculate BMI
+                const weight = parseFloat(response.weight);
+                const heightInMeters = parseFloat(response.height) / 100; // Convert cm to m
+                const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2); // Calculate BMI
+                $('#edit-bmi').val(bmi);
+                
+                // Calculate Nutritional Status
+                calculateNutritionalStatus(bmi, document.getElementById('editModal'));
+
+                $('#editModal').modal('show');
+            }
+        });
     });
-  });
+
 
   // Handle Save Changes button click
   $('#saveChanges').on('click', function() {
     var id = $('#edit-id').val();
+    var lrn_no = $('#edit-lrn_no').val();  // Add LRN field
     var name = $('#edit-name').val();
     var sex = $('#edit-sex').val();
     var grade_section = $('#edit-grade_section').val();
+    var student_section = $('#edit-student_section').val();  // Add Student Section field
     var date_of_birth = $('#edit-date_of_birth').val();
     var date_of_weighing = $('#edit-date_of_weighing').val();
     var age = $('#edit-age').val();
@@ -856,9 +963,11 @@ $(document).ready(function() {
       type: 'post',
       data: {
         id: id,
+        lrn_no: lrn_no,  // Add LRN field
         name: name,
         sex: sex,
         grade_section: grade_section,
+        student_section: student_section,  // Add Student Section field
         date_of_birth: date_of_birth,
         date_of_weighing: date_of_weighing,
         age: age,
@@ -891,7 +1000,6 @@ $(document).ready(function() {
       });
     }
   });
-
   // Auto-compute age
   $('#edit-date_of_birth, #edit-date_of_weighing').on('change', function() {
     var dob = new Date($('#edit-date_of_birth').val());

@@ -67,9 +67,9 @@ $log_stmt->close();
 // Insert into sbfp_recent_activity for SBFP role only
 if ($role === 'sbfp') {
     $sbfp_activity_stmt = $conn->prepare("INSERT INTO sbfp_recent_activity (activity, email, activity_type, timestamp) VALUES (?, ?, ?, ?)");
-    $log_stmt->bind_param("ssss", $activity, $email, $activity_type, $timestamp);
+    $sbfp_activity_stmt->bind_param("ssss", $activity, $email, $activity_type, $timestamp);
     $sbfp_activity_stmt->execute();
-    $sbfp_activity_stmt->close();
+    $sbfp_activity_stmt->close(); // Close the SBFP statement here
 }
 
 // Close connection

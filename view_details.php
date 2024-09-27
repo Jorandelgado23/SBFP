@@ -162,15 +162,56 @@ $conn->close();
                             </div>
                             <div class="right_topbar">
                                 <div class="icon_info">
-                                    <ul>
-                                        <li><a href="#"><i class="fa fa-bell-o"></i><span class="badge">2</span></a></li>
-                                        <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+                                <ul>
+                                    <li>
+
+                                    <?php
+// Fetch recent activities from database
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Query recent activities count with status 'new'
+$sql = "SELECT COUNT(*) AS activity_count FROM recent_activity WHERE status = 'new'";
+$result = $conn->query($sql);
+
+// Get activity count
+$activity_count = 0;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $activity_count = $row['activity_count'];
+}
+
+// Close connection
+$conn->close();
+?>
+
+
+<a href="allactivities.php?mark_read=true">
+    <i class="fa fa-bell-o"></i>
+    <?php if ($activity_count > 0): ?>
+        <span class="badge"><?php echo $activity_count; ?></span>
+    <?php endif; ?>
+</a>
+
+</li>
+
+                                        
+                                       
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
                                             
-                                        <a class="dropdown-toggle" data-toggle="dropdown">
+                                        <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>
         <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
 
     <span class="name_user"><?php echo $user_role; ?></span>
@@ -206,7 +247,7 @@ $conn->close();
                         <div class="row">
     <div class="col-sm-6">
         <form action="adbeneficiaries.php" method="get">
-            <button type="submit" class="btn btn-primary">Back</button>
+            <button type="submit" class="btn btn-primary"> Back</button>
         </form>
     </div>
     <div class="col ml-auto">
@@ -305,7 +346,7 @@ if (isset($_GET['session_id'])) {
                                 <h2>Beneficiary Details</h2>
                             </div>
                         </div>
-                        <div class='table_section padding_infor_info'>";
+                       ";
 
             // Print tables for each grade level
             foreach ($beneficiaries_by_grade as $grade => $details) {

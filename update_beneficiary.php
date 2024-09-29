@@ -50,6 +50,8 @@ $sql = "UPDATE beneficiary_details
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ssssssssssssss", $lrn_no, $name, $sex, $grade_section, $student_section, $date_of_birth, $date_of_weighing, $age, $weight, $height, $bmi, $nutritional_status_bmia, $nutritional_status_hfa, $id);
 
+$response = array(); // Initialize response array
+
 if ($stmt->execute()) {
     // Log the activity if the email is set and the role is 'sbfp'
     if (isset($_SESSION['email']) && $_SESSION['role'] === 'sbfp') {
@@ -69,11 +71,17 @@ if ($stmt->execute()) {
         $sbfp_activity_stmt->execute();
         $sbfp_activity_stmt->close();
     }
-    
-    echo "Record updated successfully";
+
+    $response['success'] = true; // Indicate success
+    $response['message'] = "Record updated successfully"; // Success message
 } else {
-    echo "Error updating record: " . $stmt->error;
+    $response['success'] = false; // Indicate failure
+    $response['message'] = "Error updating record: " . $stmt->error; // Error message
 }
+
+// Output response as JSON
+header('Content-Type: application/json');
+echo json_encode($response);
 
 // Close the statement and connection
 $stmt->close();

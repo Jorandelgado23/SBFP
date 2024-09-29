@@ -221,7 +221,34 @@ $conn->close();
 
 <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="adsettings.php">My Profile</a>
-                                                <a class="dropdown-item" href="logout.php"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                                                <a class="dropdown-item" href="#" id="logoutLink">
+    <span>Log Out</span> <i class="fa fa-sign-out"></i>
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.getElementById('logoutLink').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default link action
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out of your account!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, log me out!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to logout.php if confirmed
+                window.location.href = 'logout.php';
+            }
+        });
+    });
+</script>
+
                                             </div>
                                         </li>
                                     </ul>
@@ -432,8 +459,6 @@ function updateSchoolDetails() {
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Email</th>
-                                <th>Phone Number</th>
-                                <th>Birthday</th>
                                 <th>Role</th>
                                 
                             </tr>
@@ -443,7 +468,7 @@ function updateSchoolDetails() {
 include 'accountconnection.php';
 
 // Fetch Admin Accounts
-$sql_admin = "SELECT id, firstname, lastname, email, phone_number, birthday, role FROM users WHERE role = 'admin'";
+$sql_admin = "SELECT id, firstname, lastname, email, role FROM users WHERE role = 'admin'"; // Removed phone_number and birthday
 $result_admin = $conn->query($sql_admin);
 
 // Display Admin Accounts
@@ -454,26 +479,23 @@ if ($result_admin->num_rows > 0) {
         echo "<td>" . $row["firstname"] . "</td>";
         echo "<td>" . $row["lastname"] . "</td>";
         echo "<td>" . $row["email"] . "</td>";
-        echo "<td>" . $row["phone_number"] . "</td>";
-        echo "<td>" . $row["birthday"] . "</td>";
         echo "<td>" . $row["role"] . "</td>";
 
-        // Separate Edit and Remove buttons into different cells
+        // Separate Edit and Remove buttons into a single cell
         echo "<td>";
-        echo "<button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '" . $row['birthday'] . "', '" . $row['role'] . "')\"><i class='fa fa-edit'></i></button>";
-        echo "</td>";
-        echo "<td>";
+        echo "<button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['role'] . "')\"><i class='fa fa-edit'></i></button>";
         echo "<button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\"><i class='fa fa-trash'></i></button>";
         echo "</td>";
 
         echo "</tr>";
     }
 } else {
-    echo "<tr><td colspan='8'>No admin accounts found</td></tr>";
+    echo "<tr><td colspan='6'>No admin accounts found</td></tr>"; // Updated colspan
 }
 
 $conn->close();
 ?>
+
 
                         </tbody>
                     </table>
@@ -676,6 +698,8 @@ $conn->close();
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     let editUserModal = document.getElementById('editUserModal');
     let removeUserModal = document.getElementById('removeUserModal');
@@ -683,24 +707,23 @@ $conn->close();
     let removeUserId;
 
     function editUser(id, firstname, lastname, email, phone_number, birthday, role, division_province, school_district_municipality, school_name, beis_id, school_address, barangay_name, supervisor_principal_name) {
-    document.getElementById('editUserId').value = id;
-    document.getElementById('editFirstName').value = firstname;
-    document.getElementById('editLastName').value = lastname;
-    document.getElementById('editEmail').value = email;
-    document.getElementById('editPhoneNumber').value = phone_number;
-    document.getElementById('editBirthday').value = birthday;
-    document.getElementById('editRole').value = role;
-    document.getElementById('editDivisionProvince').value = division_province;
-    document.getElementById('editSchoolDistrict').value = school_district_municipality;
-    document.getElementById('editSchoolName').value = school_name;
-    document.getElementById('editBEISID').value = beis_id;
-    document.getElementById('editSchoolAddress').value = school_address;
-    document.getElementById('editBarangayName').value = barangay_name;
-    document.getElementById('editSupervisorPrincipal').value = supervisor_principal_name;
-    
-    $('#editUserModal').modal('show');
-}
+        document.getElementById('editUserId').value = id;
+        document.getElementById('editFirstName').value = firstname;
+        document.getElementById('editLastName').value = lastname;
+        document.getElementById('editEmail').value = email;
+        document.getElementById('editPhoneNumber').value = phone_number;
+        document.getElementById('editBirthday').value = birthday;
+        document.getElementById('editRole').value = role;
+        document.getElementById('editDivisionProvince').value = division_province;
+        document.getElementById('editSchoolDistrict').value = school_district_municipality;
+        document.getElementById('editSchoolName').value = school_name;
+        document.getElementById('editBEISID').value = beis_id;
+        document.getElementById('editSchoolAddress').value = school_address;
+        document.getElementById('editBarangayName').value = barangay_name;
+        document.getElementById('editSupervisorPrincipal').value = supervisor_principal_name;
 
+        $('#editUserModal').modal('show');
+    }
 
     function removeUser(id) {
         removeUserId = id;
@@ -710,15 +733,38 @@ $conn->close();
     document.getElementById('editUserForm').addEventListener('submit', function(e) {
         e.preventDefault();
         let formData = new FormData(this);
+        
         fetch('edit_user.php', {
             method: 'POST',
             body: formData
         }).then(response => response.json()).then(data => {
             if (data.success) {
-                location.reload();
+                // Show success message
+                Swal.fire({
+                    icon: 'success',
+                    title: 'User Updated!',
+                    text: 'The user has been successfully updated.',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    location.reload();
+                });
             } else {
-                alert('Error updating user');
+                // Show error message
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'There was an error updating the user. Please try again.',
+                    confirmButtonText: 'OK'
+                });
             }
+        }).catch(error => {
+            // Handle fetch errors
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'There was a problem with the request. Please try again later.',
+                confirmButtonText: 'OK'
+            });
         });
     });
 
@@ -731,30 +777,79 @@ $conn->close();
             body: JSON.stringify({ id: removeUserId })
         }).then(response => response.json()).then(data => {
             if (data.success) {
-                location.reload();
-            } else {    
-                alert('Error removing user');
+                // Show success message
+                Swal.fire({
+                    icon: 'success',
+                    title: 'User Removed!',
+                    text: 'The user has been successfully removed.',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                // Show error message
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'There was an error removing the user. Please try again.',
+                    confirmButtonText: 'OK'
+                });
             }
+        }).catch(error => {
+            // Handle fetch errors
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'There was a problem with the request. Please try again later.',
+                confirmButtonText: 'OK'
+            });
         });
     });
 </script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     document.getElementById('createUserForm').addEventListener('submit', function(e) {
         e.preventDefault();
         let formData = new FormData(this);
+
         fetch('create_user.php', {
             method: 'POST',
             body: formData
         }).then(response => response.json()).then(data => {
             if (data.success) {
-                location.reload();
+                // Show success message
+                Swal.fire({
+                    icon: 'success',
+                    title: 'User Created!',
+                    text: 'The user has been successfully created.',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    location.reload();
+                });
             } else {
-                alert('Error creating user');
+                // Show error message
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'There was an error creating the user. Please try again.',
+                    confirmButtonText: 'OK'
+                });
             }
+        }).catch(error => {
+            // Handle fetch errors
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'There was a problem with the request. Please try again later.',
+                confirmButtonText: 'OK'
+            });
         });
     });
 </script>
+
 
 
             </div>

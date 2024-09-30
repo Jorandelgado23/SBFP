@@ -287,7 +287,7 @@ $conn->close();
                         </div>
                     </div>
                     <div class="full price_table padding_infor_info">
-                        <form action="update_profile.php" method="post" enctype="multipart/form-data">
+                        <form action="update_user_profile.php" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="id" value="<?php echo htmlspecialchars($user_id); ?>">
                             <div class="row align-items-center">
                                 <!-- <div class="col-lg-3">

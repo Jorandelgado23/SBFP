@@ -10,6 +10,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Retrieve POST data
 $role = $_POST['role'];
 $firstname = $_POST['firstname'];
 $lastname = $_POST['lastname'];
@@ -32,6 +33,7 @@ if ($role != 'admin') {
     $session_id = ''; // Set session ID to empty for 'admin' role
 }
 
+// Prepare SQL for inserting user data
 $sql = "INSERT INTO users (role, firstname, lastname, email, phone_number, birthday, password, session_id, `Division/Province`, school_district_municipality, school_name, beis_id, school_address, barangay_name, supervisor_principal_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("sssssssssssssss", $role, $firstname, $lastname, $email, $phone_number, $birthday, $password, $session_id, $division_province, $school_district_municipality, $school_name, $beis_id, $school_address, $barangay_name, $supervisor_principal_name);
@@ -39,6 +41,17 @@ $stmt->bind_param("sssssssssssssss", $role, $firstname, $lastname, $email, $phon
 $response = array();
 
 if ($stmt->execute()) {
+    // Log the activity if the insertion was successful
+    $activity = "Created user with email: $email"; // Log user creation
+    $activity_type = "create"; // Define the activity type
+    $timestamp = date("Y-m-d H:i:s");
+
+    // Prepare statement for logging recent_activity
+    $log_stmt = $conn->prepare("INSERT INTO recent_activity (activity, email, activity_type, timestamp) VALUES (?, ?, ?, ?)");
+    $log_stmt->bind_param("ssss", $activity, $email, $activity_type, $timestamp);
+    $log_stmt->execute();
+    $log_stmt->close();
+
     $response['success'] = true;
 } else {
     $response['success'] = false;

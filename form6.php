@@ -505,8 +505,6 @@ $conn->close();
 
 <?php
 
-
-
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['email'])) {
     header("Location: login.php");
@@ -526,6 +524,28 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Function to mask the name
+function maskName($name) {
+    $parts = explode(' ', $name);
+    $maskedName = '';
+
+    // Mask the first name
+    if (isset($parts[0])) {
+        $firstName = $parts[0];
+        $maskedFirstName = substr($firstName, 0, 1) . str_repeat('*', strlen($firstName) - 1);
+        $maskedName = $maskedFirstName;
+    }
+
+    // Mask the last name
+    if (isset($parts[1])) {
+        $lastName = $parts[1];
+        $maskedLastName = substr($lastName, 0, 1) . str_repeat('*', strlen($lastName) - 1);
+        $maskedName .= ' ' . $maskedLastName;
+    }
+
+    return $maskedName;
+}
+
 // Function to fetch and display the milk data table
 function displayMilkData($conn, $session_id) {
     $stmt = $conn->prepare("SELECT * FROM milkcomponent WHERE session_id = ?");
@@ -538,7 +558,7 @@ function displayMilkData($conn, $session_id) {
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <!-- <th>ID</th> -->
                         <th>Region/Division/District</th>
                         <th>Name of School</th>
                         <th>School ID Number</th>
@@ -550,33 +570,33 @@ function displayMilkData($conn, $session_id) {
                 </thead>
                 <tbody>
                 <?php
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        echo "<tr>
-                <td>{$row['id']}</td>
-                <td>{$row['region_division_district']}</td>
-                <td>{$row['name_of_school']}</td>
-                <td>{$row['school_id_number']}</td>
-                <td>{$row['student_name']}</td>
-                <td>{$row['grade_section']}</td>
-                <td>{$row['milk_tolerance']}</td>
-                <td>
-                    <button class='btn btn-warning' onclick='showEditModal({$row['id']}, \"{$row['milk_tolerance']}\")'>
-                        <i class='fa fa-edit'></i>
-                    </button>
-                </td>
-                <td>
-                    <button class='btn btn-danger' onclick='confirmDelete({$row['id']});'>
-                        <i class='fa fa-trash'></i>
-                    </button>
-                </td>
-              </tr>";
-    }
-} else {
-    echo "<tr><td colspan='8'>No records found</td></tr>";
-}
-?>
-
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $maskedStudentName = maskName($row['student_name']); // Mask the student name
+                        echo "<tr>
+                        <!-- <td>{$row['id']}</td> -->
+                                <td>{$row['region_division_district']}</td>
+                                <td>{$row['name_of_school']}</td>
+                                <td>{$row['school_id_number']}</td>
+                                <td>{$maskedStudentName}</td>  <!-- Use the masked name here -->
+                                <td>{$row['grade_section']}</td>
+                                <td>{$row['milk_tolerance']}</td>
+                                <td>
+                                <button class='btn btn-warning' onclick='showEditModal({$row['id']}, \"{$row['milk_tolerance']}\")'>
+                                <i class='fa fa-edit'></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button class='btn btn-danger' onclick='confirmDelete({$row['id']});'>
+                                <i class='fa fa-trash'></i>
+                            </button>
+                        </td>
+                      </tr>";
+            }
+        } else {
+            echo "<tr><td colspan='8'>No records found</td></tr>";
+        }
+        ?>
                 </tbody>
             </table>
         </div>

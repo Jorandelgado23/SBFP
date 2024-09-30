@@ -376,13 +376,14 @@ $stmt->close();
                     <div id="beneficiary_details">
     <div class="beneficiary mt-3 border rounded p-3">
         <div class="row">
-            <div class="form-group col-md-6">
-                <label for="lrn_no" class="form-label">LRN Number:</label>
-                <input type="text" class="form-control" id="lrn_no" name="lrn_no[]" required>
-                <div class="invalid-feedback">
-                    Please provide the LRN number.
-                </div>
-            </div>
+        <div class="form-group col-md-6">
+    <label for="lrn_no" class="form-label">LRN Number:</label>
+    <input type="text" class="form-control" id="lrn_no" name="lrn_no[]" required maxlength="12" pattern="\d{12}" title="Please enter exactly 12 digits">
+    <div class="invalid-feedback">
+        Please provide the LRN number.
+    </div>
+</div>
+
 
             <div class="form-group col-md-6">
                 <label for="beneficiary_name" class="form-label">Name:</label>

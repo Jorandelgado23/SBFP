@@ -300,9 +300,10 @@ $conn->close();
                         <input type="email" class="form-control" id="createEmail" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="createPhoneNumber">Phone Number</label>
-                        <input type="text" class="form-control" id="createPhoneNumber" name="phone_number" required>
-                    </div>
+    <label for="createPhoneNumber">Phone Number</label>
+    <input type="text" class="form-control" id="createPhoneNumber" name="phone_number" required maxlength="11" pattern="\d{11}" title="Please enter an 11-digit phone number">
+</div>
+
                     <div class="form-group">
                         <label for="createBirthday">Birthday</label>
                         <input type="date" class="form-control" id="createBirthday" name="birthday" required>
@@ -455,48 +456,59 @@ function updateSchoolDetails() {
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <!-- <th>ID</th> -->
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Email</th>
+                                <th>Phone Number</th>
                                 <th>Role</th>
-                                
+                                <!-- <th>Division/Province</th>
+                                <th>School District/Municipality</th>
+                                <th>School Name</th>
+                                <th>BEIS ID</th>
+                                <th>School Address</th>
+                                <th>Barangay Name</th>
+                                <th>Supervisor/Principal Name</th>
+                                <th>Actions</th>  -->
                             </tr>
                         </thead>
                         <tbody>
                         <?php
-include 'accountconnection.php';
+                        include 'accountconnection.php';
 
-// Fetch Admin Accounts
-$sql_admin = "SELECT id, firstname, lastname, email, role FROM users WHERE role = 'admin'"; // Removed phone_number and birthday
-$result_admin = $conn->query($sql_admin);
+                        // Fetch Admin Accounts
+                        $sql_admin = "SELECT id, firstname, lastname, email, phone_number, role, `Division/Province`, school_district_municipality, school_name, beis_id, school_address, barangay_name, supervisor_principal_name FROM users WHERE role = 'admin'";
+                        $result_admin = $conn->query($sql_admin);
 
-// Display Admin Accounts
-if ($result_admin->num_rows > 0) {
-    while ($row = $result_admin->fetch_assoc()) {
-        echo "<tr>";
-        echo "<td>" . $row["id"] . "</td>";
-        echo "<td>" . $row["firstname"] . "</td>";
-        echo "<td>" . $row["lastname"] . "</td>";
-        echo "<td>" . $row["email"] . "</td>";
-        echo "<td>" . $row["role"] . "</td>";
+                        // Display Admin Accounts
+                        if ($result_admin->num_rows > 0) {
+                            while ($row = $result_admin->fetch_assoc()) {
+                                echo "<tr>";
+                                // echo "<td>" . $row["id"] . "</td>";
+                                echo "<td>" . $row["firstname"] . "</td>";
+                                echo "<td>" . $row["lastname"] . "</td>";
+                                echo "<td>" . $row["email"] . "</td>";
+                                echo "<td>" . $row["phone_number"] . "</td>";
+                                echo "<td>" . $row["role"] . "</td>";
+                                // echo "<td>" . $row["Division/Province"] . "</td>";
+                                // echo "<td>" . $row["school_district_municipality"] . "</td>";
+                                // echo "<td>" . $row["school_name"] . "</td>";
+                                // echo "<td>" . $row["beis_id"] . "</td>";
+                                // echo "<td>" . $row["school_address"] . "</td>";
+                                // echo "<td>" . $row["barangay_name"] . "</td>";
+                                // echo "<td>" . $row["supervisor_principal_name"] . "</td>";
+                                echo "<td>";
+                                echo "<button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '', '". $row['role'] . "', '" . $row['Division/Province'] . "', '" . $row['school_district_municipality'] . "', '" . $row['school_name'] . "', '" . $row['beis_id'] . "', '" . $row['school_address'] . "', '" . $row['barangay_name'] . "', '" . $row['supervisor_principal_name'] . "')\"><i class='fa fa-edit'></i></button>";
+                                echo "<button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\"><i class='fa fa-trash'></i></button>";
+                                echo "</td>";
+                                echo "</tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='13'>No admin accounts found</td></tr>";
+                        }
 
-        // Separate Edit and Remove buttons into a single cell
-        echo "<td>";
-        echo "<button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['role'] . "')\"><i class='fa fa-edit'></i></button>";
-        echo "<button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\"><i class='fa fa-trash'></i></button>";
-        echo "</td>";
-
-        echo "</tr>";
-    }
-} else {
-    echo "<tr><td colspan='6'>No admin accounts found</td></tr>"; // Updated colspan
-}
-
-$conn->close();
-?>
-
-
+                        $conn->close();
+                        ?>
                         </tbody>
                     </table>
                 </div>
@@ -517,7 +529,7 @@ $conn->close();
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <!-- <th>ID</th> -->
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Email</th>
@@ -531,61 +543,53 @@ $conn->close();
                             <th>School Address</th>
                             <th>Barangay Name</th>
                             <th>Supervisor/Principal Name</th>
-                           
+                            <!-- <th>Actions</th>  -->
                         </tr>
                     </thead>
                     <tbody>
                     <?php
-include 'accountconnection.php';
+                    include 'accountconnection.php';
 
-// Fetch SBFP Accounts
-$sql_sbfp = "SELECT id, firstname, lastname, email, phone_number, birthday, role, `Division/Province`, school_district_municipality, school_name, beis_id, school_address, barangay_name, supervisor_principal_name FROM users WHERE role = 'sbfp'";
-$result_sbfp = $conn->query($sql_sbfp);
+                    // Fetch SBFP Accounts
+                    $sql_sbfp = "SELECT id, firstname, lastname, email, phone_number, birthday, role, `Division/Province`, school_district_municipality, school_name, beis_id, school_address, barangay_name, supervisor_principal_name FROM users WHERE role = 'sbfp'";
+                    $result_sbfp = $conn->query($sql_sbfp);
 
-// Display SBFP Accounts
-if ($result_sbfp->num_rows > 0) {
-    while ($row = $result_sbfp->fetch_assoc()) {
-        echo "<tr>";
-        echo "<td>" . $row["id"] . "</td>";
-        echo "<td>" . $row["firstname"] . "</td>";
-        echo "<td>" . $row["lastname"] . "</td>";
-        echo "<td>" . $row["email"] . "</td>";
-        echo "<td>" . $row["phone_number"] . "</td>";
-        echo "<td>" . $row["birthday"] . "</td>";
-        echo "<td>" . $row["role"] . "</td>";
-        echo "<td>" . $row["Division/Province"] . "</td>";
-        echo "<td>" . $row["school_district_municipality"] . "</td>";
-        echo "<td>" . $row["school_name"] . "</td>";
-        echo "<td>" . $row["beis_id"] . "</td>";
-        echo "<td>" . $row["school_address"] . "</td>";
-        echo "<td>" . $row["barangay_name"] . "</td>";
-        echo "<td>" . $row["supervisor_principal_name"] . "</td>";
+                    // Display SBFP Accounts
+                    if ($result_sbfp->num_rows > 0) {
+                        while ($row = $result_sbfp->fetch_assoc()) {
+                            echo "<tr>";
+                            // echo "<td>" . $row["id"] . "</td>";
+                            echo "<td>" . $row["firstname"] . "</td>";
+                            echo "<td>" . $row["lastname"] . "</td>";
+                            echo "<td>" . $row["email"] . "</td>";
+                            echo "<td>" . $row["phone_number"] . "</td>";
+                            echo "<td>" . $row["birthday"] . "</td>";
+                            echo "<td>" . $row["role"] . "</td>";
+                            echo "<td>" . $row["Division/Province"] . "</td>";
+                            echo "<td>" . $row["school_district_municipality"] . "</td>";
+                            echo "<td>" . $row["school_name"] . "</td>";
+                            echo "<td>" . $row["beis_id"] . "</td>";
+                            echo "<td>" . $row["school_address"] . "</td>";
+                            echo "<td>" . $row["barangay_name"] . "</td>";
+                            echo "<td>" . $row["supervisor_principal_name"] . "</td>";
+                            echo "<td>";
+                            echo "<button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '" . $row['birthday'] . "', '" . $row['role'] . "', '" . $row['Division/Province'] . "', '" . $row['school_district_municipality'] . "', '" . $row['school_name'] . "', '" . $row['beis_id'] . "', '" . $row['school_address'] . "', '" . $row['barangay_name'] . "', '" . $row['supervisor_principal_name'] . "')\"><i class='fa fa-edit'></i></button>";
+                            echo "<button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\"><i class='fa fa-trash'></i></button>";
+                            echo "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='14'>No SBFP accounts found</td></tr>";
+                    }
 
-        // Separate Edit and Remove buttons into different cells
-        echo "<td>";
-        echo "<button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '" . $row['birthday'] . "', '" . $row['role'] . "', '" . $row['Division/Province'] . "', '" . $row['school_district_municipality'] . "', '" . $row['school_name'] . "', '" . $row['beis_id'] . "', '" . $row['school_address'] . "', '" . $row['barangay_name'] . "', '" . $row['supervisor_principal_name'] . "')\"><i class='fa fa-edit'></i></button>";
-        echo "</td>";
-        echo "<td>";
-        echo "<button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\"><i class='fa fa-trash'></button>";
-        echo "</td>";
-        
-        echo "</tr>";
-    }
-} else {
-    echo "<tr><td colspan='14'>No SBFP accounts found</td></tr>";
-}
-
-$conn->close();
-?>
-
+                    $conn->close();
+                    ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
-
-
 
 
 <!-- Edit User Modal -->
@@ -598,8 +602,8 @@ $conn->close();
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <form id="editUserForm">
+            <form id="editUserForm">
+                <div class="modal-body">
                     <input type="hidden" id="editUserId" name="id">
                     <div class="form-group">
                         <label for="editFirstName">First Name</label>
@@ -614,68 +618,64 @@ $conn->close();
                         <input type="email" class="form-control" id="editEmail" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="editPhoneNumber">Phone Number</label>
-                        <input type="text" class="form-control" id="editPhoneNumber" name="phone_number" required>
-                    </div>
+    <label for="editPhoneNumber">Phone Number</label>
+    <input type="text" class="form-control" id="editPhoneNumber" name="phone_number" required maxlength="11" pattern="\d{11}" title="Please enter an 11-digit phone number">
+</div>
+
                     <div class="form-group">
                         <label for="editBirthday">Birthday</label>
-                        <input type="date" class="form-control" id="editBirthday" name="birthday" required>
+                        <input type="date" class="form-control" id="editBirthday" name="birthday">
                     </div>
                     <div class="form-group">
                         <label for="editRole">Role</label>
-                        <input type="text" class="form-control" id="editRole" name="role" value="sbfp" readonly>
+                        <input type="text" class="form-control" id="editRole" name="role" readonly>
                     </div>
-                    <!-- New Fields (Initially Hidden) -->
-                    <div id="additionalFields">
-                        <div class="form-group">
-                            <label for="editDivisionProvince">Division/Province</label>
-                            <input type="text" class="form-control" id="editDivisionProvince" name="division_province">
-                        </div>
-                        <div class="form-group">
-                            <label for="editSchoolDistrict">School District/Municipality</label>
-                            <input type="text" class="form-control" id="editSchoolDistrict" name="school_district_municipality">
-                        </div>
-                        <div class="form-group">
-                            <label for="editSchoolName">School Name</label>
-                            <input type="text" class="form-control" id="editSchoolName" name="school_name">
-                        </div>
-                        <div class="form-group">
-                            <label for="editBEISID">BEIS ID</label>
-                            <input type="text" class="form-control" id="editBEISID" name="beis_id">
-                        </div>
-                        <div class="form-group">
-                            <label for="editSchoolAddress">School Address</label>
-                            <input type="text" class="form-control" id="editSchoolAddress" name="school_address">
-                        </div>
-                        <div class="form-group">
-                            <label for="editBarangayName">Barangay Name</label>
-                            <input type="text" class="form-control" id="editBarangayName" name="barangay_name">
-                        </div>
-                        <div class="form-group">
-                            <label for="editSupervisorPrincipal">Supervisor/Principal Name</label>
-                            <input type="text" class="form-control" id="editSupervisorPrincipal" name="supervisor_principal_name">
-                        </div>
+                    <div class="form-group">
+                        <label for="editDivisionProvince">Division/Province</label>
+                        <input type="text" class="form-control" id="editDivisionProvince" name="division_province">
                     </div>
-                    <!-- End of New Fields -->
+                    <div class="form-group">
+                        <label for="editSchoolDistrict">School District/Municipality</label>
+                        <input type="text" class="form-control" id="editSchoolDistrict" name="school_district_municipality">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSchoolName">School Name</label>
+                        <input type="text" class="form-control" id="editSchoolName" name="school_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="editBEISID">BEIS ID</label>
+                        <input type="text" class="form-control" id="editBEISID" name="beis_id">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSchoolAddress">School Address</label>
+                        <input type="text" class="form-control" id="editSchoolAddress" name="school_address">
+                    </div>
+                    <div class="form-group">
+                        <label for="editBarangayName">Barangay Name</label>
+                        <input type="text" class="form-control" id="editBarangayName" name="barangay_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSupervisorPrincipal">Supervisor/Principal Name</label>
+                        <input type="text" class="form-control" id="editSupervisorPrincipal" name="supervisor_principal_name">
+                    </div>
+                    <!-- Password Change Fields -->
                     <div class="form-group">
                         <label for="editPassword">New Password</label>
                         <input type="password" class="form-control" id="editPassword" name="password">
                     </div>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </form>
-            </div>
+                    <div class="form-group">
+                        <label for="editConfirmPassword">Confirm Password</label>
+                        <input type="password" class="form-control" id="editConfirmPassword" name="confirm_password">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var additionalFields = document.getElementById('additionalFields');
-        // Show additional fields initially since role is 'sbfp' by default
-        additionalFields.style.display = 'block';
-    });
-</script>
-
 
 <!-- Remove User Modal -->
 <div class="modal fade" id="removeUserModal" tabindex="-1" role="dialog" aria-labelledby="removeUserModalLabel" aria-hidden="true">
@@ -688,7 +688,7 @@ $conn->close();
                 </button>
             </div>
             <div class="modal-body">
-                Are you sure you want to remove this user?
+                <p>Are you sure you want to remove this user?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -698,12 +698,9 @@ $conn->close();
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
     let editUserModal = document.getElementById('editUserModal');
     let removeUserModal = document.getElementById('removeUserModal');
-    let editUserId;
     let removeUserId;
 
     function editUser(id, firstname, lastname, email, phone_number, birthday, role, division_province, school_district_municipality, school_name, beis_id, school_address, barangay_name, supervisor_principal_name) {
@@ -722,6 +719,10 @@ $conn->close();
         document.getElementById('editBarangayName').value = barangay_name;
         document.getElementById('editSupervisorPrincipal').value = supervisor_principal_name;
 
+        // Clear password fields
+        document.getElementById('editPassword').value = '';
+        document.getElementById('editConfirmPassword').value = '';
+
         $('#editUserModal').modal('show');
     }
 
@@ -739,7 +740,6 @@ $conn->close();
             body: formData
         }).then(response => response.json()).then(data => {
             if (data.success) {
-                // Show success message
                 Swal.fire({
                     icon: 'success',
                     title: 'User Updated!',
@@ -749,7 +749,6 @@ $conn->close();
                     location.reload();
                 });
             } else {
-                // Show error message
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
@@ -758,7 +757,6 @@ $conn->close();
                 });
             }
         }).catch(error => {
-            // Handle fetch errors
             Swal.fire({
                 icon: 'error',
                 title: 'Error!',
@@ -777,7 +775,6 @@ $conn->close();
             body: JSON.stringify({ id: removeUserId })
         }).then(response => response.json()).then(data => {
             if (data.success) {
-                // Show success message
                 Swal.fire({
                     icon: 'success',
                     title: 'User Removed!',
@@ -787,7 +784,6 @@ $conn->close();
                     location.reload();
                 });
             } else {
-                // Show error message
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
@@ -796,7 +792,6 @@ $conn->close();
                 });
             }
         }).catch(error => {
-            // Handle fetch errors
             Swal.fire({
                 icon: 'error',
                 title: 'Error!',
@@ -806,6 +801,8 @@ $conn->close();
         });
     });
 </script>
+
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

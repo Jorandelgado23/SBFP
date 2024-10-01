@@ -53,28 +53,29 @@ if (isset($_GET['session_id'])) {
     $pdf->SetMargins(25, 15, 30); // Set margins
     $pdf->AddPage();
 
+    // Get the current year
+    $currentYear = date('Y');
 
-     // Get the current year
-     $currentYear = date('Y');
+    // Top of the PDF with logos and headers
+    $html = '
+    <table style="width: 100%;">
+        <tr>
+            <td style="text-align: left; width: 15%;">
+                <img src="images/logo/semilogo.png" alt="Left Logo" style="width: 100px;">
+            </td>
+            <td style="text-align: center; width: 70%;">
+                <h2>Department of Education</h2>
+                <h3>Region 4A</h3>
+            </td>
+            <td style="text-align: right; width: 15%;">
+                <img src="images/LOGO.png" alt="Right Logo" style="width: 100px;">
+            </td>
+        </tr>
+    </table>
+    <br><br><br>
+    <h2 style="text-align:center;">Master List Beneficiaries for School-Based Feeding Program (SBFP) (SY ' . $currentYear . ')</h2>';
 
-     $html = '
-     <table style="width: 100%;">
-         <tr>
-             <td style="text-align: left; width: 15%;">
-                 <img src="images/logo/semilogo.png" alt="Left Logo" style="width: 100px;">
-             </td>
-             <td style="text-align: center; width: 70%;">
-                 <h2>Department of Education</h2>
-                 <h3>Region 4A</h3>
-             </td>
-             <td style="text-align: right; width: 15%;">
-                 <img src="images/LOGO.png" alt="Right Logo" style="width: 100px;">
-             </td>
-         </tr>
-     </table>
-     <br><br><br>
-     <h2 style="text-align:center;">Master List Beneficiaries for School-Based Feeding Program (SBFP) (SY ' . $currentYear . ')</h2>';
-
+    // Add school details
     $html .= "
     <table border='0' cellpadding='4' cellspacing='0' style='width: 100%;'>
         <tr>
@@ -91,46 +92,47 @@ if (isset($_GET['session_id'])) {
         </tr>
     </table>";
 
-    $html .= '<table border="1" cellpadding="4" cellspacing="0" style="width: 50%; border-collapse: collapse;">';
+   // Add beneficiary details table
+$html .= '<table border="1" cellpadding="2" cellspacing="0">';
+$html .= '<tr>
+            <th style="text-align: center;">Name</th>
+            <th style="text-align: center;">Sex</th>
+            <th style="text-align: center;">Grade/Section</th>
+            <th style="text-align: center;">Date of Birth</th>
+            <th style="text-align: center;">Date of Weighing</th>
+            <th style="text-align: center;">Age</th>
+            <th style="text-align: center;">Weight</th>
+            <th style="text-align: center;">Height</th>
+            <th style="text-align: center;">BMI</th>
+            <th style="text-align: center;">Nutritional Status (BMI-A)</th>
+            <th style="text-align: center;">Nutritional Status (HFA)</th>
+            <th style="text-align: center;">Dewormed</th>
+            <th style="text-align: center;">Parents Consent for Milk</th>
+            <th style="text-align: center;">Participation in 4Ps</th>
+            <th style="text-align: center;">Beneficiary of SBFP in Previous Years</th>
+          </tr>';
 
-    // Define column widths
-    $columnWidths = [
-        'name' => 15, // Name
-        'sex' => 10, // Sex
-        'grade_section' => 13, // Grade/Section
-        'date_of_birth' => 15, // Date of Birth
-        'date_of_weighing' => 15, // Date of Weighing
-        'age' => 8, // Age
-        'weight' => 14, // Weight
-        'height' => 13, // Height
-        'bmi' => 13, // BMI
-        'nutritional_status_bmia' => 13, // Nutritional Status (BMI-A)
-        'nutritional_status_hfa' => 13, // Nutritional Status (HFA)
-        'dewormed' => 15, // Dewormed
-        'parents_consent_for_milk' => 13, // Parent's Consent for Milk
-        'participation_in_4ps' => 13, // Participation in 4Ps
-        'beneficiary_of_sbfp_in_previous_years' => 18, // Beneficiary of SBFP in Previous Years
-    ];
+while ($row_details = $result_details->fetch_assoc()) {
+    $html .= "<tr>
+                <td style='text-align: center;'>{$row_details['name']}</td>
+                <td style='text-align: center;'>{$row_details['sex']}</td>
+                <td style='text-align: center;'>{$row_details['grade_section']}</td>
+                <td style='text-align: center;'>{$row_details['date_of_birth']}</td>
+                <td style='text-align: center;'>{$row_details['date_of_weighing']}</td>
+                <td style='text-align: center;'>{$row_details['age']}</td>
+                <td style='text-align: center;'>{$row_details['weight']}</td>
+                <td style='text-align: center;'>{$row_details['height']}</td>
+                <td style='text-align: center;'>{$row_details['bmi']}</td>
+                <td style='text-align: center;'>{$row_details['nutritional_status_bmia']}</td>
+                <td style='text-align: center;'>{$row_details['nutritional_status_hfa']}</td>
+                <td style='text-align: center;'>{$row_details['dewormed']}</td>
+                <td style='text-align: center;'>{$row_details['parents_consent_for_milk']}</td>
+                <td style='text-align: center;'>{$row_details['participation_in_4ps']}</td>
+                <td style='text-align: center;'>{$row_details['beneficiary_of_sbfp_in_previous_years']}</td>
+              </tr>";
+}
 
-    // Add header row
-    $html .= '<thead><tr style="background-color: #f2f2f2;">';
-    foreach ($columnWidths as $header => $width) {
-        $headerText = str_replace('_', ' ', ucfirst($header));
-        $html .= '<th style="width:' . $width . '%; border: 1px solid #000; text-align: center; padding: 5px;">' . $headerText . '</th>';
-    }
-    $html .= '</tr></thead><tbody>';
-
-    // Add data rows
-    while ($row_details = $result_details->fetch_assoc()) {
-        $html .= '<tr>';
-        foreach ($columnWidths as $key => $width) {
-            $data = $row_details[$key];
-            $html .= '<td style="width:' . $width . '%; border: 1px solid #000; padding: 5px; vertical-align: middle;">' . htmlspecialchars($data) . '</td>';
-        }
-        $html .= '</tr>';
-    }
-
-    $html .= '</tbody></table>';
+$html .= '</table>';
 
     // Add "Prepared by" and "Approved by" sections
     $html .= "
@@ -147,13 +149,12 @@ if (isset($_GET['session_id'])) {
         </tr>
     </table>";
 
-    $pdf->writeHTML($html, true, false, true, false, '');
-
-    $filename = 'Beneficiary_Details_' . $session_id . '.pdf';
-
     // Output PDF
+    $pdf->writeHTML($html, true, false, true, false, '');
+    $filename = 'Beneficiary_Details_' . $session_id . '.pdf';
     $pdf->Output($filename, 'D');
 
+    // Close connections
     $stmt_details->close();
     $stmt_user->close();
     $conn->close();

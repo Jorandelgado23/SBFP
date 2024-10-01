@@ -256,123 +256,134 @@ $conn->close();
                     </nav>
                 </div>
                 <!-- End Topbar -->
-                <!-- Dashboard Inner -->
-                <div class="midde_cont">
-                    <div class="container-fluid">
-                        <div class="row column_title">
-                            <div class="col-md-12">
-                                <div class="page_title">
-                                    <h2>ALL SCHOOL BENEFICIARIES</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
+              <!-- Dashboard Inner -->
+<div class="midde_cont">
+    <div class="container-fluid">
+        <div class="row column_title">
+            <div class="col-md-12">
+                <div class="page_title">
+                    <h2>ALL SCHOOL BENEFICIARIES</h2>
+                </div>
+            </div>
+        </div>
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+        <?php
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "sbfp";
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Fetch list of schools with their session IDs
-$sql_schools = "SELECT DISTINCT session_id, name_of_school, school_id_number FROM beneficiaries";
-$result_schools = $conn->query($sql_schools);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
 
-// Group schools by session ID
-$schools_by_session = array();
-if ($result_schools->num_rows > 0) {
-    while ($row_schools = $result_schools->fetch_assoc()) {
-        $session_id = $row_schools['session_id'];
-        $school_name = $row_schools['name_of_school'];
-        $schools_by_session[$session_id][$school_name][] = $row_schools;
-    }
-}
+        // Fetch list of schools with their session IDs
+        $sql_schools = "SELECT DISTINCT session_id, name_of_school, school_id_number FROM beneficiaries";
+        $result_schools = $conn->query($sql_schools);
 
-// Filtering functionality
-$search_term = isset($_GET['search']) ? $_GET['search'] : '';
-if (!empty($search_term)) {
-    $filtered_schools = array_filter($schools_by_session, function ($schools) use ($search_term) {
-        foreach ($schools as $school_name => $school_data) {
-            if (stripos($school_name, $search_term) !== false) {
-                return true;
+        // Group schools by session ID
+        $schools_by_session = array();
+        if ($result_schools->num_rows > 0) {
+            while ($row_schools = $result_schools->fetch_assoc()) {
+                $session_id = $row_schools['session_id'];
+                $school_name = $row_schools['name_of_school'];
+                $schools_by_session[$session_id][$school_name][] = $row_schools;
             }
         }
-        return false;
-    });
-} else {
-    $filtered_schools = $schools_by_session;
-}
-?>
+
+        // Filtering functionality
+        $search_term = isset($_GET['search']) ? $_GET['search'] : '';
+        if (!empty($search_term)) {
+            $filtered_schools = array_filter($schools_by_session, function ($schools) use ($search_term) {
+                foreach ($schools as $school_name => $school_data) {
+                    if (stripos($school_name, $search_term) !== false) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+        } else {
+            $filtered_schools = $schools_by_session;
+        }
+        ?>
 
 <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-12">
-                <h2 class="h4 mb-4">Beneficiaries List</h2>
-                <!-- Search form -->
-                <form method="get" class="mb-3">
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="search" placeholder="Search by school name" value="<?php echo htmlspecialchars($search_term); ?>">
+    <div class="row">
+        <div class="col-md-10">
+            <h2 class="h4 mb-4">Beneficiaries List</h2>
+            <!-- Search form -->
+            <form method="get" class="mb-4">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="search" placeholder="Search by school name" value="<?php echo htmlspecialchars($search_term); ?>">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-search"></i> Search
+                        </button>
                     </div>
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </form>
-                <div class="card shadow">
-                    <div class="card-body">
-                        <!-- Table -->
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Name of School</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($filtered_schools as $session_id => $schools) : ?>
-                                        <?php foreach ($schools as $school_name => $school_data) : ?>
-                                            <tr>
-                                                <td><?php echo htmlspecialchars($school_name); ?></td>
-                                                <td><a href="view_details.php?session_id=<?php echo urlencode($session_id); ?>" class="btn btn-primary"><i class="fa fa-eye"></a></td>
-                                            </tr>
-                                        <?php endforeach; ?>
+                </div>
+            </form>
+            <div class="card shadow">
+                <div class="card-body">
+                    <!-- Table -->
+                    <div class="table-responsive">
+              <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                                <tr>
+                                    <th>Name of School</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($filtered_schools as $session_id => $schools) : ?>
+                                    <?php foreach ($schools as $school_name => $school_data) : ?>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($school_name); ?></td>
+                                            <td>
+                                                <a href="view_details.php?session_id=<?php echo urlencode($session_id); ?>" class="btn btn-info">
+                                                    <i class="fa fa-eye"></i> View
+                                                </a>
+                                            </td>
+                                        </tr>
                                     <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-
-  <script>
-  $(document).ready(function(){
-      $('#inlineFormCustomSelectPref').change(function(){
-          var selectedSchool = $(this).val();
-          $.ajax({
-              url: 'get_filtered_data.php',
-              type: 'POST',
-              data: {school_id: selectedSchool},
-              success: function(response){
-                  $('#tableBody').html(response);
-              },
-              error: function(xhr, status, error) {
-                  console.error(xhr.responseText);
-              }
-          });
-      });
-  });
-  </script>
+<script>
+$(document).ready(function(){
+    $('#inlineFormCustomSelectPref').change(function(){
+        var selectedSchool = $(this).val();
+        $.ajax({
+            url: 'get_filtered_data.php',
+            type: 'POST',
+            data: {school_id: selectedSchool},
+            success: function(response){
+                $('#tableBody').html(response);
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+</script>
 
 <?php
 $conn->close();
 ?>
+
+    </div>
+</div>
 
                 <!-- End Dashboard Inner -->
             </div>

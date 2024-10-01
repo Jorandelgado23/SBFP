@@ -1,4 +1,10 @@
 <?php
+session_start();
+
+require_once 'vendor/autoload.php'; // Include Composer's autoloader
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -7,72 +13,146 @@ $dbname = "sbfp";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
-}
-
-// Create division_schools table
-$sql_create_table = "CREATE TABLE IF NOT EXISTS division_schools (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    report_id INT NOT NULL,
-    division_school VARCHAR(255) NOT NULL,
-    sdo_school VARCHAR(255) NOT NULL,
-    target_sbfp_school INT NOT NULL,
-    actual_sbfp_school INT NOT NULL,
-    percent DECIMAL(5,2),
-    status VARCHAR(255),
-    FOREIGN KEY (report_id) REFERENCES quarterly_reportform8(report_id)
-)";
-
-if ($conn->query($sql_create_table) === TRUE) {
-    echo "Table division_schools created successfully";
-} else {
-    echo "Error creating table: " . $conn->error;
 }
 
 // Process form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data
     $region_division = $_POST['region_division'];
-    $division_schools = $_POST['division_schools'];
-    $sdo_schools = $_POST['sdo_schools'];
-    $target_sbfp_schools = $_POST['target_sbfp_schools'];
-    $actual_sbfp_schools = $_POST['actual_sbfp_schools'];
-    $percentage = $_POST['percentage'];
-    $implementation_status = $_POST['implementation_status'];
     $amount_allocated = $_POST['amount_allocated'];
+    $amount_downloaded = $_POST['amount_downloaded'];
+    $status_fund_downloading = $_POST['status_fund_downloading'];
     $first_liquidation = $_POST['first_liquidation'];
     $second_liquidation = $_POST['second_liquidation'];
+    $total_liquidation = $_POST['total_liquidation'];
+    $liquidation_status = $_POST['liquidation_status'];
     $remarks = $_POST['remarks'];
 
-    // Insert data into the database
-    $sql = "INSERT INTO quarterly_reportform8 (region_division, amount_allocated, first_liquidation, second_liquidation, remarks) 
-            VALUES ('$region_division', '$amount_allocated', '$first_liquidation', '$second_liquidation', '$remarks')";
+    // Insert data into `quarterly_reportform8` table
+    $sql = "INSERT INTO quarterly_reportform8 (region_division, amount_allocated, amount_downloaded, status_fund_downloading, first_liquidation, second_liquidation, total_liquidation, liquidation_status, remarks)
+            VALUES ('$region_division', '$amount_allocated', '$amount_downloaded', '$status_fund_downloading', '$first_liquidation', '$second_liquidation', '$total_liquidation', '$liquidation_status', '$remarks')";
 
     if ($conn->query($sql) === TRUE) {
-        // Insert division/schools data into another table
-        $report_id = $conn->insert_id;
-        foreach ($division_schools as $index => $division_school) {
-            $sdo_school = $sdo_schools[$index];
-            $target_sbfp_school = $target_sbfp_schools[$index];
-            $actual_sbfp_school = $actual_sbfp_schools[$index];
-            $percent = $percentage[$index];
-            $status = $implementation_status[$index];
+        $report_id = $conn->insert_id; // Get the report_id of the newly inserted row
 
-            $sql = "INSERT INTO division_schools (report_id, division_school, sdo_school, target_sbfp_school, actual_sbfp_school, percent, status) 
-                    VALUES ('$report_id', '$division_school', '$sdo_school', '$target_sbfp_school', '$actual_sbfp_school', '$percent', '$status')";
-            $conn->query($sql);
+        // Insert division schools data
+        $division_schools = $_POST['division_schools'];
+        $sdo_schools = $_POST['sdo_schools'];
+        $target_sbfp_schools = $_POST['target_sbfp_schools'];
+        $actual_sbfp_schools = $_POST['actual_sbfp_schools'];
+        $percentage = $_POST['percentage'];
+        $implementation_status = $_POST['implementation_status'];
+        $target_beneficiaries = $_POST['target_beneficiaries'];
+        $actual_beneficiaries = $_POST['actual_beneficiaries'];
+        $completion_percentage = $_POST['completion_percentage'];
+
+        for ($i = 0; $i < count($division_schools); $i++) {
+            $sql_school = "INSERT INTO division_schools (report_id, division_school, sdo_school, target_sbfp_school, actual_sbfp_school, percent, status, target_beneficiaries, actual_beneficiaries, completion_percentage)
+                           VALUES ('$report_id', '".$division_schools[$i]."', '".$sdo_schools[$i]."', '".$target_sbfp_schools[$i]."', '".$actual_sbfp_schools[$i]."', '".$percentage[$i]."', '".$implementation_status[$i]."', '".$target_beneficiaries[$i]."', '".$actual_beneficiaries[$i]."', '".$completion_percentage[$i]."')";
+
+            $conn->query($sql_school);
         }
 
-        echo "Report submitted successfully";
+        // Generate PDF after successful submission
+        generatePDF($report_id, $conn);
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
 
-// Close database connection
+// Function to generate PDF
+function generatePDF($report_id, $conn) {
+    // Fetch the report data
+    $report_query = "SELECT * FROM quarterly_reportform8 WHERE report_id = $report_id";
+    $report_result = $conn->query($report_query);
+    $report_data = $report_result->fetch_assoc();
+
+    // Fetch division schools data
+    $division_query = "SELECT * FROM division_schools WHERE report_id = $report_id";
+    $division_result = $conn->query($division_query);
+
+    $division_province = $report_data['region_division'];
+    $name_of_principal = "John Doe"; // Example data, replace with actual from DB or form
+    $city_municipality_barangay = "City Name"; // Example data
+    $name_of_feeding_focal_person = "Focal Person Name"; // Example data
+    $name_of_school = "School Name"; // Example data
+    $school_id_number = "12345"; // Example data
+    $school_year = "2023-2024"; // Example data
+    $currentYear = date('Y'); // Current year
+
+    // Initialize Dompdf
+    $options = new Options();
+    $options->set('defaultFont', 'Arial');
+    $dompdf = new Dompdf($options);
+
+    // Create the PDF content
+    $html = '
+    <table style="width: 100%;">
+        <tr>
+            <td style="text-align: left; width: 15%;">
+                <img src="data:image/png;base64,' . base64_encode(file_get_contents(__DIR__ . '/images/logo/semilogo.png')) . '" alt="Left Logo" style="width: 100px;">
+            </td>
+            <td style="text-align: center; width: 70%;">
+                <h2>Department of Education</h2>
+                <h3>Region 4A</h3>
+            </td>
+            <td style="text-align: right; width: 15%;">
+                <img src="data:image/png;base64,' . base64_encode(file_get_contents(__DIR__ . '/images/LOGO.png')) . '" alt="Right Logo" style="width: 100px;">
+            </td>
+        </tr>
+    </table>
+    <br><br><br>
+    <h2 style="text-align:center;">LIST OF BENEFICIARIES (SBFP) (SY ' . $currentYear . ')</h2>
+    <table border="1" cellpadding="4" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th>Division/Schools</th>
+                <th>No. of SDO Schools</th>
+                <th>Target No. of SBFP Schools</th>
+                <th>Actual No. of SBFP Schools</th>
+                <th>% (SBFP Schools/SDO Schools)</th>
+                <th>Status of Implementation</th>
+                <th>No. of Target Beneficiaries</th>
+                <th>No. of Actual Beneficiaries</th>
+                <th>% of Completion</th>
+            </tr>
+        </thead>
+        <tbody>';
+
+    while ($row = $division_result->fetch_assoc()) {
+        $html .= "<tr>
+                    <td>{$row['division_school']}</td>
+                    <td>{$row['sdo_school']}</td>
+                    <td>{$row['target_sbfp_school']}</td>
+                    <td>{$row['actual_sbfp_school']}</td>
+                    <td>{$row['percent']}</td>
+                    <td>{$row['status']}</td>
+                    <td>{$row['target_beneficiaries']}</td>
+                    <td>{$row['actual_beneficiaries']}</td>
+                    <td>{$row['completion_percentage']}</td>
+                </tr>";
+    }
+
+    $html .= '</tbody></table>';
+
+    // Load HTML to Dompdf
+    $dompdf->loadHtml($html);
+
+    // Set paper size and orientation
+    $dompdf->setPaper('A4', 'landscape');
+
+    // Render the HTML as PDF
+    $dompdf->render();
+
+    // Output the generated PDF to Browser
+    $dompdf->stream("report_$report_id.pdf", array("Attachment" => false));
+
+    // Optional: Provide a success message
+    echo "<h2>Report submitted successfully! PDF generated.</h2>";
+}
+
 $conn->close();
-
-header("Location: form8.php");
-
 ?>

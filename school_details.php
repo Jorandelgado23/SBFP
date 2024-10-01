@@ -260,16 +260,16 @@ $conn->close();
     </div>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-10">
             <div class="white_shd full margin_bottom_0">
                 <div class="full graph_head">
                     <div class="heading1 margin_0">
                         <h2>SCHOOL DETAILS</h2>
                     </div>
                 </div>
-                <div class="table_section padding_infor_info">
-                                 <div class="table-responsive-sm">
-                                    <table class="table table-bordered">
+                <div class="table-responsive">
+              <div class="table-responsive-sm">
+                <table class="table table-bordered">
         <thead class="thead-light">
                                 <tr>
                                     <th class="text-nowrap">School Name</th>

@@ -364,10 +364,10 @@ $conn->close();
                             <h2 class="text-center mb-4">School Details</h2>
                         </div>
                     </div>
-                    <div class="table_section padding_infor_info">
-                        <div class="table-responsive-sm">
-                            <table class="table table-bordered">
-                                <thead class="thead-light">
+                    <div class="table-responsive">
+              <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                                <thead>
                                     <tr>
                                         <th class="text-nowrap">School Name</th>
                                         <th class="text-nowrap">Division/Province</th>

@@ -296,7 +296,7 @@ $conn->close();
 
 </div>
                        
-                        <?php
+<?php
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -339,7 +339,7 @@ if (isset($_GET['session_id'])) {
                         FROM beneficiary_details bd 
                         INNER JOIN beneficiaries b ON bd.beneficiary_id = b.id 
                         WHERE b.session_id = ? 
-                        ORDER BY bd.grade_section";
+                        ORDER BY bd.grade_section, bd.student_section";
 
         // Prepare and bind SQL statement for details
         $stmt_details = $conn->prepare($sql_details);
@@ -352,16 +352,18 @@ if (isset($_GET['session_id'])) {
 
         // HTML output for beneficiary details
         if ($result_details->num_rows > 0) {
-            // Initialize array to hold data by grade level
-            $beneficiaries_by_grade = [];
+            // Initialize array to hold data by grade level and section
+            $beneficiaries_by_grade_and_section = [];
             
-            // Organize data by grade level
+            // Organize data by grade level and section
             while ($row_details = $result_details->fetch_assoc()) {
                 $grade = $row_details['grade_section'];
-                if (!isset($beneficiaries_by_grade[$grade])) {
-                    $beneficiaries_by_grade[$grade] = [];
+                $section = $row_details['student_section'];
+                
+                if (!isset($beneficiaries_by_grade_and_section[$grade][$section])) {
+                    $beneficiaries_by_grade_and_section[$grade][$section] = [];
                 }
-                $beneficiaries_by_grade[$grade][] = $row_details;
+                $beneficiaries_by_grade_and_section[$grade][$section][] = $row_details;
             }
 
             // Start printing HTML content
@@ -374,53 +376,55 @@ if (isset($_GET['session_id'])) {
                         </div>
                        ";
 
-            // Print tables for each grade level
-            foreach ($beneficiaries_by_grade as $grade => $details) {
-                echo "<h3>Grade/Section: $grade</h3>
-                      <div class='table-responsive-sm'>
-                          <table class='table table-striped table-hover'>
-                              <thead class='thead-light'>
-                                  <tr>
-                                      <th>Name</th>
-                                      <th>Sex</th>
-                                      <th>Date of Birth</th>
-                                      <th>Date of Weighing</th>
-                                      <th>Age</th>
-                                      <th>Weight</th>
-                                      <th>Height</th>
-                                      <th>BMI</th>
-                                      <th>Nutritional Status (BMI-A)</th>
-                                      <th>Nutritional Status (HFA)</th>
-                                      <th>Dewormed</th>
-                                      <th>Parent's Consent for Milk</th>
-                                      <th>Participation in 4Ps</th>
-                                      <th>Beneficiary of SBFP in Previous Years</th>
-                                  </tr>
-                              </thead>
-                              <tbody>";
+            // Print tables for each grade level and section
+            foreach ($beneficiaries_by_grade_and_section as $grade => $sections) {
+                foreach ($sections as $section => $details) {
+                    echo "<h3>$grade - $section</h3>
+                          <div class='table-responsive-sm'>
+                              <table class='table table-striped table-hover'>
+                                  <thead class='thead-light'>
+                                      <tr>
+                                          <th>Name</th>
+                                          <th>Sex</th>
+                                          <th>Date of Birth</th>
+                                          <th>Date of Weighing</th>
+                                          <th>Age</th>
+                                          <th>Weight</th>
+                                          <th>Height</th>
+                                          <th>BMI</th>
+                                          <th>Nutritional Status (BMI-A)</th>
+                                          <th>Nutritional Status (HFA)</th>
+                                          <th>Dewormed</th>
+                                          <th>Parent's Consent for Milk</th>
+                                          <th>Participation in 4Ps</th>
+                                          <th>Beneficiary of SBFP in Previous Years</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>";
 
-                foreach ($details as $row_details) {
-                    $bmi_status_class = getBMIStatusClass($row_details['nutritional_status_bmia']);
-                    $hfa_status_class = getHFAStatusClass($row_details['nutritional_status_hfa']);
-                    echo "<tr>
-                            <td>{$row_details['name']}</td>
-                            <td>{$row_details['sex']}</td>
-                            <td>{$row_details['date_of_birth']}</td>
-                            <td>{$row_details['date_of_weighing']}</td>
-                            <td>{$row_details['age']}</td>
-                            <td>{$row_details['weight']}</td>
-                            <td>{$row_details['height']}</td>
-                            <td>{$row_details['bmi']}</td>
-                            <td class='$bmi_status_class'>{$row_details['nutritional_status_bmia']}</td>
-                            <td class='$hfa_status_class'>{$row_details['nutritional_status_hfa']}</td>
-                            <td>{$row_details['dewormed']}</td>
-                            <td>{$row_details['parents_consent_for_milk']}</td>
-                            <td>{$row_details['participation_in_4ps']}</td>
-                            <td>{$row_details['beneficiary_of_sbfp_in_previous_years']}</td>
-                        </tr>";
+                    foreach ($details as $row_details) {
+                        $bmi_status_class = getBMIStatusClass($row_details['nutritional_status_bmia']);
+                        $hfa_status_class = getHFAStatusClass($row_details['nutritional_status_hfa']);
+                        echo "<tr>
+                                <td>{$row_details['name']}</td>
+                                <td>{$row_details['sex']}</td>
+                                <td>{$row_details['date_of_birth']}</td>
+                                <td>{$row_details['date_of_weighing']}</td>
+                                <td>{$row_details['age']}</td>
+                                <td>{$row_details['weight']}</td>
+                                <td>{$row_details['height']}</td>
+                                <td>{$row_details['bmi']}</td>
+                                <td class='$bmi_status_class'>{$row_details['nutritional_status_bmia']}</td>
+                                <td class='$hfa_status_class'>{$row_details['nutritional_status_hfa']}</td>
+                                <td>{$row_details['dewormed']}</td>
+                                <td>{$row_details['parents_consent_for_milk']}</td>
+                                <td>{$row_details['participation_in_4ps']}</td>
+                                <td>{$row_details['beneficiary_of_sbfp_in_previous_years']}</td>
+                            </tr>";
+                    }
+
+                    echo "</tbody></table></div>";
                 }
-
-                echo "</tbody></table></div>";
             }
 
             echo "</div></div></div></div>";
@@ -437,7 +441,9 @@ if (isset($_GET['session_id'])) {
     // Close the database connection
     $conn->close();
 }
+?>
 
+<?php
 // Function to return BMI status class
 function getBMIStatusClass($status) {
     switch ($status) {

@@ -553,57 +553,69 @@ function displayMilkData($conn, $session_id) {
     $stmt->execute();
     $result = $stmt->get_result();
     ?>
-    <div class="table_section padding_infor_info">
-        <div class="table-responsive-sm">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <!-- <th>ID</th> -->
-                        <th>Region/Division/District</th>
-                        <th>Name of School</th>
-                        <th>School ID Number</th>
-                        <th>Student Name</th>
-                        <th>Grade & Section</th>
-                        <th>Milk Tolerance</th>
-                       
-                    </tr>
-                </thead>
-                <tbody>
-                <?php
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $maskedStudentName = maskName($row['student_name']); // Mask the student name
-                        echo "<tr>
-                        <!-- <td>{$row['id']}</td> -->
-                                <td>{$row['region_division_district']}</td>
-                                <td>{$row['name_of_school']}</td>
-                                <td>{$row['school_id_number']}</td>
-                                <td>{$maskedStudentName}</td>  <!-- Use the masked name here -->
-                                <td>{$row['grade_section']}</td>
-                                <td>{$row['milk_tolerance']}</td>
-                                <td>
-                                <button class='btn btn-warning' onclick='showEditModal({$row['id']}, \"{$row['milk_tolerance']}\")'>
-                                <i class='fa fa-edit'></i>
-                            </button>
-                        </td>
-                        <td>
-                            <button class='btn btn-danger' onclick='confirmDelete({$row['id']});'>
-                                <i class='fa fa-trash'></i>
-                            </button>
-                        </td>
-                      </tr>";
-            }
-        } else {
-            echo "<tr><td colspan='8'>No records found</td></tr>";
-        }
-        ?>
-                </tbody>
-            </table>
+    <!-- Table Section -->
+    <div class="col-md-12">
+        <div class="white_shd full margin_bottom_30">
+            <div class="full graph_head">
+                <div class="heading1 margin_0">
+                    <h2>Milk Data</h2>
+                </div>
+            </div>
+            <div class="table_section padding_infor_info">
+                <div class="table-responsive-sm">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <!-- <th>ID</th> -->
+                                <th>Region/Division/District</th>
+                                <th>Name of School</th>
+                                <th>School ID Number</th>
+                                <th>Student Name</th>
+                                <th>Grade & Section</th>
+                                <th>Milk Tolerance</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $maskedStudentName = maskName($row['student_name']); // Mask the student name
+                                echo "<tr>
+                                    <!-- <td>{$row['id']}</td> -->
+                                    <td>{$row['region_division_district']}</td>
+                                    <td>{$row['name_of_school']}</td>
+                                    <td>{$row['school_id_number']}</td>
+                                    <td>{$maskedStudentName}</td>  <!-- Use the masked name here -->
+                                    <td>{$row['grade_section']}</td>
+                                    <td>{$row['milk_tolerance']}</td>
+                                    <td>
+                                        <button class='btn btn-warning' onclick='showEditModal({$row['id']}, \"{$row['milk_tolerance']}\")'>
+                                            <i class='fa fa-edit'></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button class='btn btn-danger' onclick='confirmDelete({$row['id']});'>
+                                            <i class='fa fa-trash'></i>
+                                        </button>
+                                    </td>
+                                </tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='8'>No records found</td></tr>";
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
     <?php
     $stmt->close();
 }
+
 
 // Function to display the modal for editing milk tolerance
 // Function to display the modal for editing milk tolerance
@@ -684,7 +696,7 @@ $stmt->close();
     <div class="white_shd full margin_bottom_30">
         <div class="full graph_head">
             <div class="heading1 margin_0">
-                <h1>School-Based Feeding Program - Milk Component Data</h1>
+                <h1>Milk Component Data</h1>
                 <form method="POST" action="milk_regenerate.php">
                     <button type="submit" name="action" value="pdf" class="btn btn-primary"><i class="fa fa-file-pdf-o"></i> Generate PDF</button>
                     <button type="submit" name="action" value="excel" class="btn btn-success"><i class="fa fa-file-excel-o"> </i>Generate Excel</button>

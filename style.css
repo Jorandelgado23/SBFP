@@ -870,6 +870,7 @@ span {
 
 #sidebar ul.components li {
     position: relative;
+    margin-bottom: 20px; /* Adjust the margin size */
 }
 
 #sidebar ul.components ul {

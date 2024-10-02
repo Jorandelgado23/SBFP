@@ -277,7 +277,7 @@ $conn->close();
 
         <div class="container-fluid">
             <div class="row justify-content-center">
-                <div class="col-12">
+                <div class="col-15">
                     <h1 class="page-title">SCHOOL-BASED FEEDING PROGRAM MONTHLY/QUARTERLY REPORT</h1>
                 </div>
             </div>

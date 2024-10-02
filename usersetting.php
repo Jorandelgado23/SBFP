@@ -361,7 +361,7 @@ $conn->close();
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <button type="submit" class="btn btn-success">Save Changes</button>
                         </form>
                     </div>
                 </div>

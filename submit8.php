@@ -104,8 +104,27 @@ function generatePDF($report_id, $conn) {
             </td>
         </tr>
     </table>
+
+    
     <br><br><br>
     <h2 style="text-align:center;">LIST OF BENEFICIARIES (SBFP) (SY ' . $currentYear . ')</h2>
+
+    <table border="0" cellpadding="4" cellspacing="0" style="width: 100%;">
+    <tr>
+        <td style="text-align: left; width: 50%;">
+            <strong>Division/Province:</strong>__________________________________<br>
+            <strong>Name of Principal:</strong>__________________________________<br>
+            <strong>City/Municipality/Barangay:</strong>_________________________<br>
+        </td>
+        <td style="text-align: right; width: 50%;">
+            <strong>Name of Feeding Focal Person:</strong>________________________________<br>
+            <strong>Name of School:</strong>____________________________________________<br>
+            <strong>School ID Number:</strong>_______________<br>
+        </td>
+    </tr>
+</table>
+
+    
     <table border="1" cellpadding="4" cellspacing="0" style="width: 100%; border-collapse: collapse;">
         <thead>
             <tr>
@@ -137,6 +156,21 @@ function generatePDF($report_id, $conn) {
     }
 
     $html .= '</tbody></table>';
+
+    // Add "Prepared by" and "Approved by" sections
+    $html .= "
+    <table border='0' cellpadding='4' cellspacing='0' style='width: 100%; margin-top: 30px;'>
+        <tr>
+            <td style='text-align: left; width: 50%;'>
+                <strong>Prepared by:</strong> _____________________<br>
+                                                Feeding Focal Person
+            </td>
+            <td style='text-align: right; width: 50%;'>
+                <strong>Approved by:</strong> _____________________<br>
+                                                School Head
+            </td>
+        </tr>
+    </table>";
 
     // Load HTML to Dompdf
     $dompdf->loadHtml($html);

@@ -306,6 +306,8 @@ $conn->close();
   <h1>Submit School and Student Information</h1>
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#formModal"><i class="fa fa-plus"></i> Open Form</button>
 
+  
+
   <?php
 
 
@@ -554,64 +556,70 @@ function displayMilkData($conn, $session_id) {
     $result = $stmt->get_result();
     ?>
     <!-- Table Section -->
-    <div class="col-md-12">
-        <div class="white_shd full margin_bottom_30">
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-md-12 my-">
+      <div class="card shadow">
+        <div class="card-body">
+          <div class="white_shd full margin_bottom_30">
             <div class="full graph_head">
-                <div class="heading1 margin_0">
-                    <h2>Milk Data</h2>
-                </div>
+              <div class="heading1 margin_0">
+                <h2>Milk Data</h2>
+              </div>
             </div>
             <div class="table_section padding_infor_info">
-                <div class="table-responsive-sm">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <!-- <th>ID</th> -->
-                                <th>Region/Division/District</th>
-                                <th>Name of School</th>
-                                <th>School ID Number</th>
-                                <th>Student Name</th>
-                                <th>Grade & Section</th>
-                                <th>Milk Tolerance</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                $maskedStudentName = maskName($row['student_name']); // Mask the student name
-                                echo "<tr>
-                                    <!-- <td>{$row['id']}</td> -->
-                                    <td>{$row['region_division_district']}</td>
-                                    <td>{$row['name_of_school']}</td>
-                                    <td>{$row['school_id_number']}</td>
-                                    <td>{$maskedStudentName}</td>  <!-- Use the masked name here -->
-                                    <td>{$row['grade_section']}</td>
-                                    <td>{$row['milk_tolerance']}</td>
-                                    <td>
-                                        <button class='btn btn-warning' onclick='showEditModal({$row['id']}, \"{$row['milk_tolerance']}\")'>
-                                            <i class='fa fa-edit'></i>
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <button class='btn btn-danger' onclick='confirmDelete({$row['id']});'>
-                                            <i class='fa fa-trash'></i>
-                                        </button>
-                                    </td>
-                                </tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='8'>No records found</td></tr>";
+              <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Region/Division/District</th>
+                      <th>Name of School</th>
+                      <th>School ID Number</th>
+                      <th>Student Name</th>
+                      <th>Grade & Section</th>
+                      <th>Milk Tolerance</th>
+                      <th>Edit</th>
+                      <th>Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            $maskedStudentName = maskName($row['student_name']); // Mask the student name
+                            echo "<tr>
+                                <td>{$row['region_division_district']}</td>
+                                <td>{$row['name_of_school']}</td>
+                                <td>{$row['school_id_number']}</td>
+                                <td>{$maskedStudentName}</td>  <!-- Use the masked name here -->
+                                <td>{$row['grade_section']}</td>
+                                <td>{$row['milk_tolerance']}</td>
+                                <td>
+                                    <button class='btn btn-info' onclick='showEditModal({$row['id']}, \"{$row['milk_tolerance']}\")'>
+                                        <i class='fa fa-edit'></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class='btn btn-danger' onclick='confirmDelete({$row['id']});'>
+                                        <i class='fa fa-trash'></i>
+                                    </button>
+                                </td>
+                            </tr>";
                         }
-                        ?>
-                        </tbody>
-                    </table>
-                </div>
+                    } else {
+                        echo "<tr><td colspan='8'>No records found</td></tr>";
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+</div>
     <?php
     $stmt->close();
 }

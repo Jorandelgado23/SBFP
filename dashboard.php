@@ -449,7 +449,7 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
         <div class="full counter_section margin_bottom_30">
             <div class="couter_icon">
                 <div> 
-                    <i class="fa fa-child yellow_color"></i>
+                <i class="fa fa-users dark_color"></i>
                 </div>
             </div>
             <div class="counter_no">
@@ -465,7 +465,7 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
         <div class="full counter_section margin_bottom_30">
             <div class="couter_icon">
                 <div> 
-                    <i class="fa fa-smile-o blue1_color"></i>
+                    <i class="fa fa-smile-o darkgreen_color"></i>
                 </div>
             </div>
             <div class="counter_no">
@@ -562,7 +562,7 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
             <div class="map_section padding_infor_info">
                 <canvas id="bar_chart_bmi"></canvas>
                 <!-- Button to download the chart -->
-                <button onclick="downloadChart('bar_chart_bmi', 'BMI-A_Chart.png', 3)" class="btn btn-success">Download BMI-A Chart</button>
+                <button onclick="downloadChart('bar_chart_bmi', 'BMI-A_Chart.png', 3)" class="btn btn-info">Download BMI-A Chart</button>
             </div>
         </div>
     </div>
@@ -578,7 +578,7 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
             <div class="map_section padding_infor_info">
                 <canvas id="bar_chart_hfa"></canvas>
                 <!-- Button to download the chart -->
-                <button onclick="downloadChart('bar_chart_hfa', 'HFA_Chart.png', 3)" class="btn btn-success">Download HFA Chart</button>
+                <button onclick="downloadChart('bar_chart_hfa', 'HFA_Chart.png', 3)" class="btn btn-info">Download HFA Chart</button>
             </div>
         </div>
     </div>

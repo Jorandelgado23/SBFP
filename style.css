@@ -466,6 +466,18 @@ a:focus {
     float: left;
 }
 
+.dark_color{
+    color: #000000 !important;
+}
+
+.darkgreen_color{
+    color: #6EC207 !important;
+}
+
+.darkblue_color{
+    color: #0C1844 !important;
+}
+
 .brown_color {
     color: #795548 !important;
 }
@@ -515,7 +527,7 @@ a:focus {
 }
 
 .red_color {
-    color: #e91e63 !important;
+    color: #FF0000 !important;
 }
 
 .red_bg {
@@ -547,7 +559,7 @@ a:focus {
 }
 
 .green_color {
-    color: #009688 !important;
+    color: #FFEB00 !important;
 }
 
 .green_bg {
@@ -913,6 +925,7 @@ a[data-toggle="collapse"] {
     transition: ease all 0.3s;
     position: relative;
     padding: 60px 25px 25px 305px;
+    background-color: #f1f9ff;
 }
 
 .page_title {

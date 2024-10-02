@@ -378,7 +378,7 @@ $conn->close();
                     <div class="full counter_section margin_bottom_30">
                         <div class="couter_icon">
                             <div>
-                                <i class="fa fa-user yellow_color"></i>
+                                <i class="fa fa-user darkblue_color"></i>
                             </div>
                         </div>
                         <div class="counter_no">
@@ -412,7 +412,7 @@ $conn->close();
                     <div class="full counter_section margin_bottom_30">
                         <div class="couter_icon">
                             <div>
-                                <i class="fa fa-users green_color"></i>
+                                <i class="fa fa-users darkgreen_color"></i>
                             </div>
                         </div>
                         <div class="counter_no">
@@ -429,7 +429,7 @@ $conn->close();
                     <div class="full counter_section margin_bottom_30">
                         <div class="couter_icon">
                             <div>
-                                <i class="fa fa-graduation-cap red_color"></i>
+                                <i class="fa fa-graduation-cap purple_color"></i>
                             </div>
                         </div>
                         <div class="counter_no">
@@ -520,7 +520,7 @@ $conn->close(); // Close the database connection
             </div>
             <!-- Button to download the chart -->
             <div class="text-center mt-3">
-                <button onclick="downloadChart('pie_chart', 'Nutritional_Status_Chart.png', 3)" class="btn btn-success">Download Chart as Image</button>
+                <button onclick="downloadChart('pie_chart', 'Nutritional_Status_Chart.png', 3)" class="btn btn-info">Download Chart as Image</button>
             </div>
         </div>
     </div>

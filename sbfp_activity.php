@@ -126,6 +126,14 @@ $conn->close();
                         <li>
                             <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
                         </li>
+                           
+                        <li>
+                            <a href="Beneficiary_list.php"><i class="fa fa-file-excel-o"></i> <span>Beneficiary Improvement</span></a>
+                        </li>
+
+                        <li>
+                            <a href="progress_input.php"><i class="fa fa-pencil-square"></i> <span>Progress Input</span></a>
+                        </li>
                         <li>
                             <!-- <a href="form2.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 2</span></a> -->
                         </li>

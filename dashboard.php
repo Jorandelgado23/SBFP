@@ -180,6 +180,14 @@ $conn->close();
                         <li>
                             <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
                         </li>
+
+                        <li>
+                            <a href="Beneficiary_list.php"><i class="fa fa-line-chart"></i> <span>Beneficiary Improvement</span></a>
+                        </li>
+
+                        <li>
+                            <a href="progress_input.php"><i class="fa fa-pencil-square"></i> <span>Progress Input</span></a>
+                        </li>
                         <li>
                             <!-- <a href="form2.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 2</span></a> -->
                         </li>
@@ -546,7 +554,6 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
 </div>
 
 
-                     
 
                  
 
@@ -586,13 +593,125 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
 
 
 
+<div class="row column1">
+<?php
+// Include database connection
 
 
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Retrieve session_id of the logged-in user
+$email = $_SESSION['email'];
+$stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($session_id);
+$stmt->fetch();
+$stmt->close();
+
+// Fetch submitted data for the logged-in user, ensuring only beneficiaries with the same session_id are shown
+$sql = "SELECT * FROM beneficiary_details WHERE session_id = ? ORDER BY name";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $session_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Fetch data for chart visualization based on the same session_id
+$sql_improved = "SELECT COUNT(*) AS improved_count FROM beneficiary_progress 
+                 WHERE (nutritional_status_bmia = 'Normal' OR nutritional_status_hfa = 'Normal') 
+                 AND session_id = ?";
+$sql_no_progress = "SELECT COUNT(*) AS no_progress_count FROM beneficiary_progress 
+                    WHERE (nutritional_status_bmia != 'Normal' AND nutritional_status_hfa != 'Normal') 
+                    AND session_id = ?";
+
+$stmt_improved = $conn->prepare($sql_improved);
+$stmt_improved->bind_param("s", $session_id);
+$stmt_improved->execute();
+$result_improved = $stmt_improved->get_result();
+
+$stmt_no_progress = $conn->prepare($sql_no_progress);
+$stmt_no_progress->bind_param("s", $session_id);
+$stmt_no_progress->execute();
+$result_no_progress = $stmt_no_progress->get_result();
+
+$improved_count = $result_improved->fetch_assoc()['improved_count'];
+$no_progress_count = $result_no_progress->fetch_assoc()['no_progress_count'];
+
+?>
 
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-</script>
+    <!-- Pie Chart Section -->
     <div class="col-lg-6">
+        <div class="white_shd full margin_bottom_30">
+            <div class="full graph_head">
+                <div class="heading1 margin_0">
+                    <h2>Beneficiaries Progress</h2>
+                </div>
+            </div>
+            <div class="map_section padding_infor_info" style="background-color: white; padding: 20px;">
+                <canvas id="pie_chart"></canvas>
+            </div>
+            <!-- Button to download the chart -->
+            <div class="text-center mt-3">
+                <button onclick="downloadChart('pie_chart', 'Nutritional_Status_Chart.png', 3)" class="btn btn-info">Download Chart as Image</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var ctx = document.getElementById('pie_chart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Improved', 'No Progress'],
+                datasets: [{
+                    data: [<?= $improved_count ?>, <?= $no_progress_count ?>],
+                    backgroundColor: ['#4CAF50', '#F44336'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+
+        // Function to download chart as image
+        function downloadChart(chartId, filename, quality) {
+            var canvas = document.getElementById(chartId);
+            var image = canvas.toDataURL("image/png", quality);
+            var link = document.createElement('a');
+            link.href = image;
+            link.download = filename;
+            link.click();
+        }
+    </script>
+
+
+<?php
+$conn->close(); // Close the database connection
+?>
+
+
+
+<div class="col-lg-6">
         <div class="white_shd full margin_bottom_30">
             <div class="full graph_head">
                 <div class="heading1 margin_0">
@@ -666,12 +785,27 @@ $conn->close();
 
 
 
+</div>
+
+
+
+
+
+
+
+
     <!-- Include Bootstrap JS (adjust the path as necessary) -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
 
-                        
+                   
+    
+    
+
+
+
+
 
 
                         

@@ -91,6 +91,8 @@ $conn->close();
         color: #fff; /* Text color */
         font-weight: bold; /* Bold text */
     }
+
+    
     
 </style>
 
@@ -630,7 +632,7 @@ $result = $stmt->get_result();
 
 // Fetch attendance records for the current month
 $current_month = date('Y-m'); // Get current year and month
-$attendance_sql = "SELECT beneficiary_id, status, meal_served, DAY(attendance_date) as day
+$attendance_sql = "SELECT beneficiary_id, meal_served, DAY(attendance_date) as day
                    FROM beneficiary_attendance
                    WHERE attendance_date LIKE ? AND beneficiary_id IN 
                    (SELECT id FROM beneficiary_details WHERE session_id = ?)";
@@ -643,26 +645,21 @@ $attendance_stmt->bind_param("ss", $month_like, $session_id); // Now bind the va
 $attendance_stmt->execute();
 $attendance_result = $attendance_stmt->get_result();
 
-// Create an array to hold attendance data
-$attendance_data = [];
+// Create an array to hold meal served data
+$meal_data = [];
 while ($row = $attendance_result->fetch_assoc()) {
-    $attendance_data[$row['beneficiary_id']][$row['day']] = [
-        'status' => $row['status'],
-        'meal_served' => $row['meal_served']
-    ];
+    $meal_data[$row['beneficiary_id']][$row['day']] = $row['meal_served'];
 }
 ?>
 
 
     <title>SBFP Attendance System</title>
-    
-
+  
 
 <div class="container">
 
-
     <!-- Table Section -->
-    <div class="col-md-13">
+    <div class="col-md-12">
         <div class="white_shd full margin_bottom_30">
             <div class="full graph_head">
                 <div class="heading1 margin_0">
@@ -675,7 +672,9 @@ while ($row = $attendance_result->fetch_assoc()) {
                         <thead>
                             <tr>
                                 <th rowspan="2">Name of Pupil</th>
-                                <th colspan="31">Actual Feeding</th>
+                                <th colspan="31" style=" padding: 10px;
+            text-align: center;
+            font-size: 12px; ">Actual Feeding</th>
                             </tr>
                             <tr>
                                 <!-- Days of the month (1 to 31) -->
@@ -693,12 +692,12 @@ while ($row = $attendance_result->fetch_assoc()) {
                                     
                                     // Display 31 columns for feeding days
                                     for ($i = 1; $i <= 31; $i++) {
-                                        // Check if attendance data exists for the given day
-                                        if (isset($attendance_data[$row['id']][$i])) {
-                                            $status = $attendance_data[$row['id']][$i]['status'];
-                                            echo '<td>' . htmlspecialchars($status) . '</td>'; // Display status
+                                        // Check if meal data exists for the given day
+                                        if (isset($meal_data[$row['id']][$i])) {
+                                            $meal_served = $meal_data[$row['id']][$i];
+                                            echo '<td>' . htmlspecialchars($meal_served) . '</td>'; // Display meal served
                                         } else {
-                                            echo '<td></td>'; // Empty cell if no attendance data
+                                            echo '<td></td>'; // Empty cell if no meal data
                                         }
                                     }
                                     echo '</tr>';
@@ -732,6 +731,13 @@ while ($row = $attendance_result->fetch_assoc()) {
 // Close the database connection
 $conn->close();
 ?>
+
+<!-- JS and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 
 
 

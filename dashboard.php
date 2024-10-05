@@ -22,11 +22,11 @@ if ($conn->connect_error) {
 $email = $_SESSION['email'];
 
 // Prepare and bind
-$stmt = $conn->prepare("SELECT firstname, lastname, role FROM users WHERE email = ?");
+$stmt = $conn->prepare("SELECT firstname, lastname, school_name, role FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $stmt->store_result();
-$stmt->bind_result($user_firstname, $user_lastname, $user_role);
+$stmt->bind_result($user_firstname, $user_lastname, $school_name, $user_role);
 
 if ($stmt->num_rows > 0) {
     $stmt->fetch();
@@ -156,18 +156,17 @@ $conn->close();
                         <a href="dashboard.php"><img class="logo_icon img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
                         </div>
                     </div>
-                    <div class="sidebar_user_info">
+    <div class="sidebar_user_info">
     <div class="icon_setting"></div>
     <div class="user_profle_side">
-    <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
-
-    <div class="user_info">
-    <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
-        
-        <p><span class="online_animation"></span> Online</p>
+        <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
+        <div class="user_info">
+            <h6><?php echo $school_name; ?></h6> <!-- Display school name here -->
+            <p><span class="online_animation"></span> Online</p>
+        </div>
     </div>
 </div>
-</div>
+
 
                 </div>
                 <div class="sidebar_blog_2">
@@ -281,7 +280,9 @@ $conn->close();
     <?php endif; ?>
 </a>
 
-                                     
+                          
+
+
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
@@ -592,12 +593,9 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
 </div>
 
 
-
 <div class="row column1">
 <?php
 // Include database connection
-
-
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -621,6 +619,14 @@ $stmt->bind_result($session_id);
 $stmt->fetch();
 $stmt->close();
 
+// Default value for the date
+$date = date('Y-m-d'); // Current date
+
+// Check if a date was submitted
+if (isset($_POST['date'])) {
+    $date = $_POST['date'];
+}
+
 // Fetch submitted data for the logged-in user, ensuring only beneficiaries with the same session_id are shown
 $sql = "SELECT * FROM beneficiary_details WHERE session_id = ? ORDER BY name";
 $stmt = $conn->prepare($sql);
@@ -628,21 +634,21 @@ $stmt->bind_param("s", $session_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Fetch data for chart visualization based on the same session_id
+// Fetch data for chart visualization based on the selected date and session_id
 $sql_improved = "SELECT COUNT(*) AS improved_count FROM beneficiary_progress 
                  WHERE (nutritional_status_bmia = 'Normal' OR nutritional_status_hfa = 'Normal') 
-                 AND session_id = ?";
+                 AND session_id = ? AND DATE(date_of_progress) = ?";
 $sql_no_progress = "SELECT COUNT(*) AS no_progress_count FROM beneficiary_progress 
                     WHERE (nutritional_status_bmia != 'Normal' AND nutritional_status_hfa != 'Normal') 
-                    AND session_id = ?";
+                    AND session_id = ? AND DATE(date_of_progress) = ?";
 
 $stmt_improved = $conn->prepare($sql_improved);
-$stmt_improved->bind_param("s", $session_id);
+$stmt_improved->bind_param("ss", $session_id, $date);
 $stmt_improved->execute();
 $result_improved = $stmt_improved->get_result();
 
 $stmt_no_progress = $conn->prepare($sql_no_progress);
-$stmt_no_progress->bind_param("s", $session_id);
+$stmt_no_progress->bind_param("ss", $session_id, $date);
 $stmt_no_progress->execute();
 $result_no_progress = $stmt_no_progress->get_result();
 
@@ -654,13 +660,23 @@ $no_progress_count = $result_no_progress->fetch_assoc()['no_progress_count'];
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Pie Chart Section -->
+
+
     <div class="col-lg-6">
         <div class="white_shd full margin_bottom_30">
-            <div class="full graph_head">
+            <div class="full graph_head d-flex justify-content-between align-items-center">
                 <div class="heading1 margin_0">
                     <h2>Beneficiaries Progress</h2>
                 </div>
+                <!-- Form with date picker placed to the right of the heading -->
+                <form method="post" class="mb-0" id="dateForm">
+                    <div class="form-row align-items-center">
+                        <div class="col-auto">
+                            <label for="date">Select Date:</label>
+                            <input type="date" name="date" id="date" class="form-control" value="<?= $date ?>" required>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="map_section padding_infor_info" style="background-color: white; padding: 20px;">
                 <canvas id="pie_chart"></canvas>
@@ -673,6 +689,11 @@ $no_progress_count = $result_no_progress->fetch_assoc()['no_progress_count'];
     </div>
 
     <script>
+        // Automatically submit the form when the date changes
+        document.getElementById('date').addEventListener('change', function() {
+            document.getElementById('dateForm').submit();
+        });
+
         var ctx = document.getElementById('pie_chart').getContext('2d');
         var chart = new Chart(ctx, {
             type: 'pie',
@@ -724,7 +745,6 @@ $conn->close(); // Close the database connection
                         <div class="msg_list_main">
                             <ul class="msg_list">
                             <?php
-
 
 // Fetch recent activities from database
 $servername = "localhost";
@@ -785,7 +805,9 @@ $conn->close();
 
 
 
-</div>
+
+
+
 
 
 
@@ -826,7 +848,7 @@ $conn->close();
     <script src="js/Chart.min.js"></script>
     <!-- Init Charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
+    <script>
 const ctxBMI = document.getElementById('bar_chart_bmi').getContext('2d');
 const ctxHFA = document.getElementById('bar_chart_hfa').getContext('2d');
 
@@ -843,18 +865,24 @@ const barChartBMI = new Chart(ctxBMI, {
             label: 'Percentage (%)',
             data: chartDataBMI.data,
             backgroundColor: [
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
+                'rgba(54, 162, 235, 0.2)',   // Blue
+                'rgba(255, 99, 132, 0.2)',   // Red
+                'rgba(255, 206, 86, 0.2)',   // Yellow
+                'rgba(75, 192, 192, 0.2)',   // Teal
+                'rgba(153, 102, 255, 0.2)',  // Purple
+                'rgba(255, 159, 64, 0.2)',   // Orange
+                'rgba(199, 199, 199, 0.2)',  // Gray
+                'rgba(255, 99, 255, 0.2)'    // Pink
             ],
             borderColor: [
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 99, 132, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
+                'rgba(54, 162, 235, 1)',    // Blue
+                'rgba(255, 99, 132, 1)',    // Red
+                'rgba(255, 206, 86, 1)',    // Yellow
+                'rgba(75, 192, 192, 1)',    // Teal
+                'rgba(153, 102, 255, 1)',   // Purple
+                'rgba(255, 159, 64, 1)',    // Orange
+                'rgba(199, 199, 199, 1)',   // Gray
+                'rgba(255, 99, 255, 1)'     // Pink
             ],
             borderWidth: 1
         }]
@@ -880,14 +908,20 @@ const barChartHFA = new Chart(ctxHFA, {
             label: 'Percentage (%)',
             data: chartDataHFA.data,
             backgroundColor: [
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
+                'rgba(54, 162, 235, 0.2)',   // Blue
+                'rgba(255, 99, 132, 0.2)',   // Red
+                'rgba(255, 206, 86, 0.2)',   // Yellow
+                'rgba(75, 192, 192, 0.2)',   // Teal
+                'rgba(153, 102, 255, 0.2)',  // Purple
+                'rgba(255, 159, 64, 0.2)'    // Orange
             ],
             borderColor: [
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 99, 132, 1)',
-                'rgba(255, 206, 86, 1)',
+                'rgba(54, 162, 235, 1)',    // Blue
+                'rgba(255, 99, 132, 1)',    // Red
+                'rgba(255, 206, 86, 1)',    // Yellow
+                'rgba(75, 192, 192, 1)',    // Teal
+                'rgba(153, 102, 255, 1)',   // Purple
+                'rgba(255, 159, 64, 1)'     // Orange
             ],
             borderWidth: 1
         }]
@@ -903,10 +937,8 @@ const barChartHFA = new Chart(ctxHFA, {
         }
     }
 });
-</script>
 
-<script>
-
+// Download chart function
 function downloadChart(canvasId, filename, scale = 2) {
     // Get the original canvas element
     var canvas = document.getElementById(canvasId);
@@ -937,8 +969,6 @@ function downloadChart(canvasId, filename, scale = 2) {
     // Trigger the download
     link.click();
 }
-
-
 </script>
 
 

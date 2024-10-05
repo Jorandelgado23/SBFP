@@ -168,7 +168,7 @@ $conn->close();
                     </div>
                     <div class="sidebar_user_info">
                     <div class="icon_setting"></div>
-                    <div class="icon_setting"></div>
+               
 <div class="user_profle_side">
     <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
     <div class="user_info">
@@ -266,7 +266,7 @@ $conn->close();
 
 </li>
 
-                                        
+<li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
                                        
                                     </ul>
                                     <ul class="user_profile_dd">

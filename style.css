@@ -882,7 +882,7 @@ span {
 
 #sidebar ul.components li {
     position: relative;
-    margin-bottom: 20px; /* Adjust the margin size */
+    margin-bottom: 10px; /* Adjust the margin size */
 }
 
 #sidebar ul.components ul {
@@ -961,7 +961,7 @@ a[data-toggle="collapse"] {
 }
 
 .sidebar_user_info {
-    padding: 15px 25px;
+    padding:20px 10px;
     background: #214162;
 }
 

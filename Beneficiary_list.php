@@ -22,14 +22,18 @@ if ($conn->connect_error) {
 $email = $_SESSION['email'];
 
 // Prepare and bind
-$stmt = $conn->prepare("SELECT firstname, lastname, role FROM users WHERE email = ?");
+$stmt = $conn->prepare("SELECT firstname, lastname, school_name, role FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $stmt->store_result();
-$stmt->bind_result($user_firstname, $user_lastname, $user_role);
+$stmt->bind_result($user_firstname, $user_lastname, $school_name, $user_role);
 
 if ($stmt->num_rows > 0) {
     $stmt->fetch();
+    if (!isset($_SESSION['welcome_shown'])) {
+        $welcome_message = "Welcome, $user_firstname $user_lastname!";
+        $_SESSION['welcome_shown'] = true; // Set the session variable
+    }
 } else {
     echo "No user found with that email address.";
     exit();
@@ -110,22 +114,21 @@ $conn->close();
                     <div class="sidebar_user_info">
     <div class="icon_setting"></div>
     <div class="user_profle_side">
-    <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
-
-    <div class="user_info">
-    <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
-        
-        <p><span class="online_animation"></span> Online</p>
+        <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
+        <div class="user_info">
+            <h6><?php echo $school_name; ?></h6> <!-- Display school name here -->
+            <p><span class="online_animation"></span> Online</p>
+        </div>
     </div>
 </div>
-</div>
+
 
                 </div>
                 <div class="sidebar_blog_2">
                     <h4>General</h4>
                     <ul class="list-unstyled components">
                     <li>
-                            <a href="dashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
+                            <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
                         </li>
 
                         <li>
@@ -298,7 +301,6 @@ $conn->close();
 
 
 
-                       
                         <?php
 // Include database connection
 $servername = "localhost";
@@ -314,8 +316,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
-
 // Retrieve session_id of the logged-in user
 $email = $_SESSION['email'];
 $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
@@ -327,8 +327,11 @@ $stmt->fetch();
 $stmt->close();
 
 // Initialize variables for filtering
-$month = isset($_POST['month']) ? intval($_POST['month']) : date('m'); // Current month by default
-$day = isset($_POST['day']) ? intval($_POST['day']) : date('d'); // Current day by default
+$date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d'); // Default to current date
+
+// Extract month and day from the selected date
+$month = date('m', strtotime($date));
+$day = date('d', strtotime($date));
 
 // Fetch beneficiaries associated with the user's session_id and their latest progress with filtering
 $sql = "SELECT bd.name, bd.grade_section, bp.weight, bp.height, bp.bmi, bp.nutritional_status_bmia, bp.nutritional_status_hfa
@@ -341,8 +344,41 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("sii", $session_id, $month, $day);
 $stmt->execute();
 $result = $stmt->get_result();
+
+$beneficiary_data = [];
+while ($row = $result->fetch_assoc()) {
+    $beneficiary_data[] = $row;
+}
+
+// Fetch data for the line chart
+$sql_chart = "SELECT bp.date_of_progress, bp.weight, bp.height, bp.bmi
+              FROM beneficiary_details bd
+              LEFT JOIN beneficiary_progress bp ON bp.beneficiary_id = bd.id
+              WHERE bd.session_id = ? AND MONTH(bp.date_of_progress) = ? AND DAY(bp.date_of_progress) = ?
+              ORDER BY bp.date_of_progress ASC";
+
+$stmt_chart = $conn->prepare($sql_chart);
+$stmt_chart->bind_param("sii", $session_id, $month, $day);
+$stmt_chart->execute();
+$chart_result = $stmt_chart->get_result();
+
+$dates = [];
+$weights = [];
+$heights = [];
+$bmis = [];
+
+while ($chart_row = $chart_result->fetch_assoc()) {
+    $dates[] = $chart_row['date_of_progress'];
+    $weights[] = $chart_row['weight'];
+    $heights[] = $chart_row['height'];
+    $bmis[] = $chart_row['bmi'];
+}
+
 ?>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Filter Form -->
 <div class="col-md-12">
     <div class="white_shd full margin_bottom_30">
         <div class="full graph_head">
@@ -351,31 +387,17 @@ $result = $stmt->get_result();
             </div>
         </div>
         <div class="padding_infor_info">
-            <form method="POST" action="" class="mb-1">
-                <div class="form-group">
-                    <label for="month">Month:</label>
-                    <select name="month" id="month" class="form-control" required>
-                        <?php for ($m = 1; $m <= 12; $m++): ?>
-                            <option value="<?= $m ?>" <?= $m == $month ? 'selected' : '' ?>>
-                                <?= date('F', mktime(0, 0, 0, $m, 1)) ?>
-                            </option>
-                        <?php endfor; ?>
-                    </select>
+            <form method="POST" action="" id="dateForm" class="mb-0">
+                <div class="form-row align-items-center">
+                    <div class="col-auto">
+                        <label for="date">Select Date:</label>
+                        <input type="date" name="date" id="date" class="form-control" value="<?= $date ?>" required onchange="submitForm()">
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="day">Day:</label>
-                    <select name="day" id="day" class="form-control" required>
-                        <?php for ($d = 1; $d <= 31; $d++): ?>
-                            <option value="<?= $d ?>" <?= $d == $day ? 'selected' : '' ?>><?= $d ?></option>
-                        <?php endfor; ?>
-                    </select>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Filter</button>
             </form>
         </div>
 
+        <!-- Table Section -->
         <div class="table_section padding_infor_info">
             <div class="table-responsive-sm">
                 <table class="table table-bordered">
@@ -392,7 +414,7 @@ $result = $stmt->get_result();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php while ($row = $result->fetch_assoc()) { ?>
+                        <?php foreach ($beneficiary_data as $row) { ?>
                             <tr>
                                 <td><?= $row['name'] ?></td>
                                 <td><?= $row['grade_section'] ?></td>
@@ -401,23 +423,91 @@ $result = $stmt->get_result();
                                 <td><?= $row['bmi'] ?></td>
                                 <td><?= $row['nutritional_status_bmia'] ?></td>
                                 <td><?= $row['nutritional_status_hfa'] ?></td>
-                                <td>
-                                    <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'Improved' : 'No Progress' ?>
-                                </td>
+                                <td><?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'Improved' : 'No Progress' ?></td>
                             </tr>
                         <?php } ?>
                     </tbody>
                 </table>
             </div>
         </div>
+
+        <!-- Line Chart Section -->
+        <div style="width: 800px; margin: auto;">
+            <canvas id="line_chart"></canvas>
+        </div>
+
+        <script>
+            var ctx = document.getElementById('line_chart').getContext('2d');
+            var lineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: <?= json_encode($dates) ?>,
+                    datasets: [
+                        {
+                            label: 'Weight (kg)',
+                            data: <?= json_encode($weights) ?>,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            fill: false
+                        },
+                        {
+                            label: 'Height (cm)',
+                            data: <?= json_encode($heights) ?>,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 2,
+                            fill: false
+                        },
+                        {
+                            label: 'BMI',
+                            data: <?= json_encode($bmis) ?>,
+                            borderColor: 'rgba(153, 102, 255, 1)',
+                            borderWidth: 2,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Value'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Automatically submit the form when a date is selected
+            function submitForm() {
+                document.getElementById('dateForm').submit();
+            }
+        </script>
+
     </div>
 </div>
-
 
 <?php
 // Close the database connection
 $conn->close();
 ?>
+
+
+
+
+
 
 
                         

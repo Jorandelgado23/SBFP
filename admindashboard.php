@@ -168,7 +168,7 @@ $conn->close();
                     </div>
                     <div class="sidebar_user_info">
                     <div class="icon_setting"></div>
-                    <div class="icon_setting"></div>
+               
 <div class="user_profle_side">
     <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
     <div class="user_info">
@@ -204,11 +204,6 @@ $conn->close();
                             <a href="adaccountmanagement.php"><i class="fa fa-group"></i> <span>Account Management</span></a>
                         </li>
                        
-                       
-                      
-                      
-            
-                        
                         <li>
                             <a href="adsettings.php"><i class="fa fa-cog yellow_color"></i> <span>Settings</span></a>
                         </li>
@@ -271,7 +266,7 @@ $conn->close();
 
 </li>
 
-                                        
+<li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
                                        
                                     </ul>
                                     <ul class="user_profile_dd">
@@ -284,7 +279,34 @@ $conn->close();
 
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="usersetting.php">My Profile</a>
-                                                <a class="dropdown-item" href="logout.php"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                                                <a class="dropdown-item" href="#" id="logoutLink">
+    <span>Log Out</span> <i class="fa fa-sign-out"></i>
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.getElementById('logoutLink').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default link action
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out of your account!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, log me out!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to logout.php if confirmed
+                window.location.href = 'logout.php';
+            }
+        });
+    });
+</script>
+
                                             </div>
                                         </li>
                                     </ul>
@@ -356,7 +378,7 @@ $conn->close();
                     <div class="full counter_section margin_bottom_30">
                         <div class="couter_icon">
                             <div>
-                                <i class="fa fa-user yellow_color"></i>
+                                <i class="fa fa-user darkblue_color"></i>
                             </div>
                         </div>
                         <div class="counter_no">
@@ -390,7 +412,7 @@ $conn->close();
                     <div class="full counter_section margin_bottom_30">
                         <div class="couter_icon">
                             <div>
-                                <i class="fa fa-users green_color"></i>
+                                <i class="fa fa-users darkgreen_color"></i>
                             </div>
                         </div>
                         <div class="counter_no">
@@ -407,7 +429,7 @@ $conn->close();
                     <div class="full counter_section margin_bottom_30">
                         <div class="couter_icon">
                             <div>
-                                <i class="fa fa-graduation-cap red_color"></i>
+                                <i class="fa fa-graduation-cap purple_color"></i>
                             </div>
                         </div>
                         <div class="counter_no">
@@ -445,19 +467,33 @@ if ($conn->connect_error) {
 
 // SQL query to get counts of each nutritional status
 $sql = "SELECT nutritional_status_bmia, COUNT(*) as count FROM beneficiary_details GROUP BY nutritional_status_bmia";
-
 $result = $conn->query($sql);
 
 // Initialize $data as an empty array
 $data = array();
+$total_students = 0;
+$healthy_students = 0;
+$unhealthy_students = 0;
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $data[$row['nutritional_status_bmia']] = $row['count'];
+        $total_students += $row['count'];
+
+        // Count the number of "Normal" (Healthy) students
+        if ($row['nutritional_status_bmia'] == 'Normal') {
+            $healthy_students = $row['count'];
+        } else {
+            $unhealthy_students += $row['count']; // Count unhealthy students
+        }
     }
 } else {
     echo "No data found";
 }
+
+// Calculate the percentage of healthy and unhealthy students
+$healthy_percentage = $total_students > 0 ? ($healthy_students / $total_students) * 100 : 0;
+$unhealthy_percentage = $total_students > 0 ? ($unhealthy_students / $total_students) * 100 : 0;
 
 // Prepare data for JavaScript (JSON format)
 $labels = array_keys($data);
@@ -471,23 +507,58 @@ $conn->close(); // Close the database connection
 ?>
 
 <div class="row">
-<div class="col-lg-6">
-    <div class="white_shd full margin_bottom_30">
-        <div class="full graph_head">
-            <div class="heading1 margin_0">
-                <h2>Nutritional Status of All Students</h2>
+    <!-- Pie Chart Section -->
+    <div class="col-lg-6">
+        <div class="white_shd full margin_bottom_30">
+            <div class="full graph_head">
+                <div class="heading1 margin_0">
+                    <h2>Nutritional Status of All Students</h2>
+                </div>
+            </div>
+            <div class="map_section padding_infor_info" style="background-color: white; padding: 20px;">
+                <canvas id="pie_chart"></canvas>
+            </div>
+            <!-- Button to download the chart -->
+            <div class="text-center mt-3">
+                <button onclick="downloadChart('pie_chart', 'Nutritional_Status_Chart.png', 3)" class="btn btn-info">Download Chart as Image</button>
             </div>
         </div>
-        <div class="map_section padding_infor_info" style="background-color: white; padding: 20px;">
-            <canvas id="pie_chart"></canvas>
-        </div>
-        <!-- Button to download the chart -->
-        <div class="text-center mt-3">
-            <button onclick="downloadChart('pie_chart', 'Nutritional_Status_Chart.png', 3)" class="btn btn-success">Download Chart as Image</button>
+    </div>
+
+    <!-- Progress Bar Section for Healthy and Unhealthy Students -->
+    <div class="col-md-6">
+        <div class="white_shd full margin_bottom_30">
+            <div class="full graph_head">
+                <div class="heading1 margin_0">
+                    <h2>Students Progress</h2>
+                </div>
+            </div>
+            <div class="full progress_bar_inner">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="progress_bar">
+                            <!-- Healthy Students Progress Bar -->
+                            <span class="skill" style="width:<?php echo round($healthy_percentage); ?>%;">Healthy Students <span class="info_valume"><?php echo round($healthy_percentage); ?>%</span></span>
+                            <div class="progress skill-bar">
+                                <div class="progress-bar progress-bar-animated progress-bar-striped" role="progressbar" aria-valuenow="<?php echo round($healthy_percentage); ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo round($healthy_percentage); ?>%;">
+                                </div>
+                            </div>
+                            <!-- Unhealthy Students Progress Bar -->
+                            <span class="skill" style="width:<?php echo round($unhealthy_percentage); ?>%;">Unhealthy Students <span class="info_valume"><?php echo round($unhealthy_percentage); ?>%</span></span>
+                            <div class="progress skill-bar">
+                                <div class="progress-bar progress-bar-danger progress-bar-animated progress-bar-striped" role="progressbar" aria-valuenow="<?php echo round($unhealthy_percentage); ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo round($unhealthy_percentage); ?>%;">
+                                </div>
+                            </div>
+                            <!-- Display total healthy and unhealthy students -->
+                            <p>Total Healthy Students: <?php echo $healthy_students; ?> out of <?php echo $total_students; ?> students</p>
+                            <p>Total Unhealthy Students: <?php echo $unhealthy_students; ?> out of <?php echo $total_students; ?> students</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
 
 <script>
     var ctx = document.getElementById('pie_chart').getContext('2d');
@@ -526,41 +597,29 @@ $conn->close(); // Close the database connection
 
     // Function to download chart as an image
     function downloadChart(canvasId, filename, scale = 2) {
-        // Get the original canvas element
         var canvas = document.getElementById(canvasId);
-        
-        // Create a new canvas element to draw the chart with a white background
         var newCanvas = document.createElement('canvas');
-        newCanvas.width = canvas.width * scale;  // Scale the width
-        newCanvas.height = canvas.height * scale; // Scale the height
-        
-        // Get the context of the new canvas
+        newCanvas.width = canvas.width * scale;
+        newCanvas.height = canvas.height * scale;
+
         var newContext = newCanvas.getContext('2d');
-        
-        // Set the scale for the new canvas
         newContext.scale(scale, scale);
-        
-        // Fill the new canvas with a white background
         newContext.fillStyle = 'white';
         newContext.fillRect(0, 0, newCanvas.width / scale, newCanvas.height / scale);
-        
-        // Draw the original chart (canvas) onto the new canvas with the white background
         newContext.drawImage(canvas, 0, 0);
-        
-        // Create a link to download the new canvas as an image
+
         var link = document.createElement('a');
         link.href = newCanvas.toDataURL('image/png');
         link.download = filename;
-        
-        // Trigger the download
         link.click();
     }
 
-    // Event listener for the download button
     document.getElementById('download_btn').addEventListener('click', function() {
         downloadChart('pie_chart', 'nutrition_status_chart.png');
     });
 </script>
+
+
 
 
     <div class="col-lg-6">

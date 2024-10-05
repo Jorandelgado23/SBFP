@@ -298,6 +298,22 @@ $sheet->getStyle('A8:' . $sheet->getCell('AF' . $rowNumber)->getCoordinate())->a
         $html .= '</tr>';
         $html .= '</tbody></table>';
 
+
+         // Add "Prepared by" and "Approved by" sections
+    $html .= "
+    <table border='0' cellpadding='4' cellspacing='0' style='width: 100%; margin-top: 30px;'>
+        <tr>
+            <td style='text-align: left; width: 50%;'>
+                <strong>Prepared by:</strong> _____________________<br>
+                                               Feeding Focal Person
+            </td>
+            <td style='text-align: right; width: 50%;'>
+                <strong>Approved by:</strong> _____________________<br>
+                                                School Head
+            </td>
+        </tr>
+    </table>";
+
         $pdf->loadHtml($html);
         $pdf->setPaper('A4', 'landscape');
         $pdf->render();

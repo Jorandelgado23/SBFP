@@ -134,7 +134,7 @@ background: radial-gradient(circle, rgba(10,10,10,0.7622646470697654) 0%, rgba(0
                     <div class="login_form">
                         <div class="w-75 mx-auto form-container">
                             <form class="text-center" id="loginForm" method="post">
-                                <h1 class="h6 mb-3">SIGN IN</h1>
+                                <h1 class="h6 mb-3" style="color: aliceblue;">SIGN IN</h1>
                                 <fieldset>
                                     <div class="field form-group">
                                         <label class="label_field sr-only" for="inputEmail">Email Address</label>

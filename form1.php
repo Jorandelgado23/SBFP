@@ -22,14 +22,18 @@ if ($conn->connect_error) {
 $email = $_SESSION['email'];
 
 // Prepare and bind
-$stmt = $conn->prepare("SELECT firstname, lastname, role FROM users WHERE email = ?");
+$stmt = $conn->prepare("SELECT firstname, lastname, school_name, role FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $stmt->store_result();
-$stmt->bind_result($user_firstname, $user_lastname, $user_role);
+$stmt->bind_result($user_firstname, $user_lastname, $school_name, $user_role);
 
 if ($stmt->num_rows > 0) {
     $stmt->fetch();
+    if (!isset($_SESSION['welcome_shown'])) {
+        $welcome_message = "Welcome, $user_firstname $user_lastname!";
+        $_SESSION['welcome_shown'] = true; // Set the session variable
+    }
 } else {
     echo "No user found with that email address.";
     exit();
@@ -91,6 +95,8 @@ $conn->close();
         color: #fff; /* Text color */
         font-weight: bold; /* Bold text */
     }
+
+    
    </style>
 
 <body class="dashboard dashboard_2">
@@ -107,14 +113,12 @@ $conn->close();
                     <div class="sidebar_user_info">
     <div class="icon_setting"></div>
     <div class="user_profle_side">
-    <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
-
-    <div class="user_info">
-    <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
-        
-        <p><span class="online_animation"></span> Online</p>
+        <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
+        <div class="user_info">
+            <h6><?php echo $school_name; ?></h6> <!-- Display school name here -->
+            <p><span class="online_animation"></span> Online</p>
+        </div>
     </div>
-</div>
 </div>
 
                 </div>
@@ -127,6 +131,14 @@ $conn->close();
 
                         <li class="active">
                             <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
+                        </li>
+
+                        <li>
+                            <a href="Beneficiary_list.php"><i class="fa fa-line-chart"></i> <span>Beneficiary Improvement</span></a>
+                        </li>
+
+                        <li>
+                            <a href="progress_input.php"><i class="fa fa-pencil-square"></i> <span>Progress Input</span></a>
                         </li>
                         <li>
                             <!-- <a href="form2.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 2</span></a> -->
@@ -231,7 +243,34 @@ $conn->close();
 
 <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="usersetting.php">My Profile</a>
-                                                <a class="dropdown-item" href="logout.php"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                                                <a class="dropdown-item" href="#" id="logoutLink">
+    <span>Log Out</span> <i class="fa fa-sign-out"></i>
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.getElementById('logoutLink').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default link action
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out of your account!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, log me out!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to logout.php if confirmed
+                window.location.href = 'logout.php';
+            }
+        });
+    });
+</script>
+
                                             </div>
                                         </li>
                                     </ul>
@@ -349,13 +388,14 @@ $stmt->close();
                     <div id="beneficiary_details">
     <div class="beneficiary mt-3 border rounded p-3">
         <div class="row">
-            <div class="form-group col-md-6">
-                <label for="lrn_no" class="form-label">LRN Number:</label>
-                <input type="text" class="form-control" id="lrn_no" name="lrn_no[]" required>
-                <div class="invalid-feedback">
-                    Please provide the LRN number.
-                </div>
-            </div>
+        <div class="form-group col-md-6">
+    <label for="lrn_no" class="form-label">LRN Number:</label>
+    <input type="text" class="form-control" id="lrn_no" name="lrn_no[]" required maxlength="12" pattern="\d{12}" title="Please enter exactly 12 digits">
+    <div class="invalid-feedback">
+        Please provide the LRN number.
+    </div>
+</div>
+
 
             <div class="form-group col-md-6">
                 <label for="beneficiary_name" class="form-label">Name:</label>
@@ -943,13 +983,13 @@ $(document).ready(function() {
 
 
   // Handle Save Changes button click
-  $('#saveChanges').on('click', function() {
+$('#saveChanges').on('click', function() {
     var id = $('#edit-id').val();
-    var lrn_no = $('#edit-lrn_no').val();  // Add LRN field
+    var lrn_no = $('#edit-lrn_no').val();
     var name = $('#edit-name').val();
     var sex = $('#edit-sex').val();
     var grade_section = $('#edit-grade_section').val();
-    var student_section = $('#edit-student_section').val();  // Add Student Section field
+    var student_section = $('#edit-student_section').val();
     var date_of_birth = $('#edit-date_of_birth').val();
     var date_of_weighing = $('#edit-date_of_weighing').val();
     var age = $('#edit-age').val();
@@ -958,48 +998,95 @@ $(document).ready(function() {
     var bmi = $('#edit-bmi').val();
     var nutritional_status_bmia = $('#edit-nutritional_status_bmia').val();
     var nutritional_status_hfa = $('#edit-nutritional_status_hfa').val();
+
     $.ajax({
-      url: 'update_beneficiary.php',
-      type: 'post',
-      data: {
-        id: id,
-        lrn_no: lrn_no,  // Add LRN field
-        name: name,
-        sex: sex,
-        grade_section: grade_section,
-        student_section: student_section,  // Add Student Section field
-        date_of_birth: date_of_birth,
-        date_of_weighing: date_of_weighing,
-        age: age,
-        weight: weight,
-        height: height,
-        bmi: bmi,
-        nutritional_status_bmia: nutritional_status_bmia,
-        nutritional_status_hfa: nutritional_status_hfa
-      },
-      success: function(response) {
-        alert(response);
-        $('#editModal').modal('hide');
-        location.reload();
-      }
+        url: 'update_beneficiary.php',
+        type: 'post',
+        data: {
+            id: id,
+            lrn_no: lrn_no,
+            name: name,
+            sex: sex,
+            grade_section: grade_section,
+            student_section: student_section,
+            date_of_birth: date_of_birth,
+            date_of_weighing: date_of_weighing,
+            age: age,
+            weight: weight,
+            height: height,
+            bmi: bmi,
+            nutritional_status_bmia: nutritional_status_bmia,
+            nutritional_status_hfa: nutritional_status_hfa
+        },
+        success: function(response) {
+            Swal.fire({
+                title: response.success ? 'Success!' : 'Error!',
+                text: response.message,
+                icon: response.success ? 'success' : 'error',
+                confirmButtonText: 'Okay'
+            }).then(() => {
+                if (response.success) {
+                    $('#editModal').modal('hide');
+                    location.reload();
+                }
+            });
+        }
     });
-  });
+});
+
 
   // Handle Remove button click
-  $('.remove-btn').on('click', function() {
+$('.remove-btn').on('click', function() {
     var id = $(this).data('id');
-    if (confirm('Are you sure you want to remove this record?')) {
-      $.ajax({
-        url: 'remove_beneficiary.php',
-        type: 'post',
-        data: { id: id },
-        success: function(response) {
-          alert(response);
-          location.reload();
+    // Use SweetAlert for confirmation
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "This action cannot be undone!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33', // Custom color for confirm button
+        cancelButtonColor: '#007bff', // Custom color for cancel button
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        background: '#f8f9fa', // Custom background color
+        color: '#343a40', // Custom text color
+        padding: '1.5rem', // Custom padding
+        customClass: {
+            title: 'alert-title', // Custom class for title
+            htmlContainer: 'alert-content' // Custom class for content
         }
-      });
-    }
-  });
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: 'remove_beneficiary.php',
+                type: 'post',
+                data: { id: id },
+                success: function(response) {
+                    const res = JSON.parse(response);
+                    Swal.fire({
+                        title: res.success ? 'Deleted!' : 'Error!',
+                        text: res.message,
+                        icon: res.success ? 'success' : 'error',
+                        confirmButtonText: 'Okay',
+                        background: res.success ? '#d4edda' : '#f8d7da', // Custom success/error background
+                        color: res.success ? '#155724' : '#721c24', // Custom success/error text color
+                        confirmButtonColor: '#28a745', // Custom color for confirm button
+                        padding: '1.5rem', // Custom padding
+                        customClass: {
+                            title: 'alert-title', // Custom class for title
+                            htmlContainer: 'alert-content' // Custom class for content
+                        }
+                    }).then(() => {
+                        if (res.success) {
+                            location.reload();
+                        }
+                    });
+                }
+            });
+        }
+    });
+});
+
   // Auto-compute age
   $('#edit-date_of_birth, #edit-date_of_weighing').on('change', function() {
     var dob = new Date($('#edit-date_of_birth').val());

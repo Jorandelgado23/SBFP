@@ -226,7 +226,34 @@ $conn->close();
 
 <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="adsettings.php">My Profile</a>
-                                                <a class="dropdown-item" href="logout.php"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                                                <a class="dropdown-item" href="#" id="logoutLink">
+    <span>Log Out</span> <i class="fa fa-sign-out"></i>
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.getElementById('logoutLink').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default link action
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out of your account!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, log me out!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to logout.php if confirmed
+                window.location.href = 'logout.php';
+            }
+        });
+    });
+</script>
+
                                             </div>
                                         </li>
                                     </ul>
@@ -337,10 +364,10 @@ $conn->close();
                             <h2 class="text-center mb-4">School Details</h2>
                         </div>
                     </div>
-                    <div class="table_section padding_infor_info">
-                        <div class="table-responsive-sm">
-                            <table class="table table-bordered">
-                                <thead class="thead-light">
+                    <div class="table-responsive">
+              <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                                <thead>
                                     <tr>
                                         <th class="text-nowrap">School Name</th>
                                         <th class="text-nowrap">Division/Province</th>

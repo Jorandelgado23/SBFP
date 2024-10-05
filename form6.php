@@ -22,14 +22,18 @@ if ($conn->connect_error) {
 $email = $_SESSION['email'];
 
 // Prepare and bind
-$stmt = $conn->prepare("SELECT firstname, lastname, role FROM users WHERE email = ?");
+$stmt = $conn->prepare("SELECT firstname, lastname, school_name, role FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $stmt->store_result();
-$stmt->bind_result($user_firstname, $user_lastname, $user_role);
+$stmt->bind_result($user_firstname, $user_lastname, $school_name, $user_role);
 
 if ($stmt->num_rows > 0) {
     $stmt->fetch();
+    if (!isset($_SESSION['welcome_shown'])) {
+        $welcome_message = "Welcome, $user_firstname $user_lastname!";
+        $_SESSION['welcome_shown'] = true; // Set the session variable
+    }
 } else {
     echo "No user found with that email address.";
     exit();
@@ -130,15 +134,14 @@ $conn->close();
                     <div class="sidebar_user_info">
     <div class="icon_setting"></div>
     <div class="user_profle_side">
-    <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
-
-    <div class="user_info">
-    <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
-        
-        <p><span class="online_animation"></span> Online</p>
+        <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
+        <div class="user_info">
+            <h6><?php echo $school_name; ?></h6> <!-- Display school name here -->
+            <p><span class="online_animation"></span> Online</p>
+        </div>
     </div>
 </div>
-</div>
+
 
                 </div>
                 <div class="sidebar_blog_2">
@@ -151,6 +154,16 @@ $conn->close();
                         <li>
                             <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
                         </li>
+
+                        
+                        <li>
+                            <a href="Beneficiary_list.php"><i class="fa fa-line-chart"></i> <span>Beneficiary Improvement</span></a>
+                        </li>
+
+                        <li>
+                            <a href="progress_input.php"><i class="fa fa-pencil-square"></i> <span>Progress Input</span></a>
+                        </li>
+            
                         <li>
                             <!-- <a href="form2.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 2</span></a> -->
                         </li>
@@ -253,7 +266,34 @@ $conn->close();
 
 <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="usersetting.php">My Profile</a>
-                                                <a class="dropdown-item" href="logout.php"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                                                <a class="dropdown-item" href="#" id="logoutLink">
+    <span>Log Out</span> <i class="fa fa-sign-out"></i>
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.getElementById('logoutLink').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default link action
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out of your account!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, log me out!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to logout.php if confirmed
+                window.location.href = 'logout.php';
+            }
+        });
+    });
+</script>
+
                                             </div>
                                         </li>
                                     </ul>
@@ -278,6 +318,8 @@ $conn->close();
 <div class="container">
   <h1>Submit School and Student Information</h1>
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#formModal"><i class="fa fa-plus"></i> Open Form</button>
+
+  
 
   <?php
 
@@ -478,8 +520,6 @@ $conn->close();
 
 <?php
 
-
-
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['email'])) {
     header("Location: login.php");
@@ -499,6 +539,28 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Function to mask the name
+function maskName($name) {
+    $parts = explode(' ', $name);
+    $maskedName = '';
+
+    // Mask the first name
+    if (isset($parts[0])) {
+        $firstName = $parts[0];
+        $maskedFirstName = substr($firstName, 0, 1) . str_repeat('*', strlen($firstName) - 1);
+        $maskedName = $maskedFirstName;
+    }
+
+    // Mask the last name
+    if (isset($parts[1])) {
+        $lastName = $parts[1];
+        $maskedLastName = substr($lastName, 0, 1) . str_repeat('*', strlen($lastName) - 1);
+        $maskedName .= ' ' . $maskedLastName;
+    }
+
+    return $maskedName;
+}
+
 // Function to fetch and display the milk data table
 function displayMilkData($conn, $session_id) {
     $stmt = $conn->prepare("SELECT * FROM milkcomponent WHERE session_id = ?");
@@ -506,57 +568,75 @@ function displayMilkData($conn, $session_id) {
     $stmt->execute();
     $result = $stmt->get_result();
     ?>
-    <div class="table_section padding_infor_info">
-        <div class="table-responsive-sm">
-            <table class="table table-bordered">
-                <thead>
+    <!-- Table Section -->
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-md-12 my-">
+      <div class="card shadow">
+        <div class="card-body">
+          <div class="white_shd full margin_bottom_30">
+            <div class="full graph_head">
+              <div class="heading1 margin_0">
+                <h2>Milk Data</h2>
+              </div>
+            </div>
+            <div class="table_section padding_infor_info">
+              <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                  <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Region/Division/District</th>
-                        <th>Name of School</th>
-                        <th>School ID Number</th>
-                        <th>Student Name</th>
-                        <th>Grade & Section</th>
-                        <th>Milk Tolerance</th>
-                       
+                      <th>Region/Division/District</th>
+                      <th>Name of School</th>
+                      <th>School ID Number</th>
+                      <th>Student Name</th>
+                      <th>Grade & Section</th>
+                      <th>Milk Tolerance</th>
+                      <th>Edit</th>
+                      <th>Delete</th>
                     </tr>
-                </thead>
-                <tbody>
-                <?php
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        echo "<tr>
-                <td>{$row['id']}</td>
-                <td>{$row['region_division_district']}</td>
-                <td>{$row['name_of_school']}</td>
-                <td>{$row['school_id_number']}</td>
-                <td>{$row['student_name']}</td>
-                <td>{$row['grade_section']}</td>
-                <td>{$row['milk_tolerance']}</td>
-                <td>
-                    <button class='btn btn-warning' onclick='showEditModal({$row['id']}, \"{$row['milk_tolerance']}\")'>
-                        <i class='fa fa-edit'></i>
-                    </button>
-                </td>
-                <td>
-                    <button class='btn btn-danger' onclick='confirmDelete({$row['id']});'>
-                        <i class='fa fa-trash'></i>
-                    </button>
-                </td>
-              </tr>";
-    }
-} else {
-    echo "<tr><td colspan='8'>No records found</td></tr>";
-}
-?>
-
-                </tbody>
-            </table>
+                  </thead>
+                  <tbody>
+                    <?php
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            $maskedStudentName = maskName($row['student_name']); // Mask the student name
+                            echo "<tr>
+                                <td>{$row['region_division_district']}</td>
+                                <td>{$row['name_of_school']}</td>
+                                <td>{$row['school_id_number']}</td>
+                                <td>{$maskedStudentName}</td>  <!-- Use the masked name here -->
+                                <td>{$row['grade_section']}</td>
+                                <td>{$row['milk_tolerance']}</td>
+                                <td>
+                                    <button class='btn btn-info' onclick='showEditModal({$row['id']}, \"{$row['milk_tolerance']}\")'>
+                                        <i class='fa fa-edit'></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class='btn btn-danger' onclick='confirmDelete({$row['id']});'>
+                                        <i class='fa fa-trash'></i>
+                                    </button>
+                                </td>
+                            </tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='8'>No records found</td></tr>";
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+</div>
     <?php
     $stmt->close();
 }
+
 
 // Function to display the modal for editing milk tolerance
 // Function to display the modal for editing milk tolerance
@@ -592,8 +672,35 @@ function displayEditModal() {
             </div>
         </div>
     </div>
+
+    <script>
+        // Function to handle the form submission with SweetAlert
+        document.addEventListener('DOMContentLoaded', function () {
+            const editForm = document.getElementById('editForm');
+
+            editForm.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                // Show the SweetAlert confirmation dialog
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to save the changes?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, save it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        editForm.submit(); // Submit the form if confirmed
+                    }
+                });
+            });
+        });
+    </script>
     <?php
 }
+
 
 // Fetch the session_id of the logged-in user
 $email = $_SESSION['email'];
@@ -610,7 +717,7 @@ $stmt->close();
     <div class="white_shd full margin_bottom_30">
         <div class="full graph_head">
             <div class="heading1 margin_0">
-                <h1>School-Based Feeding Program - Milk Component Data</h1>
+                <h1>Milk Component Data</h1>
                 <form method="POST" action="milk_regenerate.php">
                     <button type="submit" name="action" value="pdf" class="btn btn-primary"><i class="fa fa-file-pdf-o"></i> Generate PDF</button>
                     <button type="submit" name="action" value="excel" class="btn btn-success"><i class="fa fa-file-excel-o"> </i>Generate Excel</button>

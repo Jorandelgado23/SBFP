@@ -22,11 +22,11 @@ if ($conn->connect_error) {
 $email = $_SESSION['email'];
 
 // Prepare and bind
-$stmt = $conn->prepare("SELECT firstname, lastname, role FROM users WHERE email = ?");
+$stmt = $conn->prepare("SELECT firstname, lastname, school_name, role FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $stmt->store_result();
-$stmt->bind_result($user_firstname, $user_lastname, $user_role);
+$stmt->bind_result($user_firstname, $user_lastname, $school_name, $user_role);
 
 if ($stmt->num_rows > 0) {
     $stmt->fetch();
@@ -156,18 +156,17 @@ $conn->close();
                         <a href="dashboard.php"><img class="logo_icon img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
                         </div>
                     </div>
-                    <div class="sidebar_user_info">
+    <div class="sidebar_user_info">
     <div class="icon_setting"></div>
     <div class="user_profle_side">
-    <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
-
-    <div class="user_info">
-    <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
-        
-        <p><span class="online_animation"></span> Online</p>
+        <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
+        <div class="user_info">
+            <h6><?php echo $school_name; ?></h6> <!-- Display school name here -->
+            <p><span class="online_animation"></span> Online</p>
+        </div>
     </div>
 </div>
-</div>
+
 
                 </div>
                 <div class="sidebar_blog_2">
@@ -179,6 +178,14 @@ $conn->close();
 
                         <li>
                             <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
+                        </li>
+
+                        <li>
+                            <a href="Beneficiary_list.php"><i class="fa fa-line-chart"></i> <span>Beneficiary Improvement</span></a>
+                        </li>
+
+                        <li>
+                            <a href="progress_input.php"><i class="fa fa-pencil-square"></i> <span>Progress Input</span></a>
                         </li>
                         <li>
                             <!-- <a href="form2.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 2</span></a> -->
@@ -195,9 +202,9 @@ $conn->close();
                         <li>
                             <a href="form6.php"><i class="fa fa-flask"></i> <span>Milk Component Data</span></a>
                         </li>
-                        <!-- <li>
-                            <a href="form7.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 7</span></a>
-                        </li> -->
+                        <li>
+                            <a href="beneficiary_attendance.php"><i class="fa fa-file-excel-o"></i> <span>beneficiary attendance</span></a>
+                        </li>
                         <li>
                             <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>QUARTERLY REPORT</span></a>
                         </li>
@@ -273,7 +280,9 @@ $conn->close();
     <?php endif; ?>
 </a>
 
-                                     
+                          
+
+
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
@@ -287,7 +296,34 @@ $conn->close();
 
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="usersetting.php">My Profile</a>
-                                                <a class="dropdown-item" href="logout.php"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                                                <a class="dropdown-item" href="#" id="logoutLink">
+    <span>Log Out</span> <i class="fa fa-sign-out"></i>
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.getElementById('logoutLink').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default link action
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out of your account!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, log me out!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to logout.php if confirmed
+                window.location.href = 'logout.php';
+            }
+        });
+    });
+</script>
+
                                             </div>
                                         </li>
                                     </ul>
@@ -422,7 +458,7 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
         <div class="full counter_section margin_bottom_30">
             <div class="couter_icon">
                 <div> 
-                    <i class="fa fa-child yellow_color"></i>
+                <i class="fa fa-users dark_color"></i>
                 </div>
             </div>
             <div class="counter_no">
@@ -438,7 +474,7 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
         <div class="full counter_section margin_bottom_30">
             <div class="couter_icon">
                 <div> 
-                    <i class="fa fa-smile-o blue1_color"></i>
+                    <i class="fa fa-smile-o darkgreen_color"></i>
                 </div>
             </div>
             <div class="counter_no">
@@ -519,7 +555,6 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
 </div>
 
 
-                     
 
                  
 
@@ -535,7 +570,7 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
             <div class="map_section padding_infor_info">
                 <canvas id="bar_chart_bmi"></canvas>
                 <!-- Button to download the chart -->
-                <button onclick="downloadChart('bar_chart_bmi', 'BMI-A_Chart.png', 3)" class="btn btn-success">Download BMI-A Chart</button>
+                <button onclick="downloadChart('bar_chart_bmi', 'BMI-A_Chart.png', 3)" class="btn btn-info">Download BMI-A Chart</button>
             </div>
         </div>
     </div>
@@ -551,21 +586,153 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
             <div class="map_section padding_infor_info">
                 <canvas id="bar_chart_hfa"></canvas>
                 <!-- Button to download the chart -->
-                <button onclick="downloadChart('bar_chart_hfa', 'HFA_Chart.png', 3)" class="btn btn-success">Download HFA Chart</button>
+                <button onclick="downloadChart('bar_chart_hfa', 'HFA_Chart.png', 3)" class="btn btn-info">Download HFA Chart</button>
             </div>
         </div>
     </div>
 </div>
 
 
+<div class="row column1">
+<?php
+// Include database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Retrieve session_id of the logged-in user
+$email = $_SESSION['email'];
+$stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($session_id);
+$stmt->fetch();
+$stmt->close();
+
+// Default value for the date
+$date = date('Y-m-d'); // Current date
+
+// Check if a date was submitted
+if (isset($_POST['date'])) {
+    $date = $_POST['date'];
+}
+
+// Fetch submitted data for the logged-in user, ensuring only beneficiaries with the same session_id are shown
+$sql = "SELECT * FROM beneficiary_details WHERE session_id = ? ORDER BY name";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $session_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Fetch data for chart visualization based on the selected date and session_id
+$sql_improved = "SELECT COUNT(*) AS improved_count FROM beneficiary_progress 
+                 WHERE (nutritional_status_bmia = 'Normal' OR nutritional_status_hfa = 'Normal') 
+                 AND session_id = ? AND DATE(date_of_progress) = ?";
+$sql_no_progress = "SELECT COUNT(*) AS no_progress_count FROM beneficiary_progress 
+                    WHERE (nutritional_status_bmia != 'Normal' AND nutritional_status_hfa != 'Normal') 
+                    AND session_id = ? AND DATE(date_of_progress) = ?";
+
+$stmt_improved = $conn->prepare($sql_improved);
+$stmt_improved->bind_param("ss", $session_id, $date);
+$stmt_improved->execute();
+$result_improved = $stmt_improved->get_result();
+
+$stmt_no_progress = $conn->prepare($sql_no_progress);
+$stmt_no_progress->bind_param("ss", $session_id, $date);
+$stmt_no_progress->execute();
+$result_no_progress = $stmt_no_progress->get_result();
+
+$improved_count = $result_improved->fetch_assoc()['improved_count'];
+$no_progress_count = $result_no_progress->fetch_assoc()['no_progress_count'];
+
+?>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
 
-
-
-
-</script>
     <div class="col-lg-6">
+        <div class="white_shd full margin_bottom_30">
+            <div class="full graph_head d-flex justify-content-between align-items-center">
+                <div class="heading1 margin_0">
+                    <h2>Beneficiaries Progress</h2>
+                </div>
+                <!-- Form with date picker placed to the right of the heading -->
+                <form method="post" class="mb-0" id="dateForm">
+                    <div class="form-row align-items-center">
+                        <div class="col-auto">
+                            <label for="date">Select Date:</label>
+                            <input type="date" name="date" id="date" class="form-control" value="<?= $date ?>" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="map_section padding_infor_info" style="background-color: white; padding: 20px;">
+                <canvas id="pie_chart"></canvas>
+            </div>
+            <!-- Button to download the chart -->
+            <div class="text-center mt-3">
+                <button onclick="downloadChart('pie_chart', 'Nutritional_Status_Chart.png', 3)" class="btn btn-info">Download Chart as Image</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Automatically submit the form when the date changes
+        document.getElementById('date').addEventListener('change', function() {
+            document.getElementById('dateForm').submit();
+        });
+
+        var ctx = document.getElementById('pie_chart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Improved', 'No Progress'],
+                datasets: [{
+                    data: [<?= $improved_count ?>, <?= $no_progress_count ?>],
+                    backgroundColor: ['#4CAF50', '#F44336'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+
+        // Function to download chart as image
+        function downloadChart(chartId, filename, quality) {
+            var canvas = document.getElementById(chartId);
+            var image = canvas.toDataURL("image/png", quality);
+            var link = document.createElement('a');
+            link.href = image;
+            link.download = filename;
+            link.click();
+        }
+    </script>
+
+
+<?php
+$conn->close(); // Close the database connection
+?>
+
+
+
+<div class="col-lg-6">
         <div class="white_shd full margin_bottom_30">
             <div class="full graph_head">
                 <div class="heading1 margin_0">
@@ -578,7 +745,6 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
                         <div class="msg_list_main">
                             <ul class="msg_list">
                             <?php
-
 
 // Fetch recent activities from database
 $servername = "localhost";
@@ -639,12 +805,29 @@ $conn->close();
 
 
 
+
+
+
+
+
+
+
+
+
+
+
     <!-- Include Bootstrap JS (adjust the path as necessary) -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
 
-                        
+                   
+    
+    
+
+
+
+
 
 
                         
@@ -665,7 +848,7 @@ $conn->close();
     <script src="js/Chart.min.js"></script>
     <!-- Init Charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
+    <script>
 const ctxBMI = document.getElementById('bar_chart_bmi').getContext('2d');
 const ctxHFA = document.getElementById('bar_chart_hfa').getContext('2d');
 
@@ -682,18 +865,24 @@ const barChartBMI = new Chart(ctxBMI, {
             label: 'Percentage (%)',
             data: chartDataBMI.data,
             backgroundColor: [
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
+                'rgba(54, 162, 235, 0.2)',   // Blue
+                'rgba(255, 99, 132, 0.2)',   // Red
+                'rgba(255, 206, 86, 0.2)',   // Yellow
+                'rgba(75, 192, 192, 0.2)',   // Teal
+                'rgba(153, 102, 255, 0.2)',  // Purple
+                'rgba(255, 159, 64, 0.2)',   // Orange
+                'rgba(199, 199, 199, 0.2)',  // Gray
+                'rgba(255, 99, 255, 0.2)'    // Pink
             ],
             borderColor: [
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 99, 132, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
+                'rgba(54, 162, 235, 1)',    // Blue
+                'rgba(255, 99, 132, 1)',    // Red
+                'rgba(255, 206, 86, 1)',    // Yellow
+                'rgba(75, 192, 192, 1)',    // Teal
+                'rgba(153, 102, 255, 1)',   // Purple
+                'rgba(255, 159, 64, 1)',    // Orange
+                'rgba(199, 199, 199, 1)',   // Gray
+                'rgba(255, 99, 255, 1)'     // Pink
             ],
             borderWidth: 1
         }]
@@ -719,14 +908,20 @@ const barChartHFA = new Chart(ctxHFA, {
             label: 'Percentage (%)',
             data: chartDataHFA.data,
             backgroundColor: [
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
+                'rgba(54, 162, 235, 0.2)',   // Blue
+                'rgba(255, 99, 132, 0.2)',   // Red
+                'rgba(255, 206, 86, 0.2)',   // Yellow
+                'rgba(75, 192, 192, 0.2)',   // Teal
+                'rgba(153, 102, 255, 0.2)',  // Purple
+                'rgba(255, 159, 64, 0.2)'    // Orange
             ],
             borderColor: [
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 99, 132, 1)',
-                'rgba(255, 206, 86, 1)',
+                'rgba(54, 162, 235, 1)',    // Blue
+                'rgba(255, 99, 132, 1)',    // Red
+                'rgba(255, 206, 86, 1)',    // Yellow
+                'rgba(75, 192, 192, 1)',    // Teal
+                'rgba(153, 102, 255, 1)',   // Purple
+                'rgba(255, 159, 64, 1)'     // Orange
             ],
             borderWidth: 1
         }]
@@ -742,10 +937,8 @@ const barChartHFA = new Chart(ctxHFA, {
         }
     }
 });
-</script>
 
-<script>
-
+// Download chart function
 function downloadChart(canvasId, filename, scale = 2) {
     // Get the original canvas element
     var canvas = document.getElementById(canvasId);
@@ -776,8 +969,6 @@ function downloadChart(canvasId, filename, scale = 2) {
     // Trigger the download
     link.click();
 }
-
-
 </script>
 
 

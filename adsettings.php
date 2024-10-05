@@ -220,7 +220,34 @@ $conn->close();
 
 <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="adsettings.php">My Profile</a>
-                                                <a class="dropdown-item" href="logout.php"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                                                <a class="dropdown-item" href="#" id="logoutLink">
+    <span>Log Out</span> <i class="fa fa-sign-out"></i>
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.getElementById('logoutLink').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default link action
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out of your account!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, log me out!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to logout.php if confirmed
+                window.location.href = 'logout.php';
+            }
+        });
+    });
+</script>
+
                                             </div>
                                         </li>
                                     </ul>
@@ -247,8 +274,7 @@ $conn->close();
 
 
 
-                       
-<div class="midde_cont">
+                        <div class="midde_cont">
     <div class="container-fluid">
         <div class="row column_title">
             <div class="col-md-12">
@@ -258,80 +284,92 @@ $conn->close();
             </div>
         </div>
         <div class="row column1">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
-        <div class="white_shd full margin_bottom_30">
-            <div class="full graph_head">
-                <div class="heading1 margin_0">
-                    <h2>Admin Profile Setting</h2>
-                </div>
-            </div>
-            <div class="full price_table padding_infor_info">
-                <form action="update_profile.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($user_id); ?>">
-                    <div class="row align-items-center">
-                      
-                        <div class="col-lg-9">
-                            <div class="profile_contant">
-                                <h3><?php echo htmlspecialchars($user_firstname . ' ' . $user_lastname); ?></h3>
-                                <ul class="list-unstyled">
-                                    <li><i class="fa fa-envelope-o"></i> <?php echo htmlspecialchars($email); ?></li>
-                                    <!-- Add more user details as needed -->
-                                </ul>
-                            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="white_shd full margin_bottom_30">
+                    <div class="full graph_head">
+                        <div class="heading1 margin_0">
+                            <h2>Admin Profile Setting</h2>
                         </div>
                     </div>
-                    <hr class="my-4">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="firstname">Firstname:</label>
-                                <input type="text" name="firstname" class="form-control" value="<?php echo htmlspecialchars($user_firstname); ?>">
+                    <div class="full price_table padding_infor_info">
+                        <form action="update_profile.php" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="id" value="<?php echo htmlspecialchars($user_id); ?>">
+                            <div class="row align-items-center">
+                                <div class="col-lg-9">
+                                    <div class="profile_contant">
+                                        <h3><?php echo htmlspecialchars($user_firstname . ' ' . $user_lastname); ?></h3>
+                                        <ul class="list-unstyled">
+                                            <li><i class="fa fa-envelope-o"></i> <?php echo htmlspecialchars($email); ?></li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="lastname">Lastname:</label>
-                                <input type="text" name="lastname" class="form-control" value="<?php echo htmlspecialchars($user_lastname); ?>">
+                            <hr class="my-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="firstname">Firstname:</label>
+                                        <input type="text" name="firstname" class="form-control" value="<?php echo htmlspecialchars($user_firstname); ?>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="lastname">Lastname:</label>
+                                        <input type="text" name="lastname" class="form-control" value="<?php echo htmlspecialchars($user_lastname); ?>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email:</label>
+                                        <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($email); ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="old_password">Old Password:</label>
+                                        <div class="input-group">
+                                            <input type="password" name="old_password" class="form-control" id="old_password">
+                                            <div class="input-group-append">
+                                                <button class="btn toggle-password show-password btn-primary" type="button" data-target="old_password">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="new_password">New Password:</label>
+                                        <div class="input-group">
+                                            <input type="password" name="new_password" class="form-control" id="new_password">
+                                            <div class="input-group-append">
+                                                <button class="btn toggle-password show-password btn-primary" type="button" data-target="new_password">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirm_password">Confirm Password:</label>
+                                        <div class="input-group">
+                                            <input type="password" name="confirm_password" class="form-control" id="confirm_password">
+                                            <div class="input-group-append">
+                                                <button class="btn toggle-password show-password btn-primary" type="button" data-target="confirm_password">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="email">Email:</label>
-                                <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($email); ?>">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-    <div class="form-group">
-        <label for="old_password">Old Password:</label>
-        <div class="input-group">
-            <input type="password" name="old_password" class="form-control" id="old_password">
-            <div class="input-group-append">
-                <button class="btn toggle-password show-password btn-primary" type="button" data-target="old_password">
-                    <i class="fa fa-eye"></i>
-                </button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="new_password">New Password:</label>
-        <div class="input-group">
-            <input type="password" name="new_password" class="form-control" id="new_password">
-            <div class="input-group-append">
-                <button class="btn toggle-password show-password btn-primary" type="button" data-target="new_password">
-                    <i class="fa fa-eye"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="confirm_password">Confirm Password:</label>
-        <div class="input-group">
-            <input type="password" name="confirm_password" class="form-control" id="confirm_password">
-            <div class="input-group-append">
-                <button class="btn toggle-password show-password btn-primary" type="button" data-target="confirm_password">
-                    <i class="fa fa-eye"></i>
-                </button>
-            </div>
+            <div class="col-md-2"></div>
         </div>
     </div>
 </div>
+
+<!-- Include SweetAlert CSS and JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     // Function to toggle password visibility
@@ -354,17 +392,26 @@ $conn->close();
                 }
             });
         });
+
+        // Handle form submission
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
+            
+            // Show the SweetAlert notification
+            Swal.fire({
+                title: 'Profile Updated!',
+                text: 'Your profile has been successfully updated.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // Submit the form after confirming
+                }
+            });
+        });
     });
 </script>
-
-                    </div>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-2"></div>
-</div>
 
 
 

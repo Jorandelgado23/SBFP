@@ -56,13 +56,13 @@ $conn->close();
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>Student Attendance</title>
+      <title>beneficiaries Progress page</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
       <!-- site icon -->
       <link rel="icon" href="images/LOGO.png" type="image/png" />
-
+     
       <!-- bootstrap css -->
       <link rel="stylesheet" href="css/bootstrap.min.css" />
       <!-- site css -->
@@ -77,8 +77,9 @@ $conn->close();
       <link rel="stylesheet" href="css/perfect-scrollbar.css" />
       <!-- custom css -->
       <link rel="stylesheet" href="css/custom.css" />
-
-      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
       
 
@@ -89,61 +90,21 @@ $conn->close();
    </head>
 
    <style>
-        /* Custom styles for the attendance table */
-       
-
-        .active {
+     .active {
         background-color: lightblue; /* Background color */
         color: #fff; /* Text color */
         font-weight: bold; /* Bold text */
     }
 
-    .input-group {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
-        }
-        .input-group div {
-            flex: 1;
-            margin-right: 10px;
-            min-width: 150px; /* Set a minimum width for smaller screens */
-        }
-        .input-group div:last-child {
-            margin-right: 0;
-        }
-        table {
-            width: 100%; /* Ensure the table fits within the screen width */
-            border-collapse: collapse;
-            margin-top: 20px;
-            overflow-x: hidden; /* Enable horizontal scrolling if needed */
-            display: block; /* Block layout to manage overflow */
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 10px; /* Reduce padding to fit more data */
-            text-align: center;
-            font-size: 12px; /* Decrease font size */
-        }
-        
-
-        /* Styling for horizontal scrolling */
-        .table-wrapper {
-            overflow-x: auto; /* Horizontal scrollbar */
-            margin-top: 20px;
-        }
-
     
-    </style>
-
+    
+   </style>
 
 <body class="dashboard dashboard_2">
     <div class="full_container">
         <div class="inner_container">
-           <!-- Sidebar -->
-           <nav id="sidebar">
+            <!-- Sidebar -->
+            <nav id="sidebar">
                 <div class="sidebar_blog_1">
                     <div class="sidebar-header">
                         <div class="logo_section">
@@ -161,20 +122,19 @@ $conn->close();
     </div>
 </div>
 
+
                 </div>
                 <div class="sidebar_blog_2">
                     <h4>General</h4>
                     <ul class="list-unstyled components">
                     <li>
-                            <a href="dashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
+                            <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
                         </li>
 
                         <li>
                             <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
                         </li>
-
-                           
-                        <li>
+                        <li class="active">
                             <a href="Beneficiary_list.php"><i class="fa fa-line-chart"></i> <span>Beneficiary Improvement</span></a>
                         </li>
 
@@ -187,7 +147,7 @@ $conn->close();
                         <!-- <li>
                             <a href="form3.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 3</span></a>
                         </li> -->
-                        <li class="active">
+                        <li>
                             <a href="student_attendance.php"><i class="fa fa-calendar"></i> <span>Student Attendance</span></a>
                         </li>
                         <!-- <li>
@@ -202,8 +162,10 @@ $conn->close();
                         <li>
                             <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>QUARTERLY REPORT</span></a>
                         </li>
+
+                     
                        
-                      
+
                       
             
                         
@@ -222,7 +184,7 @@ $conn->close();
                         <div class="full">
                             <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
                             <div class="logo_section">
-                                <a href="dashboard.php"><img class="img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
+                            <a href="dashboard.php"><img class="img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
                             </div>
                             <div class="right_topbar">
                                 <div class="icon_info">
@@ -269,7 +231,7 @@ $conn->close();
 <?php endif; ?>
 </a>
 
-
+  
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
@@ -278,7 +240,9 @@ $conn->close();
         <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
 
     <span class="name_user"><?php echo $user_role; ?></span>
+
 </a>
+
 
 <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="usersetting.php">My Profile</a>
@@ -325,107 +289,220 @@ $conn->close();
                         <div class="row column_title">
                             <div class="col-md-12">
                                 <div class="page_title">
-                                    <h2>ATTENDANCE</h2>
+                                    <h2>beneficiary progress</h2>
                                 </div>
                             </div>
-                        </div>
-                        <h2 class="h4 mb-4">Attendance & Meal Monitoring</h2>
-                        <form method="post" action="download.php">
-    <!-- <button type="submit" name="action" value="excel" class="btn btn-success">Download Excel</button> -->
-    <button type="submit" name="action" value="pdf" class="btn btn-danger"><i class="fa fa-file-pdf-o"></i> Download PDF</button>
-</form>
+                            
+                        </div>  
 
-<div>
-   <!-- table section -->
-<div class="col-md-13">
+
+
+             
+
+
+
+                        <?php
+// Include database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sbfp";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Retrieve session_id of the logged-in user
+$email = $_SESSION['email'];
+$stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($session_id);
+$stmt->fetch();
+$stmt->close();
+
+// Initialize variables for filtering
+$date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d'); // Default to current date
+
+// Extract month and day from the selected date
+$month = date('m', strtotime($date));
+$day = date('d', strtotime($date));
+
+// Fetch beneficiaries associated with the user's session_id and their latest progress with filtering
+$sql = "SELECT bd.name, bd.grade_section, bp.weight, bp.height, bp.bmi, bp.nutritional_status_bmia, bp.nutritional_status_hfa
+        FROM beneficiary_details bd
+        LEFT JOIN beneficiary_progress bp ON bp.beneficiary_id = bd.id
+        WHERE bd.session_id = ? AND MONTH(bp.date_of_progress) = ? AND DAY(bp.date_of_progress) = ?
+        ORDER BY bp.date_of_progress DESC";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("sii", $session_id, $month, $day);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$beneficiary_data = [];
+while ($row = $result->fetch_assoc()) {
+    $beneficiary_data[] = $row;
+}
+
+// Fetch data for the line chart
+$sql_chart = "SELECT bp.date_of_progress, bp.weight, bp.height, bp.bmi
+              FROM beneficiary_details bd
+              LEFT JOIN beneficiary_progress bp ON bp.beneficiary_id = bd.id
+              WHERE bd.session_id = ? AND MONTH(bp.date_of_progress) = ? AND DAY(bp.date_of_progress) = ?
+              ORDER BY bp.date_of_progress ASC";
+
+$stmt_chart = $conn->prepare($sql_chart);
+$stmt_chart->bind_param("sii", $session_id, $month, $day);
+$stmt_chart->execute();
+$chart_result = $stmt_chart->get_result();
+
+$dates = [];
+$weights = [];
+$heights = [];
+$bmis = [];
+
+while ($chart_row = $chart_result->fetch_assoc()) {
+    $dates[] = $chart_row['date_of_progress'];
+    $weights[] = $chart_row['weight'];
+    $heights[] = $chart_row['height'];
+    $bmis[] = $chart_row['bmi'];
+}
+
+?>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Filter Form -->
+<div class="col-md-12">
     <div class="white_shd full margin_bottom_30">
         <div class="full graph_head">
             <div class="heading1 margin_0">
-                <h2>Feeding Attendance Table</h2>
+                <h2>Filter Form</h2>
             </div>
         </div>
+        <div class="padding_infor_info">
+            <form method="POST" action="" id="dateForm" class="mb-0">
+                <div class="form-row align-items-center">
+                    <div class="col-auto">
+                        <label for="date">Select Date:</label>
+                        <input type="date" name="date" id="date" class="form-control" value="<?= $date ?>" required onchange="submitForm()">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Table Section -->
         <div class="table_section padding_infor_info">
             <div class="table-responsive-sm">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th rowspan="2">Name of Pupil</th>
-                            <th colspan="31">Actual Feeding</th>
-                        </tr>
-                        <tr>
-                            <!-- Days of the month (1 to 31) -->
-                            <?php for ($i = 1; $i <= 31; $i++) { echo "<th>$i</th>"; } ?>
+                            <th>Name</th>
+                            <th>Grade & Section</th>
+                            <th>Weight (kg)</th>
+                            <th>Height (cm)</th>
+                            <th>BMI</th>
+                            <th>Nutritional Status (BMI)</th>
+                            <th>Nutritional Status (HFA)</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        $servername = "localhost";
-                        $username = "root";
-                        $password = "";
-                        $dbname = "sbfp";
-
-                        // Create connection
-                        $conn = new mysqli($servername, $username, $password, $dbname);
-
-                        // Check connection
-                        if ($conn->connect_error) {
-                            die("Connection failed: " . $conn->connect_error);
-                        }
-
-                        // Retrieve session_id of the logged-in user
-                        $email = $_SESSION['email'];
-                        $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
-                        $stmt->bind_param("s", $email);
-                        $stmt->execute();
-                        $stmt->store_result();
-                        $stmt->bind_result($session_id);
-                        $stmt->fetch();
-                        $stmt->close();
-
-                        // Fetch submitted data for the logged-in user
-                        $sql = "SELECT * FROM beneficiary_details WHERE session_id = ? ORDER BY name";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bind_param("s", $session_id);
-                        $stmt->execute();
-                        $result = $stmt->get_result();
-
-                        if ($result->num_rows > 0) {
-                            // Loop through each student
-                            while ($row = $result->fetch_assoc()) {
-                                echo '<tr>';
-                                // Display student name
-                                echo '<td>' . $row['name'] . '</td>';
-                                // Display 31 columns for feeding days
-                                for ($i = 1; $i <= 31; $i++) {
-                                    echo '<td></td>'; // Empty cells for each day
-                                }
-                                echo '</tr>';
-                            }
-                        } else {
-                            // Placeholder rows if no data is found
-                            for ($i = 1; $i <= 25; $i++) {
-                                echo '<tr>';
-                                echo '<td>Pupil ' . $i . '</td>';
-                                echo '<td colspan="31"></td>';
-                                echo '</tr>';
-                            }
-                        }
-                        $conn->close();
-                        ?>
-                        <!-- Total row with non-editable boxes -->
-                        <tr>
-                            <td>Total</td>
-                            <?php for ($i = 1; $i <= 31; $i++): ?>
-                                <td style="text-align: center;"></td>
-                            <?php endfor; ?>
-                        </tr>
+                        <?php foreach ($beneficiary_data as $row) { ?>
+                            <tr>
+                                <td><?= $row['name'] ?></td>
+                                <td><?= $row['grade_section'] ?></td>
+                                <td><?= $row['weight'] ?></td>
+                                <td><?= $row['height'] ?></td>
+                                <td><?= $row['bmi'] ?></td>
+                                <td><?= $row['nutritional_status_bmia'] ?></td>
+                                <td><?= $row['nutritional_status_hfa'] ?></td>
+                                <td><?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'Improved' : 'No Progress' ?></td>
+                            </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
         </div>
+
+        <!-- Line Chart Section -->
+        <div style="width: 800px; margin: auto;">
+            <canvas id="line_chart"></canvas>
+        </div>
+
+        <script>
+            var ctx = document.getElementById('line_chart').getContext('2d');
+            var lineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: <?= json_encode($dates) ?>,
+                    datasets: [
+                        {
+                            label: 'Weight (kg)',
+                            data: <?= json_encode($weights) ?>,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            fill: false
+                        },
+                        {
+                            label: 'Height (cm)',
+                            data: <?= json_encode($heights) ?>,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 2,
+                            fill: false
+                        },
+                        {
+                            label: 'BMI',
+                            data: <?= json_encode($bmis) ?>,
+                            borderColor: 'rgba(153, 102, 255, 1)',
+                            borderWidth: 2,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Value'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Automatically submit the form when a date is selected
+            function submitForm() {
+                document.getElementById('dateForm').submit();
+            }
+        </script>
+
     </div>
 </div>
 
+<?php
+// Close the database connection
+$conn->close();
+?>
 
 
 
@@ -433,41 +510,14 @@ $conn->close();
 
 
 
-
-        
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
-<script>
-// JavaScript to handle clickable boxes and toggle checkboxes
-document.addEventListener('DOMContentLoaded', function () {
-    const attendanceSelects = document.querySelectorAll('.attendance-select');
-
-    // Check localStorage for previously selected options
-    for (const select of attendanceSelects) {
-        const selectId = select.id;
-        const selectedValue = localStorage.getItem(selectId);
-
-        if (selectedValue) {
-            select.value = selectedValue;
-        }
-
-        select.addEventListener('change', function () {
-            localStorage.setItem(selectId, this.value);
-        });
-    }
-});
-
-</script>
-
-
+                        
+                    </div>
+                   
+                </div>
+                <!-- End Dashboard Inner -->
             </div>
         </div>
     </div>
-
-
-    
     <!-- jQuery -->
     <script src="js/jquery.min.js"></script>
     <!-- Bootstrap Bundle JavaScript -->

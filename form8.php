@@ -22,14 +22,18 @@ if ($conn->connect_error) {
 $email = $_SESSION['email'];
 
 // Prepare and bind
-$stmt = $conn->prepare("SELECT firstname, lastname, role FROM users WHERE email = ?");
+$stmt = $conn->prepare("SELECT firstname, lastname, school_name, role FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $stmt->store_result();
-$stmt->bind_result($user_firstname, $user_lastname, $user_role);
+$stmt->bind_result($user_firstname, $user_lastname, $school_name, $user_role);
 
 if ($stmt->num_rows > 0) {
     $stmt->fetch();
+    if (!isset($_SESSION['welcome_shown'])) {
+        $welcome_message = "Welcome, $user_firstname $user_lastname!";
+        $_SESSION['welcome_shown'] = true; // Set the session variable
+    }
 } else {
     echo "No user found with that email address.";
     exit();
@@ -104,15 +108,14 @@ $conn->close();
                     <div class="sidebar_user_info">
     <div class="icon_setting"></div>
     <div class="user_profle_side">
-    <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
-
-    <div class="user_info">
-    <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
-        
-        <p><span class="online_animation"></span> Online</p>
+        <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
+        <div class="user_info">
+            <h6><?php echo $school_name; ?></h6> <!-- Display school name here -->
+            <p><span class="online_animation"></span> Online</p>
+        </div>
     </div>
 </div>
-</div>
+
 
                 </div>
                 <div class="sidebar_blog_2">
@@ -125,6 +128,15 @@ $conn->close();
                         <li>
                             <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
                         </li>
+
+                        <li>
+                            <a href="Beneficiary_list.php"><i class="fa fa-line-chart"></i> <span>Beneficiary Improvement</span></a>
+                        </li>
+
+                        <li>
+                            <a href="progress_input.php"><i class="fa fa-pencil-square"></i> <span>Progress Input</span></a>
+                        </li>
+            
                         <li>
                             <!-- <a href="form2.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 2</span></a> -->
                         </li>
@@ -227,7 +239,34 @@ $conn->close();
 
 <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="usersetting.php">My Profile</a>
-                                                <a class="dropdown-item" href="logout.php"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                                                <a class="dropdown-item" href="#" id="logoutLink">
+    <span>Log Out</span> <i class="fa fa-sign-out"></i>
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.getElementById('logoutLink').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default link action
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out of your account!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, log me out!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to logout.php if confirmed
+                window.location.href = 'logout.php';
+            }
+        });
+    });
+</script>
+
                                             </div>
                                         </li>
                                     </ul>
@@ -239,92 +278,150 @@ $conn->close();
                 <!-- End Topbar -->
                 <!-- Dashboard Inner -->
                 <div class="midde_cont">
-                    <div class="container-fluid">
-                        <div class="row column_title">
-                            <div class="col-md-12">
-                                <div class="page_title">
-                                    <h2>MONTHLY/QUARTERLY REPORT</h2>
-                                </div>
-                            </div>
-                        </div>
-                       
-                      <div class="container-fluid">
-          <div class="row justify-content-center">
-          <div class="col-12">
-            <h1 class="page-title">SCHOOL-BASED FEEDING PROGRAM MONTHLY/QUARTERLY REPORT</h1>
-            
-        </div> <!-- .col-12 -->
-          </div> <!-- .row -->
-        </div> <!-- .container-fluid -->
-        <div class="col-md-12">
-                           <div class="white_shd full margin_bottom_30">
-                              <div class="full graph_head">
-                                 <div class="heading1 margin_0">
-        <!-- <h2 class="mb-4">Monthly/Quarterly Report</h2> -->
-        <form action="submit8.php" method="POST">
-            <div class="form-group">
-                <label for="region_division">Region/Division:</label>
-                <input type="text" class="form-control" name="region_division" id="region_division">
-            </div>
-
-            <h3 class="mt-4">Division/Schools</h3>
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>Division/Schools</th>
-                            <th>No. of SDO Schools</th>
-                            <th>Target No. of SBFP Schools</th>
-                            <th>Actual No. of SBFP Schools</th>
-                            <th>% (SBFP Schools/SDO Schools)</th>
-                            <th>Status of Implementation</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><input type="text" class="form-control" name="division_schools[]" required></td>
-                            <td><input type="number" class="form-control" name="sdo_schools[]" required></td>
-                            <td><input type="number" class="form-control" name="target_sbfp_schools[]" required></td>
-                            <td><input type="number" class="form-control" name="actual_sbfp_schools[]" required></td>
-                            <td><input type="number" class="form-control" name="percentage[]" required></td>
-                            <td><input type="text" class="form-control" name="implementation_status[]" required></td>
-                        </tr>
-                        <!-- You can add more rows dynamically using JavaScript if needed -->
-                    </tbody>
-                </table>
-            </div>
-
-            <h3 class="mt-4">Financial Status</h3>
-            <div class="form-group">
-                <label for="amount_allocated">Amount Allocated:</label>
-                <input type="number" class="form-control" name="amount_allocated" id="amount_allocated">
-            </div>
-
-            <!-- Add more financial status fields as needed -->
-
-            <h3 class="mt-4">Liquidation</h3>
-            <div class="form-group">
-                <label for="first_liquidation">1st Liquidation:</label>
-                <input type="text" class="form-control" name="first_liquidation" id="first_liquidation">
-            </div>
-            <div class="form-group">
-                <label for="second_liquidation">2nd Liquidation:</label>
-                <input type="text" class="form-control" name="second_liquidation" id="second_liquidation">
-            </div>
-
-            <h3 class="mt-4">Remarks</h3>
-            <div class="form-group">
-                <textarea name="remarks" class="form-control" id="remarks" cols="30" rows="5"></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Submit Report</button>
-        </form>
-    </div>
-                        
-                    </div>
-                   
+    <div class="container-fluid">
+        <div class="row column_title">
+            <div class="col-md-12">
+                <div class="page_title">
+                    <h2>MONTHLY/QUARTERLY REPORT</h2>
                 </div>
-                <!-- End Dashboard Inner -->
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-15">
+                    <h1 class="page-title">SCHOOL-BASED FEEDING PROGRAM MONTHLY/QUARTERLY REPORT</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="white_shd full margin_bottom_30">
+                <div class="full graph_head">
+                    <div class="heading1 margin_0">
+                        <form action="submit8.php" method="POST">
+                            <div class="form-group">
+                                <label for="region_division">Region/Division:</label>
+                                <input type="text" class="form-control" name="region_division" id="region_division" required>
+                            </div>
+
+                            <h3 class="mt-4">Division/Schools</h3>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Division/Schools</th>
+                                            <th>No. of SDO Schools</th>
+                                            <th>Target No. of SBFP Schools</th>
+                                            <th>Actual No. of SBFP Schools</th>
+                                            <th>% (SBFP Schools/SDO Schools)</th>
+                                            <th>Status of Implementation</th>
+                                            <th>No. of Target Beneficiaries</th>
+                                            <th>No. of Actual Beneficiaries</th>
+                                            <th>% of Completion</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="text" class="form-control" name="division_schools[]" required></td>
+                                            <td><input type="number" class="form-control" name="sdo_schools[]" required></td>
+                                            <td><input type="number" class="form-control" name="target_sbfp_schools[]" required></td>
+                                            <td><input type="number" class="form-control" name="actual_sbfp_schools[]" required></td>
+                                            <td><input type="number" class="form-control" name="percentage[]" required></td>
+                                            <td><input type="text" class="form-control" name="implementation_status[]" required></td>
+                                            <td><input type="number" class="form-control" name="target_beneficiaries[]" oninput="calculateCompletion()" required></td>
+                                            <td><input type="number" class="form-control" name="actual_beneficiaries[]" oninput="calculateCompletion()" required></td>
+                                            <td><input type="number" step="0.01" class="form-control" name="completion_percentage[]" readonly></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h3 class="mt-4">Financial Status</h3>
+                            <div class="form-group">
+                                <label for="amount_allocated">Amount Allocated:</label>
+                                <input type="number" class="form-control" name="amount_allocated" id="amount_allocated" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="amount_downloaded">Amount Downloaded to Schools:</label>
+                                <input type="number" class="form-control" name="amount_downloaded" id="amount_downloaded" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="disbursed">Status of Downloading of Funds:</label>
+                                <input type="text" class="form-control" name="status_fund_downloading" id="status_fund_downloading" required>
+                            </div>
+
+                            <h3 class="mt-4">Liquidation</h3>
+                            <div class="form-group">
+                                <label for="first_liquidation">1st Liquidation:</label>
+                                <input type="number" class="form-control" name="first_liquidation" id="first_liquidation" oninput="calculateTotalLiquidation()" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="second_liquidation">2nd Liquidation:</label>
+                                <input type="number" class="form-control" name="second_liquidation" id="second_liquidation" oninput="calculateTotalLiquidation()" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="total_liquidation">Total Liquidation:</label>
+                                <input type="number" class="form-control" name="total_liquidation" id="total_liquidation" readonly>
+                            </div>
+
+                            <h3 class="mt-4">Remarks</h3>
+                            <div class="form-group">
+                                <label for="liquidation_status">Fully/Partially Liquidated:</label>
+                                <select name="liquidation_status" class="form-control" id="liquidation_status">
+                                    <option value="Fully">Fully Liquidated</option>
+                                    <option value="Partially">Partially Liquidated</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <textarea name="remarks" class="form-control" id="remarks" cols="30" rows="5" placeholder="Enter remarks here"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Submit Report</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Function to compute % of Completion
+    function calculateCompletion() {
+        var targetBeneficiaries = document.getElementsByName('target_beneficiaries[]');
+        var actualBeneficiaries = document.getElementsByName('actual_beneficiaries[]');
+        var completionPercentage = document.getElementsByName('completion_percentage[]');
+
+        for (let i = 0; i < targetBeneficiaries.length; i++) {
+            var target = parseFloat(targetBeneficiaries[i].value) || 0;
+            var actual = parseFloat(actualBeneficiaries[i].value) || 0;
+
+            if (target > 0) {
+                completionPercentage[i].value = ((actual / target) * 100).toFixed(2);
+            } else {
+                completionPercentage[i].value = 0;
+            }
+        }
+    }
+
+    // Function to compute total liquidation
+    function calculateTotalLiquidation() {
+        var firstLiquidation = parseFloat(document.getElementById('first_liquidation').value) || 0;
+        var secondLiquidation = parseFloat(document.getElementById('second_liquidation').value) || 0;
+        var totalLiquidation = firstLiquidation + secondLiquidation;
+        document.getElementById('total_liquidation').value = totalLiquidation.toFixed(2);
+    }
+
+    window.onload = function() {
+        document.getElementById('first_liquidation').addEventListener('input', calculateTotalLiquidation);
+        document.getElementById('second_liquidation').addEventListener('input', calculateTotalLiquidation);
+    };
+</script>
+
+
             </div>
         </div>
     </div>

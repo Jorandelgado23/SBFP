@@ -56,7 +56,7 @@ $conn->close();
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>MONTHLY/QUARTERLY REPORT</title>
+      <title>Beneficiary Attendance</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -331,56 +331,71 @@ $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
-
-    <title>SBFP Attendance System</title>
-  
-
-
 <div class="container">
+    
     <h2 class="mt-4">Beneficiary Attendance for SBFP</h2>
 
-    <!-- Attendance Form -->
+    <div class="padding_infor_info">
     <form method="POST" action="submit_attendance.php">
-        <div class="form-group">
-            <label for="attendance_date">Select Date:</label>
-            <input type="date" name="attendance_date" id="attendance_date" class="form-control" required>
-        </div>
+    <div class="form-row align-items-center">
+                    <div class="col-auto">
+                    <label for="attendance_date">Select Date:</label>
+                    <input type="date" name="attendance_date" id="attendance_date" class="form-control" required>
+                </div>
+
+                 </div>
+</div>
+
         
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Beneficiary Name</th>
-                    <th>Grade & Section</th>
-                    <th>Status (Present/Absent)</th>
-                    <th>Meal Served</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = $result->fetch_assoc()) { ?>
-                <tr>
-                    <td><?= $row['name'] ?></td>
-                    <td><?= $row['grade_section'] ?></td>
-                    <td>
-                        <select name="status[<?= $row['id'] ?>]" class="form-control" required>
-                            <option value="Present">Present</option>
-                            <option value="Absent">Absent</option>
-                        </select>
-                    </td>
-                    <td>
-                        <select name="meal_served[<?= $row['id'] ?>]" class="form-control" required>
-                            <option value="H">Hot Meal (H)</option>
-                            <option value="M">Milk (M)</option>
-                            <option value="H/M">Hot Meal & Milk (H/M)</option>
-                            <option value="A">Absent (A)</option>
-                            <option value="H2">Hot Meal Twice (H2)</option>
-                            <option value="M2">Milk Twice (M2)</option>
-                            <option value="H/M2">Hot Meal & Milk Twice (H/M2)</option>
-                        </select>
-                    </td>
-                </tr>
-                <?php } ?>
-            </tbody>
-        </table>
+        <!-- Table Section -->
+        <div class="col-md-12">
+            <div class="white_shd full margin_bottom_30">
+                <div class="full graph_head">
+                    <div class="heading1 margin_0">
+                        <h2>Beneficiary Attendance</h2>
+                    </div>
+                </div>
+                <div class="table_section padding_infor_info">
+                    <div class="table-responsive-sm">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Beneficiary Name</th>
+                                    <th>Grade & Section</th>
+                                    <th>Status (Present/Absent)</th>
+                                    <th>Meal Served</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php while ($row = $result->fetch_assoc()) { ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($row['name']) ?></td>
+                                    <td><?= htmlspecialchars($row['grade_section']) ?></td>
+                                    <td>
+                                        <select name="status[<?= $row['id'] ?>]" class="form-control" required>
+                                            <option value="Present">Present</option>
+                                            <option value="Absent">Absent</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="meal_served[<?= $row['id'] ?>]" class="form-control" required>
+                                            <option value="H">Hot Meal (H)</option>
+                                            <option value="M">Milk (M)</option>
+                                            <option value="H/M">Hot Meal & Milk (H/M)</option>
+                                            <option value="A">Absent (A)</option>
+                                            <option value="H2">Hot Meal Twice (H2)</option>
+                                            <option value="M2">Milk Twice (M2)</option>
+                                            <option value="H/M2">Hot Meal & Milk Twice (H/M2)</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <button type="submit" class="btn btn-primary">Submit Attendance</button>
     </form>
@@ -398,8 +413,8 @@ $conn->close();
 
 
 
-<?php
 
+<?php
 if (!isset($_SESSION['email'])) {
     // Redirect to login if the user is not logged in
     header("Location: login.php");
@@ -444,52 +459,63 @@ $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
-
-    <title>View Attendance Records</title>
-
-
-
 <div class="container">
     <h2 class="mt-4">Attendance Records</h2>
 
-    <!-- Date Filter Form -->
+ 
     <form method="POST" action="">
-        <div class="form-group">
+    <div class="form-row align-items-center">
+                    <div class="col-auto">
             <label for="date_filter">Select Date to View Attendance:</label>
-            <input type="date" name="date_filter" id="date_filter" class="form-control" value="<?= $date_filter ?>" required>
+            <input type="date" name="date_filter" id="date_filter" class="form-control" value="<?= htmlspecialchars($date_filter) ?>" required onchange="this.form.submit()">
         </div>
-        <button type="submit" class="btn btn-primary">View Attendance</button>
     </form>
 
-    <!-- Attendance Table -->
-    <table class="table table-bordered mt-3">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Grade & Section</th>
-                <th>Status</th>
-                <th>Meal Served</th>
-                <th>Attendance Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php while ($row = $result->fetch_assoc()) { ?>
-            <tr>
-                <td><?= $row['name'] ?></td>
-                <td><?= $row['grade_section'] ?></td>
-                <td><?= $row['status'] ?></td>
-                <td><?= $row['meal_served'] ?></td>
-                <td><?= $row['attendance_date'] ?></td>
-            </tr>
-            <?php } ?>
-        </tbody>
-    </table>
 
+    <!-- table section -->
+    <div class="col-md-12">
+        <div class="white_shd full margin_bottom_30">
+            <div class="full graph_head">
+                <div class="heading1 margin_0">
+                    <h2>Attendance Table</h2>
+                </div>
+            </div>
+            <div class="table_section padding_infor_info">
+                <div class="table-responsive-sm">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Grade & Section</th>
+                                <th>Status</th>
+                                <th>Meal Served</th>
+                                <th>Attendance Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php while ($row = $result->fetch_assoc()) { ?>
+                            <tr>
+                                <td><?= htmlspecialchars($row['name']) ?></td>
+                                <td><?= htmlspecialchars($row['grade_section']) ?></td>
+                                <td><?= htmlspecialchars($row['status']) ?></td>
+                                <td><?= htmlspecialchars($row['meal_served']) ?></td>
+                                <td><?= htmlspecialchars($row['attendance_date']) ?></td>
+                            </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- table section -->
 </div>
 
 <?php
 $conn->close();
 ?>
+
+
 
 
 
@@ -548,33 +574,44 @@ $result = $stmt->get_result();
 ?>
 
 
-    <title>Absence Statistics</title>
 
 
+    <div class="container">
 
-<div class="container">
-    <h2 class="mt-4">Beneficiary Absence Statistics</h2>
-
-    <table class="table table-bordered mt-3">
-        <thead>
-            <tr>
-                <th>Beneficiary Name</th>
-                <th>Grade & Section</th>
-                <th>Number of Absences</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php while ($row = $result->fetch_assoc()) { ?>
-            <tr>
-                <td><?= $row['name'] ?></td>
-                <td><?= $row['grade_section'] ?></td>
-                <td><?= $row['absences'] ?></td>
-            </tr>
-            <?php } ?>
-        </tbody>
-    </table>
-
+    <!-- Table Section -->
+    <div class="col-md-12">
+        <div class="white_shd full margin_bottom_30">
+            <div class="full graph_head">
+                <div class="heading1 margin_0">
+                    <h2>Beneficiary Absence Statistics</h2>
+                </div>
+            </div>
+            <div class="table_section padding_infor_info">
+            <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Beneficiary Name</th>
+                                <th>Grade & Section</th>
+                                <th>Number of Absences</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php while ($row = $result->fetch_assoc()) { ?>
+                            <tr>
+                                <td><?= htmlspecialchars($row['name']) ?></td>
+                                <td><?= htmlspecialchars($row['grade_section']) ?></td>
+                                <td><?= htmlspecialchars($row['absences']) ?></td>
+                            </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 
 <?php
 $conn->close();
@@ -592,7 +629,6 @@ $conn->close();
 
 
 <?php
-session_start(); // Ensure session is started
 
 if (!isset($_SESSION['email'])) {
     // Redirect to login if the user is not logged in
@@ -733,8 +769,8 @@ while ($row = $attendance_result->fetch_assoc()) {
                                         }
                                     }
                                     echo '<td>' . $days_present . '</td>'; // Total number of days present
-                                    echo '<td>--</td>'; // Placeholder for total feeding days
-                                    echo '<td>--</td>'; // Placeholder for percentage
+                                    echo '<td></td>'; // Placeholder for total feeding days
+                                    echo '<td></td>'; // Placeholder for percentage
                                     echo '</tr>';
                                 }
 
@@ -791,10 +827,7 @@ $conn->close();
 
 
 
-<!-- JS and Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 
 
 

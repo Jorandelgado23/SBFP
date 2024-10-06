@@ -78,7 +78,7 @@ $conn->close();
       <!-- custom css -->
       <link rel="stylesheet" href="css/custom.css" />
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
       
@@ -289,7 +289,7 @@ $conn->close();
                         <div class="row column_title">
                             <div class="col-md-12">
                                 <div class="page_title">
-                                    <h2>beneficiary progress</h2>
+                                    <h2>Beneficiary Progress</h2>
                                 </div>
                             </div>
                             
@@ -383,7 +383,7 @@ while ($chart_row = $chart_result->fetch_assoc()) {
     <div class="white_shd full margin_bottom_30">
         <div class="full graph_head">
             <div class="heading1 margin_0">
-                <h2>Filter Form</h2>
+                <h2>Filtering of Beneficiary Progress</h2>
             </div>
         </div>
         <div class="padding_infor_info">

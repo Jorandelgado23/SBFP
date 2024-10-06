@@ -78,7 +78,7 @@ $conn->close();
       <link rel="stylesheet" href="css/custom.css" />
 
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
       
@@ -571,51 +571,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- Chart Plugins -->
     <script src="js/Chart.min.js"></script>
     <!-- Init Charts -->
-    <script>
-        var ctx = document.getElementById('chartjs_area').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-
-        var ctx = document.getElementById('chartjs_bar').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-
-        var ctx = document.getElementById('chartjs_line').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-    </script>
+    
 </body>
 
 </html>

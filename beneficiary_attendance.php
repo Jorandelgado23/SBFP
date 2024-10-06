@@ -335,7 +335,7 @@ $result = $stmt->get_result();
     
     <h2 class="mt-4">Beneficiary Attendance for SBFP</h2>
 
-    <div class="padding_infor_info">
+
     <form method="POST" action="submit_attendance.php">
     <div class="form-row align-items-center">
                     <div class="col-auto">

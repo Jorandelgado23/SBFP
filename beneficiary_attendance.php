@@ -592,6 +592,7 @@ $conn->close();
 
 
 <?php
+session_start(); // Ensure session is started
 
 if (!isset($_SESSION['email'])) {
     // Redirect to login if the user is not logged in
@@ -709,11 +710,12 @@ while ($row = $attendance_result->fetch_assoc()) {
                         <tbody>
                             <?php
                             if ($result->num_rows > 0) {
+                                $counter = 1; // Initialize counter for student numbering
                                 // Loop through each student
                                 while ($row = $result->fetch_assoc()) {
                                     echo '<tr>';
-                                    // Display student name
-                                    echo '<td>' . htmlspecialchars($row['name']) . '</td>';
+                                    // Display student name with numbering
+                                    echo '<td>' . $counter++ . '. ' . htmlspecialchars($row['name']) . '</td>'; // Numbering included
                                     
                                     $days_present = 0; // Track the number of present days
 
@@ -735,11 +737,34 @@ while ($row = $attendance_result->fetch_assoc()) {
                                     echo '<td>--</td>'; // Placeholder for percentage
                                     echo '</tr>';
                                 }
+
+                                // Total Row for Meal Count
+                                echo '<tr>';
+                                echo '<td>Total:</td>';
+                                for ($i = 1; $i <= 31; $i++) {
+                                    $daily_total = 0;
+
+                                    // Loop through meal_data to sum meals served for each day
+                                    foreach ($meal_data as $beneficiary_id => $meals) {
+                                        if (isset($meals[$i]) && $meals[$i] !== 'A') {
+                                            $daily_total++;
+                                        }
+                                    }
+
+                                    // Display the total meals served for each day, or leave empty if no meals served
+                                    echo '<td style="text-align: center;">' . ($daily_total > 0 ? $daily_total : '') . '</td>';
+                                }
+
+                                // No average calculation
+                                echo '<td colspan="2" style="text-align: center;">Average:</td>'; // Display average label without calculation
+                                echo '<td></td>'; // Empty cell for total present days
+                                echo '</tr>';
+
                             } else {
                                 // Placeholder rows if no data is found
                                 for ($i = 1; $i <= 25; $i++) {
                                     echo '<tr>';
-                                    echo '<td>Pupil ' . $i . '</td>';
+                                    echo '<td>' . $i . '. Pupil ' . $i . '</td>'; // Numbering included for placeholder pupils
                                     echo '<td colspan="31"></td>';
                                     echo '<td>0</td>';
                                     echo '<td>0</td>';
@@ -760,6 +785,9 @@ while ($row = $attendance_result->fetch_assoc()) {
 // Close the database connection
 $conn->close();
 ?>
+
+
+
 
 
 

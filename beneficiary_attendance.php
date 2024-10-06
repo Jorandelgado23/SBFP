@@ -652,11 +652,30 @@ while ($row = $attendance_result->fetch_assoc()) {
 }
 ?>
 
-
-    <title>SBFP Attendance System</title>
-  
+<title>SBFP Attendance System</title>
 
 <div class="container">
+    <!-- Form Details Section -->
+    <div class="form-header">
+        <h4>SCHOOL-BASED FEEDING PROGRAM FORM 4 (2020)</h4>
+        <table class="table table-borderless">
+            <tr>
+                <td>Region: ____________________________</td>
+                <td>Division: ___________________________</td>
+            </tr>
+            <tr>
+                <td>School: ____________________________</td>
+                <td>District: ___________________________</td>
+            </tr>
+            <tr>
+                <td>Grade: __________</td>
+                <td>Section: ___________________________</td>
+            </tr>
+            <tr>
+                <td>School ID Number: _________________________</td>
+            </tr>
+        </table>
+    </div>
 
     <!-- Table Section -->
     <div class="col-md-12">
@@ -671,10 +690,16 @@ while ($row = $attendance_result->fetch_assoc()) {
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th rowspan="2">Name of Pupil</th>
-                                <th colspan="31" style=" padding: 10px;
-            text-align: center;
-            font-size: 12px; ">Actual Feeding</th>
+                                <th rowspan="3">Name of Pupil</th>
+                                <th colspan="31" style="padding: 10px; text-align: center; font-size: 12px;">Actual Feeding</th>
+                                <th colspan="3" style="text-align: center;">ATTENDANCE</th>
+                            </tr>
+                            <tr>
+                                <!-- Blank Row Under "Actual Feeding" -->
+                                <?php for ($i = 1; $i <= 31; $i++) { echo "<th></th>"; } ?>
+                                <th rowspan="2" style="text-align: center;">No. of Days Present (A)</th>
+                                <th rowspan="2" style="text-align: center;">No. of Feeding Days (B)</th>
+                                <th rowspan="2" style="text-align: center;">Percentage (A/B) * 100</th>
                             </tr>
                             <tr>
                                 <!-- Days of the month (1 to 31) -->
@@ -690,16 +715,24 @@ while ($row = $attendance_result->fetch_assoc()) {
                                     // Display student name
                                     echo '<td>' . htmlspecialchars($row['name']) . '</td>';
                                     
+                                    $days_present = 0; // Track the number of present days
+
                                     // Display 31 columns for feeding days
                                     for ($i = 1; $i <= 31; $i++) {
                                         // Check if meal data exists for the given day
                                         if (isset($meal_data[$row['id']][$i])) {
                                             $meal_served = $meal_data[$row['id']][$i];
                                             echo '<td>' . htmlspecialchars($meal_served) . '</td>'; // Display meal served
+                                            if ($meal_served !== 'A') {
+                                                $days_present++; // Increment for every non-absent day
+                                            }
                                         } else {
                                             echo '<td></td>'; // Empty cell if no meal data
                                         }
                                     }
+                                    echo '<td>' . $days_present . '</td>'; // Total number of days present
+                                    echo '<td>--</td>'; // Placeholder for total feeding days
+                                    echo '<td>--</td>'; // Placeholder for percentage
                                     echo '</tr>';
                                 }
                             } else {
@@ -708,17 +741,13 @@ while ($row = $attendance_result->fetch_assoc()) {
                                     echo '<tr>';
                                     echo '<td>Pupil ' . $i . '</td>';
                                     echo '<td colspan="31"></td>';
+                                    echo '<td>0</td>';
+                                    echo '<td>0</td>';
+                                    echo '<td>0%</td>';
                                     echo '</tr>';
                                 }
                             }
                             ?>
-                            <!-- Total row with non-editable boxes -->
-                            <tr>
-                                <td>Total</td>
-                                <?php for ($i = 1; $i <= 31; $i++): ?>
-                                    <td style="text-align: center;"></td>
-                                <?php endfor; ?>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -731,6 +760,8 @@ while ($row = $attendance_result->fetch_assoc()) {
 // Close the database connection
 $conn->close();
 ?>
+
+
 
 <!-- JS and Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

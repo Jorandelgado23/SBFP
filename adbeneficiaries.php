@@ -251,9 +251,7 @@ $conn->close();
         }
         ?>
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-10">
+<div class="col-md-12">
             <h2 class="h4 mb-4">Beneficiaries List</h2>
             <!-- Search form -->
             <form method="get" class="mb-4">

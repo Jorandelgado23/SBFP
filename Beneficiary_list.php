@@ -237,7 +237,7 @@ $conn->close();
                         <div class="row column_title">
                             <div class="col-md-12">
                                 <div class="page_title">
-                                    <h2>Beneficiary Progress</h2>
+                                    <h2>Beneficiary Improvement Page</h2>
                                 </div>
                             </div>
                             

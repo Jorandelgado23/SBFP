@@ -243,16 +243,15 @@ if (isset($_GET['id'])) {
 $conn->close();
 ?>
 
-<div class="container">
+
     <div class="text-left mt-4">
         <a href="javascript:history.back()" class="btn btn-primary">Back</a>
     </div>
 
-    <div class="row">
-        <div class="col-md-10">
-            <div class="white_shd full margin_bottom_0">
-                <div class="full graph_head">
-                    <div class="heading1 margin_0">
+    <div class="col-md-12">
+    <div class="white_shd full margin_bottom_30">
+        <div class="full graph_head">
+            <div class="heading1 margin_0">
                         <h2>SCHOOL DETAILS</h2>
                     </div>
                 </div>

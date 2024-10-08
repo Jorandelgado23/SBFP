@@ -1,18 +1,7 @@
 <?php
 session_start();
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

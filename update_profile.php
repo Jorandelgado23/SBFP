@@ -1,18 +1,7 @@
 <?php
 session_start(); // Start the session to access session variables
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Initialize variables to store user data
 $user_id = "";

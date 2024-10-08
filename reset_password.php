@@ -36,127 +36,109 @@
     <![endif]-->
     <style>
         body {
-            background: url('images/bg3.jpg') no-repeat center center fixed;
+            background: url('images/notext.jpg') no-repeat center center fixed;
             background-size: cover;
-            opacity: 0;
-            transition: opacity 2s ease;
-        }
-
-        body.fade-in {
-            opacity: 1;
-        }
-
-        .full_container {
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            margin: 0;
+          
         }
 
-        .login_section {
-            background: rgb(10,10,10);
-background: radial-gradient(circle, rgba(10,10,10,0.5717884565935749) 0%, rgba(0,0,0,0.8575027423078606) 100%);
-            padding: 30px;
+        .login-container {
+            background-color: #ffffff;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            max-width: 900px;
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23) !important;
+            text-align: center;
+           
+        }
+
+        .login-container img {
+            display: block;
+            margin: 0 auto 20px;
+            width: 100px; /* Adjusted logo size */
+        }
+
+        .login-container h2 {
+            color: #0a53be; /* Blue color for the title */
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-control {
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: #0a53be;
+            border-color: #0a53be;
             width: 100%;
         }
 
-        .login_form {
-            background: rgb(10,10,10);
-background: radial-gradient(circle, rgba(10,10,10,0.7622646470697654) 0%, rgba(0,0,0,0.7790713697588411) 100%);
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            border-radius: 10px;
+        .btn-primary:hover {
+            background-color: #084298;
         }
 
-        .signin-image {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            background: rgb(10,10,10);
-background: radial-gradient(circle, rgba(10,10,10,0.7622646470697654) 0%, rgba(0,0,0,0.7790713697588411) 100%);
-            padding: 20px;
-            border-radius: 10px;
+        .register-link {
+            display: block;
+            margin-top: 10px;
         }
 
-        .signin-image figure {
-            margin: 0;
+        .register-link a {
+            color: #0a53be;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
         }
 
         .signin-image img {
-            width: 100%;
-            max-width: 600px;
+            width: 50%;
+            max-width: 400px;
         }
 
-        .signin-image .signup-image-link {
-            display: block;
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .form-container {
-            width: 100%;
-        }
-
-        .form-container input[type="email"],
-        .form-container input[type="password"] {
-            margin: 20px auto;
-            display: block;
-            max-width: 270px;
-        }
-
-        .main_bt {
-            display: block;
-            width: 100%;
-            max-width: 300px;
-            margin: 0 auto;
-        }
+        .card-gov.card-outline {
+    border-top: 3px solid #003594;
+}
     </style>
 </head>
 
 <body>
 <div>
-    <div class="container">
-        <div class="center verticle_center full_height">
-            <div class="login_section">
-                <!-- Image section -->
-                <div class="signin-image">
-                    <figure><img src="images/LOGO.png" alt="sign up image"></figure>
-                </div>
-                <!-- Form section -->
-                <div class="login_form">
-                    <div class="w-75 mx-auto form-container">
-                        <form class="text-center" id="resetPasswordForm" method="post" action="update_password.php">
-                            <h1 class="h6 mb-3" style="color: #fff;">Reset Password</h1>
-                            <fieldset>
-                                <input type="hidden" name="token" value="<?php echo $_GET['token']; ?>">
-                                <div class="field form-group">
-                                    <label class="label_field sr-only" for="inputPassword">New Password</label>
-                                    <input type="password" id="inputPassword" name="password" class="form-control form-control-lg" placeholder="New Password" required>
-                                </div>
-                                <div class="field form-group">
-                                    <label class="label_field sr-only" for="confirmPassword">Confirm Password</label>
-                                    <input type="password" id="confirmPassword" name="confirm_password" class="form-control form-control-lg" placeholder="Confirm Password" required>
-                                </div>
-                                <div class="field margin_0">
-                                    <label class="label_field hidden">hidden label</label>
-                                    <button class="btn btn-lg btn-primary btn-block main_bt" type="submit">Reset Password</button>
-                                </div>
-                            </fieldset>
-                        </form>
-                    </div>
-                </div>
+<div class="card card-outline card-gov elevation-3">
+    <div class="login-container">
+        <div class="signin-image">
+            <img src="images/logo/semilogo.png" alt="Logo"> <!-- Placeholder for logo -->
+        </div>
+        <h2>Reset Password</h2>
+        <form id="resetPasswordForm" method="post" action="update_password.php">
+            <input type="hidden" name="token" value="<?php echo $_GET['token']; ?>">
+            <div class="form-group">
+                <label for="inputPassword">New Password</label>
+                <input type="password" id="inputPassword" name="password" class="form-control" placeholder="New Password" required>
             </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirm_password" class="form-control" placeholder="Confirm Password" required>
+            </div>
+            <button class="btn btn-primary" type="submit">Reset Password</button>
+        </form>
+        <div class="forgot-password">
+            <a href="login.php">Back to Login</a>
         </div>
     </div>
 </div>
+
 
 
     <!-- jQuery -->

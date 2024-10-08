@@ -10,18 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     // Retrieve action (excel or pdf)
     $action = $_POST['action'];
 
-    // Step 1: Connect to the database
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "sbfp";
+    include("accountconnection.php");
 
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
 
     // Retrieve session_id of the logged-in user
     $email = $_SESSION['email'];

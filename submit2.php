@@ -1,20 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['email'])) {
-    header("Location: login.php");
-    exit();
-}
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Retrieve session_id of the logged-in user
 $email = $_SESSION['email'];

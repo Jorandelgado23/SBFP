@@ -3,18 +3,7 @@
 session_start();
 
 // Include database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Retrieve submitted form data
 $attendance_date = $_POST['attendance_date'];

@@ -1,11 +1,5 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+include("accountconnection.php");
 
 $notification = '';
 
@@ -47,69 +41,101 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- site icon -->
     <link rel="icon" href="images/LOGO.png" type="image/png" />
 
-
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: rgb(10,10,10);
-background: radial-gradient(circle, rgba(10,10,10,0.5717884565935749) 0%, rgba(0,0,0,0.8575027423078606) 100%);
-            margin: 0;
-            padding: 0;
+            background: url('images/notext.jpg') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            margin: 0;
+          
         }
-        .container {
+
+        .login-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23) !important;
             text-align: center;
-            background: rgb(10,10,10);
-background: radial-gradient(circle, rgba(10,10,10,0.5717884565935749) 0%, rgba(0,0,0,0.8575027423078606) 100%);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+           
         }
-        .logo {
-            width: 500px;
+
+        .login-container img {
+            display: block;
+            margin: 0 auto 20px;
+            width: 100px; /* Adjusted logo size */
+        }
+
+        .login-container h2 {
+            color: #0a53be; /* Blue color for the title */
             margin-bottom: 20px;
+            font-size: 1.5rem;
         }
-        .notification {
-            margin-bottom: 20px;
-            padding: 10px;
-            border-radius: 5px;
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
         }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
+
+        .form-control {
+            font-size: 1rem;
         }
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
+
+        .btn-primary {
+            background-color: #0a53be;
+            border-color: #0a53be;
+            width: 100%;
         }
-        .back-button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
+
+        .btn-primary:hover {
+            background-color: #084298;
+        }
+
+        .register-link {
+            display: block;
+            margin-top: 10px;
+        }
+
+        .register-link a {
+            color: #0a53be;
             text-decoration: none;
-            font-size: 16px;
         }
-        .back-button:hover {
-            background-color: #0056b3;
+
+        .register-link a:hover {
+            text-decoration: underline;
         }
+
+        .signin-image img {
+            width: 50%;
+            max-width: 400px;
+        }
+
+        .card-gov.card-outline {
+    border-top: 3px solid #003594;
+}
     </style>
 </head>
 <body>
 
-<div class="container">
-    <img src="images/LOGO.png" alt="Logo" class="logo">
-    <?php if ($notification): ?>
-        <div class="notification <?= strpos($notification, 'successfully') !== false ? 'success' : 'error' ?>">
-            <?= $notification ?>
-        </div>
-    <?php endif; ?>
-    <a href="login.php" class="back-button">Back to Login</a>
+<div class="card card-outline card-gov elevation-3">
+<div class="login-container">
+    <div class="signin-image">
+        <img src="images/logo/semilogo.png" alt="Logo" class="logo"> <!-- Updated logo path -->
+        <div></div>
+        <?php if ($notification): ?>
+            <div class="notification <?= strpos($notification, 'successfully') !== false ? 'success' : 'error' ?>">
+                <?= $notification ?>
+            </div>
+        <?php endif; ?>
+
+        <a href="login.php" class="back-button">Back to Login</a>
+    </div>
 </div>
+
 
 </body>
 </html>

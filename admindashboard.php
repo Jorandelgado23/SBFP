@@ -1,48 +1,5 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['email'])) {
-    header("Location: login.php"); // Redirect to login if not logged in
-    exit();
-}
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$email = $_SESSION['email'];
-
-// Prepare and bind
-$stmt = $conn->prepare("SELECT firstname, lastname, role FROM users WHERE email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$stmt->store_result();
-$stmt->bind_result($user_firstname, $user_lastname, $user_role);
-
-if ($stmt->num_rows > 0) {
-    $stmt->fetch();
-    if (!isset($_SESSION['welcome_shown'])) {
-        $welcome_message = "Welcome, $user_firstname $user_lastname!";
-        $_SESSION['welcome_shown'] = true; // Set the session variable
-    }
-} else {
-    echo "No user found with that email address.";
-    exit();
-}
-
-$stmt->close();
-
-
-$conn->close();
+include("adminauth.php");
 ?>
 
 
@@ -227,19 +184,7 @@ $conn->close();
                                     <li>
 
                                     <?php
-// Fetch recent activities from database
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Query recent activities count with status 'new'
 $sql = "SELECT COUNT(*) AS activity_count FROM recent_activity WHERE status = 'new'";
@@ -278,7 +223,7 @@ $conn->close();
 </a>
 
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="usersetting.php">My Profile</a>
+                                                <a class="dropdown-item" href="adsettings.php">My Profile</a>
                                                 <a class="dropdown-item" href="#" id="logoutLink">
     <span>Log Out</span> <i class="fa fa-sign-out"></i>
 </a>
@@ -332,18 +277,7 @@ $conn->close();
                             </div>
                         </div>
                         <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Query to get the number of admin users
 $sql_admin_users = "SELECT COUNT(*) as total_admin_users FROM users WHERE role = 'admin'";
@@ -452,18 +386,7 @@ $conn->close();
 
 
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // SQL query to get counts of each nutritional status
 $sql = "SELECT nutritional_status_bmia, COUNT(*) as count FROM beneficiary_details GROUP BY nutritional_status_bmia";
@@ -635,19 +558,7 @@ $conn->close(); // Close the database connection
                         <div class="msg_list_main">
                             <ul class="msg_list">
                                 <?php
-                                // Fetch recent activities from database
-                                $servername = "localhost";
-                                $username = "root";
-                                $password = "";
-                                $dbname = "sbfp";
-
-                                // Create connection
-                                $conn = new mysqli($servername, $username, $password, $dbname);
-
-                                // Check connection
-                                if ($conn->connect_error) {
-                                    die("Connection failed: " . $conn->connect_error);
-                                }
+                             include("accountconnection.php");
 
                                 // Query recent activities
                                 $sql = "SELECT * FROM recent_activity ORDER BY timestamp DESC LIMIT 10"; // Fetch last 10 activities

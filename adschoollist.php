@@ -1,42 +1,5 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['email'])) {
-    header("Location: login.php"); // Redirect to login if not logged in
-    exit();
-}
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$email = $_SESSION['email'];
-
-// Prepare and bind
-$stmt = $conn->prepare("SELECT firstname, lastname, role FROM users WHERE email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$stmt->store_result();
-$stmt->bind_result($user_firstname, $user_lastname, $user_role);
-
-if ($stmt->num_rows > 0) {
-    $stmt->fetch();
-} else {
-    echo "No user found with that email address.";
-    exit();
-}
-
-$stmt->close();
-$conn->close();
+include("adminauth.php");
 ?>
 
 
@@ -173,19 +136,7 @@ $conn->close();
                                     <li>
 
                                     <?php
-// Fetch recent activities from database
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Query recent activities count with status 'new'
 $sql = "SELECT COUNT(*) AS activity_count FROM recent_activity WHERE status = 'new'";
@@ -276,18 +227,7 @@ $conn->close();
 
 
                         <?php
-// Step 1: Connect to the database
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 // Step 2: Fetch school details from the beneficiaries table based on the search query
 $search_query = isset($_GET['search']) ? $_GET['search'] : '';
 $sql = "SELECT id, name_of_school, division_province, city_municipality_barangay, school_id_number, name_of_principal, name_of_feeding_focal_person, session_id FROM beneficiaries WHERE name_of_school LIKE '%$search_query%' GROUP BY session_id";
@@ -427,18 +367,7 @@ $conn->close();
 
 
                         <?php
-// Step 1: Connect to the database
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Step 2: Fetch school details from the beneficiaries table based on the search query
 $search_query = isset($_GET['search']) ? $_GET['search'] : '';

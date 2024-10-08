@@ -1,18 +1,7 @@
 <?php
 session_start(); // Start session if not already started
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Check if attendance data is posted
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['attendance'])) {

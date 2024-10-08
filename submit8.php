@@ -5,18 +5,7 @@ require_once 'vendor/autoload.php'; // Include Composer's autoloader
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Process form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

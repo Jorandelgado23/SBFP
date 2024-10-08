@@ -1,14 +1,5 @@
 <?php 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 $data = json_decode(file_get_contents("php://input"));
 $id = $data->id;

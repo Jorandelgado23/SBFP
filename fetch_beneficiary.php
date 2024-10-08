@@ -1,15 +1,6 @@
 <?php
-// Connect to database
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-$conn = new mysqli($servername, $username, $password, $dbname);
+include("accountconnection.php");
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 
 // Fetch data from AJAX request
 $id = $_POST['id'];

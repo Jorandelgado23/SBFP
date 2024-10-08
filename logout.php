@@ -5,19 +5,7 @@ session_start();
 $email = $_SESSION['email'];
 $role = $_SESSION['role']; // Capture the user's role
 
-// Database credentials
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Log the activity if the email is set and the role is 'sbfp'
 if (isset($email) && $role === 'sbfp') {

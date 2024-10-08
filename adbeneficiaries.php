@@ -1,42 +1,5 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['email'])) {
-    header("Location: login.php"); // Redirect to login if not logged in
-    exit();
-}
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$email = $_SESSION['email'];
-
-// Prepare and bind
-$stmt = $conn->prepare("SELECT firstname, lastname, role FROM users WHERE email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$stmt->store_result();
-$stmt->bind_result($user_firstname, $user_lastname, $user_role);
-
-if ($stmt->num_rows > 0) {
-    $stmt->fetch();
-} else {
-    echo "No user found with that email address.";
-    exit();
-}
-
-$stmt->close();
-$conn->close();
+include("adminauth.php");
 ?>
 
 
@@ -166,19 +129,7 @@ $conn->close();
                                     <li>
 
                                     <?php
-// Fetch recent activities from database
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Query recent activities count with status 'new'
 $sql = "SELECT COUNT(*) AS activity_count FROM recent_activity WHERE status = 'new'";
@@ -268,18 +219,7 @@ $conn->close();
         </div>
 
         <?php
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "sbfp";
-
-        // Create connection
-        $conn = new mysqli($servername, $username, $password, $dbname);
-
-        // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
+       include("accountconnection.php");
 
         // Fetch list of schools with their session IDs
         $sql_schools = "SELECT DISTINCT session_id, name_of_school, school_id_number FROM beneficiaries";

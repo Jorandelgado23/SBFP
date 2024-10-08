@@ -1,47 +1,7 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['email'])) {
-    header("Location: login.php"); // Redirect to login if not logged in
-    exit();
-}
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$email = $_SESSION['email'];
-
-// Prepare and bind
-$stmt = $conn->prepare("SELECT firstname, lastname, school_name, role FROM users WHERE email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$stmt->store_result();
-$stmt->bind_result($user_firstname, $user_lastname, $school_name, $user_role);
-
-if ($stmt->num_rows > 0) {
-    $stmt->fetch();
-    if (!isset($_SESSION['welcome_shown'])) {
-        $welcome_message = "Welcome, $user_firstname $user_lastname!";
-        $_SESSION['welcome_shown'] = true; // Set the session variable
-    }
-} else {
-    echo "No user found with that email address.";
-    exit();
-}
-
-$stmt->close();
-$conn->close();
+include("connection.php");
 ?>
+
 
 
 
@@ -241,19 +201,7 @@ $conn->close();
                                     <li>
 
                                     <?php
-// Database connection details
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Query recent activities count with status 'new'
 $sql = "SELECT COUNT(*) AS activity_count FROM sbfp_recent_activity WHERE status = 'new'";
@@ -355,18 +303,7 @@ $conn->close();
                         </div>
                         <?php
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Retrieve session_id of the logged-in user
 $email = $_SESSION['email']; // Assuming email is stored in session
@@ -595,19 +532,7 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
 
 <div class="row column1">
 <?php
-// Include database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Retrieve session_id of the logged-in user
 $email = $_SESSION['email'];
@@ -746,19 +671,7 @@ $conn->close(); // Close the database connection
                             <ul class="msg_list">
                             <?php
 
-// Fetch recent activities from database
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Retrieve email of the logged-in user
 $email = $_SESSION['email'];

@@ -194,18 +194,7 @@ $conn->close();
                             </div>
                         </div>
                         <?php
-// Step 1: Connect to the database
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Step 2: Retrieve the school ID from the URL parameter
 if (isset($_GET['id'])) {

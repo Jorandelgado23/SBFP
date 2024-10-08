@@ -1,24 +1,7 @@
 <?php
 session_start();
 
-// Check if the user is not logged in, redirect to the login page
-if (!isset($_SESSION['email'])) {
-    header("Location: login.php");
-    exit();
-}
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create a database connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check the database connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Retrieve session_id and role of the logged-in user
 $email = $_SESSION['email'];

@@ -1,47 +1,7 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['email'])) {
-    header("Location: login.php"); // Redirect to login if not logged in
-    exit();
-}
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$email = $_SESSION['email'];
-
-// Prepare and bind
-$stmt = $conn->prepare("SELECT firstname, lastname, school_name, role FROM users WHERE email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$stmt->store_result();
-$stmt->bind_result($user_firstname, $user_lastname, $school_name, $user_role);
-
-if ($stmt->num_rows > 0) {
-    $stmt->fetch();
-    if (!isset($_SESSION['welcome_shown'])) {
-        $welcome_message = "Welcome, $user_firstname $user_lastname!";
-        $_SESSION['welcome_shown'] = true; // Set the session variable
-    }
-} else {
-    echo "No user found with that email address.";
-    exit();
-}
-
-$stmt->close();
-$conn->close();
+include("connection.php");
 ?>
+
 
 
 
@@ -189,19 +149,7 @@ $conn->close();
                                     <li>
 
 <?php
-// Database connection details
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Query recent activities count with status 'new'
 $sql = "SELECT COUNT(*) AS activity_count FROM sbfp_recent_activity WHERE status = 'new'";
@@ -297,7 +245,7 @@ $conn->close();
         <div class="col-md-10 mb-10">
             <div>
                 <div>
-                    <p class="card-text">Click the button below to fill out the form.</p>
+                    <p class="card-text" style="font-size: large;">Click The Open Form Below To Add Beneficiaries</p>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sbfpModal" data-whatever="@mdo"><i class="fa fa-plus"> </i>Open Form</button>
                 </div>
             </div>
@@ -305,16 +253,7 @@ $conn->close();
 
         <?php
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Retrieve session_id of the logged-in user and necessary fields
 $email = $_SESSION['email'];
@@ -628,21 +567,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <?php
 
-if (!isset($_SESSION['email'])) {
-    header("Location: login.php");
-    exit();
-}
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Retrieve session_id of the logged-in user
 $email = $_SESSION['email'];
@@ -705,7 +630,7 @@ function maskName($name) {
           <div class="white_shd full margin_bottom_30">
             <div class="full graph_head">
               <div class="heading1 margin_0">
-                <h2>Master List Beneficiaries</h2>
+                <h2>Master List Beneficiaries Table</h2>
               </div>
             </div>
             <div class="mb-3">

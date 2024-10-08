@@ -1,47 +1,7 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['email'])) {
-    header("Location: login.php"); // Redirect to login if not logged in
-    exit();
-}
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$email = $_SESSION['email'];
-
-// Prepare and bind
-$stmt = $conn->prepare("SELECT firstname, lastname, school_name, role FROM users WHERE email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$stmt->store_result();
-$stmt->bind_result($user_firstname, $user_lastname, $school_name, $user_role);
-
-if ($stmt->num_rows > 0) {
-    $stmt->fetch();
-    if (!isset($_SESSION['welcome_shown'])) {
-        $welcome_message = "Welcome, $user_firstname $user_lastname!";
-        $_SESSION['welcome_shown'] = true; // Set the session variable
-    }
-} else {
-    echo "No user found with that email address.";
-    exit();
-}
-
-$stmt->close();
-$conn->close();
+include("connection.php");
 ?>
+
 
 
 
@@ -189,19 +149,7 @@ $conn->close();
                                     <li>
 
 <?php
-// Database connection details
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Query recent activities count with status 'new'
 $sql = "SELECT COUNT(*) AS activity_count FROM sbfp_recent_activity WHERE status = 'new'";
@@ -285,7 +233,7 @@ $conn->close();
         <div class="row column_title">
             <div class="col-md-12">
                 <div class="page_title">
-                    <h2>Attendance & Meal Monitoring</h2>
+                    <h2>Beneficiary Attendance</h2>
                 </div>
             </div>
         </div>
@@ -293,25 +241,7 @@ $conn->close();
       
         <?php
 
-if (!isset($_SESSION['email'])) {
-    // Redirect to login if the user is not logged in
-    header("Location: login.php");
-    exit();
-}
-
-// Include database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Retrieve session_id of the logged-in user
 $email = $_SESSION['email'];
@@ -332,14 +262,19 @@ $result = $stmt->get_result();
 ?>
 
 <div class="container">
-    
-    <h2 class="mt-4">Beneficiary Attendance for SBFP</h2>
+
+            <div class="row justify-content-center">
+                <div class="col-15">
+    <h1 class="page-title">Attendance & Meal Monitoring</h1>
+    </div>
+    </div>
+<br>
 
 
     <form method="POST" action="submit_attendance.php">
     <div class="form-row align-items-center">
                     <div class="col-auto">
-                    <label for="attendance_date">Select Date:</label>
+                    <label for="attendance_date">Select Date of Attendance:</label>
                     <input type="date" name="attendance_date" id="attendance_date" class="form-control" required>
                 </div>
 
@@ -407,6 +342,8 @@ $result = $stmt->get_result();
 $conn->close();
 ?>
 
+<br>
+<br>
 
 
 
@@ -415,25 +352,7 @@ $conn->close();
 
 
 <?php
-if (!isset($_SESSION['email'])) {
-    // Redirect to login if the user is not logged in
-    header("Location: login.php");
-    exit();
-}
-
-// Include database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Retrieve session_id of the logged-in user
 $email = $_SESSION['email'];
@@ -460,13 +379,11 @@ $result = $stmt->get_result();
 ?>
 
 <div class="container">
-    <h2 class="mt-4">Attendance Records</h2>
 
- 
     <form method="POST" action="">
     <div class="form-row align-items-center">
                     <div class="col-auto">
-            <label for="date_filter">Select Date to View Attendance:</label>
+            <label for="date_filter" style="font-size: large;">Select Date To View Attendance</label>
             <input type="date" name="date_filter" id="date_filter" class="form-control" value="<?= htmlspecialchars($date_filter) ?>" required onchange="this.form.submit()">
         </div>
     </form>
@@ -520,34 +437,15 @@ $conn->close();
 
 
 
-
+<br>
+<br>
 
 
 
 
 
 <?php
-// Start session and check user login status
-
-if (!isset($_SESSION['email'])) {
-    // Redirect to login if the user is not logged in
-    header("Location: login.php");
-    exit();
-}
-
-// Include database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("accountconnection.php");
 
 // Retrieve session_id of the logged-in user
 $email = $_SESSION['email'];

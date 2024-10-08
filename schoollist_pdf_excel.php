@@ -10,18 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     // Retrieve action (excel or pdf)
     $action = $_POST['action'];
 
-    // Step 1: Connect to the database
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "sbfp";
-
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+    include("accountconnection.php");
 
     // Step 2: Retrieve all schools from the database with correct total beneficiaries count
     $sql = "SELECT b.id, b.name_of_school, b.division_province, b.city_municipality_barangay AS school_district_municipality, b.school_id_number AS beis_id, b.name_of_principal AS supervisor_principal_name, b.name_of_feeding_focal_person AS barangay_name,

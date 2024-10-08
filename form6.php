@@ -609,7 +609,7 @@ $stmt->close();
 <div class="col-md-12">
     <div class="white_shd full margin_bottom_30">
             <div class="heading1 margin_0">
-                <h1>Milk Component Data</h1>
+                <h1>Milk Component Data Table</h1>
                 <form method="POST" action="milk_regenerate.php">
                     <button type="submit" name="action" value="pdf" class="btn btn-primary"><i class="fa fa-file-pdf-o"></i> Generate PDF</button>
                     <button type="submit" name="action" value="excel" class="btn btn-success"><i class="fa fa-file-excel-o"> </i>Generate Excel</button>

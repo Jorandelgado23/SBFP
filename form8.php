@@ -235,7 +235,6 @@ $conn->close();
             </div>
         </div>
 
-        <div class="container-fluid">
             <div class="row justify-content-center">
                 <div class="col-15">
                     <h1 class="page-title">SCHOOL-BASED FEEDING PROGRAM MONTHLY/QUARTERLY REPORT</h1>
@@ -254,8 +253,8 @@ $conn->close();
                             </div>
 
                             <h3 class="mt-4">Division/Schools</h3>
-                            <div class="table-responsive">
-                                <table class="table table-bordered">
+                            <div class="table-responsive-sm">
+                <table class="table table-bordered">
                                     <thead class="thead-light">
                                         <tr>
                                             <th>Division/Schools</th>

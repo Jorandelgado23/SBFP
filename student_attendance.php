@@ -313,8 +313,7 @@ while ($row = $attendance_result->fetch_assoc()) {
 
 <title>SBFP Attendance System</title>
 
-<div class="container">
- 
+
 
     <!-- Table Section -->
     <div class="col-md-12">

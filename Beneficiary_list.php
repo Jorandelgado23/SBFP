@@ -265,51 +265,85 @@ $stmt->close();
 // Initialize variables for filtering
 $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d'); // Default to current date
 
-// Extract month and day from the selected date
+// Extract month and year from the selected date
 $month = date('m', strtotime($date));
-$day = date('d', strtotime($date));
+$year = date('Y', strtotime($date));
+$prev_month = date('m', strtotime("-1 month", strtotime($date)));
+$prev_year = date('Y', strtotime("-1 month", strtotime($date)));
 
-// Fetch beneficiaries associated with the user's session_id and their latest progress with filtering
-$sql = "SELECT bd.name, bd.grade_section, bp.weight, bp.height, bp.bmi, bp.nutritional_status_bmia, bp.nutritional_status_hfa
-        FROM beneficiary_details bd
-        LEFT JOIN beneficiary_progress bp ON bp.beneficiary_id = bd.id
-        WHERE bd.session_id = ? AND MONTH(bp.date_of_progress) = ? AND DAY(bp.date_of_progress) = ?
-        ORDER BY bp.date_of_progress DESC";
+// Fetch beneficiaries associated with the user's session_id for the current month
+$sql_current = "SELECT bd.name, bd.grade_section, bp.weight, bp.height, bp.bmi, bp.nutritional_status_bmia, bp.nutritional_status_hfa, bp.date_of_progress
+                FROM beneficiary_details bd
+                LEFT JOIN beneficiary_progress bp ON bp.beneficiary_id = bd.id
+                WHERE bd.session_id = ? AND MONTH(bp.date_of_progress) = ? AND YEAR(bp.date_of_progress) = ?
+                ORDER BY bp.date_of_progress DESC";
 
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("sii", $session_id, $month, $day);
-$stmt->execute();
-$result = $stmt->get_result();
+$stmt_current = $conn->prepare($sql_current);
+$stmt_current->bind_param("sii", $session_id, $month, $year);
+$stmt_current->execute();
+$result_current = $stmt_current->get_result();
 
-$beneficiary_data = [];
-while ($row = $result->fetch_assoc()) {
-    $beneficiary_data[] = $row;
+$beneficiary_data_current = [];
+while ($row = $result_current->fetch_assoc()) {
+    $beneficiary_data_current[] = $row;
 }
 
-// Fetch data for the line chart
-$sql_chart = "SELECT bp.date_of_progress, bp.weight, bp.height, bp.bmi
-              FROM beneficiary_details bd
-              LEFT JOIN beneficiary_progress bp ON bp.beneficiary_id = bd.id
-              WHERE bd.session_id = ? AND MONTH(bp.date_of_progress) = ? AND DAY(bp.date_of_progress) = ?
-              ORDER BY bp.date_of_progress ASC";
+// Fetch beneficiaries associated with the user's session_id for the previous month
+$sql_previous = "SELECT bd.name, bd.grade_section, bp.weight, bp.height, bp.bmi, bp.nutritional_status_bmia, bp.nutritional_status_hfa, bp.date_of_progress
+                 FROM beneficiary_details bd
+                 LEFT JOIN beneficiary_progress bp ON bp.beneficiary_id = bd.id
+                 WHERE bd.session_id = ? AND MONTH(bp.date_of_progress) = ? AND YEAR(bp.date_of_progress) = ?
+                 ORDER BY bp.date_of_progress DESC";
 
-$stmt_chart = $conn->prepare($sql_chart);
-$stmt_chart->bind_param("sii", $session_id, $month, $day);
-$stmt_chart->execute();
-$chart_result = $stmt_chart->get_result();
+$stmt_previous = $conn->prepare($sql_previous);
+$stmt_previous->bind_param("sii", $session_id, $prev_month, $prev_year);
+$stmt_previous->execute();
+$result_previous = $stmt_previous->get_result();
 
-$dates = [];
-$weights = [];
-$heights = [];
-$bmis = [];
-
-while ($chart_row = $chart_result->fetch_assoc()) {
-    $dates[] = $chart_row['date_of_progress'];
-    $weights[] = $chart_row['weight'];
-    $heights[] = $chart_row['height'];
-    $bmis[] = $chart_row['bmi'];
+$beneficiary_data_previous = [];
+while ($row = $result_previous->fetch_assoc()) {
+    $beneficiary_data_previous[] = $row;
 }
 
+// Prepare data for line chart comparison
+function prepareChartData($session_id, $month, $year, $conn) {
+    $sql_chart = "SELECT bp.date_of_progress, bp.weight, bp.height, bp.bmi
+                  FROM beneficiary_details bd
+                  LEFT JOIN beneficiary_progress bp ON bp.beneficiary_id = bd.id
+                  WHERE bd.session_id = ? AND MONTH(bp.date_of_progress) = ? AND YEAR(bp.date_of_progress) = ?
+                  ORDER BY bp.date_of_progress ASC";
+
+    $stmt_chart = $conn->prepare($sql_chart);
+    $stmt_chart->bind_param("sii", $session_id, $month, $year);
+    $stmt_chart->execute();
+    return $stmt_chart->get_result();
+}
+
+// Get data for current month
+$chart_result_current = prepareChartData($session_id, $month, $year, $conn);
+$dates_current = [];
+$weights_current = [];
+$heights_current = [];
+$bmis_current = [];
+while ($chart_row = $chart_result_current->fetch_assoc()) {
+    $dates_current[] = $chart_row['date_of_progress'];
+    $weights_current[] = $chart_row['weight'];
+    $heights_current[] = $chart_row['height'];
+    $bmis_current[] = $chart_row['bmi'];
+}
+
+// Get data for previous month
+$chart_result_previous = prepareChartData($session_id, $prev_month, $prev_year, $conn);
+$dates_previous = [];
+$weights_previous = [];
+$heights_previous = [];
+$bmis_previous = [];
+while ($chart_row = $chart_result_previous->fetch_assoc()) {
+    $dates_previous[] = $chart_row['date_of_progress'];
+    $weights_previous[] = $chart_row['weight'];
+    $heights_previous[] = $chart_row['height'];
+    $bmis_previous[] = $chart_row['bmi'];
+}
 ?>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -333,12 +367,14 @@ while ($chart_row = $chart_result->fetch_assoc()) {
             </form>
         </div>
 
-        <!-- Table Section -->
+        <!-- Table Section for Current Month -->
         <div class="table_section padding_infor_info">
+            <h3>Current Month Progress</h3>
             <div class="table-responsive-sm">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
+                            <th>Date of Progress</th>
                             <th>Name</th>
                             <th>Grade & Section</th>
                             <th>Weight (kg)</th>
@@ -350,8 +386,46 @@ while ($chart_row = $chart_result->fetch_assoc()) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($beneficiary_data as $row) { ?>
+                        <?php foreach ($beneficiary_data_current as $row) { ?>
                             <tr>
+                                <td><?= $row['date_of_progress'] ?></td>
+                                <td><?= $row['name'] ?></td>
+                                <td><?= $row['grade_section'] ?></td>
+                                <td><?= $row['weight'] ?></td>
+                                <td><?= $row['height'] ?></td>
+                                <td><?= $row['bmi'] ?></td>
+                                <td><?= $row['nutritional_status_bmia'] ?></td>
+                                <td><?= $row['nutritional_status_hfa'] ?></td>
+                                <td><?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'Improved' : 'No Progress' ?></td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Table Section for Previous Month -->
+        <div class="table_section padding_infor_info">
+            <h3>Previous Month Progress</h3>
+            <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Date of Progress</th>
+                            <th>Name</th>
+                            <th>Grade & Section</th>
+                            <th>Weight (kg)</th>
+                            <th>Height (cm)</th>
+                            <th>BMI</th>
+                            <th>Nutritional Status (BMI)</th>
+                            <th>Nutritional Status (HFA)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($beneficiary_data_previous as $row) { ?>
+                            <tr>
+                                <td><?= $row['date_of_progress'] ?></td>
                                 <td><?= $row['name'] ?></td>
                                 <td><?= $row['grade_section'] ?></td>
                                 <td><?= $row['weight'] ?></td>
@@ -377,26 +451,47 @@ while ($chart_row = $chart_result->fetch_assoc()) {
             var lineChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: <?= json_encode($dates) ?>,
+                    labels: <?= json_encode(array_unique(array_merge($dates_current, $dates_previous))) ?>, // Combine dates
                     datasets: [
                         {
-                            label: 'Weight (kg)',
-                            data: <?= json_encode($weights) ?>,
+                            label: 'Current Month Weight (kg)',
+                            data: <?= json_encode($weights_current) ?>,
                             borderColor: 'rgba(75, 192, 192, 1)',
                             borderWidth: 2,
                             fill: false
                         },
                         {
-                            label: 'Height (cm)',
-                            data: <?= json_encode($heights) ?>,
+                            label: 'Previous Month Weight (kg)',
+                            data: <?= json_encode($weights_previous) ?>,
                             borderColor: 'rgba(255, 99, 132, 1)',
                             borderWidth: 2,
                             fill: false
                         },
                         {
-                            label: 'BMI',
-                            data: <?= json_encode($bmis) ?>,
+                            label: 'Current Month Height (cm)',
+                            data: <?= json_encode($heights_current) ?>,
                             borderColor: 'rgba(153, 102, 255, 1)',
+                            borderWidth: 2,
+                            fill: false
+                        },
+                        {
+                            label: 'Previous Month Height (cm)',
+                            data: <?= json_encode($heights_previous) ?>,
+                            borderColor: 'rgba(255, 159, 64, 1)',
+                            borderWidth: 2,
+                            fill: false
+                        },
+                        {
+                            label: 'Current Month BMI',
+                            data: <?= json_encode($bmis_current) ?>,
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 2,
+                            fill: false
+                        },
+                        {
+                            label: 'Previous Month BMI',
+                            data: <?= json_encode($bmis_previous) ?>,
+                            borderColor: 'rgba(255, 206, 86, 1)',
                             borderWidth: 2,
                             fill: false
                         }
@@ -439,6 +534,7 @@ while ($chart_row = $chart_result->fetch_assoc()) {
 // Close the database connection
 $conn->close();
 ?>
+
 
 
 

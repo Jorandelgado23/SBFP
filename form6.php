@@ -56,28 +56,7 @@ include("connection.php");
         font-weight: bold; /* Bold text */
     }
 
-    table {
-            width: 100%; /* Ensure the table fits within the screen width */
-            border-collapse: collapse;
-            margin-top: 20px;
-            overflow-x: hidden; /* Enable horizontal scrolling if needed */
-            display: block; /* Block layout to manage overflow */
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 10px; /* Reduce padding to fit more data */
-            text-align: center;
-            font-size: 12px; /* Decrease font size */
-        }
-        
 
-        /* Styling for horizontal scrolling */
-        .table-wrapper {
-            overflow-x: auto; /* Horizontal scrollbar */
-            margin-top: 20px;
-        }
    </style>
 
 <body class="dashboard dashboard_2">
@@ -261,11 +240,11 @@ $conn->close();
                                 </div>
                             </div>
                         </div>
-                       
-                     <div class="container mt-5">
-<div class="container">
-  <h1>Submit School and Student Information</h1>
+<p class="card-text" style="font-size: large;">Click The Open Form Below To Add Data Milk Component </p>
+
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#formModal"><i class="fa fa-plus"></i> Open Form</button>
+<br>
+<br>
 
   
 
@@ -487,15 +466,11 @@ function displayMilkData($conn, $session_id) {
     $result = $stmt->get_result();
     ?>
     <!-- Table Section -->
-<div class="container-fluid">
-  <div class="row justify-content-center">
-    <div class="col-md-12 my-">
-      <div class="card shadow">
-        <div class="card-body">
-          <div class="white_shd full margin_bottom_30">
+
+          
+    <div class="white_shd full margin_bottom_30">
             <div class="full graph_head">
               <div class="heading1 margin_0">
-                <h2>Milk Data</h2>
               </div>
             </div>
             <div class="table_section padding_infor_info">
@@ -631,9 +606,8 @@ $stmt->fetch();
 $stmt->close();
 ?>
 
-<div class="col-md-11">
+<div class="col-md-12">
     <div class="white_shd full margin_bottom_30">
-        <div class="full graph_head">
             <div class="heading1 margin_0">
                 <h1>Milk Component Data</h1>
                 <form method="POST" action="milk_regenerate.php">

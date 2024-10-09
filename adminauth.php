@@ -39,7 +39,8 @@ if ($stmt->num_rows > 0) {
             <meta name="description" content="">
             <meta name="author" content="">
             <!-- site icon -->
-            <link rel="icon" href="images/fevicon.png" type="image/png" />
+            <link rel="icon" href="images/LOGO.png" type="image/png" />
+
             <!-- bootstrap css -->
             <link rel="stylesheet" href="css/bootstrap.min.css" />
             <!-- site css -->

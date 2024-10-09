@@ -31,7 +31,8 @@ if ($stmt->num_rows > 0) {
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
             <title>ACCESS DENIED</title>
-            <link rel="icon" href="images/fevicon.png" type="image/png" />
+            <link rel="icon" href="images/LOGO.png" type="image/png" />
+
             <link rel="stylesheet" href="css/bootstrap.min.css" />
             <link rel="stylesheet" href="style.css" />
             <link rel="stylesheet" href="css/responsive.css" />

@@ -324,32 +324,25 @@ $stmt->close();
                         </div>
                     </div>
                     <h2 class="mt-4">Beneficiary Details</h2>
-                    <div id="beneficiary_details">
+<div id="beneficiary_details">
     <div class="beneficiary mt-3 border rounded p-3">
         <div class="row">
-        <div class="form-group col-md-6">
-    <label for="lrn_no" class="form-label">LRN Number:</label>
-    <input type="text" class="form-control" id="lrn_no" name="lrn_no[]" required maxlength="12" pattern="\d{12}" title="Please enter exactly 12 digits">
-    <div class="invalid-feedback">
-        Please provide the LRN number.
-    </div>
-</div>
-
+            <div class="form-group col-md-6">
+                <label for="lrn_no" class="form-label">LRN Number:</label>
+                <input type="text" class="form-control" id="lrn_no" name="lrn_no[]" required maxlength="12" pattern="\d{12}" title="Please enter exactly 12 digits">
+                <div class="invalid-feedback">Please provide the LRN number.</div>
+            </div>
 
             <div class="form-group col-md-6">
                 <label for="beneficiary_name" class="form-label">Name:</label>
                 <input type="text" class="form-control" id="beneficiary_name" name="beneficiary_name[]" required>
-                <div class="invalid-feedback">
-                    Please provide the beneficiary name.
-                </div>
+                <div class="invalid-feedback">Please provide the beneficiary name.</div>
             </div>
 
             <div class="form-group col-md-6">
                 <label for="student_section" class="form-label">Student Section:</label>
                 <input type="text" class="form-control" id="student_section" name="student_section[]" required>
-                <div class="invalid-feedback">
-                    Please provide the student section.
-                </div>
+                <div class="invalid-feedback">Please provide the student section.</div>
             </div>
 
             <div class="form-group col-md-6">
@@ -359,9 +352,7 @@ $stmt->close();
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                 </select>
-                <div class="invalid-feedback">
-                    Please select the sex of the beneficiary.
-                </div>
+                <div class="invalid-feedback">Please select the sex of the beneficiary.</div>
             </div>
 
             <div class="form-group col-md-6">
@@ -376,108 +367,108 @@ $stmt->close();
                     <option value="Grade 5">Grade 5</option>
                     <option value="Grade 6">Grade 6</option>
                 </select>
-                <div class="invalid-feedback">
-                    Please provide the grade/section of the beneficiary.
-                </div>
+                <div class="invalid-feedback">Please provide the grade/section of the beneficiary.</div>
             </div>
 
-                                
+            <div class="form-group col-md-6">
+                <label for="beneficiary_dob" class="form-label">Date of Birth (MM/DD/YYYY):</label>
+                <input type="date" class="form-control" id="beneficiary_dob" name="beneficiary_dob[]" required onchange="calculateAgeAndBMI(this)">
+                <div class="invalid-feedback">Please provide the date of birth of the beneficiary.</div>
+            </div>
 
-                                <div class="form-group col-md-6">
-                                    <label for="beneficiary_dob" class="form-label">Date of Birth (MM/DD/YYYY):</label>
-                                    <input type="date" class="form-control" id="beneficiary_dob" name="beneficiary_dob[]" required onchange="calculateAgeAndBMI(this)">
-                                    <div class="invalid-feedback">
-                                        Please provide the date of birth of the beneficiary.
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="beneficiary_dow" class="form-label">Date of Weighing/Measuring (MM/DD/YYYY):</label>
-                                    <input type="date" class="form-control" id="beneficiary_dow" name="beneficiary_dow[]" required onchange="calculateAgeAndBMI(this)">
-                                    <div class="invalid-feedback">
-                                        Please provide the date of weighing/measuring of the beneficiary.
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="beneficiary_age" class="form-label">Age:</label>
-                                    <input type="text" class="form-control" id="beneficiary_age" name="beneficiary_age[]" readonly required>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="beneficiary_weight" class="form-label">Weight (Kg):</label>
-                                    <input type="number" step="0.01" class="form-control" id="beneficiary_weight" name="beneficiary_weight[]" required oninput="calculateBMI(this)">
-                                    <div class="invalid-feedback">
-                                        Please provide the weight of the beneficiary.
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="beneficiary_height" class="form-label">Height (cm):</label>
-                                    <input type="number" step="0.01" class="form-control" id="beneficiary_height" name="beneficiary_height[]" required oninput="calculateBMI(this)">
-                                    <div class="invalid-feedback">
-                                        Please provide the height of the beneficiary.
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="beneficiary_bmi" class="form-label">BMI for 6 y.o. and above:</label>
-                                    <input type="text" class="form-control" id="beneficiary_bmi" name="beneficiary_bmi[]" readonly required>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="nutritional_status_bmia" class="form-label">Nutritional Status (BMI-A):</label>
-                                    <input type="text" class="form-control" id="nutritional_status_bmia" name="nutritional_status_bmia[]" readonly required>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="nutritional_status_hfa" class="form-label">Nutritional Status (HFA):</label>
-                                    <input type="text" class="form-control" id="nutritional_status_hfa" name="nutritional_status_hfa[]" readonly required>
-                                    <div class="invalid-feedback">
-                                        Please provide the nutritional status (HFA) of the beneficiary.
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="dewormed" class="form-label">Dewormed (Yes/No):</label>
-                                    <select class="form-control" id="dewormed" name="dewormed[]" required>
-                                        <option value="" disabled selected>Choose...</option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        Please specify if the beneficiary is dewormed.
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="parents_consent_for_milk" class="form-label">Parent's Consent for Milk (Yes/No):</label>
-                                    <select class="form-control" id="parents_consent_for_milk" name="parents_consent_for_milk[]" required>
-                                        <option value="" disabled selected>Choose...</option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        Please specify if there is parent's consent for milk.
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="participation_in_4ps" class="form-label">Participation in 4Ps (Yes/No):</label>
-                                    <select class="form-control" id="participation_in_4ps" name="participation_in_4ps[]" required>
-                                        <option value="" disabled selected>Choose...</option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        Please specify if there is participation in 4Ps.
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="beneficiary_of_sbfp_in_previous_years" class="form-label">Beneficiary of SBFP in Previous Years (Yes/No):</label>
-                                    <select class="form-control" id="beneficiary_of_sbfp_in_previous_years" name="beneficiary_of_sbfp_in_previous_years[]" required>
-                                        <option value="" disabled selected>Choose...</option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        Please specify if the beneficiary was part of SBFP in previous years.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary mt-3 float-right">Submit</button>
+            <div class="form-group col-md-6">
+                <label for="beneficiary_dow" class="form-label">Date of Weighing/Measuring (MM/DD/YYYY):</label>
+                <input type="date" class="form-control" id="beneficiary_dow" name="beneficiary_dow[]" required onchange="calculateAgeAndBMI(this)">
+                <div class="invalid-feedback">Please provide the date of weighing/measuring of the beneficiary.</div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="beneficiary_age" class="form-label">Age:</label>
+                <input type="text" class="form-control" id="beneficiary_age" name="beneficiary_age[]" readonly required>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="beneficiary_weight" class="form-label">Weight (Kg):</label>
+                <input type="number" step="0.01" class="form-control" id="beneficiary_weight" name="beneficiary_weight[]" required oninput="calculateBMI(this)">
+                <div class="invalid-feedback">Please provide the weight of the beneficiary.</div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="beneficiary_height" class="form-label">Height (cm):</label>
+                <input type="number" step="0.01" class="form-control" id="beneficiary_height" name="beneficiary_height[]" required oninput="calculateBMI(this)">
+                <div class="invalid-feedback">Please provide the height of the beneficiary.</div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="beneficiary_bmi" class="form-label">BMI for 6 y.o. and above:</label>
+                <input type="text" class="form-control" id="beneficiary_bmi" name="beneficiary_bmi[]" readonly required>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="nutritional_status_bmia" class="form-label">Nutritional Status (BMI-A):</label>
+                <input type="text" class="form-control" id="nutritional_status_bmia" name="nutritional_status_bmia[]" readonly required>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="nutritional_status_hfa" class="form-label">Nutritional Status (HFA):</label>
+                <input type="text" class="form-control" id="nutritional_status_hfa" name="nutritional_status_hfa[]" readonly required>
+                <div class="invalid-feedback">Please provide the nutritional status (HFA) of the beneficiary.</div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="dewormed" class="form-label">Dewormed (Yes/No):</label>
+                <select class="form-control" id="dewormed" name="dewormed[]" required>
+                    <option value="" disabled selected>Choose...</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+                <div class="invalid-feedback">Please specify if the beneficiary is dewormed.</div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="parents_consent_for_milk" class="form-label">Parent's Consent for Milk (Yes/No):</label>
+                <select class="form-control" id="parents_consent_for_milk" name="parents_consent_for_milk[]" required>
+                    <option value="" disabled selected>Choose...</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+                <div class="invalid-feedback">Please specify if there is parent's consent for milk.</div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="participation_in_4ps" class="form-label">Participation in 4Ps (Yes/No):</label>
+                <select class="form-control" id="participation_in_4ps" name="participation_in_4ps[]" required>
+                    <option value="" disabled selected>Choose...</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+                <div class="invalid-feedback">Please specify if there is participation in 4Ps.</div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="beneficiary_of_sbfp_in_previous_years" class="form-label">Beneficiary of SBFP in Previous Years (Yes/No):</label>
+                <select class="form-control" id="beneficiary_of_sbfp_in_previous_years" name="beneficiary_of_sbfp_in_previous_years[]" required>
+                    <option value="" disabled selected>Choose...</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+                <div class="invalid-feedback">Please specify if the beneficiary was part of SBFP in previous years.</div>
+            </div>
+
+            <!-- New field for Parent's Phone Number -->
+          <!-- New field for Parent's Phone Number -->
+          <div class="form-group col-md-6">
+    <label for="parent_phone" class="form-label">Parent's Phone Number:</label>
+    <input type="tel" class="form-control" id="parent_phone" name="parent_phone[]" required pattern="^\+63\d{10}$" title="Please enter a valid Philippine phone number (11 digits, including +63)" placeholder="912 345 6789" maxlength="13" onfocus="addPrefix(this)" oninput="validatePhone(this)">
+    <div class="invalid-feedback">Please provide the parent's phone number.</div>
+</div>
+
+
+        </div>
+    </div>
+</div>
+<button type="submit" class="btn btn-primary mt-3 float-right">Submit</button>
+
                 </form>
             </div>
         </div>
@@ -1142,6 +1133,29 @@ $('.remove-btn').on('click', function() {
             }
         }
     </script>
+
+
+<script>
+function addPrefix(input) {
+    if (input.value.length === 0) {
+        input.value = '+63 ';
+    }
+}
+
+function validatePhone(input) {
+    // Remove spaces for validation
+    const value = input.value.replace(/\s/g, '');
+    // Check if it starts with +63 and is 13 characters long
+    if (value.length > 0 && !value.startsWith('+63')) {
+        input.value = '+63 ' + value.substring(3); // Replace the first part with +63
+    }
+    
+    // Ensure input remains formatted
+    if (value.length > 13) {
+        input.value = value.substring(0, 13); // Limit to 13 characters including +63
+    }
+}
+</script>
                      
                         
                     </div>

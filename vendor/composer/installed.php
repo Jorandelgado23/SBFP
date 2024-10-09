@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '7e2bb21b21a02d1df5b4955234221ffc5dae7fcf',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '7e2bb21b21a02d1df5b4955234221ffc5dae7fcf',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -151,6 +151,15 @@
             'reference' => '951eabf0338ec2522bd0d5d9c79b08a3a3d36b36',
             'type' => 'library',
             'install_path' => __DIR__ . '/../tecnickcom/tcpdf',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'twilio/sdk' => array(
+            'pretty_version' => '8.3.3',
+            'version' => '8.3.3.0',
+            'reference' => '5fae06f959653c426b040972b7a2f7679dbd5b8f',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../twilio/sdk',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

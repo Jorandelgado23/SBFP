@@ -11,6 +11,10 @@ class ComposerStaticInit2185d2f99bcd56787481d9357a5972d3
         array (
             'ZipStream\\' => 10,
         ),
+        'T' => 
+        array (
+            'Twilio\\' => 7,
+        ),
         'S' => 
         array (
             'Svg\\' => 4,
@@ -47,6 +51,10 @@ class ComposerStaticInit2185d2f99bcd56787481d9357a5972d3
         'ZipStream\\' => 
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
+        ),
+        'Twilio\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/twilio/sdk/src/Twilio',
         ),
         'Svg\\' => 
         array (

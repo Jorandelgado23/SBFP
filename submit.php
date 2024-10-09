@@ -61,7 +61,7 @@ if (!isset($_POST['beneficiary_name']) || !is_array($_POST['beneficiary_name']))
 }
 
 // Prepare statement for inserting beneficiary details
-$stmt = $conn->prepare("INSERT INTO beneficiary_details (session_id, beneficiary_id, student_section, name, lrn_no, sex, grade_section, date_of_birth, date_of_weighing, age, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa, dewormed, parents_consent_for_milk, participation_in_4ps, beneficiary_of_sbfp_in_previous_years) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt = $conn->prepare("INSERT INTO beneficiary_details (session_id, beneficiary_id, student_section, name, lrn_no, sex, grade_section, date_of_birth, date_of_weighing, age, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa, dewormed, parents_consent_for_milk, participation_in_4ps, beneficiary_of_sbfp_in_previous_years, parent_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 // Loop through each beneficiary and insert details
 foreach ($_POST['beneficiary_name'] as $index => $beneficiary_name) {
@@ -84,6 +84,7 @@ foreach ($_POST['beneficiary_name'] as $index => $beneficiary_name) {
     $parents_consent_for_milk = $_POST['parents_consent_for_milk'][$index];
     $participation_in_4ps = $_POST['participation_in_4ps'][$index];
     $beneficiary_of_sbfp_in_previous_years = $_POST['beneficiary_of_sbfp_in_previous_years'][$index];
+    $parent_phone = $_POST['parent_phone'][$index]; // New field for parent's phone number
 
     // Validate each beneficiary detail
     if (empty($beneficiary_name) || empty($lrn_no) || empty($beneficiary_sex) || empty($beneficiary_grade_section) || empty($beneficiary_dob) || empty($student_section)) {
@@ -97,7 +98,7 @@ foreach ($_POST['beneficiary_name'] as $index => $beneficiary_name) {
     }
 
     // Bind parameters and execute
-    $stmt->bind_param("sssssssssssssssssss", $session_id, $beneficiary_id, $student_section, $beneficiary_name, $lrn_no, $beneficiary_sex, $beneficiary_grade_section, $beneficiary_dob, $beneficiary_dow, $beneficiary_age, $beneficiary_weight, $beneficiary_height, $beneficiary_bmi, $nutritional_status_bmia, $nutritional_status_hfa, $dewormed, $parents_consent_for_milk, $participation_in_4ps, $beneficiary_of_sbfp_in_previous_years);
+    $stmt->bind_param("ssssssssssssssssssss", $session_id, $beneficiary_id, $student_section, $beneficiary_name, $lrn_no, $beneficiary_sex, $beneficiary_grade_section, $beneficiary_dob, $beneficiary_dow, $beneficiary_age, $beneficiary_weight, $beneficiary_height, $beneficiary_bmi, $nutritional_status_bmia, $nutritional_status_hfa, $dewormed, $parents_consent_for_milk, $participation_in_4ps, $beneficiary_of_sbfp_in_previous_years, $parent_phone);
     $stmt->execute();
 }
 

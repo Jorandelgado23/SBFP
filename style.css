@@ -466,6 +466,10 @@ a:focus {
     float: left;
 }
 
+.light_color{
+    color: #d3d3d3;
+}
+
 .dark_color{
     color: #000000 !important;
 }

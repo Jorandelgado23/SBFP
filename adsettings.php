@@ -240,7 +240,7 @@ $conn->close();
                 <div class="white_shd full margin_bottom_30">
                     <div class="full graph_head">
                         <div class="heading1 margin_0">
-                            <h2>Admin Profile Setting</h2>
+                            <h2 >Admin Profile Setting</h2>
                         </div>
                     </div>
                     <div class="full price_table padding_infor_info">
@@ -308,7 +308,7 @@ $conn->close();
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <button type="submit" class="btn btn-success" style="float: right;">Save Changes</button>
                         </form>
                     </div>
                 </div>

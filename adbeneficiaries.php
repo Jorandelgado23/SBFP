@@ -271,8 +271,8 @@ $conn->close();
               <div class="table-responsive-sm">
                 <table class="table table-bordered">
                                 <tr>
-                                    <th>Name of School</th>
-                                    <th>Action</th>
+                                    <th style="text-align: center;">Name of School</th>
+                                    <th style="text-align: center;">Veiw Info</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -280,7 +280,7 @@ $conn->close();
                                     <?php foreach ($schools as $school_name => $school_data) : ?>
                                         <tr>
                                             <td><?php echo htmlspecialchars($school_name); ?></td>
-                                            <td>
+                                            <td style="text-align: center;">
                                                 <a href="view_details.php?session_id=<?php echo urlencode($session_id); ?>" class="btn btn-info">
                                                     <i class="fa fa-eye"></i> View
                                                 </a>

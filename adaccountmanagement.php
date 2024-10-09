@@ -421,6 +421,8 @@ function updateSchoolDetails() {
                                 <th>Barangay Name</th>
                                 <th>Supervisor/Principal Name</th>
                                 <th>Actions</th>  -->
+                                <th class="text-center">Edit</th>
+                            <th class="text-center">Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -448,8 +450,10 @@ function updateSchoolDetails() {
                                 // echo "<td>" . $row["school_address"] . "</td>";
                                 // echo "<td>" . $row["barangay_name"] . "</td>";
                                 // echo "<td>" . $row["supervisor_principal_name"] . "</td>";
-                                echo "<td>";
-                                echo "<button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '', '". $row['role'] . "', '" . $row['Division/Province'] . "', '" . $row['school_district_municipality'] . "', '" . $row['school_name'] . "', '" . $row['beis_id'] . "', '" . $row['school_address'] . "', '" . $row['barangay_name'] . "', '" . $row['supervisor_principal_name'] . "')\"><i class='fa fa-edit'></i></button>";
+                                echo "<td class='text-center'>";
+                                echo "<button class='btn btn-sm btn-info' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '', '". $row['role'] . "')\"><i class='fa fa-edit'></i></button>";
+                                echo "</td>";
+                                echo "<td class='text-center'>";
                                 echo "<button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\"><i class='fa fa-trash'></i></button>";
                                 echo "</td>";
                                 echo "</tr>";
@@ -494,7 +498,8 @@ function updateSchoolDetails() {
                             <th>School Address</th>
                             <th>Barangay Name</th>
                             <th>Supervisor/Principal Name</th>
-                            <!-- <th>Actions</th>  -->
+                            <th class="text-center">Edit</th>
+                            <th class="text-center">Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -523,8 +528,10 @@ function updateSchoolDetails() {
                             echo "<td>" . $row["school_address"] . "</td>";
                             echo "<td>" . $row["barangay_name"] . "</td>";
                             echo "<td>" . $row["supervisor_principal_name"] . "</td>";
-                            echo "<td>";
-                            echo "<button class='btn btn-sm btn-primary' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '" . $row['birthday'] . "', '" . $row['role'] . "', '" . $row['Division/Province'] . "', '" . $row['school_district_municipality'] . "', '" . $row['school_name'] . "', '" . $row['beis_id'] . "', '" . $row['school_address'] . "', '" . $row['barangay_name'] . "', '" . $row['supervisor_principal_name'] . "')\"><i class='fa fa-edit'></i></button>";
+                            echo "<td class='text-center'>";
+                            echo "<button class='btn btn-sm btn-info' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '" . $row['birthday'] . "', '" . $row['role'] . "', '" . $row['Division/Province'] . "', '" . $row['school_district_municipality'] . "', '" . $row['school_name'] . "', '" . $row['beis_id'] . "', '" . $row['school_address'] . "', '" . $row['barangay_name'] . "', '" . $row['supervisor_principal_name'] . "')\"><i class='fa fa-edit'></i></button>";
+                            echo "</td>";
+                            echo "<td class='text-center'>";
                             echo "<button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\"><i class='fa fa-trash'></i></button>";
                             echo "</td>";
                             echo "</tr>";

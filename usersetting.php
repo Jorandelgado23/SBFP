@@ -321,7 +321,7 @@ $conn->close();
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-success">Save Changes</button>
+                            <button type="submit" class="btn btn-success" style="float: right;">Save Changes</button>
                         </form>
                     </div>
                 </div>

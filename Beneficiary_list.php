@@ -361,7 +361,7 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
                 <div class="form-row align-items-center">
                     <div class="col-auto">
                         <label for="date">Select Date:</label>
-                        <input type="date" name="date" id="date" class="form-control" value="<?= $date ?>" required onchange="submitForm()">
+                        <input  type="date" name="date" id="date" class="form-control" value="<?= $date ?>" required onchange="submitForm()">
                     </div>
                 </div>
             </form>

@@ -478,7 +478,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="hidden" name="session_id" id="session_id" value="<?= $session_id ?>">
                 <input type="hidden" name="date_of_birth" id="date_of_birth">
 
-                <button type="submit" class="btn btn-primary me-2">Submit</button>
+                <button type="submit" class="btn btn-primary me-2" style="float: right;">Submit</button>
+
             </form>
         </div>
     </div>

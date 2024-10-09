@@ -670,7 +670,8 @@ function maskName($name) {
                       <th>Parent's consent for milk?</th>
                       <th>Participation in 4Ps?</th>
                       <th>Beneficiary of SBFP in Previous Years?</th>
-                     
+                      <th class="text-center">Edit</th>
+                    <th class="text-center">Delete</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -699,14 +700,15 @@ if ($result->num_rows > 0) {
         echo "<td>" . $row["beneficiary_of_sbfp_in_previous_years"] . "</td>";
         
         // Separate Edit and Delete buttons into different cells
-        echo "<td>";
-        echo "<button class='btn btn-primary edit-btn' data-id='" . $row["id"] . "'>";
-        echo "<i class='fa fa-edit'></i> ";
+        echo "<td class='text-center'>";
+        echo "<button class='btn btn-sm btn-info edit-btn' data-id='" . $row["id"] . "'>";
+        echo "<i class='fa fa-edit'></i>";
         echo "</button>";
         echo "</td>";
-        echo "<td>";
-        echo "<button class='btn btn-danger remove-btn' data-id='" . $row["id"] . "'>";
-        echo "<i class='fa fa-trash'></i> ";
+
+        echo "<td class='text-center'>";
+        echo "<button class='btn btn-sm btn-danger remove-btn' data-id='" . $row["id"] . "'>";
+        echo "<i class='fa fa-trash'></i>";
         echo "</button>";
         echo "</td>";
 

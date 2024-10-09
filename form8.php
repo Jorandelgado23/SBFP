@@ -326,7 +326,7 @@ $conn->close();
                                 <textarea name="remarks" class="form-control" id="remarks" cols="30" rows="5" placeholder="Enter remarks here"></textarea>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Submit Report</button>
+                            <button type="submit" class="btn btn-primary" style="float: right;">Submit Report</button>
                         </form>
                     </div>
                 </div>

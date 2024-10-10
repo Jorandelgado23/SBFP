@@ -493,6 +493,141 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
 
 
 
+
+
+<div class="row column1">
+<?php
+include("accountconnection.php");
+
+// Retrieve session_id of the logged-in user
+$email = $_SESSION['email'];
+$stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($session_id);
+$stmt->fetch();
+$stmt->close();
+
+// Default value for the current year
+$currentYear = date('Y');
+
+// Fetch data for chart visualization based on the selected session_id for the whole year (January to December)
+$sql_monthly_progress = "SELECT 
+    MONTH(date_of_progress) AS month,
+    SUM(CASE WHEN (nutritional_status_bmia = 'Normal' OR nutritional_status_hfa = 'Normal') THEN 1 ELSE 0 END) AS improved_count,
+    SUM(CASE WHEN (nutritional_status_bmia != 'Normal' AND nutritional_status_hfa != 'Normal') THEN 1 ELSE 0 END) AS no_progress_count
+    FROM beneficiary_progress 
+    WHERE session_id = ? AND YEAR(date_of_progress) = ?
+    GROUP BY MONTH(date_of_progress)";
+
+$stmt_progress = $conn->prepare($sql_monthly_progress);
+$stmt_progress->bind_param("si", $session_id, $currentYear);
+$stmt_progress->execute();
+$result_progress = $stmt_progress->get_result();
+
+$improved_counts = array_fill(1, 12, 0); // Initialize an array with 12 zeros for months
+$no_progress_counts = array_fill(1, 12, 0); // Same for no progress counts
+
+while ($row = $result_progress->fetch_assoc()) {
+    $month = (int) $row['month'];
+    $improved_counts[$month] = (int) $row['improved_count'];
+    $no_progress_counts[$month] = (int) $row['no_progress_count'];
+}
+
+// Convert arrays to JSON format for JavaScript
+$improved_counts_json = json_encode(array_values($improved_counts));
+$no_progress_counts_json = json_encode(array_values($no_progress_counts));
+
+?>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="col-lg-12">
+    <div class="white_shd full margin_bottom_30">
+        <div class="full graph_head d-flex justify-content-between align-items-center">
+            <div class="heading1 margin_0">
+                <h2>Beneficiaries Progress (January to December)</h2>
+            </div>
+        </div>
+        <div class="map_section padding_infor_info" style="background-color: white; padding: 20px;">
+            <canvas id="area_chart"></canvas>
+        </div>
+        <!-- Button to download the chart -->
+        <div class="text-center mt-3">
+            <button onclick="downloadChart('area_chart', 'Nutritional_Status_Chart.png', 3)" class="btn btn-info">Download Chart as Image</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var ctx = document.getElementById('area_chart').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'bar',  // Default type is bar for the first dataset
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            datasets: [
+                {
+                    label: 'Improved',
+                    type: 'bar',  // Bar chart for improved data
+                    data: <?= $improved_counts_json ?>,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'No Progress',
+                    type: 'bar',  // Bar chart for no progress data
+                    data: <?= $no_progress_counts_json ?>,
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Area Overlay',
+                    type: 'line',  // Area chart overlay
+                    data: <?= $improved_counts_json ?>,  // You can modify this to overlay a different dataset if needed
+                    fill: true,
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',  // Light purple fill for area chart
+                    borderColor: 'rgba(153, 102, 255, 1)',  // Purple line for area chart
+                    tension: 0.4  // Smooth curve for the line
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true
+                },
+                y: {
+                    beginAtZero: true,
+                    suggestedMin: 0  // Ensure the y-axis starts at 0
+                }
+            }
+        }
+    });
+
+    // Function to download chart as image
+    function downloadChart(chartId, filename, quality) {
+        var canvas = document.getElementById(chartId);
+        var image = canvas.toDataURL("image/png", quality);
+        var link = document.createElement('a');
+        link.href = image;
+        link.download = filename;
+        link.click();
+    }
+</script>
+
+<?php
+$conn->close(); // Close the database connection
+?>
+
                  
 
 <div class="row column1">
@@ -530,130 +665,7 @@ echo '<script>const schoolName = ' . json_encode($school_name) . ';</script>';
 </div>
 
 
-<div class="row column1">
-<?php
-include("accountconnection.php");
 
-// Retrieve session_id of the logged-in user
-$email = $_SESSION['email'];
-$stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$stmt->store_result();
-$stmt->bind_result($session_id);
-$stmt->fetch();
-$stmt->close();
-
-// Default value for the date
-$date = date('Y-m-d'); // Current date
-
-// Check if a date was submitted
-if (isset($_POST['date'])) {
-    $date = $_POST['date'];
-}
-
-// Fetch submitted data for the logged-in user, ensuring only beneficiaries with the same session_id are shown
-$sql = "SELECT * FROM beneficiary_details WHERE session_id = ? ORDER BY name";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $session_id);
-$stmt->execute();
-$result = $stmt->get_result();
-
-// Fetch data for chart visualization based on the selected date and session_id
-$sql_improved = "SELECT COUNT(*) AS improved_count FROM beneficiary_progress 
-                 WHERE (nutritional_status_bmia = 'Normal' OR nutritional_status_hfa = 'Normal') 
-                 AND session_id = ? AND DATE(date_of_progress) = ?";
-$sql_no_progress = "SELECT COUNT(*) AS no_progress_count FROM beneficiary_progress 
-                    WHERE (nutritional_status_bmia != 'Normal' AND nutritional_status_hfa != 'Normal') 
-                    AND session_id = ? AND DATE(date_of_progress) = ?";
-
-$stmt_improved = $conn->prepare($sql_improved);
-$stmt_improved->bind_param("ss", $session_id, $date);
-$stmt_improved->execute();
-$result_improved = $stmt_improved->get_result();
-
-$stmt_no_progress = $conn->prepare($sql_no_progress);
-$stmt_no_progress->bind_param("ss", $session_id, $date);
-$stmt_no_progress->execute();
-$result_no_progress = $stmt_no_progress->get_result();
-
-$improved_count = $result_improved->fetch_assoc()['improved_count'];
-$no_progress_count = $result_no_progress->fetch_assoc()['no_progress_count'];
-
-?>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
-
-    <div class="col-lg-6">
-        <div class="white_shd full margin_bottom_30">
-            <div class="full graph_head d-flex justify-content-between align-items-center">
-                <div class="heading1 margin_0">
-                    <h2>Beneficiaries Progress</h2>
-                </div>
-                <!-- Form with date picker placed to the right of the heading -->
-                <form method="post" class="mb-0" id="dateForm">
-                    <div class="form-row align-items-center">
-                        <div class="col-auto">
-                            <label for="date">Select Date:</label>
-                            <input type="date" name="date" id="date" class="form-control" value="<?= $date ?>" required>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="map_section padding_infor_info" style="background-color: white; padding: 20px;">
-                <canvas id="pie_chart"></canvas>
-            </div>
-            <!-- Button to download the chart -->
-            <div class="text-center mt-3">
-                <button onclick="downloadChart('pie_chart', 'Nutritional_Status_Chart.png', 3)" class="btn btn-info">Download Chart as Image</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Automatically submit the form when the date changes
-        document.getElementById('date').addEventListener('change', function() {
-            document.getElementById('dateForm').submit();
-        });
-
-        var ctx = document.getElementById('pie_chart').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Improved', 'No Progress'],
-                datasets: [{
-                    data: [<?= $improved_count ?>, <?= $no_progress_count ?>],
-                    backgroundColor: ['#4CAF50', '#F44336'],
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    }
-                }
-            }
-        });
-
-        // Function to download chart as image
-        function downloadChart(chartId, filename, quality) {
-            var canvas = document.getElementById(chartId);
-            var image = canvas.toDataURL("image/png", quality);
-            var link = document.createElement('a');
-            link.href = image;
-            link.download = filename;
-            link.click();
-        }
-    </script>
-
-
-<?php
-$conn->close(); // Close the database connection
-?>
 
 
 

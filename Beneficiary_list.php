@@ -372,7 +372,7 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
             <h3>Current Month Progress</h3>
             <div class="table-responsive-sm">
                 <table class="table table-bordered">
-                    <thead>
+                    <thead style="color: #fff; background-color: #0971b8;">
                         <tr>
                             <th>Date of Progress</th>
                             <th>Name</th>
@@ -396,7 +396,11 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
                                 <td><?= $row['bmi'] ?></td>
                                 <td><?= $row['nutritional_status_bmia'] ?></td>
                                 <td><?= $row['nutritional_status_hfa'] ?></td>
-                                <td><?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'Improved' : 'No Progress' ?></td>
+                                <td style="color: <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'white' : 'white' ?>; 
+                                    background-color: <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? '#59CE8F' : '#FC2947' ?>; 
+                                    padding: 5px; border-radius: 4px; font-weight:400; text-align: center;">
+                            <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'Improved' : 'No Progress' ?>
+                        </td>
                             </tr>
                         <?php } ?>
                     </tbody>
@@ -409,7 +413,7 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
             <h3>Previous Month Progress</h3>
             <div class="table-responsive-sm">
                 <table class="table table-bordered">
-                    <thead>
+                    <thead style="color: #fff; background-color: #0971b8;">
                         <tr>
                             <th>Date of Progress</th>
                             <th>Name</th>
@@ -433,7 +437,11 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
                                 <td><?= $row['bmi'] ?></td>
                                 <td><?= $row['nutritional_status_bmia'] ?></td>
                                 <td><?= $row['nutritional_status_hfa'] ?></td>
-                                <td><?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'Improved' : 'No Progress' ?></td>
+                                <td style="color: <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'white' : 'white' ?>; 
+                                    background-color: <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? '#59CE8F' : '#FC2947' ?>; 
+                                    padding: 5px; border-radius: 4px; font-weight:400; text-align: center;">
+                            <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'Improved' : 'No Progress' ?>
+                        </td>
                             </tr>
                         <?php } ?>
                     </tbody>

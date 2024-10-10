@@ -476,7 +476,7 @@ function displayMilkData($conn, $session_id) {
             <div class="table_section padding_infor_info">
               <div class="table-responsive-sm">
                 <table class="table table-bordered">
-                  <thead>
+                <thead style="color: #fff; background-color: #0971b8;">
                     <tr>
                       <th>Region/Division/District</th>
                       <th>Name of School</th>

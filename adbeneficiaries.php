@@ -270,7 +270,7 @@ $conn->close();
                     <div class="table-responsive">
               <div class="table-responsive-sm">
                 <table class="table table-bordered">
-                                <tr>
+                                <tr style="color: #fff; background-color: #0971b8;">
                                     <th style="text-align: center;">Name of School</th>
                                     <th style="text-align: center;">Veiw Info</th>
                                 </tr>

@@ -301,13 +301,13 @@ $conn->close();
                 <div class="white_shd full margin_bottom_30">
                     <div class="full graph_head">
                         <div class="heading1 margin_0">
-                            <h2 class="text-center mb-4">School Details</h2>
+                            <h2>School Details</h2>
                         </div>
                     </div>
                     <div class="table-responsive">
               <div class="table-responsive-sm">
                 <table class="table table-bordered">
-                                <thead>
+                                <thead style="color: #fff; background-color: #0971b8;">
                                     <tr>
                                         <th class="text-nowrap">School Name</th>
                                         <th class="text-nowrap">Division/Province</th>

@@ -79,6 +79,11 @@ $conn->close();
     font-weight: bold;
     color: #333; /* Adjust color to your preference */
 }
+.active {
+        background-color: lightblue; /* Background color */
+        color: #fff; /* Text color */
+        font-weight: bold; /* Bold text */
+    }
 
 
       </style>
@@ -119,7 +124,7 @@ $conn->close();
                     <h4>General</h4>
                     <ul class="list-unstyled components">
                     <li>
-                            <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
+                            <a href="admindashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
                         </li>
 
                         <!-- <li>
@@ -128,7 +133,7 @@ $conn->close();
 
                        
                         <li class="active">
-                            <a href="adbeneficiaries.php"><i class="fa fa-university""></i> <span>All School Beneficiaries</span></a>
+                            <a href="adbeneficiaries.php"><i class="fa fa-university"></i> <span>All School Beneficiaries</span></a>
                         </li>
 
                         <li>
@@ -371,7 +376,7 @@ if (isset($_GET['session_id'])) {
                     <div class='white_shd full margin_bottom_30'>
                         <div class='full graph_head'>
                             <div class='heading1 margin_0'>
-                                <h2>Beneficiary Details</h2>
+                          
                             </div>
                         </div>
                        ";
@@ -379,10 +384,10 @@ if (isset($_GET['session_id'])) {
             // Print tables for each grade level and section
             foreach ($beneficiaries_by_grade_and_section as $grade => $sections) {
                 foreach ($sections as $section => $details) {
-                    echo "<h3>$grade - $section</h3>
+                    echo "<h3 style='font-size: 18px;'>$grade - $section</h3>
                           <div class='table-responsive-sm'>
                               <table class='table table-striped table-hover'>
-                                  <thead class='thead-light'>
+                                  <thead style='color: #fff; background-color: #0971b8;'>
                                       <tr>
                                           <th>Name</th>
                                           <th>Sex</th>

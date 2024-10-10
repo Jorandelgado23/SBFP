@@ -277,7 +277,7 @@ $stmt->close();
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="background-color: #FFF6EA;">
                 <form id="sbfpForm" class="needs-validation" novalidate action="submit.php" method="post">
                     <div class="row">
                         <div class="form-group col-md-6" hidden>
@@ -639,81 +639,106 @@ function maskName($name) {
               </form>
             </div>
             <div class="table_section padding_infor_info">
-              <div class="table-responsive-sm">
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th style="display:none;">No.</th> <!-- Hidden column -->
-                      <th>LRN No.</th>
-                      <th>Name</th>
-                      <th>Sex</th>
-                      <th>Grade Level</th>
-                      <th>Student Section</th>
-                      <th>Date of Birth</th>
-                      <th>Date of Weighing</th>
-                      <th>Age</th>
-                      <th>Weight (Kg)</th>
-                      <th>Height (cm)</th>
-                      <th>BMI</th>
-                      <th>Nutritional Status (BMI-A)</th>
-                      <th>Nutritional Status (HFA)</th>
-                      <th>Dewormed?</th>
-                      <th>Parent's consent for milk?</th>
-                      <th>Participation in 4Ps?</th>
-                      <th>Beneficiary of SBFP in Previous Years?</th>
-                      <th class="text-center">Edit</th>
+    <div class="table-responsive-sm">
+        <table class="table table-bordered">
+            <thead style="color: #fff; background-color: #0971b8;">
+                <tr>
+                    <th style="display:none;">No.</th> <!-- Hidden column -->
+                    <th>LRN No.</th>
+                    <th>Name</th>
+                    <th>Sex</th>
+                    <th>Grade Level</th>
+                    <th>Student Section</th>
+                    <th>Date of Birth</th>
+                    <th>Date of Weighing</th>
+                    <th>Age</th>
+                    <th>Weight (Kg)</th>
+                    <th>Height (cm)</th>
+                    <th>BMI</th>
+                    <th>Nutritional Status (BMI-A)</th>
+                    <th>Nutritional Status (HFA)</th>
+                    <th>Dewormed?</th>
+                    <th>Parent's consent for milk?</th>
+                    <th>Participation in 4Ps?</th>
+                    <th>Beneficiary of SBFP in Previous Years?</th>
+                    <th class="text-center">Edit</th>
                     <th class="text-center">Delete</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  <?php
-if ($result->num_rows > 0) {
-    $count = 1;
-    while ($row = $result->fetch_assoc()) {
-        echo "<tr>";
-        echo "<td style='display:none;'>" . $count++ . "</td>"; // Hidden column
-        echo "<td>" . $row["lrn_no"] . "</td>";
-        echo "<td>" . maskName($row["name"]) . "</td>"; // Masked name
-        echo "<td>" . $row["sex"] . "</td>";
-        echo "<td>" . $row["grade_section"] . "</td>";
-        echo "<td>" . $row["student_section"] . "</td>";
-        echo "<td>" . $row["date_of_birth"] . "</td>";
-        echo "<td>" . $row["date_of_weighing"] . "</td>";
-        echo "<td>" . $row["age"] . "</td>";
-        echo "<td>" . $row["weight"] . "</td>";
-        echo "<td>" . $row["height"] . "</td>";
-        echo "<td>" . $row["bmi"] . "</td>";
-        echo "<td>" . $row["nutritional_status_bmia"] . "</td>";
-        echo "<td>" . $row["nutritional_status_hfa"] . "</td>";
-        echo "<td>" . $row["dewormed"] . "</td>";
-        echo "<td>" . $row["parents_consent_for_milk"] . "</td>";
-        echo "<td>" . $row["participation_in_4ps"] . "</td>";
-        echo "<td>" . $row["beneficiary_of_sbfp_in_previous_years"] . "</td>";
-        
-        // Separate Edit and Delete buttons into different cells
-        echo "<td class='text-center'>";
-        echo "<button class='btn btn-sm btn-info edit-btn' data-id='" . $row["id"] . "'>";
-        echo "<i class='fa fa-edit'></i>";
-        echo "</button>";
-        echo "</td>";
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if ($result->num_rows > 0) {
+                    $count = 1;
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td style='display:none;'>" . $count++ . "</td>"; // Hidden column
+                        echo "<td>" . $row["lrn_no"] . "</td>";
+                        echo "<td>" . maskName($row["name"]) . "</td>"; // Masked name
+                        echo "<td>" . $row["sex"] . "</td>";
+                        echo "<td>" . $row["grade_section"] . "</td>";
+                        echo "<td>" . $row["student_section"] . "</td>";
+                        echo "<td>" . $row["date_of_birth"] . "</td>";
+                        echo "<td>" . $row["date_of_weighing"] . "</td>";
+                        echo "<td>" . $row["age"] . "</td>";
+                        echo "<td>" . $row["weight"] . "</td>";
+                        echo "<td>" . $row["height"] . "</td>";
+                        echo "<td>" . $row["bmi"] . "</td>";
 
-        echo "<td class='text-center'>";
-        echo "<button class='btn btn-sm btn-danger remove-btn' data-id='" . $row["id"] . "'>";
-        echo "<i class='fa fa-trash'></i>";
-        echo "</button>";
-        echo "</td>";
+                        // Nutritional Status (BMI-A) with color coding
+                        $bmi_status = $row["nutritional_status_bmia"];
+                        $bmi_class = "";
+                        if ($bmi_status == "Severely Wasted") {
+                            $bmi_class = "table-danger"; // Red color for Severely Wasted
+                        } elseif ($bmi_status == "Wasted") {
+                            $bmi_class = "table-warning"; // Yellow color for Wasted
+                        } elseif ($bmi_status == "Normal") {
+                            $bmi_class = "table-success"; // Green color for Normal
+                        } elseif ($bmi_status == "Overweight") {
+                            $bmi_class = "table-warning"; // Yellow for Overweight
+                        } elseif ($bmi_status == "Obese") {
+                            $bmi_class = "table-danger"; // Red color for Obese
+                        }
+                        echo "<td class='$bmi_class'>" . $bmi_status . "</td>";
 
-        echo "</tr>";
-    }
-} else {
-    echo "<tr><td colspan='18'>No data available</td></tr>";
-}
-$stmt->close();
-$conn->close();
-?>
+                        // Nutritional Status (HFA) with color coding
+                        $hfa_status = $row["nutritional_status_hfa"];
+                        $hfa_class = "";
+                        if ($hfa_status == "Stunted") {
+                            $hfa_class = "table-danger"; // Red color for Stunted
+                        } elseif ($hfa_status == "Normal") {
+                            $hfa_class = "table-success"; // Green color for Normal
+                        }
+                        echo "<td class='$hfa_class'>" . $hfa_status . "</td>";
 
-                  </tbody>
-                </table>
+                        echo "<td>" . $row["dewormed"] . "</td>";
+                        echo "<td>" . $row["parents_consent_for_milk"] . "</td>";
+                        echo "<td>" . $row["participation_in_4ps"] . "</td>";
+                        echo "<td>" . $row["beneficiary_of_sbfp_in_previous_years"] . "</td>";
+
+                        // Edit and Delete buttons
+                        echo "<td class='text-center'>";
+                        echo "<button class='btn btn-sm btn-info edit-btn' data-id='" . $row["id"] . "'>";
+                        echo "<i class='fa fa-edit'></i>";
+                        echo "</button>";
+                        echo "</td>";
+
+                        echo "<td class='text-center'>";
+                        echo "<button class='btn btn-sm btn-danger remove-btn' data-id='" . $row["id"] . "'>";
+                        echo "<i class='fa fa-trash'></i>";
+                        echo "</button>";
+                        echo "</td>";
+
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='18'>No data available</td></tr>";
+                }
+                $stmt->close();
+                $conn->close();
+                ?>
+            </tbody>
+        </table>
+    </div>
               </div>
             </div>
           </div>
@@ -732,13 +757,14 @@ $conn->close();
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+    <div class="modal-header bg-primary text-light">
+
         <h5 class="modal-title" id="editModalLabel">Edit Beneficiary Details</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="background-color: #FFF6EA;">
         <form id="editForm">
           <input type="hidden" id="edit-id">
 

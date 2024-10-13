@@ -106,8 +106,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         // Generate PDF
         require_once 'vendor/autoload.php';
 
-        $leftLogoPath = __DIR__ . '/images/logo/semilogo.png';
-        $rightLogoPath = __DIR__ . '/images/LOGO.png';
+        $leftLogoPath = __DIR__ . '/images/LOGO.png';
+        $rightLogoPath = __DIR__ . '/images/logo/semilogo.png';
 
         // Ensure the images exist
         if (!file_exists($leftLogoPath)) {
@@ -131,8 +131,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                         <img src="data:image/png;base64,' . $leftLogoBase64 . '" alt="Left Logo" style="width: 100px;">
                     </td>
                     <td style="text-align: center; width: 70%;">
-                        <h2>Department of Education</h2>
-                        <h3>Region 4A</h3>
+                        <h5>Department of Education</h5>
+                        <h6>Region 4A</h6>
                         <h4>SCHOOL-BASED FEEDING PROGRAM (SBFP) LIST OF SCHOOLS (SY ' . $currentYear . ')</h4>
                     </td>
                     <td style="text-align: right; width: 15%;">
@@ -148,8 +148,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                     </td>
                 </tr>
             </table>
-            <h2>School Details</h2>
-            <table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+            <br>
+            <table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse; border-color: black;">
+
                 <thead>
                     <tr>
                         <th>School Name</th>

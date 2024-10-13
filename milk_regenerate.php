@@ -7,7 +7,6 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -57,14 +56,13 @@ $name_of_feeding_focal_person = $result_user['name_of_feeding_focal_person'];
 $name_of_school = $result_user['name_of_school'];
 $school_id_number = $result_user['school_id_number'];
 
-
-    // Get the current year
-    $currentYear = date('Y');
+// Get the current year
+$currentYear = date('Y');
 
 // Generate PDF function
-function generatePDF($result, $division_province, $name_of_principal, $city_municipality_barangay, $name_of_feeding_focal_person, $name_of_school, $school_id_number, $school_year, $currentYear) {
-    $leftLogoPath = __DIR__ . '/images/logo/semilogo.png';
-    $rightLogoPath = __DIR__ . '/images/LOGO.png';
+function generatePDF($result, $division_province, $name_of_principal, $city_municipality_barangay, $name_of_feeding_focal_person, $name_of_school, $school_id_number, $currentYear) {
+    $leftLogoPath = __DIR__ . '/images/LOGO.png';
+    $rightLogoPath = __DIR__ . '/images/logo/semilogo.png';
 
     // Ensure the images exist
     if (!file_exists($leftLogoPath)) {
@@ -79,23 +77,24 @@ function generatePDF($result, $division_province, $name_of_principal, $city_muni
     $leftLogoBase64 = base64_encode(file_get_contents($leftLogoPath));
     $rightLogoBase64 = base64_encode(file_get_contents($rightLogoPath));
 
+    // Adding styles to the HTML
     $html = '
-     <table style="width: 100%;">
-         <tr>
-             <td style="text-align: left; width: 15%;">
-                 <img src="data:image/png;base64,' . $leftLogoBase64 . '" alt="Left Logo" style="width: 100px;">
-             </td>
-             <td style="text-align: center; width: 70%;">
-                 <h2>Department of Education</h2>
-                 <h3>Region 4A</h3>
-             </td>
-             <td style="text-align: right; width: 15%;">
-                 <img src="data:image/png;base64,' . $rightLogoBase64 . '" alt="Right Logo" style="width: 100px;">
-             </td>
-         </tr>
-     </table>
-     <br><br><br>
-     <h2 style="text-align:center;">LIST OF BENEFICIARIES (SBFP) (SY ' . $currentYear . ')</h2>';
+    <table style="width: 100%;">
+        <tr>
+            <td style="text-align: left; width: 15%;">
+                <img src="data:image/png;base64,' . $leftLogoBase64 . '" alt="Left Logo" style="width: 100px;">
+            </td>
+            <td style="text-align: center; width: 70%;">
+                <h5>Department of Education</h5>
+                <h6>Region 4A</h6>
+            </td>
+            <td style="text-align: right; width: 15%;">
+                <img src="data:image/png;base64,' . $rightLogoBase64 . '" alt="Right Logo" style="width: 100px;">
+            </td>
+        </tr>
+    </table>
+    <br>
+    <h4 style="text-align:center;">SCHOOL-BASED FEEDING PROGRAM - MILK COMPONENT</h4>';
 
     // Additional table for user-specific details
     $html .= "
@@ -114,38 +113,47 @@ function generatePDF($result, $division_province, $name_of_principal, $city_muni
         </tr>
     </table>";
 
-   
+// Table for Milk Component Data
+$html .= '<table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+            <thead>
+            <tr><th colspan="5" style="text-align: center;">LIST OF BENEFICIARIES (SBFP) (SY ' . $currentYear . ')</th></tr>
+                <tr>
+                    <th rowspan="2">Name</th>
+                    <th rowspan="2">Grade & Section</th>
+                    <th colspan="3" style="text-align: center;">Classification of Students in terms of Milk Tolerance</th>
+                </tr>
+                <tr>
+                    <th>Without milk intolerance and will participate in milk feeding</th>
+                    <th>With milk intolerance but willing to participate in milk feeding</th>
+                    <th>Not allowed by parents to participate in milk feeding</th>
+                </tr>
+            </thead>
+            <tbody>';
 
-    // Table for Milk Component Data
-    $html .= '<table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
-                <thead>
-                    <tr>
-                        <th>Region/Division/District</th>
-                        <th>Name of School</th>
-                        <th>School ID Number</th>
-                        <th>Student Name</th>
-                        <th>Grade & Section</th>
-                        <th>Milk Tolerance</th>
-                    </tr>
-                </thead>
-                <tbody>';
-
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $html .= '<tr>';
-            $html .= '<td>' . htmlspecialchars($row["region_division_district"]) . '</td>';
-            $html .= '<td>' . htmlspecialchars($row["name_of_school"]) . '</td>';
-            $html .= '<td>' . htmlspecialchars($row["school_id_number"]) . '</td>';
-            $html .= '<td>' . htmlspecialchars($row["student_name"]) . '</td>';
-            $html .= '<td>' . htmlspecialchars($row["grade_section"]) . '</td>';
-            $html .= '<td>' . htmlspecialchars($row["milk_tolerance"]) . '</td>';
-            $html .= '</tr>';
-        }
-    } else {
-        $html .= '<tr><td colspan="6">No data available</td></tr>';
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $html .= '<tr>';
+        $html .= '<td>' . htmlspecialchars($row["student_name"]) . '</td>';
+        $html .= '<td>' . htmlspecialchars($row["grade_section"]) . '</td>';
+        
+        // Automatically fill the correct columns based on milk tolerance data
+        $milkTolerance = trim($row["milk_tolerance"]); // Trim any whitespace
+        $html .= '<td style="font-family: \'DejaVu Sans\'; text-align: center; font-size: 30px;">' . 
+                    ($milkTolerance == 'Without milk intolerance and will participate in milk feeding' ? '&check;' : '') . 
+                  '</td>';
+        $html .= '<td style="font-family: \'DejaVu Sans\'; text-align: center; font-size: 30px;">' . 
+                    ($milkTolerance == 'With milk intolerance but willing to participate in milk feeding' ? '&check;' : '') . 
+                  '</td>';
+        $html .= '<td style="font-family: \'DejaVu Sans\'; text-align: center; font-size: 30px;">' . 
+                    ($milkTolerance == 'Not allowed by parents to participate in milk feeding' ? '&check;' : '') . 
+                  '</td>';
+        $html .= '</tr>';
     }
+} else {
+    $html .= '<tr><td colspan="5">No data available</td></tr>'; // Adjusted to match the number of columns
+}
 
-    $html .= '</tbody></table>';
+$html .= '</tbody></table>';
 
     // Additional section
     $html .= "
@@ -175,6 +183,7 @@ function generatePDF($result, $division_province, $name_of_principal, $city_muni
     $dompdf->stream('Milk_Component_Data.pdf', array('Attachment' => 0));
     exit();
 }
+
 
 // Generate Excel function
 function generateExcel($result, $division_province, $name_of_principal, $city_municipality_barangay, $name_of_feeding_focal_person, $name_of_school, $school_id_number, $school_year) {
@@ -402,7 +411,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
     // Process action
     if ($_POST['action'] === 'pdf') {
-        generatePDF($result, $division_province, $name_of_principal, $city_municipality_barangay, $name_of_feeding_focal_person, $name_of_school, $school_id_number, $school_year, $currentYear);
+        generatePDF($result, $division_province, $name_of_principal, $city_municipality_barangay, $name_of_feeding_focal_person, $name_of_school, $school_id_number, $currentYear);
     } elseif ($_POST['action'] === 'excel') {
         generateExcel($result, $division_province, $name_of_principal, $city_municipality_barangay, $name_of_feeding_focal_person, $name_of_school, $school_id_number, $school_year);
     }

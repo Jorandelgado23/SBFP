@@ -512,32 +512,46 @@ $stmt->close();
 // Default value for the current year
 $currentYear = date('Y');
 
-// Fetch data for chart visualization based on the selected session_id for the whole year (January to December)
-$sql_monthly_progress = "SELECT 
-    MONTH(date_of_progress) AS month,
-    SUM(CASE WHEN (nutritional_status_bmia = 'Normal' OR nutritional_status_hfa = 'Normal') THEN 1 ELSE 0 END) AS improved_count,
-    SUM(CASE WHEN (nutritional_status_bmia != 'Normal' AND nutritional_status_hfa != 'Normal') THEN 1 ELSE 0 END) AS no_progress_count
-    FROM beneficiary_progress 
-    WHERE session_id = ? AND YEAR(date_of_progress) = ?
-    GROUP BY MONTH(date_of_progress)";
+// Fetch data for BMI and HFA (Nutritional Status) for the whole year (January to December)
+$sql_monthly_progress = "
+    SELECT 
+        MONTH(bp.date_of_progress) AS month,
+        SUM(CASE WHEN bp.nutritional_status_bmia = 'Normal' THEN 1 ELSE 0 END) AS bmi_improved,
+        SUM(CASE WHEN bp.nutritional_status_bmia != 'Normal' THEN 1 ELSE 0 END) AS bmi_no_progress,
+        SUM(CASE WHEN bp.nutritional_status_hfa = 'Normal' THEN 1 ELSE 0 END) AS hfa_improved,
+        SUM(CASE WHEN bp.nutritional_status_hfa != 'Normal' THEN 1 ELSE 0 END) AS hfa_no_progress
+    FROM (
+        SELECT beneficiary_id, MAX(date_of_progress) AS latest_progress, MONTH(date_of_progress) AS month
+        FROM beneficiary_progress
+        WHERE session_id = ? AND YEAR(date_of_progress) = ?
+        GROUP BY beneficiary_id, MONTH(date_of_progress)
+    ) latest
+    JOIN beneficiary_progress bp ON bp.beneficiary_id = latest.beneficiary_id AND bp.date_of_progress = latest.latest_progress
+    GROUP BY MONTH(bp.date_of_progress)";
 
 $stmt_progress = $conn->prepare($sql_monthly_progress);
 $stmt_progress->bind_param("si", $session_id, $currentYear);
 $stmt_progress->execute();
 $result_progress = $stmt_progress->get_result();
 
-$improved_counts = array_fill(1, 12, 0); // Initialize an array with 12 zeros for months
-$no_progress_counts = array_fill(1, 12, 0); // Same for no progress counts
+$bmi_improved = array_fill(1, 12, 0);
+$bmi_no_progress = array_fill(1, 12, 0);
+$hfa_improved = array_fill(1, 12, 0);
+$hfa_no_progress = array_fill(1, 12, 0);
 
 while ($row = $result_progress->fetch_assoc()) {
     $month = (int) $row['month'];
-    $improved_counts[$month] = (int) $row['improved_count'];
-    $no_progress_counts[$month] = (int) $row['no_progress_count'];
+    $bmi_improved[$month] = (int) $row['bmi_improved'];
+    $bmi_no_progress[$month] = (int) $row['bmi_no_progress'];
+    $hfa_improved[$month] = (int) $row['hfa_improved'];
+    $hfa_no_progress[$month] = (int) $row['hfa_no_progress'];
 }
 
 // Convert arrays to JSON format for JavaScript
-$improved_counts_json = json_encode(array_values($improved_counts));
-$no_progress_counts_json = json_encode(array_values($no_progress_counts));
+$bmi_improved_json = json_encode(array_values($bmi_improved));
+$bmi_no_progress_json = json_encode(array_values($bmi_no_progress));
+$hfa_improved_json = json_encode(array_values($hfa_improved));
+$hfa_no_progress_json = json_encode(array_values($hfa_no_progress));
 
 ?>
 
@@ -547,50 +561,63 @@ $no_progress_counts_json = json_encode(array_values($no_progress_counts));
     <div class="white_shd full margin_bottom_30">
         <div class="full graph_head d-flex justify-content-between align-items-center">
             <div class="heading1 margin_0">
-                <h2>Beneficiaries Progress (January to December)</h2>
+                <h2>Beneficiaries Progress (BMI vs HFA) - January to December</h2>
             </div>
         </div>
         <div class="map_section padding_infor_info" style="background-color: white; padding: 20px;">
-            <canvas id="area_chart"></canvas>
+            <canvas id="bmi_hfa_chart"></canvas>
         </div>
         <!-- Button to download the chart -->
         <div class="text-center mt-3">
-            <button onclick="downloadChart('area_chart', 'Nutritional_Status_Chart.png', 3)" class="btn btn-info">Download Chart as Image</button>
+            <button onclick="downloadChart('bmi_hfa_chart', 'Nutritional_Status_BMI_HFA_Chart.png', 3)" class="btn btn-info">Download Chart as Image</button>
         </div>
     </div>
 </div>
 
 <script>
-    var ctx = document.getElementById('area_chart').getContext('2d');
+    var ctx = document.getElementById('bmi_hfa_chart').getContext('2d');
     var chart = new Chart(ctx, {
-        type: 'bar',  // Default type is bar for the first dataset
+        type: 'bar',
         data: {
             labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             datasets: [
                 {
-                    label: 'Improved',
-                    type: 'bar',  // Bar chart for improved data
-                    data: <?= $improved_counts_json ?>,
+                    label: 'BMI Improved',
+                    data: <?= $bmi_improved_json ?>,
                     backgroundColor: 'rgba(75, 192, 192, 0.6)',
                     borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
+                    borderWidth: 1,
+                    yAxisID: 'y1'  // Use first y-axis for BMI data
                 },
                 {
-                    label: 'No Progress',
-                    type: 'bar',  // Bar chart for no progress data
-                    data: <?= $no_progress_counts_json ?>,
+                    label: 'BMI No Progress',
+                    data: <?= $bmi_no_progress_json ?>,
                     backgroundColor: 'rgba(255, 99, 132, 0.6)',
                     borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
+                    borderWidth: 1,
+                    yAxisID: 'y1'  // Use first y-axis for BMI data
                 },
                 {
-                    label: 'Area Overlay',
-                    type: 'line',  // Area chart overlay
-                    data: <?= $improved_counts_json ?>,  // You can modify this to overlay a different dataset if needed
-                    fill: true,
-                    backgroundColor: 'rgba(153, 102, 255, 0.2)',  // Light purple fill for area chart
-                    borderColor: 'rgba(153, 102, 255, 1)',  // Purple line for area chart
-                    tension: 0.4  // Smooth curve for the line
+                    label: 'HFA Improved',
+                    data: <?= $hfa_improved_json ?>,
+                    backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1,
+                    yAxisID: 'y2',  // Use second y-axis for HFA data
+                    type: 'line',  // Line chart for HFA data
+                    tension: 0.4,
+                    fill: false
+                },
+                {
+                    label: 'HFA No Progress',
+                    data: <?= $hfa_no_progress_json ?>,
+                    backgroundColor: 'rgba(255, 205, 86, 0.6)',
+                    borderColor: 'rgba(255, 205, 86, 1)',
+                    borderWidth: 1,
+                    yAxisID: 'y2',  // Use second y-axis for HFA data
+                    type: 'line',  // Line chart for HFA data
+                    tension: 0.4,
+                    fill: false
                 }
             ]
         },
@@ -598,16 +625,33 @@ $no_progress_counts_json = json_encode(array_values($no_progress_counts));
             responsive: true,
             plugins: {
                 legend: {
-                    position: 'top',
+                    position: 'top'
                 }
             },
             scales: {
                 x: {
                     beginAtZero: true
                 },
-                y: {
+                y1: {
+                    type: 'linear',
+                    position: 'left',
                     beginAtZero: true,
-                    suggestedMin: 0  // Ensure the y-axis starts at 0
+                    title: {
+                        display: true,
+                        text: 'BMI Progress'
+                    }
+                },
+                y2: {
+                    type: 'linear',
+                    position: 'right',
+                    beginAtZero: true,
+                    grid: {
+                        drawOnChartArea: false // Only show y2 grid on the right
+                    },
+                    title: {
+                        display: true,
+                        text: 'HFA Progress'
+                    }
                 }
             }
         }
@@ -627,6 +671,7 @@ $no_progress_counts_json = json_encode(array_values($no_progress_counts));
 <?php
 $conn->close(); // Close the database connection
 ?>
+
 
                  
 

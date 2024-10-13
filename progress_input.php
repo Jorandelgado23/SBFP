@@ -335,82 +335,84 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $improvement_message = "New record added.";
     }
     
-    // Update beneficiary_details with the latest weight, height, and nutritional statuses
-    $sql_details_update = "UPDATE beneficiary_details SET weight = ?, height = ?, nutritional_status_bmia = ?, nutritional_status_hfa = ? WHERE id = ?";
+    // Update beneficiary_details with the latest weight, height, BMI, and nutritional statuses
+    $sql_details_update = "UPDATE beneficiary_details SET weight = ?, height = ?, bmi = ?, nutritional_status_bmia = ?, nutritional_status_hfa = ? WHERE id = ?";
     $stmt_details_update = $conn->prepare($sql_details_update);
-    $stmt_details_update->bind_param('ddssi', $weight, $height, $nutritional_status_bmia, $nutritional_status_hfa, $beneficiary_id);
+    $stmt_details_update->bind_param('ddsssi', $weight, $height, $bmi, $nutritional_status_bmia, $nutritional_status_hfa, $beneficiary_id);
     $stmt_details_update->execute();
     
     echo $improvement_message; // Display improvement message
 }
 ?>
 
+<title>Input Beneficiary Progress</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Nutritional Status Calculation Function
+    function calculateNutritionalStatus() {
+        const weight = parseFloat($('#weight').val());
+        const heightCm = parseFloat($('#height').val());
 
-    <title>Input Beneficiary Progress</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            // Nutritional Status Calculation Function
-            function calculateNutritionalStatus() {
-                const weight = parseFloat($('#weight').val());
-                const heightCm = parseFloat($('#height').val());
+        if (weight > 0 && heightCm > 0) {
+            // Calculate BMI
+            const heightM = heightCm / 100;
+            const bmi = weight / (heightM * heightM);
+            $('#bmi').val(bmi.toFixed(2)); // Display BMI
 
-                if (weight > 0 && heightCm > 0) {
-                    // Calculate BMI
-                    const heightM = heightCm / 100;
-                    const bmi = weight / (heightM * heightM);
-                    $('#bmi').val(bmi.toFixed(2)); // Display BMI
+            // Calculate BMI nutritional status
+            let nutritionalStatusBMI = "Normal";
+            if (bmi < 16) {
+                nutritionalStatusBMI = "Severely Wasted";
+            } else if (bmi < 18.5) {
+                nutritionalStatusBMI = "Wasted";
+            } else if (bmi >= 18.5 && bmi < 25) {
+                nutritionalStatusBMI = "Normal";
+            } else if (bmi >= 25 && bmi < 30) {
+                nutritionalStatusBMI = "Overweight";
+            } else if (bmi >= 30) {
+                nutritionalStatusBMI = "Obese";
+            }
+            $('#nutritional_status_bmia').val(nutritionalStatusBMI);
 
-                    // Calculate BMI nutritional status
-                    let nutritionalStatusBMI = "Normal";
-                    if (bmi < 16) {
-                        nutritionalStatusBMI = "Severely Wasted";
-                    } else if (bmi < 18.5) {
-                        nutritionalStatusBMI = "Wasted";
-                    } else if (bmi >= 25 && bmi < 30) {
-                        nutritionalStatusBMI = "Overweight";
-                    } else if (bmi >= 30) {
-                        nutritionalStatusBMI = "Obese";
-                    }
-                    $('#nutritional_status_bmia').val(nutritionalStatusBMI);
+            // Calculate HFA nutritional status
+            const dob = new Date($('#date_of_birth').val());
+            const now = new Date();
+            const ageMonths = (now.getFullYear() - dob.getFullYear()) * 12 + now.getMonth() - dob.getMonth();
+            let nutritionalStatusHFA = "Normal";
 
-                    // Calculate HFA nutritional status
-                    const dob = new Date($('#date_of_birth').val());
-                    const now = new Date();
-                    const ageMonths = (now.getFullYear() - dob.getFullYear()) * 12 + now.getMonth() - dob.getMonth();
-                    let nutritionalStatusHFA = "Normal";
-
-                    // Example thresholds; replace with your actual criteria
-                    if (ageMonths < 60 && heightCm < 90) {
-                        nutritionalStatusHFA = "Stunted";
-                    } else if (ageMonths >= 60 && ageMonths < 120 && heightCm < 115) {
-                        nutritionalStatusHFA = "Stunted";
-                    } else if (ageMonths >= 120 && heightCm < 130) {
-                        nutritionalStatusHFA = "Stunted";
-                    } else if (ageMonths < 60 && heightCm > 110) {
-                        nutritionalStatusHFA = "Tall";
-                    } else if (ageMonths >= 60 && ageMonths < 120 && heightCm > 140) {
-                        nutritionalStatusHFA = "Tall";
-                    } else if (ageMonths >= 120 && heightCm > 160) {
-                        nutritionalStatusHFA = "Tall";
-                    }
-
-                    $('#nutritional_status_hfa').val(nutritionalStatusHFA);
-                }
+            // Example thresholds; replace with your actual criteria
+            if (ageMonths < 60 && heightCm < 90) {
+                nutritionalStatusHFA = "Stunted";
+            } else if (ageMonths >= 60 && ageMonths < 120 && heightCm < 115) {
+                nutritionalStatusHFA = "Stunted";
+            } else if (ageMonths >= 120 && heightCm < 130) {
+                nutritionalStatusHFA = "Stunted";
+            } else if (ageMonths < 60 && heightCm > 110) {
+                nutritionalStatusHFA = "Tall";
+            } else if (ageMonths >= 60 && ageMonths < 120 && heightCm > 140) {
+                nutritionalStatusHFA = "Tall";
+            } else if (ageMonths >= 120 && heightCm > 160) {
+                nutritionalStatusHFA = "Tall";
             }
 
-            // Event listeners for weight and height inputs
-            $('#weight, #height').on('input', calculateNutritionalStatus);
+            $('#nutritional_status_hfa').val(nutritionalStatusHFA);
+        }
+    }
 
-            // Get session_id and date_of_birth from the selected beneficiary
-            $('#beneficiary_id').on('change', function() {
-                const selectedOption = $(this).find('option:selected');
-                $('#session_id').val(selectedOption.data('session_id'));
-                $('#date_of_birth').val(selectedOption.data('date_of_birth'));
-                calculateNutritionalStatus(); // Recalculate in case of a new beneficiary
-            });
-        });
-    </script>
+    // Event listeners for weight and height inputs
+    $('#weight, #height').on('input', calculateNutritionalStatus);
+
+    // Get session_id and date_of_birth from the selected beneficiary
+    $('#beneficiary_id').on('change', function() {
+        const selectedOption = $(this).find('option:selected');
+        $('#session_id').val(selectedOption.data('session_id'));
+        $('#date_of_birth').val(selectedOption.data('date_of_birth'));
+        calculateNutritionalStatus(); // Recalculate in case of a new beneficiary
+    });
+});
+</script>
+
 
 <div class="col-md-12 grid-margin stretch-card">
     <div class="card">
@@ -484,6 +486,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 </div>
+
 
 
 

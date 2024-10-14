@@ -78,79 +78,78 @@ function generatePDF($result, $division_province, $name_of_principal, $city_muni
     $rightLogoBase64 = base64_encode(file_get_contents($rightLogoPath));
 
     // Adding styles to the HTML
-    $html = '
-    <table style="width: 100%;">
-        <tr>
-            <td style="text-align: left; width: 15%;">
-                <img src="data:image/png;base64,' . $leftLogoBase64 . '" alt="Left Logo" style="width: 100px;">
-            </td>
-            <td style="text-align: center; width: 70%;">
-                <h5>Department of Education</h5>
-                <h6>Region 4A</h6>
-            </td>
-            <td style="text-align: right; width: 15%;">
-                <img src="data:image/png;base64,' . $rightLogoBase64 . '" alt="Right Logo" style="width: 100px;">
-            </td>
-        </tr>
-    </table>
-    <br>
-    <h4 style="text-align:center;">SCHOOL-BASED FEEDING PROGRAM - MILK COMPONENT</h4>';
+   // Adding styles to the HTML
+$html = '
+<table style="width: 100%;">
+    <tr>
+        <td style="text-align: left; width: 15%;">
+            <img src="data:image/png;base64,' . $leftLogoBase64 . '" alt="Left Logo" style="width: 100px;">
+        </td>
+        <td style="text-align: center; width: 70%;">
+            <h5>DEPARTMENT OF EDUCATION</h5>
+            <h5>Region 4A</h5>
+        </td>
+        <td style="text-align: right; width: 15%;">
+            <img src="data:image/png;base64,' . $rightLogoBase64 . '" alt="Right Logo" style="width: 100px;">
+        </td>
+    </tr>
+</table>
+<br>';
 
-    // Additional table for user-specific details
-    $html .= "
-    <table border='0' cellpadding='4' cellspacing='0' style='width: 100%;'>
-        <tr>
-            <td style='text-align: left; width: 50%;'>
-                <strong>Division/Province:</strong> {$division_province}<br>
-                <strong>Name of Principal:</strong> {$name_of_principal}<br>
-                <strong>City/Municipality/Barangay:</strong> {$city_municipality_barangay}<br>
-            </td>
-            <td style='text-align: right; width: 50%;'>
-                <strong>Name of Feeding Focal Person:</strong> {$name_of_feeding_focal_person}<br>
-                <strong>Name of School:</strong> {$name_of_school}<br>
-                <strong>School ID Number:</strong> {$school_id_number}<br>
-            </td>
-        </tr>
-    </table>";
+// Additional table for user-specific details
+$html .= "
+<table border='0' cellpadding='4' cellspacing='0' style='width: 100%;'>
+    <tr>
+        <td style='text-align: left; width: 50%;'>
+            <strong>REGION/DIVISION/DISTRICT:</strong> {$division_province}<br>
+            <strong>Name of School:</strong> {$name_of_school}<br>
+            <strong>School ID Number:</strong> {$school_id_number}<br>
+        </td>
+    </tr>
+</table>";
+
+// Move the program title here, right after the user-specific details
+$html .= '<h4 style="text-align:center;">SCHOOL-BASED FEEDING PROGRAM - MILK COMPONENT</h4>';
 
 // Table for Milk Component Data
 $html .= '<table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
-            <thead>
-            <tr><th colspan="5" style="text-align: center;">LIST OF BENEFICIARIES (SBFP) (SY ' . $currentYear . ')</th></tr>
-                <tr>
-                    <th rowspan="2">Name</th>
-                    <th rowspan="2">Grade & Section</th>
-                    <th colspan="3" style="text-align: center;">Classification of Students in terms of Milk Tolerance</th>
-                </tr>
-                <tr>
-                    <th>Without milk intolerance and will participate in milk feeding</th>
-                    <th>With milk intolerance but willing to participate in milk feeding</th>
-                    <th>Not allowed by parents to participate in milk feeding</th>
-                </tr>
-            </thead>
-            <tbody>';
+
+        <thead>
+        <tr><th colspan="5" style="text-align: center;">LIST OF BENEFICIARIES(SY ' . $currentYear . ')</th></tr>
+            <tr>
+                <th rowspan="2">Name</th>
+                <th rowspan="2">Grade & Section</th>
+                <th colspan="3" style="text-align: center;">Classification of Students in terms of Milk Tolerance</th>
+            </tr>
+            <tr>
+                <th>Without milk intolerance and will participate in milk feeding</th>
+                <th>With milk intolerance but willing to participate in milk feeding</th>
+                <th>Not allowed by parents to participate in milk feeding</th>
+            </tr>
+        </thead>
+        <tbody>';
 
 if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $html .= '<tr>';
-        $html .= '<td>' . htmlspecialchars($row["student_name"]) . '</td>';
-        $html .= '<td>' . htmlspecialchars($row["grade_section"]) . '</td>';
-        
-        // Automatically fill the correct columns based on milk tolerance data
-        $milkTolerance = trim($row["milk_tolerance"]); // Trim any whitespace
-        $html .= '<td style="font-family: \'DejaVu Sans\'; text-align: center; font-size: 30px;">' . 
-                    ($milkTolerance == 'Without milk intolerance and will participate in milk feeding' ? '&check;' : '') . 
-                  '</td>';
-        $html .= '<td style="font-family: \'DejaVu Sans\'; text-align: center; font-size: 30px;">' . 
-                    ($milkTolerance == 'With milk intolerance but willing to participate in milk feeding' ? '&check;' : '') . 
-                  '</td>';
-        $html .= '<td style="font-family: \'DejaVu Sans\'; text-align: center; font-size: 30px;">' . 
-                    ($milkTolerance == 'Not allowed by parents to participate in milk feeding' ? '&check;' : '') . 
-                  '</td>';
-        $html .= '</tr>';
-    }
+while ($row = $result->fetch_assoc()) {
+    $html .= '<tr>';
+    $html .= '<td>' . htmlspecialchars($row["student_name"]) . '</td>';
+    $html .= '<td>' . htmlspecialchars($row["grade_section"]) . '</td>';
+    
+    // Automatically fill the correct columns based on milk tolerance data
+    $milkTolerance = trim($row["milk_tolerance"]); // Trim any whitespace
+    $html .= '<td style="font-family: \'DejaVu Sans\'; text-align: center; font-size: 30px;">' . 
+                ($milkTolerance == 'Without milk intolerance and will participate in milk feeding' ? '&check;' : '') . 
+              '</td>';
+    $html .= '<td style="font-family: \'DejaVu Sans\'; text-align: center; font-size: 30px;">' . 
+                ($milkTolerance == 'With milk intolerance but willing to participate in milk feeding' ? '&check;' : '') . 
+              '</td>';
+    $html .= '<td style="font-family: \'DejaVu Sans\'; text-align: center; font-size: 30px;">' . 
+                ($milkTolerance == 'Not allowed by parents to participate in milk feeding' ? '&check;' : '') . 
+              '</td>';
+    $html .= '</tr>';
+}
 } else {
-    $html .= '<tr><td colspan="5">No data available</td></tr>'; // Adjusted to match the number of columns
+$html .= '<tr><td colspan="5">No data available</td></tr>'; // Adjusted to match the number of columns
 }
 
 $html .= '</tbody></table>';

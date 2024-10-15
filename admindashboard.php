@@ -381,6 +381,72 @@ $conn->close();
 
 
 
+<?php
+include("accountconnection.php");
+
+// Query to get the number of beneficiaries per school
+$sql = "SELECT name_of_school, COUNT(*) as num_beneficiaries 
+        FROM beneficiaries 
+        GROUP BY name_of_school";
+$result = $conn->query($sql);
+
+$schools = [];
+$beneficiaries = [];
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $schools[] = $row['name_of_school'];
+        $beneficiaries[] = $row['num_beneficiaries'];
+    }
+}
+
+// Pass the data to the JavaScript as JSON
+$schools_json = json_encode($schools);
+$beneficiaries_json = json_encode($beneficiaries);
+?>
+
+<div class="col-lg-13">
+    <div class="white_shd full margin_bottom_30">
+        <div class="full graph_head">
+            <div class="heading1 margin_0">
+                <h2>NUMBER OF BENEFICIARIES PER SCHOOL CHART</h2>
+            </div>
+        </div>
+        <div class="map_section padding_infor_info">
+            <canvas id="bar_chart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Get data from PHP
+    var schools = <?php echo $schools_json; ?>;
+    var beneficiaries = <?php echo $beneficiaries_json; ?>;
+
+    // Generate bar chart
+    var ctx = document.getElementById('bar_chart').getContext('2d');
+    var barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: schools, // Schools as labels
+            datasets: [{
+                label: 'Number of Beneficiaries',
+                data: beneficiaries, // Number of beneficiaries per school
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
 
 
 
@@ -545,6 +611,18 @@ $conn->close(); // Close the database connection
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     <div class="col-lg-6">
         <div class="white_shd full margin_bottom_30">
             <div class="full graph_head">
@@ -621,51 +699,7 @@ $conn->close(); // Close the database connection
     <!-- Chart Plugins -->
     <script src="js/Chart.min.js"></script>
     <!-- Init Charts -->
-    <script>
-        var ctx = document.getElementById('chartjs_area').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
 
-        var ctx = document.getElementById('chartjs_bar').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-
-        var ctx = document.getElementById('chartjs_line').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-    </script>
 
 
 <script>

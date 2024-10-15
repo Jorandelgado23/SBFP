@@ -61,7 +61,7 @@ include("adminauth.php");
                 <div class="sidebar_blog_1">
                     <div class="sidebar-header">
                         <div class="logo_section">
-                        <a href="admindashboard.php"><img class="logo_icon img-responsive" src="images/LOGO.png" alt="#" /></a>
+                        <a href="admindashboard.php"><img class="logo_icon img-responsive" src="images/origlogo.jpg" alt="#" /></a>
 
 
                         </div>
@@ -229,7 +229,7 @@ $conn->close();
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="background-color: rgba(0, 0, 0, 0.05);">
                 <form id="createUserForm">
                     <div class="form-group">
                         <label for="createRole">Role</label>
@@ -561,7 +561,7 @@ function updateSchoolDetails() {
                 </button>
             </div>
             <form id="editUserForm">
-                <div class="modal-body">
+                <div class="modal-body" style="background-color: rgba(0, 0, 0, 0.05);">
                     <input type="hidden" id="editUserId" name="id">
                     <div class="form-group">
                         <label for="editFirstName">First Name</label>

@@ -67,7 +67,7 @@ include("connection.php");
                 <div class="sidebar_blog_1">
                     <div class="sidebar-header">
                         <div class="logo_section">
-                            <a href="dashboard.php"><img class="logo_icon img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
+                            <a href="dashboard.php"><img class="logo_icon img-responsive" src="images/origlogo.jpg" alt="#" /></a>
                         </div>
                     </div>
                     <div class="sidebar_user_info">
@@ -289,7 +289,7 @@ $conn->close();
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="background-color: rgba(0, 0, 0, 0.05);">
         <form action="submit6.php" method="post" id="consolidatedForm">
           <h2>School Information</h2>
           <div class="mb-3">
@@ -343,7 +343,7 @@ $conn->close();
           </div>
           <!-- Add student button
           <button type="button" class="btn btn-secondary" onclick="addStudent()">Add Another Student</button> -->
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary" style="float: right;">Submit</button>
         </form>
       </div>
     </div>
@@ -558,7 +558,7 @@ function displayEditModal() {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
                         <button type="submit" class="btn btn-primary" id="saveChangesBtn">Save changes</button>
                     </div>
                 </form>

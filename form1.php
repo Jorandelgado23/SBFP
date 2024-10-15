@@ -67,7 +67,7 @@ include("connection.php");
                 <div class="sidebar_blog_1">
                     <div class="sidebar-header">
                         <div class="logo_section">
-                        <a href="dashboard.php"><img class="logo_icon img-responsive" src="images/logo/semilogo.png" alt="#" /></a>
+                        <a href="dashboard.php"><img class="logo_icon img-responsive" src="images/origlogo.jpg" alt="#" /></a>
                         </div>
                     </div>
                     <div class="sidebar_user_info">
@@ -271,13 +271,13 @@ $stmt->close();
 <div class="modal fade" id="sbfpModal" tabindex="-1" role="dialog" aria-labelledby="sbfpModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-light">
+            <div class="modal-header">
                 <h5 class="modal-title" id="sbfpModalLabel">School-Based Feeding Program Form</h5>
-                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" style="background-color: #FFF6EA;">
+            <div class="modal-body" style="background-color: rgba(0, 0, 0, 0.05);">
                 <form id="sbfpForm" class="needs-validation" novalidate action="submit.php" method="post">
                     <div class="row">
                         <div class="form-group col-md-6" hidden>
@@ -757,14 +757,14 @@ function maskName($name) {
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-    <div class="modal-header bg-primary text-light">
+    <div class="modal-header">
 
         <h5 class="modal-title" id="editModalLabel">Edit Beneficiary Details</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body" style="background-color: #FFF6EA;">
+      <div class="modal-body" style="background-color: rgba(0, 0, 0, 0.05);">
         <form id="editForm">
           <input type="hidden" id="edit-id">
 
@@ -836,7 +836,7 @@ function maskName($name) {
             <input type="text" class="form-control" id="edit-nutritional_status_hfa" readonly>
           </div>
 
-          <button type="button" class="btn btn-primary" id="saveChanges">Save Changes</button>
+          <button type="button" class="btn btn-primary" id="saveChanges" style="float: right;">Save Changes</button>
         </form>
       </div>
     </div>

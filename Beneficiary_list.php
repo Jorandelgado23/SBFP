@@ -449,85 +449,10 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
             </div>
         </div>
 
-        <!-- Line Chart Section -->
-        <div style="width: 800px; margin: auto;">
-            <canvas id="line_chart"></canvas>
-        </div>
+
 
         <script>
-            var ctx = document.getElementById('line_chart').getContext('2d');
-            var lineChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: <?= json_encode(array_unique(array_merge($dates_current, $dates_previous))) ?>, // Combine dates
-                    datasets: [
-                        {
-                            label: 'Current Month Weight (kg)',
-                            data: <?= json_encode($weights_current) ?>,
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 2,
-                            fill: false
-                        },
-                        {
-                            label: 'Previous Month Weight (kg)',
-                            data: <?= json_encode($weights_previous) ?>,
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 2,
-                            fill: false
-                        },
-                        {
-                            label: 'Current Month Height (cm)',
-                            data: <?= json_encode($heights_current) ?>,
-                            borderColor: 'rgba(153, 102, 255, 1)',
-                            borderWidth: 2,
-                            fill: false
-                        },
-                        {
-                            label: 'Previous Month Height (cm)',
-                            data: <?= json_encode($heights_previous) ?>,
-                            borderColor: 'rgba(255, 159, 64, 1)',
-                            borderWidth: 2,
-                            fill: false
-                        },
-                        {
-                            label: 'Current Month BMI',
-                            data: <?= json_encode($bmis_current) ?>,
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 2,
-                            fill: false
-                        },
-                        {
-                            label: 'Previous Month BMI',
-                            data: <?= json_encode($bmis_previous) ?>,
-                            borderColor: 'rgba(255, 206, 86, 1)',
-                            borderWidth: 2,
-                            fill: false
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        }
-                    },
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Date'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Value'
-                            }
-                        }
-                    }
-                }
-            });
+      
 
             // Automatically submit the form when a date is selected
             function submitForm() {

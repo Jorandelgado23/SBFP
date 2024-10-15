@@ -397,9 +397,9 @@ function updateSchoolDetails() {
     <div class="row">
     <div class="col-md-12">
         <div class="white_shd full margin_bottom_30">
-            <div class="full graph_head">
+            <div class="full graph_head" style="background-color:#0971b8;">
                 <div class="heading1 margin_0">
-                    <h2>Admin Accounts</h2>
+                    <h2 style="color:#fff;">Admin Accounts</h2>
                 </div>
             </div>
             <div class="table_section padding_infor_info">
@@ -474,9 +474,9 @@ function updateSchoolDetails() {
 
 <div class="col-md-12">
     <div class="white_shd full margin_bottom_30">
-        <div class="full graph_head">
+        <div class="full graph_head" style="background-color:#0971b8;">
             <div class="heading1 margin_0">
-                <h2>SBFP Accounts</h2>
+                <h2 style="color:#fff;">SBFP Accounts</h2>
             </div>
         </div>
         <div class="table_section padding_infor_info">

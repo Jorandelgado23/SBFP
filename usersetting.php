@@ -238,12 +238,12 @@ $conn->close();
             </div>
         </div>
         <div class="row column1">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
+            <div class="col-md-12"></div>
+            <div class="col-md-12">
                 <div class="white_shd full margin_bottom_30">
-                    <div class="full graph_head">
+                    <div class="full graph_head" style="background-color:#0971b8;">
                         <div class="heading1 margin_0">
-                            <h2>User Profile</h2>
+                            <h2 style="color:#fff;">User Profile</h2>
                         </div>
                     </div>
                     <div class="full price_table padding_infor_info">

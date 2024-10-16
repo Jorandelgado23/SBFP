@@ -508,9 +508,9 @@ $conn->close(); // Close the database connection
                 <canvas id="pie_chart"></canvas>
             </div>
             <!-- Button to download the chart -->
-            <div class="text-center mt-3">
+            <!-- <div class="text-center mt-3">
                 <button onclick="downloadChart('pie_chart', 'Nutritional_Status_Chart.png', 3)" class="btn btn-info">Download Chart as Image</button>
-            </div>
+            </div> -->
         </div>
     </div>
 

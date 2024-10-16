@@ -1021,19 +1021,5 @@ function validatePhone(input) {
                    
                 </div>
                 <!-- End Dashboard Inner -->
-            </div>
-        </div>
-    </div>
- 
-
-   
-    <!-- Bootstrap Bundle JavaScript -->
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <!-- Custom Scripts -->
-    <script src="js/custom.js"></script>
-    
-    
-    
-</body>
-
-</html>
+                <?php include'user_botNav.php';
+?>

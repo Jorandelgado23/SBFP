@@ -36,6 +36,7 @@ include("connection.php");
       <link rel="stylesheet" href="css/perfect-scrollbar.css" />
       <!-- custom css -->
       <link rel="stylesheet" href="css/custom.css" />
+      
 
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -89,7 +90,24 @@ include("connection.php");
             <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
         </li>
 
-        <li class="active">
+        <li>
+    <a href="#snsDropdown" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <i class="fa fa-dashboard"></i> <span>SNS List</span>
+    </a>
+    <ul class="collapse list-unstyled" id="snsDropdown">
+        <li><a href="weighing_sessions.php?kinder">> <span>Kinder</span></a></li>
+        <li><a href="weighing_sessions.php?grade1">> <span>Grade 1</span></a></li>
+        <li><a href="weighing_sessions.php?grade2">> <span>Grade 2</span></a></li>
+        <li><a href="weighing_sessions.php?grade3">> <span>Grade 3</span></a></li>
+        <li><a href="weighing_sessions.php?grade4">> <span>Grade 4</span></a></li>
+        <li><a href="weighing_sessions.php?grade5">> <span>Grade 5</span></a></li>
+        <li><a href="weighing_sessions.php?grade6">> <span>Grade 6</span></a></li>
+        <li><a href="sns_summary.php">> <span>SNS Summary</span></a></li>
+    </ul>
+</li>
+
+
+        <li class="">
             <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
         </li>
 

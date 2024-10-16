@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 15, 2024 at 10:45 AM
+-- Generation Time: Oct 16, 2024 at 03:31 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -43,7 +43,9 @@ CREATE TABLE `beneficiaries` (
 --
 
 INSERT INTO `beneficiaries` (`id`, `division_province`, `city_municipality_barangay`, `name_of_school`, `school_id_number`, `name_of_principal`, `name_of_feeding_focal_person`, `session_id`) VALUES
-(198, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr');
+(198, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(199, 'Laguna', 'Santa Cruz', 'San Juan Elementary School', '123469', 'sample', 'jaynard sandoval', 'CZP8JeWl'),
+(200, 'Laguna', 'Santa Cruz', 'San Juan Elementary School', '123469', 'sample', 'jaynard sandoval', 'CZP8JeWl');
 
 -- --------------------------------------------------------
 
@@ -56,7 +58,8 @@ CREATE TABLE `beneficiary_attendance` (
   `beneficiary_id` int(11) NOT NULL,
   `attendance_date` date NOT NULL,
   `status` enum('Present','Absent') NOT NULL,
-  `meal_served` enum('H','M','H/M','A','H2','M2','H/M2') DEFAULT 'H'
+  `meal_served` enum('H','M','H/M','A','H2','M2','H/M2') DEFAULT 'H',
+  `session_id` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -95,7 +98,9 @@ CREATE TABLE `beneficiary_details` (
 --
 
 INSERT INTO `beneficiary_details` (`id`, `beneficiary_id`, `student_section`, `lrn_no`, `name`, `sex`, `grade_section`, `date_of_birth`, `date_of_weighing`, `age`, `weight`, `height`, `bmi`, `nutritional_status_bmia`, `nutritional_status_hfa`, `dewormed`, `parents_consent_for_milk`, `participation_in_4ps`, `beneficiary_of_sbfp_in_previous_years`, `session_id`, `selected`, `parent_phone`) VALUES
-(121, 198, 'exmple section', '345657757657', 'icievy sandrino', 'Female', 'Grade 5', '2006-02-06', '2024-10-11', '18', 26.00, 116.00, 19.32, 'Normal', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes', 'e55jUNtr', 1, '+639207569581');
+(121, 198, 'exmple section', '345657757657', 'icievy sandrino', 'Female', 'Grade 5', '2006-02-06', '2024-10-11', '18', 45.00, 150.00, 20.00, 'Normal', 'Normal', 'Yes', 'Yes', 'Yes', 'Yes', 'e55jUNtr', 1, '+639207569581'),
+(122, 199, 'sappire', '111111111111', 'cyrus gaza', 'Male', 'Grade 3', '2018-02-04', '2024-10-15', '6', 19.50, 120.00, 13.54, 'Severely Wasted', 'Normal', 'Yes', 'Yes', 'Yes', 'Yes', 'CZP8JeWl', 0, '+639123456789'),
+(123, 200, 'kamagong', '222222222222', 'shyla', 'Female', 'Grade 5', '2007-02-16', '2024-10-15', '17', 34.00, 140.00, 17.35, 'Wasted', 'Normal', 'Yes', 'Yes', 'Yes', 'Yes', 'CZP8JeWl', 0, '+639207569640');
 
 -- --------------------------------------------------------
 
@@ -113,33 +118,6 @@ CREATE TABLE `beneficiary_progress` (
   `nutritional_status_bmia` enum('Severely Wasted','Wasted','Normal','Overweight','Obese') NOT NULL,
   `nutritional_status_hfa` enum('Stunted','Normal','Tall') NOT NULL,
   `session_id` varchar(8) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `beneficiary_progress`
---
-
-INSERT INTO `beneficiary_progress` (`id`, `beneficiary_id`, `date_of_progress`, `weight`, `height`, `bmi`, `nutritional_status_bmia`, `nutritional_status_hfa`, `session_id`) VALUES
-(64, 121, '2024-10-11', 26.00, 116.00, 19.32, 'Normal', 'Stunted', 'e55jUNtr');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `division_schools`
---
-
-CREATE TABLE `division_schools` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `report_id` int(10) UNSIGNED NOT NULL,
-  `division_school` varchar(255) NOT NULL,
-  `sdo_school` int(11) NOT NULL,
-  `target_sbfp_school` int(11) NOT NULL,
-  `actual_sbfp_school` int(11) NOT NULL,
-  `percent` decimal(5,2) DEFAULT NULL,
-  `status` varchar(255) DEFAULT NULL,
-  `target_beneficiaries` int(11) NOT NULL,
-  `actual_beneficiaries` int(11) NOT NULL,
-  `completion_percentage` decimal(5,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -164,7 +142,7 @@ CREATE TABLE `milkcomponent` (
 --
 
 INSERT INTO `milkcomponent` (`id`, `region_division_district`, `name_of_school`, `school_id_number`, `student_name`, `grade_section`, `milk_tolerance`, `session_id`) VALUES
-(81, 'Laguna', 'Gatid Elementary School', '123461', 'icievy sandrino', 'Grade 5', 'With milk intolerance but willing to participate in milk feeding', 'e55jUNtr');
+(81, 'Laguna', 'Gatid Elementary School', '123461', 'icievy sandrino', 'Grade 5', 'Without milk intolerance and will participate in milk feeding', 'e55jUNtr');
 
 -- --------------------------------------------------------
 
@@ -977,25 +955,44 @@ INSERT INTO `recent_activity` (`id`, `email`, `activity`, `activity_type`, `time
 (895, 'icievy@gmail.com', 'User logged out', 'logout', '2024-10-14 07:48:22', 'read'),
 (896, 'icievy@gmail.com', 'User logged in', 'login', '2024-10-14 17:38:36', 'read'),
 (897, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-10-14 17:44:17', 'read'),
-(898, 'icievy@gmail.com', 'User logged in', 'login', '2024-10-14 18:30:09', 'new'),
-(899, 'icievy@gmail.com', 'User logged out', 'logout', '2024-10-14 18:37:16', 'new'),
-(900, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-10-14 18:37:24', 'new'),
-(901, 'icievy@gmail.com', 'User logged in', 'login', '2024-10-14 18:38:58', 'new'),
-(902, 'icievy@gmail.com', 'Updated milk tolerance for ID: 79', 'update', '2024-10-14 18:42:17', 'new'),
-(903, 'icievy@gmail.com', 'User logged in', 'login', '2024-10-14 18:48:43', 'new'),
-(904, 'icievy@gmail.com', 'Deleted milk component record for student: icievy sandrino (ID: 79)', 'delete', '2024-10-14 18:51:20', 'new'),
-(905, 'icievy@gmail.com', 'User logged in', 'login', '2024-10-14 18:53:03', 'new'),
-(906, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-10-14 18:57:08', 'new'),
-(907, 'icievy@gmail.com', 'User logged in', 'login', '2024-10-14 19:00:11', 'new'),
-(908, 'icievy@gmail.com', 'User logged in', 'login', '2024-10-15 01:40:49', 'new'),
-(909, 'icievy@gmail.com', 'Inserted milkcomponent data', 'data_insert', '2024-10-15 01:41:14', 'new'),
-(910, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-10-15 01:54:55', 'new'),
-(911, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-10-15 01:55:06', 'new'),
-(912, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-10-15 01:59:59', 'new'),
-(913, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-10-15 02:00:10', 'new'),
-(914, 'icievy@gmail.com', 'Deleted milk component record for student: icievy sandrino (ID: 80)', 'delete', '2024-10-15 02:00:20', 'new'),
-(915, 'icievy@gmail.com', 'Inserted milkcomponent data', 'data_insert', '2024-10-15 02:01:14', 'new'),
-(916, 'icievy@gmail.com', 'User logged out', 'logout', '2024-10-15 02:43:06', 'new');
+(898, 'icievy@gmail.com', 'User logged in', 'login', '2024-10-14 18:30:09', 'read'),
+(899, 'icievy@gmail.com', 'User logged out', 'logout', '2024-10-14 18:37:16', 'read'),
+(900, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-10-14 18:37:24', 'read'),
+(901, 'icievy@gmail.com', 'User logged in', 'login', '2024-10-14 18:38:58', 'read'),
+(902, 'icievy@gmail.com', 'Updated milk tolerance for ID: 79', 'update', '2024-10-14 18:42:17', 'read'),
+(903, 'icievy@gmail.com', 'User logged in', 'login', '2024-10-14 18:48:43', 'read'),
+(904, 'icievy@gmail.com', 'Deleted milk component record for student: icievy sandrino (ID: 79)', 'delete', '2024-10-14 18:51:20', 'read'),
+(905, 'icievy@gmail.com', 'User logged in', 'login', '2024-10-14 18:53:03', 'read'),
+(906, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-10-14 18:57:08', 'read'),
+(907, 'icievy@gmail.com', 'User logged in', 'login', '2024-10-14 19:00:11', 'read'),
+(908, 'icievy@gmail.com', 'User logged in', 'login', '2024-10-15 01:40:49', 'read'),
+(909, 'icievy@gmail.com', 'Inserted milkcomponent data', 'data_insert', '2024-10-15 01:41:14', 'read'),
+(910, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-10-15 01:54:55', 'read'),
+(911, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-10-15 01:55:06', 'read'),
+(912, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-10-15 01:59:59', 'read'),
+(913, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-10-15 02:00:10', 'read'),
+(914, 'icievy@gmail.com', 'Deleted milk component record for student: icievy sandrino (ID: 80)', 'delete', '2024-10-15 02:00:20', 'read'),
+(915, 'icievy@gmail.com', 'Inserted milkcomponent data', 'data_insert', '2024-10-15 02:01:14', 'read'),
+(916, 'icievy@gmail.com', 'User logged out', 'logout', '2024-10-15 02:43:06', 'read'),
+(917, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-10-15 02:48:15', 'read'),
+(918, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-10-15 05:43:36', 'read'),
+(919, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-10-15 05:45:04', 'new'),
+(920, 'jaynigger@gmail.com', 'Created user with email: jaynigger@gmail.com', 'create', '2024-10-15 05:47:56', 'new'),
+(921, 'jaynigger@gmail.com', 'User logged in', 'login', '2024-10-15 05:48:12', 'new'),
+(922, 'jaynigger@gmail.com', 'User logged out', 'logout', '2024-10-15 06:05:23', 'new'),
+(923, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-10-15 06:05:30', 'new'),
+(924, 'jaynigger@gmail.com', 'User logged in', 'login', '2024-10-15 06:19:39', 'new'),
+(925, 'jaynigger@gmail.com', 'User logged out', 'logout', '2024-10-15 06:47:13', 'new'),
+(926, 'icievy@gmail.com', 'User logged in', 'login', '2024-10-15 06:47:20', 'new'),
+(927, 'icievy@gmail.com', 'User logged out', 'logout', '2024-10-15 06:50:07', 'new'),
+(928, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-10-15 06:57:47', 'new'),
+(929, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-10-16 03:45:43', 'new'),
+(930, 'icievy@gmail.com', 'User logged in', 'login', '2024-10-16 03:46:36', 'new'),
+(931, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-10-16 04:11:13', 'new'),
+(932, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-10-16 04:11:21', 'new'),
+(933, 'jorandelgado23@gmail.com', 'User logged in', 'login', '2024-10-16 05:30:10', 'new'),
+(934, 'icievy@gmail.com', 'Updated milk tolerance for ID: 81', 'update', '2024-10-16 07:28:06', 'new'),
+(935, 'icievy@gmail.com', 'Updated milk tolerance for ID: 81', 'update', '2024-10-16 07:28:10', 'new');
 
 -- --------------------------------------------------------
 
@@ -1436,28 +1433,18 @@ INSERT INTO `sbfp_recent_activity` (`id`, `email`, `activity`, `activity_type`, 
 (417, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-10-15 02:00:10', 'new'),
 (418, 'icievy@gmail.com', 'Deleted milk component record for student: icievy sandrino (ID: 80)', 'delete', '2024-10-15 02:00:20', 'new'),
 (419, 'icievy@gmail.com', 'Inserted milkcomponent data', 'data_insert', '2024-10-15 02:01:14', 'new'),
-(420, 'icievy@gmail.com', 'User logged out', 'logout', '2024-10-15 02:43:06', 'new');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `schools`
---
-
-CREATE TABLE `schools` (
-  `id` int(11) NOT NULL,
-  `division_province` varchar(255) NOT NULL,
-  `school_district_municipality` varchar(255) NOT NULL,
-  `school_name` varchar(255) NOT NULL,
-  `beis_id` varchar(50) DEFAULT NULL,
-  `school_address` varchar(255) DEFAULT NULL,
-  `barangay_name` varchar(100) DEFAULT NULL,
-  `supervisor_principal_name` varchar(255) DEFAULT NULL,
-  `contact_number` varchar(20) DEFAULT NULL,
-  `email_address` varchar(100) DEFAULT NULL,
-  `total_beneficiaries` int(11) DEFAULT NULL,
-  `session_id` varchar(8) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+(420, 'icievy@gmail.com', 'User logged out', 'logout', '2024-10-15 02:43:06', 'new'),
+(421, 'jaynigger@gmail.com', 'User logged in', 'login', '2024-10-15 05:48:12', 'new'),
+(422, 'jaynigger@gmail.com', 'User logged out', 'logout', '2024-10-15 06:05:23', 'new'),
+(423, 'jaynigger@gmail.com', 'User logged in', 'login', '2024-10-15 06:19:39', 'new'),
+(424, 'jaynigger@gmail.com', 'User logged out', 'logout', '2024-10-15 06:47:13', 'new'),
+(425, 'icievy@gmail.com', 'User logged in', 'login', '2024-10-15 06:47:20', 'new'),
+(426, 'icievy@gmail.com', 'User logged out', 'logout', '2024-10-15 06:50:07', 'new'),
+(427, 'icievy@gmail.com', 'User logged in', 'login', '2024-10-16 03:46:36', 'new'),
+(428, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-10-16 04:11:13', 'new'),
+(429, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-10-16 04:11:21', 'new'),
+(430, 'icievy@gmail.com', 'Updated milk tolerance for ID: 81', 'update', '2024-10-16 07:28:06', 'new'),
+(431, 'icievy@gmail.com', 'Updated milk tolerance for ID: 81', 'update', '2024-10-16 07:28:10', 'new');
 
 -- --------------------------------------------------------
 
@@ -1496,7 +1483,8 @@ INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `phone_
 (16, 'prince joran', 'solano', 'jorandelgado23@gmail.com', '$2y$10$9x08kjkpKUmeZT2NjCUZ/OW7CyqZKWcZGJPBwMTl60mLvk1IdABUG', '09883273453', '2002-10-26', '2024-06-17 13:02:10', 'admin', 'LOGO.jpg', '', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', NULL, NULL),
 (58, 'icievy', 'sandrino', 'icievy@gmail.com', '$2y$10$dcgTtdRy4y51vI8pudJCn.f4TBe6jvvaTtyG7mYNCEaDGv/JxCKFe', '09883273453', '2002-10-29', '2024-09-30 17:29:43', 'sbfp', NULL, 'e55jUNtr', 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'Gatid, Santa Cruz, Laguna', 'Barangay Gatid', 'LOREVIE K. RIVERA', NULL, NULL),
 (60, 'jeri dominic', 'palasin', 'palasin@gmail.com', '$2y$10$1Bw0Ka1aCg9DGI4vdaKxb.53hu62loEMcXnIJCFOK6Xtz24ZeqbOm', '09123456789', '2002-09-19', '2024-09-30 18:07:53', 'admin', NULL, '', 'Laguna', 'Santa Cruz', 'Labuin Elementary School', '123462', 'Labuin, Santa Cruz, Laguna', 'Barangay Labuin', 'MARIFE F. DUMA', NULL, NULL),
-(61, 'dominic', 'gaza', 'gaza@gmail.com', '$2y$10$QtlbuEgIFufUJIwcKG5M/ORSR.rVU9C2Qe.0NSi3O4m9e9.vsE/ue', '09213546554', '2000-10-29', '2024-09-30 18:08:56', 'admin', NULL, 'QTeGprdV', 'Laguna', 'Santa Cruz', 'Labuin Elementary School', '123462', 'Labuin, Santa Cruz, Laguna', 'Barangay Labuin', 'example name', NULL, NULL);
+(61, 'dominic', 'gaza', 'gaza@gmail.com', '$2y$10$QtlbuEgIFufUJIwcKG5M/ORSR.rVU9C2Qe.0NSi3O4m9e9.vsE/ue', '09213546554', '2000-10-29', '2024-09-30 18:08:56', 'admin', NULL, 'QTeGprdV', 'Laguna', 'Santa Cruz', 'Labuin Elementary School', '123462', 'Labuin, Santa Cruz, Laguna', 'Barangay Labuin', 'example name', NULL, NULL),
+(64, 'jaynard', 'sandoval', 'jaynigger@gmail.com', '$2y$10$lw1kdb0lAyXsF9Tvcrv4WelVnDr3vjdPNyVx8qId946kskx.DYCce', '09123456789', '2002-08-20', '2024-10-15 11:47:56', 'sbfp', NULL, 'CZP8JeWl', 'Laguna', 'Santa Cruz', 'San Juan Elementary School', '123469', 'San Juan, Santa Cruz, Laguna', 'Barangay San Juan', 'sample', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -1512,7 +1500,9 @@ ALTER TABLE `beneficiaries`
 -- Indexes for table `beneficiary_attendance`
 --
 ALTER TABLE `beneficiary_attendance`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `beneficiary_id` (`beneficiary_id`),
+  ADD KEY `session_id` (`session_id`);
 
 --
 -- Indexes for table `beneficiary_details`
@@ -1527,13 +1517,6 @@ ALTER TABLE `beneficiary_details`
 ALTER TABLE `beneficiary_progress`
   ADD PRIMARY KEY (`id`),
   ADD KEY `beneficiary_id` (`beneficiary_id`);
-
---
--- Indexes for table `division_schools`
---
-ALTER TABLE `division_schools`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `report_id` (`report_id`);
 
 --
 -- Indexes for table `milkcomponent`
@@ -1560,12 +1543,6 @@ ALTER TABLE `sbfp_recent_activity`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `schools`
---
-ALTER TABLE `schools`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -1580,31 +1557,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `beneficiaries`
 --
 ALTER TABLE `beneficiaries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=199;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=201;
 
 --
 -- AUTO_INCREMENT for table `beneficiary_attendance`
 --
 ALTER TABLE `beneficiary_attendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `beneficiary_details`
 --
 ALTER TABLE `beneficiary_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
 
 --
 -- AUTO_INCREMENT for table `beneficiary_progress`
 --
 ALTER TABLE `beneficiary_progress`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
-
---
--- AUTO_INCREMENT for table `division_schools`
---
-ALTER TABLE `division_schools`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT for table `milkcomponent`
@@ -1622,25 +1593,19 @@ ALTER TABLE `quarterly_reportform8`
 -- AUTO_INCREMENT for table `recent_activity`
 --
 ALTER TABLE `recent_activity`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=917;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=936;
 
 --
 -- AUTO_INCREMENT for table `sbfp_recent_activity`
 --
 ALTER TABLE `sbfp_recent_activity`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=421;
-
---
--- AUTO_INCREMENT for table `schools`
---
-ALTER TABLE `schools`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=432;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
 -- Constraints for dumped tables
@@ -1657,12 +1622,6 @@ ALTER TABLE `beneficiary_details`
 --
 ALTER TABLE `beneficiary_progress`
   ADD CONSTRAINT `beneficiary_progress_ibfk_1` FOREIGN KEY (`beneficiary_id`) REFERENCES `beneficiary_details` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `division_schools`
---
-ALTER TABLE `division_schools`
-  ADD CONSTRAINT `division_schools_ibfk_1` FOREIGN KEY (`report_id`) REFERENCES `quarterly_reportform8` (`report_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

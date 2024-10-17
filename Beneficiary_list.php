@@ -394,8 +394,8 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
                                 <td style="color: <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'white' : 'white' ?>; 
                                     background-color: <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? '#59CE8F' : '#FC2947' ?>; 
                                     padding: 5px; border-radius: 4px; font-weight:400; text-align: center;">
-                            <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'Improved' : 'No Progress' ?>
-                        </td>
+                                    <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'Improved' : 'No Progress' ?>
+                                </td>
                             </tr>
                         <?php } ?>
                     </tbody>
@@ -435,8 +435,8 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
                                 <td style="color: <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'white' : 'white' ?>; 
                                     background-color: <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? '#59CE8F' : '#FC2947' ?>; 
                                     padding: 5px; border-radius: 4px; font-weight:400; text-align: center;">
-                            <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'Improved' : 'No Progress' ?>
-                        </td>
+                                    <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'Improved' : 'No Progress' ?>
+                                </td>
                             </tr>
                         <?php } ?>
                     </tbody>
@@ -444,15 +444,103 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
             </div>
         </div>
 
-
+        <!-- Chart Section -->
+        <div class="chart_section padding_infor_info">
+            <h3>Summary Chart: Current vs Previous Month Progress</h3>
+            <canvas id="progressChart"></canvas>
+        </div>
 
         <script>
-      
-
             // Automatically submit the form when a date is selected
             function submitForm() {
                 document.getElementById('dateForm').submit();
             }
+
+            // Get chart context
+            var ctx = document.getElementById('progressChart').getContext('2d');
+
+            // Prepare chart data
+            var chartData = {
+                labels: <?= json_encode($dates_current) ?>, // X-axis labels (dates for current month)
+                datasets: [
+                    {
+                        label: 'Weight (kg) - Current Month',
+                        data: <?= json_encode($weights_current) ?>,
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Height (cm) - Current Month',
+                        data: <?= json_encode($heights_current) ?>,
+                        backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'BMI - Current Month',
+                        data: <?= json_encode($bmis_current) ?>,
+                        backgroundColor: 'rgba(255, 159, 64, 0.6)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Weight (kg) - Previous Month',
+                        data: <?= json_encode($weights_previous) ?>,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Height (cm) - Previous Month',
+                        data: <?= json_encode($heights_previous) ?>,
+                        backgroundColor: 'rgba(255, 206, 86, 0.6)',
+                        borderColor: 'rgba(255, 206, 86, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'BMI - Previous Month',
+                        data: <?= json_encode($bmis_previous) ?>,
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            };
+
+            // Create the chart
+            var progressChart = new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Dates'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Measurement Values'
+                            }
+                        }
+                    },
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        }
+                    }
+                }
+            });
         </script>
 
     </div>
@@ -462,6 +550,7 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
 // Close the database connection
 $conn->close();
 ?>
+
 
 
 

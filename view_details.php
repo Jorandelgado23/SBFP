@@ -284,13 +284,13 @@ $conn->close();
     <div class="col ml-auto">
     <div class="dropdown float-right">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="actionMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            GENERATE REPORT
+            GENERATE PDF
         </button>
         <div class="dropdown-menu" aria-labelledby="actionMenuButton">
-            <form action="beneficiary_excel.php" method="get" class="dropdown-item">
+            <!-- <form action="beneficiary_excel.php" method="get" class="dropdown-item">
                 <input type="hidden" name="session_id" value="<?php echo $_GET['session_id']; ?>">
                 <button type="submit" class="btn btn-link">Download as Excel</button>
-            </form>
+            </form> -->
             <form action="beneficiary_pdf.php" method="get" class="dropdown-item">
                 <input type="hidden" name="session_id" value="<?php echo $_GET['session_id']; ?>">
                 <button type="submit" class="btn btn-link">Download as PDF</button>

@@ -2,46 +2,58 @@
    include'user_topNav.php';
    ?>
 <?php
-   // Database connection
-   $conn = new mysqli('localhost', 'root', '', 'sbfp');
-   
-   // Check for connection errors
-   if ($conn->connect_error) {
-       die("Connection failed: " . $conn->connect_error);
-   }
-   
-   // Get the first section for grade_id = 1
-   $first_section_sql = "SELECT section_id, section_name FROM sections WHERE grade_id = 1 ORDER BY section_id LIMIT 1";
-   $first_section_result = $conn->query($first_section_sql);
-   
-   $first_section = null;
-   $school_year = "N/A"; // Default value if not found
-   $weighing_date = "N/A"; // Default value if not found
-   
-   if ($first_section_result->num_rows > 0) {
-       $first_section = $first_section_result->fetch_assoc();
-       $section_id = $first_section['section_id'];
-   
-       // Now get the latest weighing session for this section
-       $latest_weighing_sql = "
-           SELECT ws.session_date, sy.school_year 
-           FROM weighing_sessions ws 
-           JOIN school_years sy ON ws.school_year_id = sy.school_year_id 
-           WHERE ws.section_id = ? 
-           ORDER BY ws.session_date DESC 
-           LIMIT 1";
-           
-       $latest_weighing_stmt = $conn->prepare($latest_weighing_sql);
-       $latest_weighing_stmt->bind_param("i", $section_id);
-       $latest_weighing_stmt->execute();
-       $latest_weighing_stmt->bind_result($weighing_date, $school_year);
-       $latest_weighing_stmt->fetch();
-       $latest_weighing_stmt->close();
-   }
-   
-   // Close the database connection
-   $conn->close();
-   ?>
+// Database connection
+$conn = new mysqli('localhost', 'root', '', 'sbfp');
+
+// Check for connection errors
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Check if the success parameter is set in the URL
+if (isset($_GET['success']) && $_GET['success'] == 1) {
+   $_SESSION['success'] = true; // Set a session variable
+}
+
+// Check if there's a success message to display
+$showSuccessModal = isset($_SESSION['success']);
+if ($showSuccessModal) {
+   unset($_SESSION['success']); // Clear the session variable to avoid showing it again on refresh
+}
+
+
+// Get the first section for grade_id = 1
+$first_section_sql = "SELECT section_id, section_name FROM sections WHERE grade_id = 1 ORDER BY section_id LIMIT 1";
+$first_section_result = $conn->query($first_section_sql);
+
+$first_section = null;
+$school_year = "N/A"; // Default value if not found
+$weighing_date = "N/A"; // Default value if not found
+
+if ($first_section_result->num_rows > 0) {
+    $first_section = $first_section_result->fetch_assoc();
+    $section_id = $first_section['section_id'];
+
+    // Now get the latest weighing session for this section
+    $latest_weighing_sql = "
+        SELECT ws.session_date, ws.school_year 
+        FROM weighing_sessions ws 
+        WHERE ws.section_id = ? 
+        ORDER BY ws.session_date DESC 
+        LIMIT 1";
+
+    $latest_weighing_stmt = $conn->prepare($latest_weighing_sql);
+    $latest_weighing_stmt->bind_param("i", $section_id);
+    $latest_weighing_stmt->execute();
+    $latest_weighing_stmt->bind_result($weighing_date, $school_year);
+    $latest_weighing_stmt->fetch();
+    $latest_weighing_stmt->close();
+}
+
+// Close the database connection
+$conn->close();
+?>
+
 <div class="col-lg-12 grid-margin stretch-card py-4 px-0">
    <div class="card">
       <div class="card-body">
@@ -75,7 +87,7 @@
                          }
                      } else {
                          // Display message if no sections are found
-                         echo "<option value=''>No sections available for grade 1</option>";
+                         echo "<option value=''>No sections available for Kinder</option>";
                      }
                      
                      // Close the database connection
@@ -130,9 +142,22 @@
                <li class="nav-item">
                   <a class="nav-link" id="home-tab" data-bs-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="false">+ Students</a>
                </li>
-               <li class="nav-item">
-                  <a class="nav-link" id="home-tab" data-bs-toggle="modal" data-bs-target="#multiInputModal" href="#overview" role="tab" aria-controls="overview" aria-selected="false">+ Section</a>
-               </li>
+               <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="sectionDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Sections
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="sectionDropdown">
+        <li>
+            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addSectionModal" href="#">+ Add Section</a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteSectionsModal">Delete Sections</a>
+        </li>
+    </ul>
+</li>
+
+
+
                <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="snsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   SNS History
@@ -189,6 +214,13 @@
    </div>
 </div>
 <!-- MODALS -->
+
+
+
+
+
+
+
 <!-- Modal Structure -->
 <div class="modal fade" id="weighingSessionModal" tabindex="-1" aria-labelledby="weighingSessionModalLabel" aria-hidden="true">
    <div class="modal-dialog">
@@ -234,7 +266,7 @@
                              echo "<option value='" . $row['section_id'] . "'>" . $row['section_name'] . "</option>";
                          }
                      } else {
-                         echo "<option value=''>No sections available for grade 1</option>";
+                         echo "<option value=''>No sections available for Kinder</option>";
                      }
                      
                      $conn->close();
@@ -245,12 +277,19 @@
             </form>
          </div>
          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-         </div>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+</div>
+<p class="text-center text-warning px-3" style="margin-top: 10px;">
+    Note: Creating a new weighing session for the same section will replace the existing session if there are no students or weighing records.
+</p>
+
       </div>
    </div>
 </div>
-<!-- Modal Structure -->
+
+
+
+<!-- SUCCESS MODAL -->
 <div id="responseModal" class="modal fade" tabindex="-1" aria-labelledby="responseModalLabel" aria-hidden="true">
    <div class="modal-dialog">
       <div class="modal-content">
@@ -264,122 +303,279 @@
       </div>
    </div>
 </div>
+
+
+
+
+
+<!-- ADDING SECTIONS MODAL -->
+<div class="modal fade" id="addSectionModal" tabindex="-1" aria-labelledby="addSectionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addSectionModalLabel">Add New Section</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addSectionForm">
+                    <div class="mb-3">
+                        <label for="sectionName" class="form-label">Section Name</label>
+                        <input type="text" class="form-control" id="sectionName" name="section_name" required>
+                        <div id="sectionNameFeedback" class="invalid-feedback" style="display: none;">
+                            This section name already exists. Please choose a different one.
+                        </div>
+                    </div>
+                    <p class="text-warning">Note: The section will be created for Grade ID 1.</p>
+                    <input type="hidden" name="grade_id" value="1">
+                    <button type="submit" class="btn btn-primary">Save Section</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Section added successfully!
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<?php
+// your_page.php
+if ($showSuccessModal) {
+   echo "
+   <div class='modal fade' id='successModal' tabindex='-1' aria-labelledby='successModalLabel' aria-hidden='true'>
+       <div class='modal-dialog'>
+           <div class='modal-content'>
+               <div class='modal-header'>
+                   <h5 class='modal-title' id='successModalLabel'>Success</h5>
+                   <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+               </div>
+               <div class='modal-body'>
+                   Section added successfully!
+               </div>
+           </div>
+       </div>
+   </div>
+   <script>
+       // Use jQuery to show the modal and hide it after 2 seconds
+       $(document).ready(function() {
+           $('#successModal').modal('show');
+           setTimeout(function() {
+               $('#successModal').modal('hide');
+           }, 2000); // 2000 milliseconds = 2 seconds
+       });
+   </script>
+   ";
+}
+
+// Display the modal (if needed)
+// Include the modal code here
+?>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#addSectionForm').on('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        $.ajax({
+            type: 'POST',
+            url: 'add_section.php', // The PHP file that handles the submission
+            data: $(this).serialize(), // Serialize the form data
+            success: function(response) {
+                if (response.includes("Error:")) {
+                    // Show invalid feedback
+                    $('#sectionNameFeedback').show();
+                } else {
+                    // Hide the modal and show success modal
+                    $('#addSectionModal').modal('hide');
+                    showSuccessModal();
+                }
+            },
+            error: function() {
+                alert('Error adding section. Please try again.');
+            }
+        });
+    });
+
+    function showSuccessModal() {
+        $('#successModal').modal('show');
+        setTimeout(function() {
+            $('#successModal').modal('hide');
+        }, 2000); // Hide after 2 seconds
+    }
+});
+</script>
+
+
+
+<!-- Delete Sections Modal -->
+<div class="modal fade" id="deleteSectionsModal" tabindex="-1" aria-labelledby="deleteSectionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteSectionsModalLabel">Delete Sections</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the selected sections?</p>
+                <form id="deleteSectionsForm" method="POST" action="delete_sections.php">
+                    <div id="sectionsList">
+                    <?php
+                    // Fetch sections from the database
+                    $conn = new mysqli($servername, $username, $password, $dbname);
+                    $result = $conn->query("SELECT section_id, section_name FROM sections WHERE grade_id = 1");
+
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo "
+                            <div class='form-check'>
+                                <input class='form-check-input' type='checkbox' name='section_ids[]' value='{$row['section_id']}' id='section_{$row['section_id']}'>
+                                <label class='form-check-label' for='section_{$row['section_id']}'>{$row['section_name']}</label>
+                            </div>
+                            ";
+                        }
+                    } else {
+                        echo "<p>No sections available.</p>";
+                    }
+
+                    $conn->close();
+                    ?>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger" form="deleteSectionsForm">Delete Sections</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 <!-- PHP BACK END OF THIS MODAL -->
 <?php
-   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-       // Database connection
-       $conn = new mysqli('localhost', 'root', '', 'sbfp');
-   
-       // Check connection
-       if ($conn->connect_error) {
-           die("Connection failed: " . $conn->connect_error);
-       }
-   
-       // Collect form data
-       $school_year = $_POST['school_year'];
-       $weighing_date = $_POST['weighing_date'];
-       $section_id = $_POST['section_id']; // Get the selected section ID
-   
-       // Check for empty section_id
-       if (empty($section_id)) {
-           echo "<script>document.getElementById('sectionError').innerHTML = 'No sections available.';</script>";
-           exit; // Stop further execution
-       }
-   
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+   // Database connection
+   $conn = new mysqli('localhost', 'root', '', 'sbfp');
+
+   // Check connection
+   if ($conn->connect_error) {
+       die("Connection failed: " . $conn->connect_error);
+   }
+
+   // Collect form data
+   $school_year = $_POST['school_year'];
+   $weighing_date = $_POST['weighing_date'];
+   $section_id = $_POST['section_id'];
+
+   // Ensure all form fields are filled
+   if (!empty($school_year) && !empty($weighing_date) && !empty($section_id)) {
+
        // Get the Kindergarten grade ID (which is 1)
        $grade_id = 1;
-   
-       // Check if the school year already exists
-       $check_year_sql = "SELECT school_year_id FROM school_years WHERE school_year = ?";
-       $check_year_stmt = $conn->prepare($check_year_sql);
-       $check_year_stmt->bind_param("s", $school_year);
-       $check_year_stmt->execute();
-       $check_year_stmt->store_result();
-   
-       if ($check_year_stmt->num_rows > 0) {
-           $check_year_stmt->bind_result($school_year_id);
-           $check_year_stmt->fetch();
-       } else {
-           // Insert the new school year
-           $insert_year_sql = "INSERT INTO school_years (school_year) VALUES (?)";
-           $insert_year_stmt = $conn->prepare($insert_year_sql);
-           $insert_year_stmt->bind_param("s", $school_year);
-           $insert_year_stmt->execute();
-           $school_year_id = $insert_year_stmt->insert_id; // Get the new school year ID
-           $insert_year_stmt->close();
-       }
-       $check_year_stmt->close();
-   
-       // Check if there's already a weighing session for this section with no records
+
+       // Check if there's already a pending weighing session for this section
        $check_session_sql = "
-           SELECT ws.weighing_session_id
-           FROM weighing_sessions ws
-           LEFT JOIN weighing_records wr ON ws.weighing_session_id = wr.weighing_session_id
-           WHERE ws.section_id = ? AND wr.weighing_record_id IS NULL
+           SELECT weighing_session_id 
+           FROM weighing_sessions 
+           WHERE section_id = ? AND status = 'pending'
        ";
        $check_session_stmt = $conn->prepare($check_session_sql);
        $check_session_stmt->bind_param("i", $section_id);
        $check_session_stmt->execute();
        $check_session_stmt->store_result();
-   
+
+       // If a pending session exists, delete it
        if ($check_session_stmt->num_rows > 0) {
-         // Get session details for prompt
-         $session_details_sql = "
-             SELECT ws.session_date, s.section_name 
-             FROM weighing_sessions ws
-             JOIN sections s ON ws.section_id = s.section_id
-             WHERE ws.section_id = ? LIMIT 1
-         ";
-         $session_details_stmt = $conn->prepare($session_details_sql);
-         $session_details_stmt->bind_param("i", $section_id);
-         $session_details_stmt->execute();
-         $session_details_stmt->bind_result($existing_session_date, $section_name);
-         $session_details_stmt->fetch();
-         $session_details_stmt->close();
-     
-         // A session exists without any records, prompt the user to replace it
-         echo "
-             <script>
-                 if (confirm('There is already a weighing session for this section ($section_name) on $existing_session_date with NO STUDENT RECORDS. Do you want to replace it?')) {
-                     window.location.href = 'weighing_sessions.php?section_id=$section_id&school_year_id=$school_year_id';
-                 } else {
-                     window.location.href = 'create_new_weighing_session.php';
-                 }
-             </script>
-         ";
-         exit; // Stop further execution
+           $check_session_stmt->bind_result($existing_session_id);
+           $check_session_stmt->fetch();
+
+           // Delete the existing session
+           $delete_session_sql = "DELETE FROM weighing_sessions WHERE weighing_session_id = ?";
+           $delete_session_stmt = $conn->prepare($delete_session_sql);
+           $delete_session_stmt->bind_param("i", $existing_session_id);
+           $delete_session_stmt->execute();
+           $delete_session_stmt->close();
        }
-       $check_session_stmt->close();
-   
-       // Insert the new weighing session if no empty session exists
-       $sql = "INSERT INTO weighing_sessions (school_year_id, session_date, grade_id, section_id) VALUES (?, ?, ?, ?)";
-       $stmt = $conn->prepare($sql);
-       $stmt->bind_param("ssii", $school_year_id, $weighing_date, $grade_id, $section_id);
-       $stmt->execute();
-   
-       if ($stmt->affected_rows > 0) {
-           $message = "Weighing session created successfully!";
+
+       // Insert the new weighing session
+       $insert_sql = "
+           INSERT INTO weighing_sessions (school_year, session_date, grade_id, section_id, status) 
+           VALUES (?, ?, ?, ?, 'pending')
+       ";
+       $insert_stmt = $conn->prepare($insert_sql);
+       $insert_stmt->bind_param("ssii", $school_year, $weighing_date, $grade_id, $section_id);
+       $insert_stmt->execute();
+
+       // Display success message in modal
+       if ($insert_stmt->affected_rows > 0) {
+           echo "
+               <script>
+                   document.getElementById('modalMessage').innerText = 'Weighing session created successfully!';
+                   var myModal = new bootstrap.Modal(document.getElementById('responseModal'), {});
+                   myModal.show();
+               </script>
+           ";
        } else {
-           $message = "Error creating weighing session.";
+           echo "
+               <script>
+                   document.getElementById('modalMessage').innerText = 'Error creating weighing session.';
+                   var myModal = new bootstrap.Modal(document.getElementById('responseModal'), {});
+                   myModal.show();
+               </script>
+           ";
        }
-   
-       $stmt->close();
-   
-       // Output JavaScript to show the modal
+
+       $insert_stmt->close();
+       $conn->close();
+   } else {
        echo "
            <script>
-               var modal = new bootstrap.Modal(document.getElementById('responseModal'), {});
-               document.getElementById('modalMessage').innerText = '$message';
-               modal.show();
-               setTimeout(function() {
-                   modal.hide();
-               }, 2000); // Hide modal after 2 seconds
+               document.getElementById('modalMessage').innerText = 'Required form data is missing. Please fill in all fields.';
+               var myModal = new bootstrap.Modal(document.getElementById('responseModal'), {});
+               myModal.show();
            </script>
        ";
-       
-       $conn->close();
    }
-   ?>
+}
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- END OF MODALSSSSSSSS -->
 <?php include'user_botNav.php';
    ?>

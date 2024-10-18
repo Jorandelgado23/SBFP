@@ -12,9 +12,8 @@ $section_id = $_POST['section_id'];
 
 // SQL query to get the latest weighing session
 $latest_session_sql = "
-    SELECT ws.session_date, sy.school_year 
+    SELECT ws.session_date, ws.school_year 
     FROM weighing_sessions ws
-    JOIN school_years sy ON ws.school_year_id = sy.school_year_id
     WHERE ws.section_id = ?
     ORDER BY ws.session_date DESC
     LIMIT 1

@@ -11,9 +11,8 @@ if ($conn->connect_error) {
 $section_id = isset($_GET['section_id']) ? intval($_GET['section_id']) : 0;
 
 // Prepare the SQL query to get the latest weighing session
-$sql = "SELECT ws.session_date, sy.school_year 
+$sql = "SELECT ws.session_date, ws.school_year 
         FROM weighing_sessions ws 
-        JOIN school_years sy ON ws.school_year_id = sy.school_year_id 
         WHERE ws.section_id = ? 
         ORDER BY ws.session_date DESC LIMIT 1";
 

@@ -250,9 +250,9 @@ $conn->close();
 
     <div class="col-md-12">
     <div class="white_shd full margin_bottom_30">
-        <div class="full graph_head">
+        <div class="full graph_head" style="background-color:#0971b8;">
             <div class="heading1 margin_0">
-                        <h2>SCHOOL DETAILS</h2>
+                        <h2 style="color:#fff;">SCHOOL DETAILS</h2>
                     </div>
                 </div>
                 <div class="table-responsive">

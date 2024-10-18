@@ -144,9 +144,9 @@ include("adminauth.php");
                             <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
                         </li>
 
-                        <!-- <li>
+                        <li>
                             <a href="attendance.php"><i class="fa fa-calendar"></i> <span>Attendance</span></a>
-                        </li> -->
+                        </li>
 
                        
                         <li>
@@ -534,7 +534,6 @@ $conn->close(); // Close the database connection
                                 <div class="progress-bar progress-bar-danger progress-bar-animated progress-bar-striped" role="progressbar" aria-valuenow="<?php echo round($unhealthy_percentage); ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo round($unhealthy_percentage); ?>%;">
                                 </div>
                             </div>
-                            <br>
                             <br>
                             <br>
                             <br>

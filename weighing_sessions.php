@@ -15,8 +15,7 @@
     <label>Section: </label>
     <select class="js-example-basic-single w-100" id="section" name="section_id" required>
     <?php
-// Assuming you have a database connection established
- $conn = new mysqli('localhost', 'root', '', 'sbfp');
+include("accountconnection.php");
 
 // SQL query to select sections for grade_id 1
 $section_sql = "SELECT section_id, section_name FROM sections WHERE grade_id = 1";
@@ -155,8 +154,7 @@ $conn->close();
     <label for="section" class="form-label">Section</label>
     <select class="form-control" id="section" name="section_id" required>
         <?php
-        // Assuming you have a database connection established
-        $conn = new mysqli('localhost', 'root', '', 'sbfp');
+        include("accountconnection.php");
         $section_sql = "SELECT section_id, section_name FROM sections WHERE grade_id = 1";
         $section_result = $conn->query($section_sql);
 

@@ -144,9 +144,9 @@ include("adminauth.php");
                             <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
                         </li>
 
-                        <!-- <li>
+                        <li>
                             <a href="attendance.php"><i class="fa fa-calendar"></i> <span>Attendance</span></a>
-                        </li> -->
+                        </li>
 
                        
                         <li>
@@ -507,10 +507,6 @@ $conn->close(); // Close the database connection
             <div class="map_section padding_infor_info" style="background-color: white; padding: 20px;">
                 <canvas id="pie_chart"></canvas>
             </div>
-            <!-- Button to download the chart -->
-            <!-- <div class="text-center mt-3">
-                <button onclick="downloadChart('pie_chart', 'Nutritional_Status_Chart.png', 3)" class="btn btn-info">Download Chart as Image</button>
-            </div> -->
         </div>
     </div>
 
@@ -527,20 +523,23 @@ $conn->close(); // Close the database connection
                     <div class="col-md-12">
                         <div class="progress_bar">
                             <!-- Healthy Students Progress Bar -->
-                            <span class="skill" style="width:<?php echo round($healthy_percentage); ?>%;">Healthy Students <span class="info_valume"><?php echo round($healthy_percentage); ?>%</span></span>
+                            <span class="skill" style="width:<?php echo round($healthy_percentage); ?>%; color: #4CAF50;">Healthy Students <span class="info_valume"><?php echo round($healthy_percentage); ?>%</span></span>
                             <div class="progress skill-bar">
                                 <div class="progress-bar progress-bar-animated progress-bar-striped" role="progressbar" aria-valuenow="<?php echo round($healthy_percentage); ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo round($healthy_percentage); ?>%;">
                                 </div>
                             </div>
                             <!-- Unhealthy Students Progress Bar -->
-                            <span class="skill" style="width:<?php echo round($unhealthy_percentage); ?>%;">Unhealthy Students <span class="info_valume"><?php echo round($unhealthy_percentage); ?>%</span></span>
+                            <span class="skill" style="width:<?php echo round($unhealthy_percentage); ?>%; color: red;">Unhealthy Students <span class="info_valume"><?php echo round($unhealthy_percentage); ?>%</span></span>
                             <div class="progress skill-bar">
                                 <div class="progress-bar progress-bar-danger progress-bar-animated progress-bar-striped" role="progressbar" aria-valuenow="<?php echo round($unhealthy_percentage); ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo round($unhealthy_percentage); ?>%;">
                                 </div>
                             </div>
+                            <br>
+                            <br>
+                            <br>
                             <!-- Display total healthy and unhealthy students -->
-                            <p>Total Healthy Students: <?php echo $healthy_students; ?> out of <?php echo $total_students; ?> students</p>
-                            <p>Total Unhealthy Students: <?php echo $unhealthy_students; ?> out of <?php echo $total_students; ?> students</p>
+                            <p style="color: #4CAF50; font-weight:bold">Total Healthy Students: <?php echo $healthy_students; ?> out of <?php echo $total_students; ?> students</p>
+                            <p style="color: red; font-weight:bold">Total Unhealthy Students: <?php echo $unhealthy_students; ?> out of <?php echo $total_students; ?> students</p>
                         </div>
                     </div>
                 </div>
@@ -571,7 +570,7 @@ $conn->close(); // Close the database connection
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'top',
+                    position: 'left', // Align legend to the left
                 },
                 tooltip: {
                     callbacks: {

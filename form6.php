@@ -286,6 +286,7 @@ $conn->close();
       <div class="modal-body" style="background-color: rgba(0, 0, 0, 0.05);">
         <form action="submit6.php" method="post" id="consolidatedForm">
           <h2>School Information</h2>
+          <br>
           <div class="mb-3">
             <label for="regionDivisionDistrict" class="form-label">REGION/DIVISION/DISTRICT:</label>
             <input type="text" class="form-control" id="regionDivisionDistrict" name="region_division_district" value="<?php echo htmlspecialchars($division_province); ?>" readonly>
@@ -300,6 +301,7 @@ $conn->close();
           </div>
 
           <h2 class="mt-5">Student Information</h2>
+          <br>
           <div id="studentSection">
             <!-- Initial student info section -->
             <div class="student-info">

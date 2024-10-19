@@ -253,7 +253,7 @@ $stmt->fetch();
 $stmt->close();
 
 // Fetch beneficiaries associated with the user's session_id
-$sql = "SELECT id, name, date_of_birth FROM beneficiary_details WHERE session_id = ? ORDER BY name";
+$sql = "SELECT id, name, date_of_birth, student_section FROM beneficiary_details WHERE session_id = ? ORDER BY name";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $session_id);
 $stmt->execute();
@@ -268,7 +268,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $bmi = $_POST['bmi']; // Will be calculated via JavaScript
     $nutritional_status_bmia = $_POST['nutritional_status_bmia']; // Will be set via JavaScript
     $nutritional_status_hfa = $_POST['nutritional_status_hfa']; // Will be set via JavaScript
-    
+    $student_section = $_POST['student_section']; // Added for student section
+
     // Check if a record for this beneficiary and date already exists
     $sql_check = "SELECT * FROM beneficiary_progress WHERE beneficiary_id = ? AND date_of_progress = ?";
     $stmt_check = $conn->prepare($sql_check);
@@ -329,10 +330,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $improvement_message = "New record added.";
     }
     
-    // Update beneficiary_details with the latest weight, height, BMI, and nutritional statuses
-    $sql_details_update = "UPDATE beneficiary_details SET weight = ?, height = ?, bmi = ?, nutritional_status_bmia = ?, nutritional_status_hfa = ? WHERE id = ?";
+    // Update beneficiary_details with the latest weight, height, BMI, nutritional statuses, and student section
+    $sql_details_update = "UPDATE beneficiary_details SET weight = ?, height = ?, bmi = ?, nutritional_status_bmia = ?, nutritional_status_hfa = ?, student_section = ? WHERE id = ?";
     $stmt_details_update = $conn->prepare($sql_details_update);
-    $stmt_details_update->bind_param('ddsssi', $weight, $height, $bmi, $nutritional_status_bmia, $nutritional_status_hfa, $beneficiary_id);
+    $stmt_details_update->bind_param('ddssssi', $weight, $height, $bmi, $nutritional_status_bmia, $nutritional_status_hfa, $student_section, $beneficiary_id);
     $stmt_details_update->execute();
     
     echo $improvement_message; // Display improvement message
@@ -397,16 +398,16 @@ $(document).ready(function() {
     // Event listeners for weight and height inputs
     $('#weight, #height').on('input', calculateNutritionalStatus);
 
-    // Get session_id and date_of_birth from the selected beneficiary
+    // Get session_id, date_of_birth, and student_section from the selected beneficiary
     $('#beneficiary_id').on('change', function() {
         const selectedOption = $(this).find('option:selected');
         $('#session_id').val(selectedOption.data('session_id'));
         $('#date_of_birth').val(selectedOption.data('date_of_birth'));
+        $('#student_section').val(selectedOption.data('student_section')); // Add this line
         calculateNutritionalStatus(); // Recalculate in case of a new beneficiary
     });
 });
 </script>
-
 
 <div class="col-md-12 grid-margin stretch-card">
     <div class="card">
@@ -421,7 +422,8 @@ $(document).ready(function() {
                             <?php while ($row = $result->fetch_assoc()) { ?>
                                 <option value="<?= $row['id'] ?>" 
                                         data-date_of_birth="<?= $row['date_of_birth'] ?>" 
-                                        data-session_id="<?= $session_id ?>">
+                                        data-session_id="<?= $session_id ?>"
+                                        data-student_section="<?= $row['student_section'] ?>"> <!-- Add this data attribute -->
                                     <?= $row['name'] ?>
                                 </option>
                             <?php } ?>
@@ -439,14 +441,14 @@ $(document).ready(function() {
                 <div class="form-group row">
                     <label for="weight" class="col-sm-4 col-form-label">Weight (kg):</label>
                     <div class="col-sm-8">
-                        <input type="number" name="weight" id="weight" class="form-control" step="0.01" required>
+                        <input type="number" step="0.01" name="weight" id="weight" class="form-control" required>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="height" class="col-sm-4 col-form-label">Height (cm):</label>
                     <div class="col-sm-8">
-                        <input type="number" name="height" id="height" class="form-control" step="0.01" required>
+                        <input type="number" step="0.01" name="height" id="height" class="form-control" required>
                     </div>
                 </div>
 
@@ -458,7 +460,7 @@ $(document).ready(function() {
                 </div>
 
                 <div class="form-group row">
-                    <label for="nutritional_status_bmia" class="col-sm-4 col-form-label">Nutritional Status (BMI-A):</label>
+                    <label for="nutritional_status_bmia" class="col-sm-4 col-form-label">Nutritional Status (BMIA):</label>
                     <div class="col-sm-8">
                         <input type="text" name="nutritional_status_bmia" id="nutritional_status_bmia" class="form-control" readonly>
                     </div>
@@ -471,11 +473,10 @@ $(document).ready(function() {
                     </div>
                 </div>
 
-                <input type="hidden" name="session_id" id="session_id" value="<?= $session_id ?>">
-                <input type="hidden" name="date_of_birth" id="date_of_birth">
+                <!-- Hidden input for student section -->
+                <input type="hidden" name="student_section" id="student_section">
 
-                <button type="submit" class="btn btn-primary me-2" style="float: right;">Submit</button>
-
+                <button type="submit" class="btn btn-primary mr-2" style="float: right;">Submit Progress</button>
             </form>
         </div>
     </div>

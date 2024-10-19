@@ -2957,7 +2957,7 @@ ul.inbox-pagination li {
 
 .table-hover tbody tr:hover,
 .table-hover tbody tr:focus {
-    background-color: lightblue !important;
+    background-color: rgb(173, 175, 230) !important;
     color: #fff;
 }
 

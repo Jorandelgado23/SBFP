@@ -267,7 +267,7 @@ $prev_month = date('m', strtotime("-1 month", strtotime($date)));
 $prev_year = date('Y', strtotime("-1 month", strtotime($date)));
 
 // Fetch beneficiaries associated with the user's session_id for the current month
-$sql_current = "SELECT bd.name, bd.grade_section, bp.weight, bp.height, bp.bmi, bp.nutritional_status_bmia, bp.nutritional_status_hfa, bp.date_of_progress
+$sql_current = "SELECT bd.name, bd.grade_section, bd.student_section, bp.weight, bp.height, bp.bmi, bp.nutritional_status_bmia, bp.nutritional_status_hfa, bp.date_of_progress
                 FROM beneficiary_details bd
                 LEFT JOIN beneficiary_progress bp ON bp.beneficiary_id = bd.id
                 WHERE bd.session_id = ? AND MONTH(bp.date_of_progress) = ? AND YEAR(bp.date_of_progress) = ?
@@ -284,7 +284,7 @@ while ($row = $result_current->fetch_assoc()) {
 }
 
 // Fetch beneficiaries associated with the user's session_id for the previous month
-$sql_previous = "SELECT bd.name, bd.grade_section, bp.weight, bp.height, bp.bmi, bp.nutritional_status_bmia, bp.nutritional_status_hfa, bp.date_of_progress
+$sql_previous = "SELECT bd.name, bd.grade_section, bd.student_section, bp.weight, bp.height, bp.bmi, bp.nutritional_status_bmia, bp.nutritional_status_hfa, bp.date_of_progress
                  FROM beneficiary_details bd
                  LEFT JOIN beneficiary_progress bp ON bp.beneficiary_id = bd.id
                  WHERE bd.session_id = ? AND MONTH(bp.date_of_progress) = ? AND YEAR(bp.date_of_progress) = ?
@@ -356,7 +356,7 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
                 <div class="form-row align-items-center">
                     <div class="col-auto">
                         <label for="date">Select Date:</label>
-                        <input  type="date" name="date" id="date" class="form-control" value="<?= $date ?>" required onchange="submitForm()">
+                        <input type="date" name="date" id="date" class="form-control" value="<?= $date ?>" required onchange="submitForm()">
                     </div>
                 </div>
             </form>
@@ -371,7 +371,8 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
                         <tr>
                             <th>Date of Progress</th>
                             <th>Name</th>
-                            <th>Grade & Section</th>
+                            <th>Grade</th>
+                            <th>Section</th> <!-- New Column for Student Section -->
                             <th>Weight (kg)</th>
                             <th>Height (cm)</th>
                             <th>BMI</th>
@@ -386,6 +387,7 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
                                 <td><?= $row['date_of_progress'] ?></td>
                                 <td><?= $row['name'] ?></td>
                                 <td><?= $row['grade_section'] ?></td>
+                                <td><?= $row['student_section'] ?></td> <!-- Display Student Section -->
                                 <td><?= $row['weight'] ?></td>
                                 <td><?= $row['height'] ?></td>
                                 <td><?= $row['bmi'] ?></td>
@@ -412,7 +414,8 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
                         <tr>
                             <th>Date of Progress</th>
                             <th>Name</th>
-                            <th>Grade & Section</th>
+                            <th>Grade</th>
+                            <th>Section</th> <!-- New Column for Student Section -->
                             <th>Weight (kg)</th>
                             <th>Height (cm)</th>
                             <th>BMI</th>
@@ -427,6 +430,7 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
                                 <td><?= $row['date_of_progress'] ?></td>
                                 <td><?= $row['name'] ?></td>
                                 <td><?= $row['grade_section'] ?></td>
+                                <td><?= $row['student_section'] ?></td> <!-- Display Student Section -->
                                 <td><?= $row['weight'] ?></td>
                                 <td><?= $row['height'] ?></td>
                                 <td><?= $row['bmi'] ?></td>
@@ -444,112 +448,18 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
             </div>
         </div>
 
-        <!-- Chart Section -->
-        <div class="chart_section padding_infor_info">
-            <h3>Summary Chart: Current vs Previous Month Progress</h3>
-            <canvas id="progressChart"></canvas>
-        </div>
-
         <script>
-            // Automatically submit the form when a date is selected
-            function submitForm() {
-                document.getElementById('dateForm').submit();
-            }
-
-            // Get chart context
-            var ctx = document.getElementById('progressChart').getContext('2d');
-
-            // Prepare chart data
-            var chartData = {
-                labels: <?= json_encode($dates_current) ?>, // X-axis labels (dates for current month)
-                datasets: [
-                    {
-                        label: 'Weight (kg) - Current Month',
-                        data: <?= json_encode($weights_current) ?>,
-                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Height (cm) - Current Month',
-                        data: <?= json_encode($heights_current) ?>,
-                        backgroundColor: 'rgba(153, 102, 255, 0.6)',
-                        borderColor: 'rgba(153, 102, 255, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'BMI - Current Month',
-                        data: <?= json_encode($bmis_current) ?>,
-                        backgroundColor: 'rgba(255, 159, 64, 0.6)',
-                        borderColor: 'rgba(255, 159, 64, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Weight (kg) - Previous Month',
-                        data: <?= json_encode($weights_previous) ?>,
-                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Height (cm) - Previous Month',
-                        data: <?= json_encode($heights_previous) ?>,
-                        backgroundColor: 'rgba(255, 206, 86, 0.6)',
-                        borderColor: 'rgba(255, 206, 86, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'BMI - Previous Month',
-                        data: <?= json_encode($bmis_previous) ?>,
-                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
-                    }
-                ]
-            };
-
-            // Create the chart
-            var progressChart = new Chart(ctx, {
-                type: 'bar',
-                data: chartData,
-                options: {
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Dates'
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Measurement Values'
-                            }
-                        }
-                    },
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                        }
-                    }
-                }
-            });
-        </script>
-
-    </div>
-</div>
+    // Automatically submit the form when a date is selected
+    function submitForm() {
+        document.getElementById('dateForm').submit();
+    }
+</script>
 
 <?php
 // Close the database connection
 $conn->close();
 ?>
+
 
 
 

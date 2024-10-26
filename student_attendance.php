@@ -301,9 +301,9 @@ while ($row = $attendance_result->fetch_assoc()) {
     <div class="col-md-12">
         <div class="white_shd full margin_bottom_30">
             <div class="full graph_head">
-                <div class="heading1 margin_0">
+                <!-- <div class="heading1 margin_0">
                     <h2>Feeding Attendance Table</h2>
-                </div>
+                </div> -->
             </div>
             <div class="table_section padding_infor_info">
                 <div class="table-responsive-sm">

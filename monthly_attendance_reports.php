@@ -15,7 +15,7 @@ include("adminauth.php");
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>SCHOOL BENEFICIARIES</title>
+      <title>monthly attendance reports</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -37,6 +37,8 @@ include("adminauth.php");
       <!-- custom css -->
       <link rel="stylesheet" href="css/custom.css" />
 
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
       
 
       <!--[if lt IE 9]>
@@ -46,14 +48,19 @@ include("adminauth.php");
    </head>
 
    <style>
-     .active {
+
+
+        .active {
         background-color: lightblue; /* Background color */
         color: #fff; /* Text color */
         font-weight: bold; /* Bold text */
     }
-   </style>
+
+
+    </style>
 
 <body class="dashboard dashboard_2">
+
     <div class="full_container">
         <div class="inner_container">
             <!-- Sidebar -->
@@ -61,13 +68,13 @@ include("adminauth.php");
                 <div class="sidebar_blog_1">
                     <div class="sidebar-header">
                         <div class="logo_section">
-                        <a href="admindashboard.php"><img class="logo_icon img-responsive" src="images/origlogo.jpg" alt="#" /></a>
-
-
+                            <a href="admindashboard.php"><img class="logo_icon img-responsive" src="images/origlogo.jpg" alt="#" /></a>
                         </div>
                     </div>
                     <div class="sidebar_user_info">
-                    <div class="user_profle_side">
+                    <div class="icon_setting"></div>
+               
+<div class="user_profle_side">
     <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
     <div class="user_info">
     <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
@@ -76,6 +83,7 @@ include("adminauth.php");
     </div>
 </div>
 </div>
+
                 </div>
                 <div class="sidebar_blog_2">
                     <h4>General</h4>
@@ -84,7 +92,7 @@ include("adminauth.php");
                             <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
                         </li>
 
-                        <li>
+                        <li class="active">
                         <a href="#element" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-calendar"></i> <span>School Attendance</span></a>
                         <ul class="collapse list-unstyled" id="element">
                            <li><a href="monthly_attendance_reports.php">> <span>Monthly Report</span></a></li> 
@@ -93,7 +101,7 @@ include("adminauth.php");
                         </ul>
                      </li>
                        
-                        <li class="active">
+                        <li>
                             <a href="adbeneficiaries.php"><i class="fa fa-university""></i> <span>All School Beneficiaries</span></a>
                         </li>
 
@@ -114,8 +122,8 @@ include("adminauth.php");
             <!-- End Sidebar -->
             <!-- Right Content -->
             <div id="content">
-              <!-- Topbar -->
-              <div class="topbar">
+                <!-- Topbar -->
+                <div class="topbar">
                     <nav class="navbar navbar-expand-lg navbar-light">
                         <div class="full">
                             <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
@@ -155,19 +163,18 @@ $conn->close();
 
 </li>
 
-                                        
-                                        
+<li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+                                       
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
                                             
-                                        <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user light_color"></i></a>
-        <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
-
+                                        <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user light_color"></i>
+    <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
     <span class="name_user"><?php echo $user_role; ?></span>
 </a>
 
-<div class="dropdown-menu">
+                                            <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="adsettings.php">My Profile</a>
                                                 <a class="dropdown-item" href="#" id="logoutLink">
     <span>Log Out</span> <i class="fa fa-sign-out"></i>
@@ -205,127 +212,167 @@ $conn->close();
                         </div>
                     </nav>
                 </div>
+                <?php if (isset($welcome_message)) { ?>
+                                <div class="alert alert-success" id="welcomeMessage">
+                                    <?php echo $welcome_message; ?>
+                                </div>
+                                <?php } ?>
                 <!-- End Topbar -->
-              <!-- Dashboard Inner -->
-<div class="midde_cont">
-    <div class="container-fluid">
-        <div class="row column_title">
-            <div class="col-md-12">
-                <div class="page_title">
-                    <h2>ALL SCHOOL BENEFICIARIES</h2>
-                </div>
-            </div>
-        </div>
+                <!-- Dashboard Inner -->
+                <div class="midde_cont">
+                    <div class="container-fluid">
+                        <div class="row column_title">
+                            <div class="col-md-12">
+                                <div class="page_title">
+                                    <h2>monthly attendance reports</h2>
+                                </div>
+                            </div>
+                        </div>
 
-        <?php
-       include("accountconnection.php");
+                   <?php
+include("accountconnection.php");
 
-        // Fetch list of schools with their session IDs
-        $sql_schools = "SELECT DISTINCT session_id, name_of_school, school_id_number FROM beneficiaries";
-        $result_schools = $conn->query($sql_schools);
+// Enable error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-        // Group schools by session ID
-        $schools_by_session = array();
-        if ($result_schools->num_rows > 0) {
-            while ($row_schools = $result_schools->fetch_assoc()) {
-                $session_id = $row_schools['session_id'];
-                $school_name = $row_schools['name_of_school'];
-                $schools_by_session[$session_id][$school_name][] = $row_schools;
-            }
-        }
+// Fetch list of schools for the dropdown
+$schoolQuery = "SELECT DISTINCT name_of_school FROM beneficiaries";
+$schoolResult = $conn->query($schoolQuery);
 
-        // Filtering functionality
-        $search_term = isset($_GET['search']) ? $_GET['search'] : '';
-        if (!empty($search_term)) {
-            $filtered_schools = array_filter($schools_by_session, function ($schools) use ($search_term) {
-                foreach ($schools as $school_name => $school_data) {
-                    if (stripos($school_name, $search_term) !== false) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-        } else {
-            $filtered_schools = $schools_by_session;
-        }
-        ?>
+// Fetch list of grade levels for the dropdown
+$grades = ['Kinder', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6'];
 
-<div class="col-md-12">
-           
-            <!-- Search form -->
-            <form method="get" class="mb-4">
-                <div class="input-group">
-                    <input type="text" class="form-control" name="search" placeholder="Search by school name" value="<?php echo htmlspecialchars($search_term); ?>">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fa fa-search"></i> Search
-                        </button>
-                    </div>
-                </div>
-            </form>
-            <div class="card shadow">
-                <div class="card-body">
-                    <!-- Table -->
-                    <div class="table-responsive">
-              <div class="table-responsive-sm">
-                <table class="table table-bordered">
-                                <tr style="color: #fff; background-color: #0971b8;">
-                                    <th style="text-align: center;">Name of School</th>
-                                    <th style="text-align: center;">Veiw Info</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($filtered_schools as $session_id => $schools) : ?>
-                                    <?php foreach ($schools as $school_name => $school_data) : ?>
-                                        <tr>
-                                            <td><?php echo htmlspecialchars($school_name); ?></td>
-                                            <td style="text-align: center;">
-                                                <a href="view_details.php?session_id=<?php echo urlencode($session_id); ?>" class="btn btn-info">
-                                                    <i class="fa fa-eye"></i> View
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+// Get filter parameters
+$filter_school = isset($_POST['name_of_school']) ? $_POST['name_of_school'] : '';
+$filter_grade = isset($_POST['grade_section']) ? $_POST['grade_section'] : '';
 
-<script>
-$(document).ready(function(){
-    $('#inlineFormCustomSelectPref').change(function(){
-        var selectedSchool = $(this).val();
-        $.ajax({
-            url: 'get_filtered_data.php',
-            type: 'POST',
-            data: {school_id: selectedSchool},
-            success: function(response){
-                $('#tableBody').html(response);
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
-    });
-});
-</script>
+// Prepare SQL query to summarize attendance
+$sql = "
+    SELECT 
+        b.name_of_school, 
+        ba.grade_section, 
+        ba.name AS student_name,
+        COUNT(DISTINCT CASE WHEN ba.status = 'Present' THEN ba.id END) AS total_present,
+        COUNT(DISTINCT CASE WHEN ba.status = 'Absent' THEN ba.id END) AS total_absent,
+        COUNT(DISTINCT ba.id) AS total_attendance,
+        (COUNT(DISTINCT CASE WHEN ba.status = 'Present' THEN ba.id END) / COUNT(DISTINCT ba.id)) * 100 AS attendance_rate
+    FROM beneficiary_attendance AS ba
+    JOIN beneficiaries AS b ON ba.session_id = b.session_id
+    WHERE 1=1
+";
 
-<?php
-$conn->close();
+if ($filter_school) $sql .= " AND b.name_of_school = ?";
+if ($filter_grade) $sql .= " AND ba.grade_section = ?";
+
+$sql .= " GROUP BY b.name_of_school, ba.grade_section, ba.name";
+
+$stmt = $conn->prepare($sql);
+
+// Bind parameters
+$params = [];
+if ($filter_school) $params[] = $filter_school;
+if ($filter_grade) $params[] = $filter_grade;
+
+// Dynamically bind parameters
+if ($params) {
+    $types = str_repeat('s', count($params)); // All parameters are strings
+    $stmt->bind_param($types, ...$params);
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Create an associative array to hold the results by school
+$attendanceData = [];
+while ($row = $result->fetch_assoc()) {
+    $attendanceData[$row['name_of_school']][] = $row;
+}
 ?>
 
+<!-- Filter Form -->
+<form method="POST" action="" class="form-inline" style="margin-bottom: 20px;">
+    <div class="form-group">
+        <label for="name_of_school">School Name:</label>
+        <select name="name_of_school" id="name_of_school" class="form-control">
+            <option value="">Select a School</option>
+            <?php while ($school = $schoolResult->fetch_assoc()): ?>
+                <option value="<?php echo htmlspecialchars($school['name_of_school']); ?>" <?php echo ($filter_school === $school['name_of_school']) ? 'selected' : ''; ?>>
+                    <?php echo htmlspecialchars($school['name_of_school']); ?>
+                </option>
+            <?php endwhile; ?>
+        </select>
     </div>
-</div>
 
-                <!-- End Dashboard Inner -->
+    <div class="form-group">
+        <label for="grade_section">Grade Level:</label>
+        <select name="grade_section" id="grade_section" class="form-control">
+            <option value="">Select Grade Level</option>
+            <?php foreach ($grades as $grade): ?>
+                <option value="<?php echo $grade; ?>" <?php echo ($filter_grade === $grade) ? 'selected' : ''; ?>>
+                    <?php echo $grade; ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Generate Report</button>
+</form>
+
+<!-- Table Section -->
+<div class="col-md-12">
+    <div class="white_shd full margin_bottom_30">
+        <div class="full graph_head">
+            <div class="heading1 margin_0">
+                <h2>Attendance Summary</h2>
+            </div>
+        </div>
+        <div class="table_section padding_infor_info">
+            <div class="table-responsive-sm">
+                <?php
+                // Generate separate tables for each school
+                foreach ($attendanceData as $schoolName => $logs): ?>
+                    <h3><?php echo htmlspecialchars($schoolName); ?></h3>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Grade Level</th>
+                                <th>Student Name</th>
+                                <th>Total Present</th>
+                                <th>Total Absent</th>
+                                <th>Total Attendance</th>
+                                <th>Attendance Rate (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($logs as $log): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($log['grade_section']); ?></td>
+                                    <td><?php echo htmlspecialchars($log['student_name']); ?></td>
+                                    <td><?php echo htmlspecialchars($log['total_present']); ?></td>
+                                    <td><?php echo htmlspecialchars($log['total_absent']); ?></td>
+                                    <td><?php echo htmlspecialchars($log['total_attendance']); ?></td>
+                                    <td><?php echo number_format($log['attendance_rate'], 2); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endforeach; ?>
             </div>
         </div>
     </div>
+</div>
+
+
+
+
+
+
+    </div>
+        </div>
+    </div>
+
+
     <!-- jQuery -->
     <script src="js/jquery.min.js"></script>
     <!-- Bootstrap Bundle JavaScript -->
@@ -335,51 +382,8 @@ $conn->close();
     <!-- Chart Plugins -->
     <script src="js/Chart.min.js"></script>
     <!-- Init Charts -->
-    <script>
-        var ctx = document.getElementById('chartjs_area').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-
-        var ctx = document.getElementById('chartjs_bar').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-
-        var ctx = document.getElementById('chartjs_line').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-    </script>
 </body>
-
 </html>
+
+
+

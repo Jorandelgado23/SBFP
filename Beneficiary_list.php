@@ -347,9 +347,9 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
 <div class="col-md-12">
     <div class="white_shd full margin_bottom_30">
         <div class="full graph_head">
-            <div class="heading1 margin_0">
+            <!-- <div class="heading1 margin_0">
                 <h2>Filtering of Beneficiary Progress</h2>
-            </div>
+            </div> -->
         </div>
         <div class="padding_infor_info">
             <form method="POST" action="" id="dateForm" class="mb-0">

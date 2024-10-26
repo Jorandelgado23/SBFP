@@ -91,28 +91,27 @@ include("adminauth.php");
                             <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
                         </li>
 
-                        <!-- <li>
-                            <a href="attendance.php"><i class="fa fa-calendar"></i> <span>Attendance</span></a>
-                        </li> -->
-
+                        <li>
+                        <a href="#element" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-calendar"></i> <span>School Attendance</span></a>
+                        <ul class="collapse list-unstyled" id="element">
+                           <li><a href="monthly_attendance_reports.php">> <span>Monthly Report</span></a></li> 
+                           <li><a href="adattendance.php">> <span>Attendance Logs</span></a></li> 
+                          
+                        </ul>
+                     </li>
                        
                         <li>
                             <a href="adbeneficiaries.php"><i class="fa fa-university""></i> <span>All School Beneficiaries</span></a>
                         </li>
 
                         <li class="active">
-    <a href="adschoollist.php"><i class="fa fa-pie-chart"></i> <span>School List Of Laguna</span></a>
-</li>
+                            <a href="adschoollist.php"><i class="fa fa-pie-chart"></i> <span>School List Of Laguna</span></a>
+                        </li>
 
                         <li>
                             <a href="adaccountmanagement.php"><i class="fa fa-group"></i> <span>Account Management</span></a>
                         </li>
                        
-                       
-                      
-                      
-            
-                        
                         <li>
                             <a href="adsettings.php"><i class="fa fa-cog yellow_color"></i> <span>Settings</span></a>
                         </li>
@@ -284,7 +283,7 @@ $conn->close();
         <div class="col-12">
             <div class="row align-items-center my-4">
                 <div class="col">
-                    <h2 class="h3 mb-0 page-title">SCHOOL LIST</h2>
+                    <!-- <h2 class="h3 mb-0 page-title">SCHOOL LIST</h2> -->
                 </div>
                 <div class="col-auto">
                     <!-- Search form -->

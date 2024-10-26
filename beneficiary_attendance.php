@@ -256,13 +256,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
-<div class="container">
 
-            <div class="row justify-content-center">
-                <div class="col-15">
-    <h1 class="page-title">Attendance & Meal Monitoring</h1>
-    </div>
-    </div>
 <br>
 
 

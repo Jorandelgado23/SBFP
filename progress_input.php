@@ -242,6 +242,10 @@ $conn->close();
 // Include database connection
 include("accountconnection.php");
 
+// Initialize variables for success message and error message
+$success_message = "";
+$error_message = "";
+
 // Retrieve session_id of the logged-in user
 $email = $_SESSION['email'];
 $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
@@ -265,10 +269,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $date_of_progress = $_POST['date_of_progress'];
     $weight = $_POST['weight'];
     $height = $_POST['height'];
-    $bmi = $_POST['bmi']; // Will be calculated via JavaScript
-    $nutritional_status_bmia = $_POST['nutritional_status_bmia']; // Will be set via JavaScript
-    $nutritional_status_hfa = $_POST['nutritional_status_hfa']; // Will be set via JavaScript
-    $student_section = $_POST['student_section']; // Added for student section
+    $bmi = $_POST['bmi'];
+    $nutritional_status_bmia = $_POST['nutritional_status_bmia'];
+    $nutritional_status_hfa = $_POST['nutritional_status_hfa'];
+    $student_section = $_POST['student_section'];
 
     // Check if a record for this beneficiary and date already exists
     $sql_check = "SELECT * FROM beneficiary_progress WHERE beneficiary_id = ? AND date_of_progress = ?";
@@ -277,14 +281,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt_check->execute();
     $result_check = $stmt_check->get_result();
 
-    // Initialize improvement message
     $improvement_message = "No Improvement Detected.";
 
     if ($result_check->num_rows > 0) {
-        // Record exists, update it
+        // Update record
         $previous_record = $result_check->fetch_assoc();
 
-        // Check for improvement based on nutritional status
         if (
             ($previous_record['nutritional_status_bmia'] == "Severely Wasted" && $nutritional_status_bmia == "Normal") ||
             ($previous_record['nutritional_status_bmia'] == "Wasted" && $nutritional_status_bmia == "Normal")
@@ -292,14 +294,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $improvement_message = "Improvement Detected!";
         }
 
-        // Check if weight has increased
         if ($weight > $previous_record['weight']) {
             $improvement_message .= " Weight has increased.";
         } else {
             $improvement_message .= " Weight has not improved.";
         }
 
-        // Update the existing record
         $sql_update = "UPDATE beneficiary_progress 
                        SET date_of_progress = ?, weight = ?, height = ?, bmi = ?, 
                            nutritional_status_bmia = ?, nutritional_status_hfa = ?, session_id = ? 
@@ -314,31 +314,73 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $nutritional_status_hfa, 
             $session_id, 
             $beneficiary_id,
-            $date_of_progress // Include this for the WHERE clause
+            $date_of_progress 
         );
         $stmt_update->execute();
 
+        $activity = "Updated progress for beneficiary ID: $beneficiary_id on date: $date_of_progress";
+        $activity_type = "progress_update";
+        
     } else {
-        // No existing record, insert new progress
+        // Insert new record
         $sql_insert = "INSERT INTO beneficiary_progress (beneficiary_id, date_of_progress, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa, session_id)
                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt_insert = $conn->prepare($sql_insert);
         $stmt_insert->bind_param('issddsss', $beneficiary_id, $date_of_progress, $weight, $height, $bmi, $nutritional_status_bmia, $nutritional_status_hfa, $session_id);
         $stmt_insert->execute();
 
-        // Initialize improvement message if this is the first record
+        $activity = "Inserted progress for beneficiary ID: $beneficiary_id on date: $date_of_progress";
+        $activity_type = "progress_insert";
         $improvement_message = "New record added.";
     }
-    
-    // Update beneficiary_details with the latest weight, height, BMI, nutritional statuses, and student section
-    $sql_details_update = "UPDATE beneficiary_details SET weight = ?, height = ?, bmi = ?, nutritional_status_bmia = ?, nutritional_status_hfa = ?, student_section = ? WHERE id = ?";
+
+    $sql_details_update = "UPDATE beneficiary_details SET weight = ?, height = ?, bmi = ?, nutritional_status_bmia = ?, nutritional_status_hfa = ?, student_section = ?, date_of_weighing = ? WHERE id = ?";
     $stmt_details_update = $conn->prepare($sql_details_update);
-    $stmt_details_update->bind_param('ddssssi', $weight, $height, $bmi, $nutritional_status_bmia, $nutritional_status_hfa, $student_section, $beneficiary_id);
+    $stmt_details_update->bind_param('ddsssssi', $weight, $height, $bmi, $nutritional_status_bmia, $nutritional_status_hfa, $student_section,$date_of_progress, $beneficiary_id);
     $stmt_details_update->execute();
+
+    $activity .= " Updated beneficiary details.";
+    $activity_type .= "_details_update";
+
+    $timestamp = date("Y-m-d H:i:s");
+    $log_stmt = $conn->prepare("INSERT INTO recent_activity (activity, email, activity_type, timestamp) VALUES (?, ?, ?, ?)");
+    $log_stmt->bind_param("ssss", $activity, $email, $activity_type, $timestamp);
+    $log_stmt->execute();
+    $log_stmt->close();
+
+    if ($_SESSION['role'] === 'sbfp') {
+        $sbfp_activity_stmt = $conn->prepare("INSERT INTO sbfp_recent_activity (activity, email, activity_type, timestamp) VALUES (?, ?, ?, ?)");
+        $sbfp_activity_stmt->bind_param("ssss", $activity, $email, $activity_type, $timestamp);
+        $sbfp_activity_stmt->execute();
+        $sbfp_activity_stmt->close();
+    }
     
-    echo $improvement_message; // Display improvement message
+    // Display success message
+    $success_message = $improvement_message;
 }
 ?>
+
+<script>
+// Show SweetAlert based on PHP messages
+document.addEventListener('DOMContentLoaded', function() {
+    <?php if (!empty($success_message)) { ?>
+        Swal.fire({
+            title: 'Success!',
+            text: "<?= $success_message ?>",
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    <?php } elseif (!empty($error_message)) { ?>
+        Swal.fire({
+            title: 'Error!',
+            text: "<?= $error_message ?>",
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    <?php } ?>
+});
+</script>
+
 
 <title>Input Beneficiary Progress</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

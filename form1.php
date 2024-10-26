@@ -7,7 +7,7 @@ include'user_topNav.php';
                         <div class="row column_title">
                             <div class="col-md-12">
                                 <div class="page_title">
-                                    <h2>Master List Of Beneficiariesz</h2>
+                                    <h2>Master List Of Beneficiaries</h2>
                                 </div>
                             </div>
                         </div>
@@ -393,9 +393,9 @@ function maskName($name) {
         <div class="card-body">
           <div class="white_shd full margin_bottom_30">
             <div class="full graph_head">
-              <div class="heading1 margin_0">
+              <!-- <div class="heading1 margin_0">
                 <h2>Master List Beneficiaries Table</h2>
-              </div>
+              </div> -->
             </div>
             <div class="mb-3">
               <form method="POST" id="filterForm">

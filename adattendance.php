@@ -15,7 +15,7 @@ include("adminauth.php");
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>SCHOOL BENEFICIARIES</title>
+      <title>Detailed Attendance Logs</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -37,6 +37,8 @@ include("adminauth.php");
       <!-- custom css -->
       <link rel="stylesheet" href="css/custom.css" />
 
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
       
 
       <!--[if lt IE 9]>
@@ -46,12 +48,20 @@ include("adminauth.php");
    </head>
 
    <style>
-     .active {
+        /* CSS styles for the welcome message */
+  
+
+
+        .active {
         background-color: lightblue; /* Background color */
         color: #fff; /* Text color */
         font-weight: bold; /* Bold text */
     }
-   </style>
+
+    
+
+
+    </style>
 
 <body class="dashboard dashboard_2">
     <div class="full_container">
@@ -61,13 +71,13 @@ include("adminauth.php");
                 <div class="sidebar_blog_1">
                     <div class="sidebar-header">
                         <div class="logo_section">
-                        <a href="admindashboard.php"><img class="logo_icon img-responsive" src="images/origlogo.jpg" alt="#" /></a>
-
-
+                            <a href="admindashboard.php"><img class="logo_icon img-responsive" src="images/origlogo.jpg" alt="#" /></a>
                         </div>
                     </div>
                     <div class="sidebar_user_info">
-                    <div class="user_profle_side">
+                    <div class="icon_setting"></div>
+               
+<div class="user_profle_side">
     <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
     <div class="user_info">
     <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
@@ -76,6 +86,7 @@ include("adminauth.php");
     </div>
 </div>
 </div>
+
                 </div>
                 <div class="sidebar_blog_2">
                     <h4>General</h4>
@@ -84,7 +95,7 @@ include("adminauth.php");
                             <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
                         </li>
 
-                        <li>
+                        <li class="active">
                         <a href="#element" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-calendar"></i> <span>School Attendance</span></a>
                         <ul class="collapse list-unstyled" id="element">
                            <li><a href="monthly_attendance_reports.php">> <span>Monthly Report</span></a></li> 
@@ -93,7 +104,7 @@ include("adminauth.php");
                         </ul>
                      </li>
                        
-                        <li class="active">
+                        <li>
                             <a href="adbeneficiaries.php"><i class="fa fa-university""></i> <span>All School Beneficiaries</span></a>
                         </li>
 
@@ -114,8 +125,8 @@ include("adminauth.php");
             <!-- End Sidebar -->
             <!-- Right Content -->
             <div id="content">
-              <!-- Topbar -->
-              <div class="topbar">
+                <!-- Topbar -->
+                <div class="topbar">
                     <nav class="navbar navbar-expand-lg navbar-light">
                         <div class="full">
                             <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
@@ -155,19 +166,18 @@ $conn->close();
 
 </li>
 
-                                        
-                                        
+<li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+                                       
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
                                             
-                                        <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user light_color"></i></a>
-        <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
-
+                                        <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user light_color"></i>
+    <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
     <span class="name_user"><?php echo $user_role; ?></span>
 </a>
 
-<div class="dropdown-menu">
+                                            <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="adsettings.php">My Profile</a>
                                                 <a class="dropdown-item" href="#" id="logoutLink">
     <span>Log Out</span> <i class="fa fa-sign-out"></i>
@@ -205,127 +215,177 @@ $conn->close();
                         </div>
                     </nav>
                 </div>
+                <?php if (isset($welcome_message)) { ?>
+                                <div class="alert alert-success" id="welcomeMessage">
+                                    <?php echo $welcome_message; ?>
+                                </div>
+                                <?php } ?>
                 <!-- End Topbar -->
-              <!-- Dashboard Inner -->
-<div class="midde_cont">
-    <div class="container-fluid">
-        <div class="row column_title">
-            <div class="col-md-12">
-                <div class="page_title">
-                    <h2>ALL SCHOOL BENEFICIARIES</h2>
-                </div>
-            </div>
-        </div>
+                <!-- Dashboard Inner -->
+                <div class="midde_cont">
+                    <div class="container-fluid">
+                        <div class="row column_title">
+                            <div class="col-md-12">
+                                <div class="page_title">
+                                    <h2>Detailed Attendance Logs</h2>
+                                </div>
+                            </div>
+                        </div>
 
-        <?php
-       include("accountconnection.php");
+                        <?php
+include("accountconnection.php");
 
-        // Fetch list of schools with their session IDs
-        $sql_schools = "SELECT DISTINCT session_id, name_of_school, school_id_number FROM beneficiaries";
-        $result_schools = $conn->query($sql_schools);
+// Get filter parameters
+$filter_date = isset($_POST['attendance_date']) ? $_POST['attendance_date'] : '';
+$filter_school = isset($_POST['name_of_school']) ? $_POST['name_of_school'] : '';
 
-        // Group schools by session ID
-        $schools_by_session = array();
-        if ($result_schools->num_rows > 0) {
-            while ($row_schools = $result_schools->fetch_assoc()) {
-                $session_id = $row_schools['session_id'];
-                $school_name = $row_schools['name_of_school'];
-                $schools_by_session[$session_id][$school_name][] = $row_schools;
-            }
-        }
+// Fetch school names for the dropdown
+$schoolQuery = "SELECT name_of_school FROM beneficiaries GROUP BY name_of_school";
+$schoolResult = $conn->query($schoolQuery);
+$schools = [];
+while ($row = $schoolResult->fetch_assoc()) {
+    $schools[] = $row['name_of_school'];
+}
 
-        // Filtering functionality
-        $search_term = isset($_GET['search']) ? $_GET['search'] : '';
-        if (!empty($search_term)) {
-            $filtered_schools = array_filter($schools_by_session, function ($schools) use ($search_term) {
-                foreach ($schools as $school_name => $school_data) {
-                    if (stripos($school_name, $search_term) !== false) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-        } else {
-            $filtered_schools = $schools_by_session;
-        }
-        ?>
+// Prepare SQL query with filters
+$sql = "
+    SELECT DISTINCT ba.id, ba.attendance_date, ba.status, ba.meal_served, ba.name AS student_name, 
+           ba.student_section, ba.grade_section, b.name_of_school
+    FROM beneficiary_attendance AS ba
+    JOIN beneficiaries AS b ON ba.session_id = b.session_id
+    WHERE 1=1
+";
 
-<div class="col-md-12">
-           
-            <!-- Search form -->
-            <form method="get" class="mb-4">
-                <div class="input-group">
-                    <input type="text" class="form-control" name="search" placeholder="Search by school name" value="<?php echo htmlspecialchars($search_term); ?>">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fa fa-search"></i> Search
-                        </button>
-                    </div>
-                </div>
-            </form>
-            <div class="card shadow">
-                <div class="card-body">
-                    <!-- Table -->
-                    <div class="table-responsive">
-              <div class="table-responsive-sm">
-                <table class="table table-bordered">
-                                <tr style="color: #fff; background-color: #0971b8;">
-                                    <th style="text-align: center;">Name of School</th>
-                                    <th style="text-align: center;">Veiw Info</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($filtered_schools as $session_id => $schools) : ?>
-                                    <?php foreach ($schools as $school_name => $school_data) : ?>
-                                        <tr>
-                                            <td><?php echo htmlspecialchars($school_name); ?></td>
-                                            <td style="text-align: center;">
-                                                <a href="view_details.php?session_id=<?php echo urlencode($session_id); ?>" class="btn btn-info">
-                                                    <i class="fa fa-eye"></i> View
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+if ($filter_date) $sql .= " AND ba.attendance_date = ?";
+if ($filter_school) $sql .= " AND b.name_of_school = ?";
 
-<script>
-$(document).ready(function(){
-    $('#inlineFormCustomSelectPref').change(function(){
-        var selectedSchool = $(this).val();
-        $.ajax({
-            url: 'get_filtered_data.php',
-            type: 'POST',
-            data: {school_id: selectedSchool},
-            success: function(response){
-                $('#tableBody').html(response);
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
-    });
-});
-</script>
+$stmt = $conn->prepare($sql);
 
-<?php
-$conn->close();
+// Bind parameters
+$params = [];
+if ($filter_date) $params[] = $filter_date;
+if ($filter_school) $params[] = $filter_school;
+
+// Dynamically bind parameters
+if ($params) {
+    $types = str_repeat('s', count($params)); // All parameters are strings
+    $stmt->bind_param($types, ...$params);
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Initialize an associative array to hold the logs grouped by school
+$attendanceData = [];
+while ($log = $result->fetch_assoc()) {
+    $attendanceData[$log['name_of_school']][] = $log;
+}
+
+$rowsPerPage = 5;
 ?>
 
+<!-- Filter Form -->
+<form method="POST" action="" class="form-inline">
+    <div class="form-group">
+        <label for="attendance_date">Date:</label>
+        <input type="date" name="attendance_date" id="attendance_date" class="form-control" value="<?php echo htmlspecialchars($filter_date); ?>">
     </div>
-</div>
 
-                <!-- End Dashboard Inner -->
+    <div class="form-group">
+        <label for="name_of_school">School Name:</label>
+        <select name="name_of_school" id="name_of_school" class="form-control">
+            <option value="">Select a school</option>
+            <?php foreach ($schools as $school): ?>
+                <option value="<?php echo htmlspecialchars($school); ?>" <?php echo ($school === $filter_school) ? 'selected' : ''; ?>>
+                    <?php echo htmlspecialchars($school); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+
+<!-- Table Section -->
+<div class="col-md-12">
+    <div class="white_shd full margin_bottom_30">
+        <div class="full graph_head">
+            <div class="heading1 margin_0">
+                <h2>Attendance Logs</h2>
+            </div>
+        </div>
+        <div class="table_section padding_infor_info">
+            <div class="table-responsive-sm">
+                <?php foreach ($attendanceData as $schoolName => $logs):
+                    $totalLogs = count($logs);
+                    $totalPages = ceil($totalLogs / $rowsPerPage);
+                    $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                    $currentPage = max(1, min($currentPage, $totalPages)); // Ensure current page is valid
+                    $offset = ($currentPage - 1) * $rowsPerPage;
+                ?>
+                <h3><?php echo htmlspecialchars($schoolName); ?></h3>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Student Name</th>
+                            <th>Grade Level</th>
+                            <th>Section</th>
+                            <th>Status</th>
+                            <th>Meal Served</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        // Display rows for the current page
+                        for ($i = $offset; $i < $offset + $rowsPerPage && $i < $totalLogs; $i++):
+                            $log = $logs[$i]; ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($log['attendance_date']); ?></td>
+                                <td><?php echo htmlspecialchars($log['student_name']); ?></td>
+                                <td><?php echo htmlspecialchars($log['grade_section']); ?></td>
+                                <td><?php echo htmlspecialchars($log['student_section']); ?></td>
+                                <td><?php echo htmlspecialchars($log['status']); ?></td>
+                                <td><?php echo htmlspecialchars($log['meal_served']); ?></td>
+                            </tr>
+                        <?php endfor; ?>
+                    </tbody>
+                </table>
+
+                <?php if ($totalPages > 1): ?>
+                    <div class="pagination">
+                        <?php if ($currentPage > 1): ?>
+                            <a href="?page=<?php echo $currentPage - 1; ?>">Previous</a>
+                        <?php endif; ?>
+
+                        <span>Page <?php echo $currentPage; ?> of <?php echo $totalPages; ?></span>
+
+                        <?php if ($currentPage < $totalPages): ?>
+                            <a href="?page=<?php echo $currentPage + 1; ?>">Next</a>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+                <?php endforeach; ?>
             </div>
         </div>
     </div>
+</div>
+
+
+
+
+
+
+
+
+    
+
+            </div>
+        </div>
+    </div>
+
+
+    
     <!-- jQuery -->
     <script src="js/jquery.min.js"></script>
     <!-- Bootstrap Bundle JavaScript -->
@@ -335,51 +395,8 @@ $conn->close();
     <!-- Chart Plugins -->
     <script src="js/Chart.min.js"></script>
     <!-- Init Charts -->
-    <script>
-        var ctx = document.getElementById('chartjs_area').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
 
-        var ctx = document.getElementById('chartjs_bar').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
 
-        var ctx = document.getElementById('chartjs_line').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-    </script>
-</body>
+    </body>
 
 </html>

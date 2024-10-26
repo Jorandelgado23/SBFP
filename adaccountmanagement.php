@@ -85,11 +85,15 @@ include("adminauth.php");
                     <li>
                             <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
                         </li>
-<!-- 
-                        <li>
-                            <a href="attendance.php"><i class="fa fa-calendar"></i> <span>Attendance</span></a>
-                        </li> -->
 
+                        <li>
+                        <a href="#element" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-calendar"></i> <span>School Attendance</span></a>
+                        <ul class="collapse list-unstyled" id="element">
+                           <li><a href="monthly_attendance_reports.php">> <span>Monthly Report</span></a></li> 
+                           <li><a href="adattendance.php">> <span>Attendance Logs</span></a></li> 
+                          
+                        </ul>
+                     </li>
                        
                         <li>
                             <a href="adbeneficiaries.php"><i class="fa fa-university""></i> <span>All School Beneficiaries</span></a>
@@ -103,11 +107,6 @@ include("adminauth.php");
                             <a href="adaccountmanagement.php"><i class="fa fa-group"></i> <span>Account Management</span></a>
                         </li>
                        
-                       
-                      
-                      
-            
-                        
                         <li>
                             <a href="adsettings.php"><i class="fa fa-cog yellow_color"></i> <span>Settings</span></a>
                         </li>

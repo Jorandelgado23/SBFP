@@ -421,15 +421,15 @@ function updateSchoolDetails() {
                                 <th>Supervisor/Principal Name</th>
                                 <th>Actions</th>  -->
                                 <th class="text-center">Edit</th>
-                            <th class="text-center">Delete</th>
+                                <th class="text-center">Delete</th>
                             </tr>
                         </thead>
                         <tbody>
                         <?php
                         include 'accountconnection.php';
 
-                        // Fetch Admin Accounts
-                        $sql_admin = "SELECT id, firstname, lastname, email, phone_number, role, `Division/Province`, school_district_municipality, school_name, beis_id, school_address, barangay_name, supervisor_principal_name FROM users WHERE role = 'admin'";
+                        // Fetch Admin Accounts excluding the main admin account
+                        $sql_admin = "SELECT id, firstname, lastname, email, phone_number, role, `Division/Province`, school_district_municipality, school_name, beis_id, school_address, barangay_name, supervisor_principal_name FROM users WHERE role = 'admin' AND email != 'mainadmin@sbfp.ph'";
                         $result_admin = $conn->query($sql_admin);
 
                         // Display Admin Accounts
@@ -458,7 +458,7 @@ function updateSchoolDetails() {
                                 echo "</tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='13'>No admin accounts found</td></tr>";
+                            echo "<tr><td colspan='7'>No admin accounts found</td></tr>";
                         }
 
                         $conn->close();
@@ -470,6 +470,7 @@ function updateSchoolDetails() {
         </div>
     </div>
 </div>
+
 
 <div class="col-md-12">
     <div class="white_shd full margin_bottom_30">

@@ -119,10 +119,9 @@
 <div>
     
 <div class="card card-outline card-gov elevation-3">
-
-<div class="login-container">
-    <div class="signin-image">
-        <img src="images/logo/semilogo.png" alt="Logo"> <!-- Placeholder for logo -->
+    <div class="login-container">
+        <div class="signin-image">
+            <img src="images/logo/semilogo.png" alt="Logo"> <!-- Placeholder for logo -->
         </div>
         <h2>Nutrition Monitoring System</h2>
         <form id="loginForm" method="post" action="loginauth.php">
@@ -140,7 +139,29 @@
             <a href="forgot_password.php">Forgot Password?</a>
         </div>
     </div>
-<script>
+
+    <!-- Passcode Modal -->
+    <div class="modal fade" id="passcodeModal" tabindex="-1" role="dialog" aria-labelledby="passcodeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="passcodeModalLabel">Enter Passcode</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="password" id="inputPasscode" class="form-control" placeholder="Passcode" required>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button> -->
+                    <button type="button" class="btn btn-primary" id="submitPasscode">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
         // Function to save email to localStorage
         function saveEmail() {
             const emailInput = document.getElementById('inputEmail');
@@ -158,6 +179,80 @@
         // Event listener to save email on form submit
         document.addEventListener('DOMContentLoaded', loadEmail);
         window.addEventListener('beforeunload', saveEmail);
+
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting
+
+            // Get form data
+            const formData = new FormData(this);
+            const email = document.getElementById('inputEmail').value;
+
+            // Send form data to login authentication script
+            fetch('loginauth.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Check for mainadmin email
+                    if (email === 'mainadmin@sbfp.ph') {
+                        // Show passcode modal
+                        $('#passcodeModal').modal('show');
+                    } else {
+                        // Redirect based on role
+                        redirectToRole(data.role);
+                    }
+                } else {
+                    // Display error message
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: data.message
+                    });
+                }
+            })
+            .catch(error => {
+                // Handle network error
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'An error occurred. Please try again later.'
+                });
+            });
+        });
+
+        // Redirect based on role
+        function redirectToRole(role) {
+            if (role === 'admin') {
+                window.location.href = 'admindashboard.php';
+            } else if (role === 'sbfp') {
+                window.location.href = 'dashboard.php';
+            } else {
+                // Invalid role
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Invalid role!'
+                });
+            }
+        }
+
+        // Handle passcode submission
+        document.getElementById('submitPasscode').addEventListener('click', function() {
+            const passcode = document.getElementById('inputPasscode').value;
+            if (passcode === 'sbfpadmin') { // Replace with your actual passcode
+                $('#passcodeModal').modal('hide');
+                window.location.href = 'admindashboard.php'; // Redirect to admin dashboard
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Invalid passcode!'
+                });
+            }
+        });
     </script>
 
     <!-- jQuery -->
@@ -181,53 +276,8 @@
         document.addEventListener("DOMContentLoaded", function() {
             document.body.classList.add('fade-in');
         });
-
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the form from submitting
-
-            // Get form data
-            const formData = new FormData(this);
-
-            // Send form data to login authentication script
-            fetch('loginauth.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Redirect based on role
-                    if (data.role === 'admin') {
-                        window.location.href = 'admindashboard.php';
-                    } else if (data.role === 'sbfp') {
-                        window.location.href = 'dashboard.php';
-                    } else {
-                        // Invalid role
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Invalid role!'
-                        });
-                    }
-                } else {
-                    // Display error message
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: data.message
-                    });
-                }
-            })
-            .catch(error => {
-                // Handle network error
-                console.error('Error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'An error occurred. Please try again later.'
-                });
-            });
-        });
     </script>
+</div>
+
 </body>
 </html>

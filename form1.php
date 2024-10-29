@@ -11,18 +11,12 @@ include'user_topNav.php';
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
- <div class="col-lg-12">
-<div>
-    <div class="container mt-5">
-        <div class="col-md-10 mb-10">
-            <div>
-                <div>
+
                     <p class="card-text" style="font-size: large;">Click The Open Form Below To Add Beneficiaries</p>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sbfpModal" data-whatever="@mdo"><i class="fa fa-plus"> </i>Open Form</button>
-                </div>
-            </div>
-        </div>
+        <br>
+        <br>
+
 
         <?php
 
@@ -386,13 +380,10 @@ function maskName($name) {
 
 ?>
 
-<div class="container-fluid">
-  <div class="row justify-content-center">
-    <div class="col-md-12 my-4">
-      <div class="card shadow">
-        <div class="card-body">
-          <div class="white_shd full margin_bottom_30">
-            <div class="full graph_head">
+<div class="col-md-12">
+                           <div class="white_shd full margin_bottom_30">
+                              <div class="full graph_head">
+                                 <div class="heading1 margin_0">
               <!-- <div class="heading1 margin_0">
                 <h2>Master List Beneficiaries Table</h2>
               </div> -->

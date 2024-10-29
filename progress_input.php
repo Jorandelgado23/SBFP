@@ -397,14 +397,12 @@ $(document).ready(function() {
             const bmi = weight / (heightM * heightM);
             $('#bmi').val(bmi.toFixed(2)); // Display BMI
 
-            // Calculate BMI nutritional status
+            // Calculate BMI nutritional status based on BMI value
             let nutritionalStatusBMI = "Normal";
             if (bmi < 16) {
                 nutritionalStatusBMI = "Severely Wasted";
             } else if (bmi < 18.5) {
                 nutritionalStatusBMI = "Wasted";
-            } else if (bmi >= 18.5 && bmi < 25) {
-                nutritionalStatusBMI = "Normal";
             } else if (bmi >= 25 && bmi < 30) {
                 nutritionalStatusBMI = "Overweight";
             } else if (bmi >= 30) {
@@ -412,27 +410,19 @@ $(document).ready(function() {
             }
             $('#nutritional_status_bmia').val(nutritionalStatusBMI);
 
-            // Calculate HFA nutritional status
+            // Calculate HFA nutritional status based on age and height
             const dob = new Date($('#date_of_birth').val());
             const now = new Date();
             const ageMonths = (now.getFullYear() - dob.getFullYear()) * 12 + now.getMonth() - dob.getMonth();
             let nutritionalStatusHFA = "Normal";
 
-            // Example thresholds; replace with your actual criteria
-            if (ageMonths < 60 && heightCm < 90) {
-                nutritionalStatusHFA = "Stunted";
-            } else if (ageMonths >= 60 && ageMonths < 120 && heightCm < 115) {
-                nutritionalStatusHFA = "Stunted";
-            } else if (ageMonths >= 120 && heightCm < 130) {
-                nutritionalStatusHFA = "Stunted";
-            } else if (ageMonths < 60 && heightCm > 110) {
-                nutritionalStatusHFA = "Tall";
-            } else if (ageMonths >= 60 && ageMonths < 120 && heightCm > 140) {
-                nutritionalStatusHFA = "Tall";
-            } else if (ageMonths >= 120 && heightCm > 160) {
-                nutritionalStatusHFA = "Tall";
+            if (ageMonths < 60) {
+                nutritionalStatusHFA = heightCm < 90 ? "Stunted" : heightCm > 110 ? "Tall" : "Normal";
+            } else if (ageMonths < 120) {
+                nutritionalStatusHFA = heightCm < 115 ? "Stunted" : heightCm > 140 ? "Tall" : "Normal";
+            } else {
+                nutritionalStatusHFA = heightCm < 130 ? "Stunted" : heightCm > 160 ? "Tall" : "Normal";
             }
-
             $('#nutritional_status_hfa').val(nutritionalStatusHFA);
         }
     }
@@ -440,13 +430,12 @@ $(document).ready(function() {
     // Event listeners for weight and height inputs
     $('#weight, #height').on('input', calculateNutritionalStatus);
 
-    // Get session_id, date_of_birth, and student_section from the selected beneficiary
+    // Update beneficiary details on selection change
     $('#beneficiary_id').on('change', function() {
         const selectedOption = $(this).find('option:selected');
-        $('#session_id').val(selectedOption.data('session_id'));
         $('#date_of_birth').val(selectedOption.data('date_of_birth'));
-        $('#student_section').val(selectedOption.data('student_section')); // Add this line
-        calculateNutritionalStatus(); // Recalculate in case of a new beneficiary
+        $('#student_section').val(selectedOption.data('student_section'));
+        calculateNutritionalStatus(); // Recalculate when selecting a new beneficiary
     });
 });
 </script>

@@ -245,6 +245,7 @@ $conn->close();
 </form>
 
 <div>
+    <br>
 <?php
 
 if (!isset($_SESSION['email'])) {

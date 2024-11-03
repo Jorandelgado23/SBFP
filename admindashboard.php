@@ -131,7 +131,8 @@ include("adminauth.php");
     <div class="user_info">
     <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
         
-        <p><span class="online_animation"></span> Online</p>
+    <p><span class="online_animation"></span> Logged In</p>
+
     </div>
 </div>
 </div>
@@ -417,7 +418,7 @@ $beneficiaries_json = json_encode($beneficiaries);
     <div class="white_shd full margin_bottom_30">
         <div class="full graph_head">
             <div class="heading1 margin_0">
-                <h2>NUMBER OF BENEFICIARIES PER SCHOOL CHART</h2>
+                <h2>Number Of Beneficiaries Per School</h2>
             </div>
         </div>
         <div class="map_section padding_infor_info">

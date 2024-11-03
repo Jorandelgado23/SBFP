@@ -78,7 +78,8 @@ include("adminauth.php");
     <div class="user_info">
     <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
         
-        <p><span class="online_animation"></span> Online</p>
+    <p><span class="online_animation"></span> Logged In</p>
+
     </div>
 </div>
 </div>
@@ -299,9 +300,9 @@ $conn->close();
             <div class="col-md-12">
                 <div class="white_shd full margin_bottom_30">
                     <div class="full graph_head">
-                        <div class="heading1 margin_0">
+                        <!-- <div class="heading1 margin_0">
                             <h2>School Details</h2>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="table-responsive">
               <div class="table-responsive-sm">

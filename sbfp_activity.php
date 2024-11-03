@@ -110,7 +110,8 @@ $conn->close();
     <div class="user_info">
     <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
         
-        <p><span class="online_animation"></span> Online</p>
+    <p><span class="online_animation"></span> Logged In</p>
+
     </div>
 </div>
 </div>

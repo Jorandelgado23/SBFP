@@ -122,7 +122,7 @@ include("connection.php");
         <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
         <div class="user_info">
             <h6><?php echo $school_name; ?></h6> <!-- Display school name here -->
-            <p><span class="online_animation"></span> Online</p>
+            <p><span class="online_animation"></span> Logged In</p>
         </div>
     </div>
 </div>

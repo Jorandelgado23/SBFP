@@ -76,7 +76,8 @@ include("connection.php");
         <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
         <div class="user_info">
             <h6><?php echo $school_name; ?></h6> <!-- Display school name here -->
-            <p><span class="online_animation"></span> Online</p>
+            <p><span class="online_animation"></span> Logged In</p>
+
         </div>
     </div>
 </div>
@@ -94,21 +95,21 @@ include("connection.php");
             <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
         </li>
 
-        <!-- Dropdown for Beneficiary Improvement and Progress Input -->
-        <li>
+         <!-- Dropdown for Beneficiary Improvement and Progress Input -->
+         <li>
             <a href="#beneficiaryDropdown" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                <i class="fa fa-line-chart"></i> <span>Beneficiary</span>
+                <i class="fa fa-line-chart"></i> <span>Beneficiary Section</span>
             </a>
             <ul class="collapse list-unstyled" id="beneficiaryDropdown">
-                <li><a href="Beneficiary_list.php">> <span>Beneficiary Improvement</span></a></li>
                 <li><a href="progress_input.php">> <span>Progress Input</span></a></li>
+                <li><a href="Beneficiary_list.php">> <span>Beneficiary Improvement</span></a></li>
             </ul>
         </li>
 
         <!-- Dropdown for Student Attendance and Beneficiary Attendance -->
         <li>
             <a href="#attendanceDropdown" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                <i class="fa fa-calendar"></i> <span>Attendance</span>
+                <i class="fa fa-calendar"></i> <span>Attendance Section</span>
             </a>
             <ul class="collapse list-unstyled" id="attendanceDropdown">
             <li><a href="beneficiary_attendance.php">> <span>Beneficiary Attendance</span></a></li>

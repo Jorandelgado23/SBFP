@@ -79,7 +79,8 @@ include("adminauth.php");
     <div class="user_info">
     <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
         
-        <p><span class="online_animation"></span> Online</p>
+    <p><span class="online_animation"></span> Logged In</p>
+
     </div>
 </div>
 </div>
@@ -293,7 +294,7 @@ while ($row = $result->fetch_assoc()) {
 <!-- Filter Form -->
 <form method="POST" action="" class="form-inline" style="margin-bottom: 20px;">
     <div class="form-group">
-        <label for="name_of_school">School Name:</label>
+        <label for="name_of_school" style="font-weight: bolder;">SCHOOL :</label>
         <select name="name_of_school" id="name_of_school" class="form-control">
             <option value="">Select a School</option>
             <?php while ($school = $schoolResult->fetch_assoc()): ?>
@@ -305,7 +306,7 @@ while ($row = $result->fetch_assoc()) {
     </div>
 
     <div class="form-group">
-        <label for="grade_section">Grade Level:</label>
+        <label for="grade_section" style="font-weight: bolder;">GRADE LEVEL :</label>
         <select name="grade_section" id="grade_section" class="form-control">
             <option value="">Select Grade Level</option>
             <?php foreach ($grades as $grade): ?>
@@ -318,6 +319,7 @@ while ($row = $result->fetch_assoc()) {
 
     <button type="submit" class="btn btn-primary">Generate Report</button>
 </form>
+<br>
 
 <!-- Table Section -->
 <div class="col-md-12">

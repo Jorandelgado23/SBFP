@@ -24,8 +24,8 @@ if ($row['count'] == 0) {
     $stmtInsert = $conn->prepare($sqlInsert);
     $stmtInsert->bind_param("ssssss", $firstname, $lastname, $email, $hashedPassword, $role, $session_id);
 
-    $firstname = 'Main';
-    $lastname = 'Admin';
+    $firstname = 'MAIN';
+    $lastname = 'ADMIN';
 
     if ($stmtInsert->execute()) {
         echo "Default MAIN_ADMIN user created successfully.";

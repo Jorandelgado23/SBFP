@@ -82,7 +82,7 @@ include("adminauth.php");
     <div class="user_info">
     <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
         
-        <p><span class="online_animation"></span> Online</p>
+    <p><span class="online_animation"></span> Logged In</p>
     </div>
 </div>
 </div>
@@ -287,12 +287,12 @@ $rowsPerPage = 5;
 <!-- Filter Form -->
 <form method="POST" action="" class="form-inline">
     <div class="form-group">
-        <label for="attendance_date">Date:</label>
+        <label for="attendance_date" style="font-weight: bolder;">DATE :</label>
         <input type="date" name="attendance_date" id="attendance_date" class="form-control" value="<?php echo htmlspecialchars($filter_date); ?>">
     </div>
 
     <div class="form-group">
-        <label for="name_of_school">School Name:</label>
+        <label for="name_of_school" style="font-weight: bolder;">SCHOOL :</label>
         <select name="name_of_school" id="name_of_school" class="form-control">
             <option value="">Select a school</option>
             <?php foreach ($schools as $school): ?>
@@ -305,6 +305,8 @@ $rowsPerPage = 5;
 
     <button type="submit" class="btn btn-primary">Filter</button>
 </form>
+<br>
+<br>
 
 <!-- Table Section -->
 <div class="col-md-12">

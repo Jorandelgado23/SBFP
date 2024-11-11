@@ -21,6 +21,10 @@ $stmt->bind_result($session_id);
 $stmt->fetch();
 $stmt->close();
 
+// ClickSend API credentials
+$username = 'joran2312';  // Your ClickSend username
+$apiKey = 'EB59DEAA-98B2-5648-FB90-4BD97EA1CFDA';  // Your ClickSend API key
+
 // Loop through each beneficiary
 foreach ($status as $beneficiary_id => $attendance_status) {
     // Adjust the attendance status based on the selected attendance mode
@@ -30,12 +34,12 @@ foreach ($status as $beneficiary_id => $attendance_status) {
     $meal = $meal_served[$beneficiary_id];
 
     // Get beneficiary details (name, student_section, grade_section)
-    $info_sql = "SELECT name, student_section, grade_section FROM beneficiary_details WHERE id = ?";
+    $info_sql = "SELECT name, student_section, grade_section, parent_phone FROM beneficiary_details WHERE id = ?";
     $info_stmt = $conn->prepare($info_sql);
     $info_stmt->bind_param("i", $beneficiary_id);
     $info_stmt->execute();
     $info_stmt->store_result();
-    $info_stmt->bind_result($name, $student_section, $grade_section);
+    $info_stmt->bind_result($name, $student_section, $grade_section, $parent_phone);
     $info_stmt->fetch();
 
     // Check if the attendance record already exists for this beneficiary and date
@@ -52,7 +56,7 @@ foreach ($status as $beneficiary_id => $attendance_status) {
         $update_stmt->bind_param("ssiss", $final_status, $meal, $beneficiary_id, $attendance_date, $session_id);
         $update_stmt->execute();
         $update_stmt->close();
-        
+
         // Log the update activity
         $activity = "Updated attendance for beneficiary ID: $beneficiary_id";
     } else {
@@ -65,6 +69,51 @@ foreach ($status as $beneficiary_id => $attendance_status) {
 
         // Log the insert activity
         $activity = "Inserted attendance for beneficiary ID: $beneficiary_id";
+    }
+
+    // If the beneficiary is absent, send SMS notification
+    if ($final_status === 'Absent' && !empty($parent_phone)) {
+        // Prepare SMS message
+        $sms_body = "Dear Parent, your child $name is marked as absent on $attendance_date. Please contact us for more information.";
+        
+        // SMS details
+        $sms_data = [
+            'messages' => [
+                [
+                    'source' => 'php',
+                    'to' => $parent_phone,
+                    'body' => $sms_body,
+                ],
+            ],
+        ];
+
+        // ClickSend API URL
+        $apiUrl = 'https://rest.clicksend.com/v3/sms/send';
+
+        // Initialize cURL for SMS
+        $ch = curl_init($apiUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        curl_setopt($ch, CURLOPT_USERPWD, "$username:$apiKey");
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($sms_data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+        ]);
+
+        // Execute the request
+        $sms_response = curl_exec($ch);
+
+        // Check for SMS errors
+        if (curl_errno($ch)) {
+            error_log('SMS Error: ' . curl_error($ch));
+        } else {
+            // Log the SMS response if needed
+            error_log('SMS Response: ' . $sms_response);
+        }
+
+        // Close cURL
+        curl_close($ch);
     }
 
     // Log the activity in recent_activity table

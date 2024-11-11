@@ -705,7 +705,88 @@ $conn->close(); // Close the database connection
     </div>
 </div>
 
+<?php
+include("accountconnection.php");
 
+// Retrieve the current page number from the URL, default to 1 if not set
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$limit = 5; // Number of records per page
+$offset = ($page - 1) * $limit; // Calculate offset
+
+// Get the user's session ID
+$email = $_SESSION['email'];
+$stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($session_id);
+$stmt->fetch();
+$stmt->close();
+
+// Get the total number of rows
+$total_query = "SELECT COUNT(*) as total FROM beneficiary_details WHERE session_id = ?";
+$total_stmt = $conn->prepare($total_query);
+$total_stmt->bind_param("s", $session_id);
+$total_stmt->execute();
+$total_result = $total_stmt->get_result();
+$total_row = $total_result->fetch_assoc();
+$total_rows = $total_row['total'];
+$total_stmt->close();
+
+// Calculate total pages
+$total_pages = ceil($total_rows / $limit);
+
+// Fetch the current page data with LIMIT and OFFSET
+$query = "SELECT name, parent_phone FROM beneficiary_details WHERE session_id = ? LIMIT ? OFFSET ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("sii", $session_id, $limit, $offset);
+$stmt->execute();
+$result = $stmt->get_result();
+?>
+
+<div class="col-md-6">
+   <div class="white_shd full margin_bottom_30">
+      <div class="full graph_head">
+         <div class="heading1 margin_0">
+            <h2>Beneficiary Parent Number</h2>
+         </div>
+      </div>
+      <div class="table_section padding_infor_info">
+         <div class="table-responsive-sm">
+            <table class="table table-bordered">
+               <thead style="color: #fff; background-color: #0971b8;">
+                  <tr>
+                     <th>Name of Parent</th>
+                     <th>Parent Phone Number</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <?php while ($row = $result->fetch_assoc()) { ?>
+                     <tr>
+                        <td><?php echo htmlspecialchars($row['name']); ?></td>
+                        <td><?php echo htmlspecialchars($row['parent_phone']); ?></td>
+                     </tr>
+                  <?php } ?>
+               </tbody>
+            </table>
+         </div>
+         <!-- Pagination -->
+         <div>
+            <?php if ($page > 1): ?>
+               <a href="?page=<?php echo $page - 1; ?>" class="btn btn-primary">Previous</a>
+            <?php endif; ?>
+            <?php if ($page < $total_pages): ?>
+               <a href="?page=<?php echo $page + 1; ?>" class="btn btn-primary">Next</a>
+            <?php endif; ?>
+         </div>
+      </div>
+   </div>
+</div>
+
+<?php
+$stmt->close();
+$conn->close();
+?>
 
 
 

@@ -18,6 +18,11 @@ $height = $_POST['height'];
 $bmi = $_POST['bmi'];
 $nutritional_status_bmia = $_POST['nutritional_status_bmia'];
 $nutritional_status_hfa = $_POST['nutritional_status_hfa'];
+$parent_phone = $_POST['parent_phone']; // Add Parent Phone field
+$dewormed = $_POST['dewormed'];
+$parents_consent_for_milk = $_POST['parents_consent_for_milk'];
+$participation_in_4ps = $_POST['participation_in_4ps'];
+$beneficiary_of_sbfp_in_previous_years = $_POST['beneficiary_of_sbfp_in_previous_years'];
 
 // Update query
 $sql = "UPDATE beneficiary_details 
@@ -33,12 +38,16 @@ $sql = "UPDATE beneficiary_details
             height=?, 
             bmi=?, 
             nutritional_status_bmia=?, 
-            nutritional_status_hfa=? 
+            nutritional_status_hfa=?, 
+            parent_phone=?,
+            dewormed=?, 
+            parents_consent_for_milk=?, 
+            participation_in_4ps=?, 
+            beneficiary_of_sbfp_in_previous_years=?
         WHERE id=?";
 
-// Prepare statement to prevent SQL injection
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssssssssssssss", $lrn_no, $name, $sex, $grade_section, $student_section, $date_of_birth, $date_of_weighing, $age, $weight, $height, $bmi, $nutritional_status_bmia, $nutritional_status_hfa, $id);
+$stmt->bind_param("sssssssssssssssssss", $lrn_no, $name, $sex, $grade_section, $student_section, $date_of_birth, $date_of_weighing, $age, $weight, $height, $bmi, $nutritional_status_bmia, $nutritional_status_hfa, $parent_phone, $dewormed, $parents_consent_for_milk, $participation_in_4ps, $beneficiary_of_sbfp_in_previous_years, $id);
 
 $response = array(); // Initialize response array
 

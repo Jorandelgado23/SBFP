@@ -236,7 +236,6 @@ $conn->close();
 
       
         <?php
-
 include("accountconnection.php");
 
 // Retrieve session_id of the logged-in user
@@ -249,58 +248,113 @@ $stmt->bind_result($session_id);
 $stmt->fetch();
 $stmt->close();
 
-// Fetch submitted data (beneficiary details) for the logged-in user's session
-$sql = "SELECT * FROM beneficiary_details WHERE session_id = ? ORDER BY name";
+// Define grade levels for filtering
+$grades = ["Kinder", "Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6"];
+$sections = [];
+
+// Fetch distinct student sections available for the logged-in user's session
+$sql = "SELECT DISTINCT student_section FROM beneficiary_details WHERE session_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $session_id);
+$stmt->execute();
+$result = $stmt->get_result();
+while ($row = $result->fetch_assoc()) {
+    $sections[] = $row['student_section'];
+}
+$stmt->close();
+
+// Apply filters if set
+$selected_grade = isset($_POST['grade_section']) ? $_POST['grade_section'] : '';
+$selected_section = isset($_POST['student_section']) ? $_POST['student_section'] : '';
+
+$sql = "SELECT * FROM beneficiary_details WHERE session_id = ?";
+$params = [$session_id];
+$types = "s";
+
+if (!empty($selected_grade)) {
+    $sql .= " AND grade_section = ?";
+    $params[] = $selected_grade;
+    $types .= "s";
+}
+
+if (!empty($selected_section)) {
+    $sql .= " AND student_section = ?";
+    $params[] = $selected_section;
+    $types .= "s";
+}
+
+$sql .= " ORDER BY name";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param($types, ...$params);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
 
-<br>
 
+<!-- Filter Form -->
+<form method="POST" action="beneficiary_attendance.php" class="form-inline mb-3">
+    <label for="grade_section" class="mr-2">Grade Level:</label>
+    <select name="grade_section" id="grade_section" class="form-control mr-3">
+        <option value="">All</option>
+        <?php foreach ($grades as $grade): ?>
+            <option value="<?= $grade ?>" <?= ($selected_grade == $grade) ? 'selected' : '' ?>><?= $grade ?></option>
+        <?php endforeach; ?>
+    </select>
 
-    <form method="POST" action="submit_attendance.php">
+    <label for="student_section" class="mr-2">Section:</label>
+    <select name="student_section" id="student_section" class="form-control mr-3">
+        <option value="">All</option>
+        <?php foreach ($sections as $section): ?>
+            <option value="<?= $section ?>" <?= ($selected_section == $section) ? 'selected' : '' ?>><?= $section ?></option>
+        <?php endforeach; ?>
+    </select>
+
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+
+<!-- Attendance Form -->
+<form method="POST" action="submit_attendance.php">
     <div class="form-row align-items-center">
-                    <div class="col-auto">
-                    <label for="attendance_date">Select Date of Attendance:</label>
-                    <input type="date" name="attendance_date" id="attendance_date" class="form-control" required>
-                </div>
+        <div class="col-auto">
+            <label for="attendance_date">Select Date of Attendance:</label>
+            <input type="date" name="attendance_date" id="attendance_date" class="form-control" value="<?= date('Y-m-d'); ?>" required>
+        </div>
+    </div>
 
-                 </div>
-</div>
+    <!-- Toggle Attendance Mode Button -->
+    <button type="button" id="toggleMode" class="btn btn-secondary mb-3">Switch to Mark Absent Mode</button>
+    <input type="hidden" name="attendance_mode" id="attendance_mode" value="Present">
 
-        
-        <!-- Table Section -->
-        <div class="col-md-12">
-            <div class="white_shd full margin_bottom_30">
-                <div class="full graph_head">
-                    <div class="heading1 margin_0">
-                        <h2>Beneficiary Attendance</h2>
-                    </div>
+    <!-- Table Section -->
+    <div class="col-md-12">
+        <div class="white_shd full margin_bottom_30">
+            <div class="full graph_head">
+                <div class="heading1 margin_0">
+                    <h2>Beneficiary Attendance</h2>
                 </div>
-                <div class="table_section padding_infor_info">
-                    <div class="table-responsive-sm">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Beneficiary Name</th>
-                                    <th>Grade & Section</th>
-                                    <th>Status (Present/Absent)</th>
-                                    <th>Meal Served</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php while ($row = $result->fetch_assoc()) { ?>
+            </div>
+
+            <div class="table_section padding_infor_info">
+                <div class="table-responsive-sm">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Beneficiary Name</th>
+                                <th>Grade & Section</th>
+                                <th>Status (Present/Absent)</th>
+                                <th>Meal Served</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php while ($row = $result->fetch_assoc()) { ?>
                                 <tr>
                                     <td><?= htmlspecialchars($row['name']) ?></td>
-                                    <td><?= htmlspecialchars($row['grade_section']) ?></td>
+                                    <td><?= htmlspecialchars($row['grade_section'] . " - " . $row['student_section']) ?></td>
                                     <td>
-                                        <select name="status[<?= $row['id'] ?>]" class="form-control" required>
-                                            <option value="Present">Present</option>
-                                            <option value="Absent">Absent</option>
-                                        </select>
+                                        <!-- Checkbox with hidden input for unchecked state -->
+                                        <input type="hidden" name="status[<?= $row['id'] ?>]" value="Absent">
+                                        <input type="checkbox" name="status[<?= $row['id'] ?>]" value="Present" class="attendance-checkbox">
                                     </td>
                                     <td>
                                         <select name="meal_served[<?= $row['id'] ?>]" class="form-control" required>
@@ -314,23 +368,30 @@ $result = $stmt->get_result();
                                         </select>
                                     </td>
                                 </tr>
-                                <?php } ?>
-                            </tbody>
-                        </table>
-                    </div>
+                            <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
 
-        <button type="submit" class="btn btn-primary">Submit Attendance</button>
-    </form>
+    <button type="submit" class="btn btn-primary">Submit Attendance</button>
+</form>
 
-</div>
+<script>
+    // JavaScript for toggling between Present and Absent modes
+    document.getElementById('toggleMode').addEventListener('click', function() {
+        const modeInput = document.getElementById('attendance_mode');
+        const isPresentMode = modeInput.value === 'Present';
 
-<?php
-// Close the database connection
-$conn->close();
-?>
+        // Toggle mode
+        modeInput.value = isPresentMode ? 'Absent' : 'Present';
+        
+        // Update button text
+        this.textContent = isPresentMode ? 'Switch to Mark Present Mode' : 'Switch to Mark Absent Mode';
+    });
+</script>
 
 <br>
 <br>

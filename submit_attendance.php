@@ -9,6 +9,7 @@ include("accountconnection.php");
 $attendance_date = $_POST['attendance_date'];
 $status = $_POST['status'];
 $meal_served = $_POST['meal_served'];
+$attendance_mode = $_POST['attendance_mode']; // Retrieve the selected attendance mode (Present/Absent)
 
 // Retrieve session_id of the logged-in user
 $email = $_SESSION['email'];
@@ -22,6 +23,9 @@ $stmt->close();
 
 // Loop through each beneficiary
 foreach ($status as $beneficiary_id => $attendance_status) {
+    // Adjust the attendance status based on the selected attendance mode
+    $final_status = ($attendance_mode === 'Present') ? $attendance_status : ($attendance_status === 'Present' ? 'Absent' : 'Present');
+    
     // Get the corresponding meal served
     $meal = $meal_served[$beneficiary_id];
 
@@ -45,7 +49,7 @@ foreach ($status as $beneficiary_id => $attendance_status) {
         // Record exists, update the existing record
         $update_sql = "UPDATE beneficiary_attendance SET status = ?, meal_served = ? WHERE beneficiary_id = ? AND attendance_date = ? AND session_id = ?";
         $update_stmt = $conn->prepare($update_sql);
-        $update_stmt->bind_param("ssiss", $attendance_status, $meal, $beneficiary_id, $attendance_date, $session_id);
+        $update_stmt->bind_param("ssiss", $final_status, $meal, $beneficiary_id, $attendance_date, $session_id);
         $update_stmt->execute();
         $update_stmt->close();
         
@@ -55,7 +59,7 @@ foreach ($status as $beneficiary_id => $attendance_status) {
         // No record exists, insert a new record with additional fields
         $insert_sql = "INSERT INTO beneficiary_attendance (beneficiary_id, attendance_date, status, meal_served, session_id, name, student_section, grade_section) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $insert_stmt = $conn->prepare($insert_sql);
-        $insert_stmt->bind_param("isssssss", $beneficiary_id, $attendance_date, $attendance_status, $meal, $session_id, $name, $student_section, $grade_section);
+        $insert_stmt->bind_param("isssssss", $beneficiary_id, $attendance_date, $final_status, $meal, $session_id, $name, $student_section, $grade_section);
         $insert_stmt->execute();
         $insert_stmt->close();
 

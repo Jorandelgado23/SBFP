@@ -76,7 +76,7 @@ include("adminauth.php");
             font-size: 16px;
         }
         button {
-            background-color: #28a745;
+            background-color: #0971b8;
             color: white;
             cursor: pointer;
             transition: background-color 0.3s;

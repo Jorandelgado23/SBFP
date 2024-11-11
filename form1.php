@@ -221,8 +221,6 @@ $stmt->close();
                 </select>
                 <div class="invalid-feedback">Please specify if the beneficiary was part of SBFP in previous years.</div>
             </div>
-
-            <!-- New field for Parent's Phone Number -->
           <!-- New field for Parent's Phone Number -->
           <div class="form-group col-md-6">
     <label for="parent_phone" class="form-label">Parent's Phone Number:</label>
@@ -513,76 +511,11 @@ function maskName($name) {
 </div>
 
 
-
-
-<!-- <?php
-include("accountconnection.php");
-
-
-$email = $_SESSION['email'];
-$stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$stmt->store_result();
-$stmt->bind_result($session_id);
-$stmt->fetch();
-$stmt->close();
-
-
-$query = "SELECT name, parent_phone FROM beneficiary_details WHERE session_id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("s", $session_id);
-$stmt->execute();
-$result = $stmt->get_result();
-?>
-
-<div class="col-md-6">
-   <div class="white_shd full margin_bottom_30">
-      <div class="full graph_head">
-         <div class="heading1 margin_0">
-            <h2>Beneficiary Parent Number</h2>
-         </div>
-      </div>
-      <div class="table_section padding_infor_info">
-         <div class="table-responsive-sm">
-            <table class="table table-hover">
-               <thead>
-                  <tr>
-                     <th>Name</th>
-                     <th>Parent Phone Number</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <?php while ($row = $result->fetch_assoc()) { ?>
-                     <tr>
-                        <td><?php echo htmlspecialchars($row['name']); ?></td>
-                        <td><?php echo htmlspecialchars($row['parent_phone']); ?></td>
-                     </tr>
-                  <?php } ?>
-               </tbody>
-            </table>
-         </div>
-      </div>
-   </div>
-</div>
-
-
-<?php
-$stmt->close();
-$conn->close();
-?> -->
-
-
-
-
-
-
 <!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-    <div class="modal-header">
-
+      <div class="modal-header">
         <h5 class="modal-title" id="editModalLabel">Edit Beneficiary Details</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -660,12 +593,52 @@ $conn->close();
             <input type="text" class="form-control" id="edit-nutritional_status_hfa" readonly>
           </div>
 
+          <div class="form-group">
+            <label for="edit-parent_phone">Parent's Phone</label>
+            <input type="text" class="form-control" id="edit-parent_phone" required>
+          </div>
+
+          <!-- New Fields -->
+<div class="form-group">
+  <label for="edit-dewormed">Dewormed</label>
+  <select class="form-control" id="edit-dewormed" required>
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label for="edit-parents_consent_for_milk">Parent's Consent for Milk</label>
+  <select class="form-control" id="edit-parents_consent_for_milk" required>
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label for="edit-participation_in_4ps">Participation in 4Ps</label>
+  <select class="form-control" id="edit-participation_in_4ps" required>
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label for="edit-beneficiary_of_sbfp_in_previous_years">Beneficiary of SBFP in Previous Years</label>
+  <select class="form-control" id="edit-beneficiary_of_sbfp_in_previous_years" required>
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+  </select>
+</div>
+
+
           <button type="button" class="btn btn-primary" id="saveChanges" style="float: right;">Save Changes</button>
         </form>
       </div>
     </div>
   </div>
 </div>
+
 
 
 
@@ -714,43 +687,45 @@ $(document).ready(function() {
         }
     }
 
-    // Handle Edit button click
-    $('.edit-btn').on('click', function() {
-        var id = $(this).data('id');
-        $.ajax({
-            url: 'fetch_beneficiary.php',
-            type: 'post',
-            data: { id: id },
-            success: function(response) {
-                response = JSON.parse(response);
-                $('#edit-id').val(response.id);
-                $('#edit-lrn_no').val(response.lrn_no);  // Add LRN field
-                $('#edit-name').val(response.name);
-                $('#edit-sex').val(response.sex);
-                $('#edit-grade_section').val(response.grade_section);
-                $('#edit-student_section').val(response.student_section);  // Add Student Section field
-                $('#edit-date_of_birth').val(response.date_of_birth);
-                $('#edit-date_of_weighing').val(response.date_of_weighing);
-                $('#edit-age').val(response.age);
-                $('#edit-weight').val(response.weight);
-                $('#edit-height').val(response.height);
-                
-                // Calculate BMI
-                const weight = parseFloat(response.weight);
-                const heightInMeters = parseFloat(response.height) / 100; // Convert cm to m
-                const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2); // Calculate BMI
-                $('#edit-bmi').val(bmi);
-                
-                // Calculate Nutritional Status
-                calculateNutritionalStatus(bmi, document.getElementById('editModal'));
+   // Handle Edit button click
+   $('.edit-btn').on('click', function() {
+    var id = $(this).data('id');
+    $.ajax({
+        url: 'fetch_beneficiary.php',
+        type: 'post',
+        data: { id: id },
+        success: function(response) {
+            response = JSON.parse(response);
+            $('#edit-id').val(response.id);
+            $('#edit-lrn_no').val(response.lrn_no);
+            $('#edit-name').val(response.name);
+            $('#edit-sex').val(response.sex);
+            $('#edit-grade_section').val(response.grade_section);
+            $('#edit-student_section').val(response.student_section);
+            $('#edit-date_of_birth').val(response.date_of_birth);
+            $('#edit-date_of_weighing').val(response.date_of_weighing);
+            $('#edit-age').val(response.age);
+            $('#edit-weight').val(response.weight);
+            $('#edit-height').val(response.height);
+            $('#edit-parent_phone').val(response.parent_phone); 
+            $('#edit-dewormed').val(response.dewormed);
+            $('#edit-parents_consent_for_milk').val(response.parents_consent_for_milk);
+            $('#edit-participation_in_4ps').val(response.participation_in_4ps);
+            $('#edit-beneficiary_of_sbfp_in_previous_years').val(response.beneficiary_of_sbfp_in_previous_years);
+   // Calculate BMI
+   const weight = parseFloat(response.weight);
+            const heightInMeters = parseFloat(response.height) / 100; // Convert cm to m
+            const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2); // Calculate BMI
+            $('#edit-bmi').val(bmi);
 
-                $('#editModal').modal('show');
-            }
-        });
+            // Calculate Nutritional Status
+            calculateNutritionalStatus(bmi, document.getElementById('editModal'));
+            $('#editModal').modal('show');
+        }
     });
+});
 
-
-  // Handle Save Changes button click
+// Handle Save Changes button click
 $('#saveChanges').on('click', function() {
     var id = $('#edit-id').val();
     var lrn_no = $('#edit-lrn_no').val();
@@ -766,6 +741,11 @@ $('#saveChanges').on('click', function() {
     var bmi = $('#edit-bmi').val();
     var nutritional_status_bmia = $('#edit-nutritional_status_bmia').val();
     var nutritional_status_hfa = $('#edit-nutritional_status_hfa').val();
+    var parent_phone = $('#edit-parent_phone').val();
+    var dewormed = $('#edit-dewormed').val();
+    var parents_consent_for_milk = $('#edit-parents_consent_for_milk').val();
+    var participation_in_4ps = $('#edit-participation_in_4ps').val();
+    var beneficiary_of_sbfp_in_previous_years = $('#edit-beneficiary_of_sbfp_in_previous_years').val();
 
     $.ajax({
         url: 'update_beneficiary.php',
@@ -784,7 +764,12 @@ $('#saveChanges').on('click', function() {
             height: height,
             bmi: bmi,
             nutritional_status_bmia: nutritional_status_bmia,
-            nutritional_status_hfa: nutritional_status_hfa
+            nutritional_status_hfa: nutritional_status_hfa,
+            parent_phone: parent_phone,
+            dewormed: dewormed,
+            parents_consent_for_milk: parents_consent_for_milk,
+            participation_in_4ps: participation_in_4ps,
+            beneficiary_of_sbfp_in_previous_years: beneficiary_of_sbfp_in_previous_years
         },
         success: function(response) {
             Swal.fire({
@@ -987,25 +972,31 @@ $('.remove-btn').on('click', function() {
 
 <script>
 function addPrefix(input) {
+    // Only add prefix if the input is empty
     if (input.value.length === 0) {
-        input.value = '+63 ';
+        input.value = '+63'; // Start with the prefix only, no space
     }
 }
 
 function validatePhone(input) {
-    // Remove spaces for validation
-    const value = input.value.replace(/\s/g, '');
-    // Check if it starts with +63 and is 13 characters long
+    // Remove all spaces and ensure no extra characters
+    let value = input.value.replace(/\s/g, '');
+
+    // Check if the value starts with +63 and is the correct length
     if (value.length > 0 && !value.startsWith('+63')) {
-        input.value = '+63 ' + value.substring(3); // Replace the first part with +63
+        // If it doesn't start with +63, replace the first part with +63
+        value = '+63' + value.replace(/^\+63/, '');
     }
-    
-    // Ensure input remains formatted
+
+    // Ensure the length does not exceed 13 characters
     if (value.length > 13) {
-        input.value = value.substring(0, 13); // Limit to 13 characters including +63
+        value = value.substring(0, 13); // Limit to 13 characters including +63
     }
+
+    input.value = value; // Update the input value with the formatted value
 }
 </script>
+
                      
    
 

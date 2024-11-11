@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 03, 2024 at 11:06 AM
+-- Generation Time: Nov 11, 2024 at 04:06 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -53,7 +53,25 @@ INSERT INTO `beneficiaries` (`id`, `division_province`, `city_municipality_baran
 (206, 'Laguna', 'Santa Cruz', 'San Juan Elementary School', '123469', 'sample', 'jaynard sandoval', 'CZP8JeWl'),
 (207, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
 (208, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
-(209, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr');
+(209, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(210, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(211, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(212, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(213, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(214, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(215, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(216, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(217, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(218, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(219, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(220, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(221, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(222, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(223, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(224, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(225, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(226, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr'),
+(227, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', 'e55jUNtr');
 
 -- --------------------------------------------------------
 
@@ -72,6 +90,14 @@ CREATE TABLE `beneficiary_attendance` (
   `student_section` varchar(255) NOT NULL,
   `grade_section` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `beneficiary_attendance`
+--
+
+INSERT INTO `beneficiary_attendance` (`id`, `beneficiary_id`, `attendance_date`, `status`, `meal_served`, `session_id`, `name`, `student_section`, `grade_section`) VALUES
+(72, 121, '2024-11-08', 'Absent', 'H', 'e55jUNtr', 'icievy sandrino', 'apple', 'Grade 6'),
+(73, 148, '2024-11-08', 'Absent', 'H', 'e55jUNtr', 'jeri dominic palasin', 'exmple section', 'Grade 6');
 
 -- --------------------------------------------------------
 
@@ -109,14 +135,10 @@ CREATE TABLE `beneficiary_details` (
 --
 
 INSERT INTO `beneficiary_details` (`id`, `beneficiary_id`, `student_section`, `lrn_no`, `name`, `sex`, `grade_section`, `date_of_birth`, `date_of_weighing`, `age`, `weight`, `height`, `bmi`, `nutritional_status_bmia`, `nutritional_status_hfa`, `dewormed`, `parents_consent_for_milk`, `participation_in_4ps`, `beneficiary_of_sbfp_in_previous_years`, `session_id`, `selected`, `parent_phone`) VALUES
-(121, 198, 'exmple section', '345657757657', 'icievy sandrino', 'Female', 'Grade 5', '2006-02-06', '2024-10-30', '18', 50.00, 120.00, 34.72, 'Obese', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes', 'e55jUNtr', 0, '+639207569581'),
+(121, 198, 'apple', '345657757657', 'icievy sandrino', 'Female', 'Grade 6', '2006-02-06', '2024-11-08', '18', 34.00, 120.00, 23.61, 'Normal', 'Stunted', 'No', 'Yes', 'Yes', 'Yes', 'e55jUNtr', 0, '+639207569581'),
 (122, 199, 'sappire', '111111111111', 'cyrus gaza', 'Female', 'Grade 3', '2018-02-04', '2024-10-15', '6', 19.50, 120.00, 13.54, 'Severely Wasted', 'Normal', 'Yes', 'Yes', 'Yes', 'Yes', 'CZP8JeWl', 0, '+639658078488'),
 (123, 200, 'kamagong', '222222222222', 'shyla', 'Male', 'Grade 5', '2007-02-16', '2024-10-15', '17', 45.00, 140.00, 22.96, 'Normal', 'Tall', 'Yes', 'Yes', 'Yes', 'Yes', 'CZP8JeWl', 0, '+639207569640'),
-(125, 202, 'exmple section', '234234456456', 'joran delgado', 'Male', 'Grade 1', '2018-10-26', '2024-10-28', '6', 40.00, 140.00, 20.41, 'Normal', 'Normal', 'Yes', 'Yes', 'Yes', 'Yes', 'e55jUNtr', 0, '+639203343242'),
-(126, 203, 'exmple section', '4342324234', 'jeri dominic palasin', 'Male', 'Grade 5', '2006-02-16', '2024-10-19', '18', 49.00, 150.00, 21.78, 'Normal', 'Normal', 'Yes', 'Yes', 'Yes', 'Yes', 'e55jUNtr', 0, '+639357800988'),
-(127, 204, 'sappire', '837564234234', 'jelo dikitanan', 'Male', 'Kinder', '2019-02-01', '2024-10-26', '5', 20.60, 100.00, 20.60, 'Normal', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes', 'CZP8JeWl', 0, '+632321343242'),
-(129, 206, 'sample', '456565545456', 'vince', 'Male', 'Grade 1', '2019-02-12', '2024-10-28', '5', 20.00, 110.00, 16.53, 'Wasted', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes', 'CZP8JeWl', 0, '+636575665756'),
-(131, 209, 'example section', '456656456546', 'gaza', 'Male', 'Grade 5', '2002-02-20', '2024-10-30', '22', 45.00, 120.00, 31.25, 'Obese', 'Stunted', 'Yes', 'Yes', 'Yes', 'Yes', 'e55jUNtr', 0, '+634353454354');
+(148, 227, 'exmple section', '456656456546', 'jeri dominic palasin', 'Male', 'Grade 6', '2017-03-08', '2024-11-08', '7', 49.00, 150.00, 21.78, 'Normal', 'Tall', 'Yes', 'Yes', 'Yes', 'Yes', 'e55jUNtr', 0, '+634353454354');
 
 -- --------------------------------------------------------
 
@@ -139,6 +161,13 @@ CREATE TABLE `beneficiary_progress` (
   `grade_section` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `beneficiary_progress`
+--
+
+INSERT INTO `beneficiary_progress` (`id`, `beneficiary_id`, `date_of_progress`, `weight`, `height`, `bmi`, `nutritional_status_bmia`, `nutritional_status_hfa`, `session_id`, `name`, `student_section`, `grade_section`) VALUES
+(86, 121, '2024-11-08', 34.00, 120.00, 23.61, 'Normal', 'Stunted', 'e55jUNtr', NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -149,6 +178,19 @@ CREATE TABLE `grades` (
   `grade_id` int(11) NOT NULL,
   `grade_name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `grades`
+--
+
+INSERT INTO `grades` (`grade_id`, `grade_name`) VALUES
+(1, 'Kinder'),
+(2, 'Grade 1'),
+(3, 'Grade 2'),
+(4, 'Grade 3'),
+(5, 'Grade 4'),
+(6, 'Grade 5'),
+(7, 'Grade 6');
 
 -- --------------------------------------------------------
 
@@ -1280,7 +1322,134 @@ INSERT INTO `recent_activity` (`id`, `email`, `activity`, `activity_type`, `time
 (1196, 'icievy@gmail.com', 'User logged out', 'logout', '2024-11-03 02:54:32', 'read'),
 (1197, 'mainadmin@sbfp.ph', 'User logged in', 'login', '2024-11-03 02:56:06', 'read'),
 (1198, 'mainadmin@sbfp.ph', 'User logged in', 'login', '2024-11-03 03:00:41', 'read'),
-(1199, 'mainadmin@sbfp.ph', 'User logged in', 'login', '2024-11-03 03:02:14', 'new');
+(1199, 'mainadmin@sbfp.ph', 'User logged in', 'login', '2024-11-03 03:02:14', 'read'),
+(1200, 'mainadmin@sbfp.ph', 'User logged in', 'login', '2024-11-04 04:54:38', 'read'),
+(1201, 'icievy@gmail.com', 'User logged in', 'login', '2024-11-04 05:01:37', 'read'),
+(1202, 'icievy@gmail.com', 'User logged out', 'logout', '2024-11-04 05:02:06', 'read'),
+(1203, 'mainadmin@sbfp.ph', 'User logged in', 'login', '2024-11-04 05:02:24', 'read'),
+(1204, 'mainadmin@sbfp.ph', 'User logged in', 'login', '2024-11-04 05:03:07', 'read'),
+(1205, 'icievy@gmail.com', 'User logged in', 'login', '2024-11-04 05:09:22', 'read'),
+(1206, 'icievy@gmail.com', 'User logged out', 'logout', '2024-11-04 05:10:16', 'read'),
+(1207, 'mainadmin@sbfp.ph', 'User logged in', 'login', '2024-11-04 05:10:34', 'read'),
+(1208, 'icievy@gmail.com', 'User logged in', 'login', '2024-11-04 05:19:34', 'new'),
+(1209, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:28:47', 'new'),
+(1210, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:28:54', 'new'),
+(1211, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 132', 'delete', '2024-11-04 05:31:43', 'new'),
+(1212, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:43:18', 'new'),
+(1213, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:51:35', 'new'),
+(1214, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:56:07', 'new'),
+(1215, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:56:30', 'new'),
+(1216, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:56:47', 'new'),
+(1217, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:57:13', 'new'),
+(1218, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:57:28', 'new'),
+(1219, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:57:37', 'new'),
+(1220, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 06:06:41', 'new'),
+(1221, 'mainadmin@sbfp.ph', 'User logged in', 'login', '2024-11-04 06:21:19', 'new'),
+(1222, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 135', 'delete', '2024-11-04 06:37:35', 'new'),
+(1223, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 134', 'delete', '2024-11-04 06:37:37', 'new'),
+(1224, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 133', 'delete', '2024-11-04 06:39:37', 'new'),
+(1225, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 131', 'delete', '2024-11-04 06:39:57', 'new'),
+(1226, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 06:40:47', 'new'),
+(1227, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 136', 'delete', '2024-11-04 06:46:12', 'new'),
+(1228, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 137', 'delete', '2024-11-04 06:49:07', 'new'),
+(1229, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 06:49:35', 'new'),
+(1230, 'icievy@gmail.com', 'Inserted milkcomponent data', 'data_insert', '2024-11-04 06:52:28', 'new'),
+(1231, 'icievy@gmail.com', 'Deleted milk component record for student: icievy sandrino (ID: 86)', 'delete', '2024-11-04 06:52:31', 'new'),
+(1232, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 138', 'delete', '2024-11-04 06:57:06', 'new'),
+(1233, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 139', 'delete', '2024-11-04 06:58:37', 'new'),
+(1234, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 140', 'delete', '2024-11-04 07:01:45', 'new'),
+(1235, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 141', 'delete', '2024-11-04 07:04:49', 'new'),
+(1236, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 126', 'delete', '2024-11-04 07:06:13', 'new'),
+(1237, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 142', 'delete', '2024-11-04 07:09:56', 'new'),
+(1238, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 125', 'delete', '2024-11-04 07:11:08', 'new'),
+(1239, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 07:11:47', 'new'),
+(1240, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 07:11:54', 'new'),
+(1241, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 143', 'delete', '2024-11-04 07:13:20', 'new'),
+(1242, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 144', 'delete', '2024-11-04 07:17:13', 'new'),
+(1243, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 145', 'delete', '2024-11-04 07:18:01', 'new'),
+(1244, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 146', 'delete', '2024-11-04 07:21:53', 'new'),
+(1245, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 147', 'delete', '2024-11-04 07:24:04', 'new'),
+(1246, 'jaynigger@gmail.com', 'User logged in', 'login', '2024-11-04 07:24:44', 'new'),
+(1247, 'jaynigger@gmail.com', 'Deleted beneficiary details for ID: 129', 'delete', '2024-11-04 07:24:54', 'new'),
+(1248, 'icievy@gmail.com', 'User logged out', 'logout', '2024-11-04 07:29:25', 'new'),
+(1249, 'jaynigger@gmail.com', 'User logged in', 'login', '2024-11-04 07:29:35', 'new'),
+(1250, 'jaynigger@gmail.com', 'Deleted beneficiary details for ID: 127', 'delete', '2024-11-04 07:29:41', 'new'),
+(1251, 'jaynigger@gmail.com', 'User logged out', 'logout', '2024-11-04 07:33:50', 'new'),
+(1252, 'jaynigger@gmail.com', 'User logged in', 'login', '2024-11-07 18:00:49', 'new'),
+(1253, 'jaynigger@gmail.com', 'User logged out', 'logout', '2024-11-07 18:01:53', 'new'),
+(1254, 'icievy@gmail.com', 'User logged in', 'login', '2024-11-07 22:34:59', 'new'),
+(1255, 'icievy@gmail.com', 'User logged out', 'logout', '2024-11-07 22:36:33', 'new'),
+(1256, 'mainadmin@sbfp.ph', 'User logged in', 'login', '2024-11-07 22:36:45', 'new'),
+(1257, 'icievy@gmail.com', 'User logged in', 'login', '2024-11-07 22:38:38', 'new'),
+(1258, 'icievy@gmail.com', 'Inserted attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:19:26', 'new'),
+(1259, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:24:56', 'new'),
+(1260, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:08', 'new'),
+(1261, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:11', 'new'),
+(1262, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:13', 'new'),
+(1263, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:15', 'new'),
+(1264, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:17', 'new'),
+(1265, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:19', 'new'),
+(1266, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:19', 'new'),
+(1267, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:21', 'new'),
+(1268, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:29', 'new'),
+(1269, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:48', 'new'),
+(1270, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:53', 'new'),
+(1271, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:27:54', 'new'),
+(1272, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:27:59', 'new'),
+(1273, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:29:12', 'new'),
+(1274, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:29:17', 'new'),
+(1275, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:31:52', 'new'),
+(1276, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:35:41', 'new'),
+(1277, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:36:03', 'new'),
+(1278, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:36:09', 'new'),
+(1279, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:36:17', 'new'),
+(1280, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:36:23', 'new'),
+(1281, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:36:29', 'new'),
+(1282, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:43:24', 'new'),
+(1283, 'icievy@gmail.com', 'Inserted attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:43:24', 'new'),
+(1284, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:43:39', 'new'),
+(1285, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:43:39', 'new'),
+(1286, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:47:10', 'new'),
+(1287, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:47:10', 'new'),
+(1288, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:47:22', 'new'),
+(1289, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:47:22', 'new'),
+(1290, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:47:33', 'new'),
+(1291, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:47:33', 'new'),
+(1292, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:47:41', 'new'),
+(1293, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:47:41', 'new'),
+(1294, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:48:01', 'new'),
+(1295, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:48:01', 'new'),
+(1296, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:48:12', 'new'),
+(1297, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:48:13', 'new'),
+(1298, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:51:45', 'new'),
+(1299, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:51:45', 'new'),
+(1300, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:52:47', 'new'),
+(1301, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:52:47', 'new'),
+(1302, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:56:26', 'new'),
+(1303, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:56:26', 'new'),
+(1304, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:56:53', 'new'),
+(1305, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:56:53', 'new'),
+(1306, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:57:09', 'new'),
+(1307, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:57:09', 'new'),
+(1308, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:57:44', 'new'),
+(1309, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:57:44', 'new'),
+(1310, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:58:44', 'new'),
+(1311, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:58:44', 'new'),
+(1312, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:58:50', 'new'),
+(1313, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:58:51', 'new'),
+(1314, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:59:07', 'new'),
+(1315, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:59:07', 'new'),
+(1316, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:59:20', 'new'),
+(1317, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:59:20', 'new'),
+(1318, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-08 00:00:01', 'new'),
+(1319, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-08 00:00:01', 'new'),
+(1320, 'icievy@gmail.com', 'Inserted progress for beneficiary ID: 121 on date: 2024-11-08 Updated beneficiary details.', 'progress_insert_details_update', '2024-11-08 00:05:52', 'new'),
+(1321, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-08 00:09:56', 'new'),
+(1322, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-08 00:09:56', 'new'),
+(1323, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-08 00:12:39', 'new'),
+(1324, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-08 00:12:39', 'new'),
+(1325, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-08 00:12:46', 'new'),
+(1326, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-08 00:12:46', 'new');
 
 -- --------------------------------------------------------
 
@@ -1929,7 +2098,128 @@ INSERT INTO `sbfp_recent_activity` (`id`, `email`, `activity`, `activity_type`, 
 (624, 'jaynigger@gmail.com', 'User logged in', 'login', '2024-11-03 02:21:42', 'read'),
 (625, 'jaynigger@gmail.com', 'User logged out', 'logout', '2024-11-03 02:22:18', 'read'),
 (626, 'icievy@gmail.com', 'User logged in', 'login', '2024-11-03 02:36:26', 'read'),
-(627, 'icievy@gmail.com', 'User logged out', 'logout', '2024-11-03 02:54:32', 'new');
+(627, 'icievy@gmail.com', 'User logged out', 'logout', '2024-11-03 02:54:32', 'read'),
+(628, 'icievy@gmail.com', 'User logged in', 'login', '2024-11-04 05:01:37', 'read'),
+(629, 'icievy@gmail.com', 'User logged out', 'logout', '2024-11-04 05:02:06', 'read'),
+(630, 'icievy@gmail.com', 'User logged in', 'login', '2024-11-04 05:09:22', 'read'),
+(631, 'icievy@gmail.com', 'User logged out', 'logout', '2024-11-04 05:10:16', 'read'),
+(632, 'icievy@gmail.com', 'User logged in', 'login', '2024-11-04 05:19:34', 'read'),
+(633, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:28:47', 'read'),
+(634, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:28:54', 'read'),
+(635, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 132', 'delete', '2024-11-04 05:31:43', 'read'),
+(636, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:43:18', 'read'),
+(637, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:51:35', 'read'),
+(638, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:56:07', 'read'),
+(639, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:56:30', 'read'),
+(640, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:56:47', 'read'),
+(641, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:57:13', 'read'),
+(642, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:57:28', 'read'),
+(643, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 05:57:37', 'read'),
+(644, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 06:06:41', 'read'),
+(645, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 135', 'delete', '2024-11-04 06:37:35', 'read'),
+(646, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 134', 'delete', '2024-11-04 06:37:37', 'read'),
+(647, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 133', 'delete', '2024-11-04 06:39:37', 'read'),
+(648, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 131', 'delete', '2024-11-04 06:39:57', 'read'),
+(649, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 06:40:47', 'read'),
+(650, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 136', 'delete', '2024-11-04 06:46:12', 'read'),
+(651, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 137', 'delete', '2024-11-04 06:49:07', 'read'),
+(652, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 06:49:35', 'read'),
+(653, 'icievy@gmail.com', 'Inserted milkcomponent data', 'data_insert', '2024-11-04 06:52:28', 'read'),
+(654, 'icievy@gmail.com', 'Deleted milk component record for student: icievy sandrino (ID: 86)', 'delete', '2024-11-04 06:52:31', 'read'),
+(655, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 138', 'delete', '2024-11-04 06:57:06', 'read'),
+(656, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 139', 'delete', '2024-11-04 06:58:37', 'read'),
+(657, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 140', 'delete', '2024-11-04 07:01:45', 'read'),
+(658, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 141', 'delete', '2024-11-04 07:04:49', 'read'),
+(659, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 126', 'delete', '2024-11-04 07:06:13', 'read'),
+(660, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 142', 'delete', '2024-11-04 07:09:56', 'read'),
+(661, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 125', 'delete', '2024-11-04 07:11:08', 'read'),
+(662, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 07:11:47', 'read'),
+(663, 'icievy@gmail.com', 'Updated beneficiary details for ID: 121', 'update', '2024-11-04 07:11:54', 'read'),
+(664, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 143', 'delete', '2024-11-04 07:13:20', 'read'),
+(665, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 144', 'delete', '2024-11-04 07:17:13', 'read'),
+(666, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 145', 'delete', '2024-11-04 07:18:01', 'read'),
+(667, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 146', 'delete', '2024-11-04 07:21:53', 'read'),
+(668, 'icievy@gmail.com', 'Deleted beneficiary details for ID: 147', 'delete', '2024-11-04 07:24:04', 'read'),
+(669, 'jaynigger@gmail.com', 'User logged in', 'login', '2024-11-04 07:24:44', 'read'),
+(670, 'jaynigger@gmail.com', 'Deleted beneficiary details for ID: 129', 'delete', '2024-11-04 07:24:54', 'read'),
+(671, 'icievy@gmail.com', 'User logged out', 'logout', '2024-11-04 07:29:25', 'read'),
+(672, 'jaynigger@gmail.com', 'User logged in', 'login', '2024-11-04 07:29:35', 'read'),
+(673, 'jaynigger@gmail.com', 'Deleted beneficiary details for ID: 127', 'delete', '2024-11-04 07:29:41', 'read'),
+(674, 'jaynigger@gmail.com', 'User logged out', 'logout', '2024-11-04 07:33:50', 'read'),
+(675, 'jaynigger@gmail.com', 'User logged in', 'login', '2024-11-07 18:00:49', 'read'),
+(676, 'jaynigger@gmail.com', 'User logged out', 'logout', '2024-11-07 18:01:53', 'new'),
+(677, 'icievy@gmail.com', 'User logged in', 'login', '2024-11-07 22:34:59', 'new'),
+(678, 'icievy@gmail.com', 'User logged out', 'logout', '2024-11-07 22:36:33', 'new'),
+(679, 'icievy@gmail.com', 'User logged in', 'login', '2024-11-07 22:38:38', 'new'),
+(680, 'icievy@gmail.com', 'Inserted attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:19:26', 'new'),
+(681, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:24:56', 'new'),
+(682, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:08', 'new'),
+(683, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:11', 'new'),
+(684, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:13', 'new'),
+(685, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:15', 'new'),
+(686, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:17', 'new'),
+(687, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:19', 'new'),
+(688, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:19', 'new'),
+(689, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:21', 'new'),
+(690, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:29', 'new'),
+(691, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:48', 'new'),
+(692, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:26:53', 'new'),
+(693, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:27:54', 'new'),
+(694, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:27:59', 'new'),
+(695, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:29:12', 'new'),
+(696, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:29:17', 'new'),
+(697, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:31:52', 'new'),
+(698, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:35:41', 'new'),
+(699, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:36:03', 'new'),
+(700, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:36:09', 'new'),
+(701, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:36:17', 'new'),
+(702, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:36:23', 'new'),
+(703, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:36:29', 'new'),
+(704, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:43:24', 'new'),
+(705, 'icievy@gmail.com', 'Inserted attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:43:24', 'new'),
+(706, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:43:39', 'new'),
+(707, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:43:39', 'new'),
+(708, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:47:10', 'new'),
+(709, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:47:10', 'new'),
+(710, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:47:22', 'new'),
+(711, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:47:22', 'new'),
+(712, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:47:33', 'new'),
+(713, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:47:33', 'new'),
+(714, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:47:41', 'new'),
+(715, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:47:41', 'new'),
+(716, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:48:01', 'new'),
+(717, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:48:01', 'new'),
+(718, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:48:12', 'new'),
+(719, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:48:13', 'new'),
+(720, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:51:45', 'new'),
+(721, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:51:45', 'new'),
+(722, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:52:47', 'new'),
+(723, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:52:47', 'new'),
+(724, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:56:26', 'new'),
+(725, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:56:26', 'new'),
+(726, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:56:53', 'new'),
+(727, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:56:53', 'new'),
+(728, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:57:09', 'new'),
+(729, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:57:09', 'new'),
+(730, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:57:44', 'new'),
+(731, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:57:44', 'new'),
+(732, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:58:44', 'new'),
+(733, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:58:44', 'new'),
+(734, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:58:50', 'new'),
+(735, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:58:51', 'new'),
+(736, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:59:07', 'new'),
+(737, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:59:07', 'new'),
+(738, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-07 23:59:20', 'new'),
+(739, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-07 23:59:20', 'new'),
+(740, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-08 00:00:01', 'new'),
+(741, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-08 00:00:01', 'new'),
+(742, 'icievy@gmail.com', 'Inserted progress for beneficiary ID: 121 on date: 2024-11-08 Updated beneficiary details.', 'progress_insert_details_update', '2024-11-08 00:05:52', 'new'),
+(743, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-08 00:09:56', 'new'),
+(744, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-08 00:09:56', 'new'),
+(745, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-08 00:12:39', 'new'),
+(746, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-08 00:12:39', 'new'),
+(747, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 121', 'attendance_update', '2024-11-08 00:12:46', 'new'),
+(748, 'icievy@gmail.com', 'Updated attendance for beneficiary ID: 148', 'attendance_update', '2024-11-08 00:12:46', 'new');
 
 -- --------------------------------------------------------
 
@@ -2006,7 +2296,8 @@ INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `phone_
 (58, 'icievy', 'sandrino', 'icievy@gmail.com', '$2y$10$0BIp35xtpImPTzhHaCsAcecfCC.VenPl1GPOeD/oQ0X8v8YFoTZ.S', '09883273453', '2002-10-29', '2024-09-30 17:29:43', 'sbfp', NULL, 'e55jUNtr', 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'Gatid, Santa Cruz, Laguna', 'Barangay Gatid', 'LOREVIE K. RIVERA', NULL, NULL),
 (60, 'jeri dominic', 'palasin', 'palasin@gmail.com', '$2y$10$1Bw0Ka1aCg9DGI4vdaKxb.53hu62loEMcXnIJCFOK6Xtz24ZeqbOm', '09123456789', '2002-09-19', '2024-09-30 18:07:53', 'admin', NULL, '', 'Laguna', 'Santa Cruz', 'Labuin Elementary School', '123462', 'Labuin, Santa Cruz, Laguna', 'Barangay Labuin', 'MARIFE F. DUMA', NULL, NULL),
 (61, 'dominic', 'gaza', 'gaza@gmail.com', '$2y$10$QtlbuEgIFufUJIwcKG5M/ORSR.rVU9C2Qe.0NSi3O4m9e9.vsE/ue', '09213546554', '2000-10-29', '2024-09-30 18:08:56', 'admin', NULL, 'QTeGprdV', 'Laguna', 'Santa Cruz', 'Labuin Elementary School', '123462', 'Labuin, Santa Cruz, Laguna', 'Barangay Labuin', 'example name', NULL, NULL),
-(64, 'jaynard', 'sandoval', 'jaynigger@gmail.com', '$2y$10$lw1kdb0lAyXsF9Tvcrv4WelVnDr3vjdPNyVx8qId946kskx.DYCce', '09123456789', '2002-08-20', '2024-10-15 11:47:56', 'sbfp', NULL, 'CZP8JeWl', 'Laguna', 'Santa Cruz', 'San Juan Elementary School', '123469', 'San Juan, Santa Cruz, Laguna', 'Barangay San Juan', 'sample', NULL, NULL);
+(64, 'jaynard', 'sandoval', 'jaynigger@gmail.com', '$2y$10$lw1kdb0lAyXsF9Tvcrv4WelVnDr3vjdPNyVx8qId946kskx.DYCce', '09123456789', '2002-08-20', '2024-10-15 11:47:56', 'sbfp', NULL, 'CZP8JeWl', 'Laguna', 'Santa Cruz', 'San Juan Elementary School', '123469', 'San Juan, Santa Cruz, Laguna', 'Barangay San Juan', 'sample', NULL, NULL),
+(76, 'MAIN', 'ADMIN', 'mainadmin@sbfp.ph', '$2y$10$0q6zeV7NaWPczyCWxbcqrujg20.FNUx0sailYM3EQlabHArQXxBnS', NULL, NULL, '2024-11-04 11:54:35', 'admin', NULL, 'default_session_id', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2114,31 +2405,31 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `beneficiaries`
 --
 ALTER TABLE `beneficiaries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=210;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=228;
 
 --
 -- AUTO_INCREMENT for table `beneficiary_attendance`
 --
 ALTER TABLE `beneficiary_attendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT for table `beneficiary_details`
 --
 ALTER TABLE `beneficiary_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
 
 --
 -- AUTO_INCREMENT for table `beneficiary_progress`
 --
 ALTER TABLE `beneficiary_progress`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT for table `milkcomponent`
 --
 ALTER TABLE `milkcomponent`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT for table `quarterly_reportform8`
@@ -2150,19 +2441,19 @@ ALTER TABLE `quarterly_reportform8`
 -- AUTO_INCREMENT for table `recent_activity`
 --
 ALTER TABLE `recent_activity`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1200;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1327;
 
 --
 -- AUTO_INCREMENT for table `sbfp_recent_activity`
 --
 ALTER TABLE `sbfp_recent_activity`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=628;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=749;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- Constraints for dumped tables

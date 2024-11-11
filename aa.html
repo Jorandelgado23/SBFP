@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBFP Form 3 (2020)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 5px;
+        }
+        .header-section {
+            margin-bottom: 20px;
+        }
+        .header-section input {
+            width: 60%;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        .footer-section {
+            margin-top: 20px;
+        }
+        .footer-section input {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>School-Based Feeding Program (SBFP) Summary of Beneficiaries & Start of Feeding</h2>
+
+<!-- Header Section -->
+<div class="header-section">
+    <label>Division/Province: <input type="text" name="division_province"></label><br>
+    <label>City Municipality/Barangay: <input type="text" name="city_municipality_barangay"></label><br>
+    <label>Name of School/School District: <input type="text" name="school_name"></label><br>
+    <label>School ID Number: <input type="text" name="school_id"></label><br>
+    <label>Date of Start of Feeding: <input type="text" name="start_date"></label><br>
+    <label>Last Mile School (Yes/No): <input type="text" name="last_mile"></label>
+</div>
+
+<!-- Table Section -->
+<table>
+    <thead>
+        <tr>
+            <th rowspan="2">Number of Undernourished School Children by Grade Level</th>
+            <th colspan="6">Nutritional Status at Start/End of Feeding</th>
+            <th rowspan="2">No. of Pupils at-Risk of Dropping Out (PARDO)</th>
+            <th colspan="4">No. of Secondary Targets</th>
+            <th rowspan="2">No. of 4Ps Beneficiaries</th>
+            <th rowspan="2">No. of Pupils Who Are Beneficiaries in Previous Years (Repeaters)</th>
+        </tr>
+        <tr>
+            <th>SW</th>
+            <th>W</th>
+            <th>OW</th>
+            <th>O</th>
+            <th>SS</th>
+            <th>N</th>
+            <th>No. of Stunted/Severely Stunted</th>
+            <th>No. of Indigent Learners</th>
+            <th>No. of Indigenous Peoples (IPs)</th>
+            <th>No. of Learners Dewormed</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Kinder</td>
+            <td><input type="number" name="kinder_sw"></td>
+            <td><input type="number" name="kinder_w"></td>
+            <td><input type="number" name="kinder_ow"></td>
+            <td><input type="number" name="kinder_o"></td>
+            <td><input type="number" name="kinder_ss"></td>
+            <td><input type="number" name="kinder_n"></td>
+            <td><input type="number" name="kinder_pardo"></td>
+            <td><input type="number" name="kinder_stunted"></td>
+            <td><input type="number" name="kinder_indigent"></td>
+            <td><input type="number" name="kinder_indigenous"></td>
+            <td><input type="number" name="kinder_dewormed"></td>
+            <td><input type="number" name="kinder_4ps"></td>
+            <td><input type="number" name="kinder_repeaters"></td>
+        </tr>
+        <tr>
+            <td>Grade I</td>
+            <td><input type="number" name="grade1_sw"></td>
+            <td><input type="number" name="grade1_w"></td>
+            <td><input type="number" name="grade1_ow"></td>
+            <td><input type="number" name="grade1_o"></td>
+            <td><input type="number" name="grade1_ss"></td>
+            <td><input type="number" name="grade1_n"></td>
+            <td><input type="number" name="grade1_pardo"></td>
+            <td><input type="number" name="grade1_stunted"></td>
+            <td><input type="number" name="grade1_indigent"></td>
+            <td><input type="number" name="grade1_indigenous"></td>
+            <td><input type="number" name="grade1_dewormed"></td>
+            <td><input type="number" name="grade1_4ps"></td>
+            <td><input type="number" name="grade1_repeaters"></td>
+        </tr>
+        <!-- Repeat the same structure for Grade II to Grade VI -->
+        <tr>
+            <td colspan="14">Total</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- Footer Section -->
+<div class="footer-section">
+    <label>Prepared by: <input type="text" name="prepared_by"></label><br>
+    <label>Approved by: <input type="text" name="approved_by"></label><br>
+</div>
+
+</body>
+</html>

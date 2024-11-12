@@ -290,11 +290,6 @@ $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 19aabae9cda03818840dc8cc9fa05b6090c95278
 <!-- Filter Form -->
 <form method="POST" action="beneficiary_attendance.php" class="form-inline mb-3">
     <label for="grade_section" class="mr-2">Grade Level:</label>
@@ -326,11 +321,7 @@ $result = $stmt->get_result();
     </div>
 
     <!-- Toggle Attendance Mode Button -->
-<<<<<<< HEAD
-    <button type="button" id="toggleMode" class="btn btn-secondary mb-3">Switch to Mark Absent Mode</button>
-=======
     <button type="button" id="toggleMode" class="btn btn-secondary mb-3">Select Present</button>
->>>>>>> 19aabae9cda03818840dc8cc9fa05b6090c95278
     <input type="hidden" name="attendance_mode" id="attendance_mode" value="Present">
 
     <!-- Table Section -->
@@ -350,9 +341,6 @@ $result = $stmt->get_result();
                                 <th>Beneficiary Name</th>
                                 <th>Grade & Section</th>
                                 <th>Status (Present/Absent)</th>
-<<<<<<< HEAD
-                                <th>Meal Served</th>
-=======
                                 <th>
                                     <!-- Dropdown for meal selection in the header -->
                                     <select id="meal-served-header" class="form-control">
@@ -365,7 +353,6 @@ $result = $stmt->get_result();
                                         <option value="H/M2">Hot Meal & Milk Twice (H/M2)</option>
                                     </select>
                                 </th>
->>>>>>> 19aabae9cda03818840dc8cc9fa05b6090c95278
                             </tr>
                         </thead>
                         <tbody>
@@ -379,20 +366,8 @@ $result = $stmt->get_result();
                                         <input type="checkbox" name="status[<?= $row['id'] ?>]" value="Present" class="attendance-checkbox">
                                     </td>
                                     <td>
-<<<<<<< HEAD
-                                        <select name="meal_served[<?= $row['id'] ?>]" class="form-control" required>
-                                            <option value="H">Hot Meal (H)</option>
-                                            <option value="M">Milk (M)</option>
-                                            <option value="H/M">Hot Meal & Milk (H/M)</option>
-                                            <option value="A">Absent (A)</option>
-                                            <option value="H2">Hot Meal Twice (H2)</option>
-                                            <option value="M2">Milk Twice (M2)</option>
-                                            <option value="H/M2">Hot Meal & Milk Twice (H/M2)</option>
-                                        </select>
-=======
                                         <!-- Individual dropdown for each student -->
                                         <input name="meal_served[<?= $row['id'] ?>]" class="form-control meal-served-dropdown" readonly required>
->>>>>>> 19aabae9cda03818840dc8cc9fa05b6090c95278
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -407,12 +382,8 @@ $result = $stmt->get_result();
 </form>
 
 <script>
-<<<<<<< HEAD
-    // JavaScript for toggling between Present and Absent modes
-=======
 document.addEventListener('DOMContentLoaded', function() {
     // Toggle attendance mode button functionality
->>>>>>> 19aabae9cda03818840dc8cc9fa05b6090c95278
     document.getElementById('toggleMode').addEventListener('click', function() {
         const modeInput = document.getElementById('attendance_mode');
         const isPresentMode = modeInput.value === 'Present';
@@ -421,14 +392,6 @@ document.addEventListener('DOMContentLoaded', function() {
         modeInput.value = isPresentMode ? 'Absent' : 'Present';
         
         // Update button text
-<<<<<<< HEAD
-        this.textContent = isPresentMode ? 'Switch to Mark Present Mode' : 'Switch to Mark Absent Mode';
-    });
-</script>
-
-<br>
-<br>
-=======
         this.textContent = isPresentMode ? 'Select Absent' : 'Select Present';
 
         // Update all meal served fields based on the new mode
@@ -539,7 +502,6 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 
->>>>>>> 19aabae9cda03818840dc8cc9fa05b6090c95278
 
 
 

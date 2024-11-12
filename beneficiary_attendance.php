@@ -290,8 +290,11 @@ $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 19aabae9cda03818840dc8cc9fa05b6090c95278
 <!-- Filter Form -->
 <form method="POST" action="beneficiary_attendance.php" class="form-inline mb-3">
     <label for="grade_section" class="mr-2">Grade Level:</label>
@@ -323,7 +326,11 @@ $result = $stmt->get_result();
     </div>
 
     <!-- Toggle Attendance Mode Button -->
+<<<<<<< HEAD
     <button type="button" id="toggleMode" class="btn btn-secondary mb-3">Switch to Mark Absent Mode</button>
+=======
+    <button type="button" id="toggleMode" class="btn btn-secondary mb-3">Select Present</button>
+>>>>>>> 19aabae9cda03818840dc8cc9fa05b6090c95278
     <input type="hidden" name="attendance_mode" id="attendance_mode" value="Present">
 
     <!-- Table Section -->
@@ -343,7 +350,22 @@ $result = $stmt->get_result();
                                 <th>Beneficiary Name</th>
                                 <th>Grade & Section</th>
                                 <th>Status (Present/Absent)</th>
+<<<<<<< HEAD
                                 <th>Meal Served</th>
+=======
+                                <th>
+                                    <!-- Dropdown for meal selection in the header -->
+                                    <select id="meal-served-header" class="form-control">
+                                        <option value="H">Hot Meal (H)</option>
+                                        <option value="M">Milk (M)</option>
+                                        <option value="H/M">Hot Meal & Milk (H/M)</option>
+                                        <option value="A">Absent (A)</option>
+                                        <option value="H2">Hot Meal Twice (H2)</option>
+                                        <option value="M2">Milk Twice (M2)</option>
+                                        <option value="H/M2">Hot Meal & Milk Twice (H/M2)</option>
+                                    </select>
+                                </th>
+>>>>>>> 19aabae9cda03818840dc8cc9fa05b6090c95278
                             </tr>
                         </thead>
                         <tbody>
@@ -357,6 +379,7 @@ $result = $stmt->get_result();
                                         <input type="checkbox" name="status[<?= $row['id'] ?>]" value="Present" class="attendance-checkbox">
                                     </td>
                                     <td>
+<<<<<<< HEAD
                                         <select name="meal_served[<?= $row['id'] ?>]" class="form-control" required>
                                             <option value="H">Hot Meal (H)</option>
                                             <option value="M">Milk (M)</option>
@@ -366,6 +389,10 @@ $result = $stmt->get_result();
                                             <option value="M2">Milk Twice (M2)</option>
                                             <option value="H/M2">Hot Meal & Milk Twice (H/M2)</option>
                                         </select>
+=======
+                                        <!-- Individual dropdown for each student -->
+                                        <input name="meal_served[<?= $row['id'] ?>]" class="form-control meal-served-dropdown" readonly required>
+>>>>>>> 19aabae9cda03818840dc8cc9fa05b6090c95278
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -380,7 +407,12 @@ $result = $stmt->get_result();
 </form>
 
 <script>
+<<<<<<< HEAD
     // JavaScript for toggling between Present and Absent modes
+=======
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle attendance mode button functionality
+>>>>>>> 19aabae9cda03818840dc8cc9fa05b6090c95278
     document.getElementById('toggleMode').addEventListener('click', function() {
         const modeInput = document.getElementById('attendance_mode');
         const isPresentMode = modeInput.value === 'Present';
@@ -389,12 +421,125 @@ $result = $stmt->get_result();
         modeInput.value = isPresentMode ? 'Absent' : 'Present';
         
         // Update button text
+<<<<<<< HEAD
         this.textContent = isPresentMode ? 'Switch to Mark Present Mode' : 'Switch to Mark Absent Mode';
     });
 </script>
 
 <br>
 <br>
+=======
+        this.textContent = isPresentMode ? 'Select Absent' : 'Select Present';
+
+        // Update all meal served fields based on the new mode
+        updateMealServed();
+        clearCheckboxesForAbsentMode(); // Clears checkboxes in Absent mode
+    });
+
+    // Function to update meal served based on current mode
+    function updateMealServed() {
+        const mode = document.getElementById('attendance_mode').value;
+        const selectedMeal = document.getElementById('meal-served-header').value;
+
+        document.querySelectorAll('.attendance-checkbox').forEach(checkbox => {
+            const studentId = checkbox.getAttribute('name').replace('status[', '').replace(']', '');
+            const mealDropdown = document.querySelector(`input[name="meal_served[${studentId}]"]`);
+
+            if (mode === "Absent") {
+                if (checkbox.checked) {
+                    mealDropdown.value = "A";  // Set "A" if checked in absent mode
+                } else {
+                    mealDropdown.value = selectedMeal;  // Apply the selected meal if unchecked
+                }
+            } else { // Present Mode
+                if (checkbox.checked) {
+                    mealDropdown.value = selectedMeal;  // Apply selected meal when checked in present mode
+                } else {
+                    mealDropdown.value = "A";  // Set "A" when unchecked in present mode
+                }
+            }
+        });
+    }
+
+    // Handle checkbox change (when a student is marked present/absent)
+    document.querySelectorAll('.attendance-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const studentId = this.getAttribute('name').replace('status[', '').replace(']', '');
+            const mealDropdown = document.querySelector(`input[name="meal_served[${studentId}]"]`);
+            const selectedMeal = document.getElementById('meal-served-header').value;
+            const mode = document.getElementById('attendance_mode').value;
+
+            if (mode === 'Absent') {
+                if (this.checked) {
+                    mealDropdown.value = "A";  // Mark as absent when checked in absent mode
+                } else {
+                    mealDropdown.value = selectedMeal;  // Apply selected meal if unchecked in absent mode
+                }
+            } else if (mode === 'Present') {
+                if (this.checked) {
+                    mealDropdown.value = selectedMeal;  // Apply selected meal if checked in present mode
+                } else {
+                    mealDropdown.value = "A";  // Mark absent when unchecked in present mode
+                }
+            }
+        });
+    });
+
+    // JavaScript for applying header meal selection to all student dropdowns
+    document.getElementById('meal-served-header').addEventListener('change', function() {
+        const selectedMeal = this.value;
+        const mode = document.getElementById('attendance_mode').value;
+
+        document.querySelectorAll('.meal-served-dropdown').forEach(dropdown => {
+            const studentId = dropdown.getAttribute('name').replace('meal_served[', '').replace(']', '');
+            const checkbox = document.querySelector(`input[name="status[${studentId}]"]`);
+
+            if (mode === 'Present' && checkbox.checked) {
+                dropdown.value = selectedMeal;  // Apply header meal if present
+            } else if (mode === 'Absent') {
+                dropdown.value = selectedMeal;  // In absent mode, apply selected meal to all students
+            }
+        });
+
+        // Apply the selected meal to all checked boxes for present mode
+        document.querySelectorAll('.attendance-checkbox').forEach(checkbox => {
+            const studentId = checkbox.getAttribute('name').replace('status[', '').replace(']', '');
+            const mealDropdown = document.querySelector(`input[name="meal_served[${studentId}]"]`);
+            
+            // When meal served header is changed, apply it dynamically to checked students in Present mode
+            if (checkbox.checked && mode === 'Present') {
+                mealDropdown.value = selectedMeal;  // Update meal for checked boxes in Present mode
+            }
+        });
+    });
+
+    // Clear checkboxes and reset meals when switching between Present and Absent modes
+    function clearCheckboxesForAbsentMode() {
+        const mode = document.getElementById('attendance_mode').value;
+
+        document.querySelectorAll('.attendance-checkbox').forEach(checkbox => {
+            const studentId = checkbox.getAttribute('name').replace('status[', '').replace(']', '');
+            const mealDropdown = document.querySelector(`input[name="meal_served[${studentId}]"]`);
+
+            if (mode === 'Absent') {
+                checkbox.checked = false;  // Uncheck all checkboxes in Absent mode
+                mealDropdown.value = "A";  // Set all meals to "A" in Absent mode
+            }
+        });
+    }
+
+    // Dynamically reset checkbox behavior and meal updates
+    window.addEventListener('load', function() {
+        clearCheckboxesForAbsentMode();  // Clear checkboxes in Absent mode on page load
+        updateMealServed();  // Initialize meal served state for Present or Absent mode
+    });
+});
+
+
+</script>
+
+
+>>>>>>> 19aabae9cda03818840dc8cc9fa05b6090c95278
 
 
 

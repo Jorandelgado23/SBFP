@@ -21,13 +21,10 @@ $stmt->bind_result($session_id);
 $stmt->fetch();
 $stmt->close();
 
-<<<<<<< HEAD
-=======
 // ClickSend API credentials
 $username = 'joran2312';  // Your ClickSend username
 $apiKey = 'EB59DEAA-98B2-5648-FB90-4BD97EA1CFDA';  // Your ClickSend API key
 
->>>>>>> 19aabae9cda03818840dc8cc9fa05b6090c95278
 // Loop through each beneficiary
 foreach ($status as $beneficiary_id => $attendance_status) {
     // Adjust the attendance status based on the selected attendance mode
@@ -37,20 +34,12 @@ foreach ($status as $beneficiary_id => $attendance_status) {
     $meal = $meal_served[$beneficiary_id];
 
     // Get beneficiary details (name, student_section, grade_section)
-<<<<<<< HEAD
-    $info_sql = "SELECT name, student_section, grade_section FROM beneficiary_details WHERE id = ?";
-=======
     $info_sql = "SELECT name, student_section, grade_section, parent_phone FROM beneficiary_details WHERE id = ?";
->>>>>>> 19aabae9cda03818840dc8cc9fa05b6090c95278
     $info_stmt = $conn->prepare($info_sql);
     $info_stmt->bind_param("i", $beneficiary_id);
     $info_stmt->execute();
     $info_stmt->store_result();
-<<<<<<< HEAD
-    $info_stmt->bind_result($name, $student_section, $grade_section);
-=======
     $info_stmt->bind_result($name, $student_section, $grade_section, $parent_phone);
->>>>>>> 19aabae9cda03818840dc8cc9fa05b6090c95278
     $info_stmt->fetch();
 
     // Check if the attendance record already exists for this beneficiary and date
@@ -67,11 +56,6 @@ foreach ($status as $beneficiary_id => $attendance_status) {
         $update_stmt->bind_param("ssiss", $final_status, $meal, $beneficiary_id, $attendance_date, $session_id);
         $update_stmt->execute();
         $update_stmt->close();
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> 19aabae9cda03818840dc8cc9fa05b6090c95278
         // Log the update activity
         $activity = "Updated attendance for beneficiary ID: $beneficiary_id";
     } else {
@@ -86,8 +70,6 @@ foreach ($status as $beneficiary_id => $attendance_status) {
         $activity = "Inserted attendance for beneficiary ID: $beneficiary_id";
     }
 
-<<<<<<< HEAD
-=======
     // If the beneficiary is absent, send SMS notification
     if ($final_status === 'Absent' && !empty($parent_phone)) {
         // Prepare SMS message
@@ -133,7 +115,6 @@ foreach ($status as $beneficiary_id => $attendance_status) {
         curl_close($ch);
     }
 
->>>>>>> 19aabae9cda03818840dc8cc9fa05b6090c95278
     // Log the activity in recent_activity table
     $activity_type = "attendance_update";
     $timestamp = date("Y-m-d H:i:s");

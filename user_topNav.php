@@ -100,12 +100,12 @@ include("connection.php");
     </a>
     <ul class="collapse list-unstyled" id="snsDropdown">
         <li><a href="weighing_sessions.php?kinder">> <span>Kinder</span></a></li>
-        <li><a href="weighing_sessions.php?grade1">> <span>Grade 1</span></a></li>
-        <li><a href="weighing_sessions.php?grade2">> <span>Grade 2</span></a></li>
-        <li><a href="weighing_sessions.php?grade3">> <span>Grade 3</span></a></li>
-        <li><a href="weighing_sessions.php?grade4">> <span>Grade 4</span></a></li>
-        <li><a href="weighing_sessions.php?grade5">> <span>Grade 5</span></a></li>
-        <li><a href="weighing_sessions.php?grade6">> <span>Grade 6</span></a></li>
+        <li><a href="weighing_sessions1.php?grade1">> <span>Grade 1</span></a></li>
+        <li><a href="weighing_sessions2.php?grade2">> <span>Grade 2</span></a></li>
+        <li><a href="weighing_sessions3.php?grade3">> <span>Grade 3</span></a></li>
+        <li><a href="weighing_sessions4.php?grade4">> <span>Grade 4</span></a></li>
+        <li><a href="weighing_sessions5.php?grade5">> <span>Grade 5</span></a></li>
+        <li><a href="weighing_sessions6.php?grade6">> <span>Grade 6</span></a></li>
         <li><a href="sns_summary.php">> <span>SNS Summary</span></a></li>
     </ul>
 </li>

@@ -27,7 +27,7 @@ if ($showSuccessModal) {
 }
 
 // Get the first section for grade_id = 1
-$first_section_sql = "SELECT section_id, section_name FROM sections WHERE grade_id = 1 ORDER BY section_id LIMIT 1";
+$first_section_sql = "SELECT section_id, section_name FROM sections WHERE grade_id = 6 ORDER BY section_id LIMIT 1";
 $first_section_result = $conn->query($first_section_sql);
 
 $first_section = null;
@@ -76,7 +76,7 @@ $conn->close();
                      $conn = new mysqli('localhost', 'root', '', 'sbfp');
                      
                      // SQL query to select sections for grade_id 1
-                     $section_sql = "SELECT section_id, section_name FROM sections WHERE grade_id = 1";
+                     $section_sql = "SELECT section_id, section_name FROM sections WHERE grade_id = 6";
                      $section_result = $conn->query($section_sql);
                      $first_section_id = null;
                      
@@ -337,7 +337,7 @@ $conn->close();
                   <?php
                      // Assuming you have a database connection established
                      $conn = new mysqli('localhost', 'root', '', 'sbfp');
-                     $section_sql = "SELECT section_id, section_name FROM sections WHERE grade_id = 1";
+                     $section_sql = "SELECT section_id, section_name FROM sections WHERE grade_id = 6";
                      $section_result = $conn->query($section_sql);
                      
                      if ($section_result->num_rows > 0) {
@@ -405,8 +405,8 @@ $conn->close();
                             This section name already exists. Please choose a different one.
                         </div>
                     </div>
-                    <p class="text-warning">Note: The section will be created for Grade ID 1.</p>
-                    <input type="hidden" name="grade_id" value="1">
+                    <p class="text-warning">Note: The section will be created for Grade ID 3.</p>
+                    <input type="hidden" name="grade_id" value="6">
                     <button type="submit" class="btn btn-primary">Save Section</button>
                 </form>
             </div>
@@ -516,7 +516,7 @@ $(document).ready(function() {
                     <?php
                     // Fetch sections from the database
                     $conn = new mysqli($servername, $username, $password, $dbname);
-                    $result = $conn->query("SELECT section_id, section_name FROM sections WHERE grade_id = 1");
+                    $result = $conn->query("SELECT section_id, section_name FROM sections WHERE grade_id = 6");
 
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {

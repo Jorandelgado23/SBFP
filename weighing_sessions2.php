@@ -2,6 +2,7 @@
    include'user_topNav.php';
    ?>
 <?php
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -13,6 +14,19 @@ $conn = new mysqli($servername, $username, $password, $database);
 // Check for connection errors
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
+}
+
+// Get user_session_id for the logged-in user
+if (isset($_SESSION['email'])) {
+    $email = $_SESSION['email'];
+    $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->bind_result($user_session_id);
+    $stmt->fetch();
+    $stmt->close();
+} else {
+    die("Error: User email not found in session.");
 }
 
 // Check if the success parameter is set in the URL
@@ -38,16 +52,16 @@ if ($first_section_result->num_rows > 0) {
     $first_section = $first_section_result->fetch_assoc();
     $section_id = $first_section['section_id'];
 
-    // Now get the latest weighing session for this section
+    // Now get the latest weighing session for this section and user
     $latest_weighing_sql = "
         SELECT ws.session_date, ws.school_year 
         FROM weighing_sessions ws 
-        WHERE ws.section_id = ? 
+        WHERE ws.section_id = ? AND ws.user_session_id = ?
         ORDER BY ws.session_date DESC 
         LIMIT 1";
 
     $latest_weighing_stmt = $conn->prepare($latest_weighing_sql);
-    $latest_weighing_stmt->bind_param("i", $section_id);
+    $latest_weighing_stmt->bind_param("is", $section_id, $user_session_id);
     $latest_weighing_stmt->execute();
     $latest_weighing_stmt->bind_result($weighing_date, $school_year);
     $latest_weighing_stmt->fetch();
@@ -57,6 +71,7 @@ if ($first_section_result->num_rows > 0) {
 // Close the database connection
 $conn->close();
 ?>
+
 
 <div class="col-lg-12 grid-margin stretch-card py-4 px-0">
    <div class="card">
@@ -72,31 +87,44 @@ $conn->close();
                   <label>Section: </label>
                   <select class="js-example-basic-single w-100" id="section" name="section_id" required onchange="updateWeighingSessionDetails()">
                   <?php
-                     // Assuming you have a database connection established
+
+                     // Database connection
                      $conn = new mysqli('localhost', 'root', '', 'sbfp');
-                     
-                     // SQL query to select sections for grade_id 1
-                     $section_sql = "SELECT section_id, section_name FROM sections WHERE grade_id = 3";
-                     $section_result = $conn->query($section_sql);
-                     $first_section_id = null;
-                     
-                     // Check if sections are found
-                     if ($section_result->num_rows > 0) {
-                         // Display sections and get the first section ID
-                         while ($row = $section_result->fetch_assoc()) {
+
+                     // Check for connection errors
+                     if ($conn->connect_error) {
+                         die("Connection failed: " . $conn->connect_error);
+                     }
+
+                     // Get the session_id of the logged-in user
+                     $email = $_SESSION['email']; // Assuming email is stored in session after login
+                     $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+                     $stmt->bind_param("s", $email);
+                     $stmt->execute();
+                     $stmt->bind_result($session_id);
+                     $stmt->fetch();
+                     $stmt->close();
+
+                     // Fetch sections from the database based on session_id
+                     $sql = "SELECT section_id, section_name FROM sections WHERE grade_id = 3 AND session_id = ?";
+                     $stmt = $conn->prepare($sql);
+                     $stmt->bind_param("s", $session_id);
+                     $stmt->execute();
+                     $result = $stmt->get_result();
+
+                     // Display sections
+                     if ($result->num_rows > 0) {
+                         // Display each section as an option
+                         while ($row = $result->fetch_assoc()) {
                              echo "<option value='" . $row['section_id'] . "'>" . $row['section_name'] . "</option>";
-                             if ($first_section_id === null) {
-                                 $first_section_id = $row['section_id'];
-                             }
                          }
                      } else {
-                         // Display message if no sections are found
                          echo "<option value=''>No sections available for Kinder</option>";
                      }
-                     
+
                      // Close the database connection
                      $conn->close();
-                     ?>
+                  ?>
                   </select>
                </div>
                <script>
@@ -180,6 +208,8 @@ $conn->close();
             </div>
          </div>
          <?php
+
+
 // Database connection
 $conn = new mysqli('localhost', 'root', '', 'sbfp');
 
@@ -188,9 +218,21 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch students from the database
-$sql = "SELECT * FROM students";
-$result = $conn->query($sql);
+// Get the session_id of the logged-in user
+$email = $_SESSION['email']; // Assuming email is stored in session after login
+$stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->bind_result($session_id);
+$stmt->fetch();
+$stmt->close();
+
+// Fetch students from the database based on the session_id
+$sql = "SELECT * FROM students WHERE session_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $session_id);
+$stmt->execute();
+$result = $stmt->get_result();
 
 echo '<div class="table-responsive pt-3">
          <table class="table table-bordered table-striped">
@@ -315,13 +357,13 @@ $conn->close();
                <div class="mb-3">
                   <label for="schoolYear" class="form-label">School Year</label>
                   <select class="form-select" id="schoolYear" name="school_year" required>
-                  <?php
-                     $currentYear = date('Y');
-                     for ($i = 0; $i <= 5; $i++) {
-                         $nextYear = $currentYear + $i;
-                         $schoolYear = $nextYear . '-' . ($nextYear + 1);
-                         echo "<option value=\"$schoolYear\">$schoolYear</option>";
-                     }
+                     <?php
+                        $currentYear = date('Y');
+                        for ($i = 0; $i <= 5; $i++) {
+                            $nextYear = $currentYear + $i;
+                            $schoolYear = $nextYear . '-' . ($nextYear + 1);
+                            echo "<option value=\"$schoolYear\">$schoolYear</option>";
+                        }
                      ?>
                   </select>
                </div>
@@ -334,22 +376,44 @@ $conn->close();
                <div class="mb-3">
                   <label for="section" class="form-label">Section</label>
                   <select class="form-control" id="section" name="section_id" required>
-                  <?php
-                     // Assuming you have a database connection established
-                     $conn = new mysqli('localhost', 'root', '', 'sbfp');
-                     $section_sql = "SELECT section_id, section_name FROM sections WHERE grade_id = 3";
-                     $section_result = $conn->query($section_sql);
-                     
-                     if ($section_result->num_rows > 0) {
-                         echo "<option value=''>Select a section</option>";
-                         while ($row = $section_result->fetch_assoc()) {
-                             echo "<option value='" . $row['section_id'] . "'>" . $row['section_name'] . "</option>";
-                         }
-                     } else {
-                         echo "<option value=''>No sections available for Kinder</option>";
-                     }
-                     
-                     $conn->close();
+                     <?php
+                        // Start the session to access session data
+                        session_start();
+
+                        // Database connection
+                        $conn = new mysqli('localhost', 'root', '', 'sbfp');
+
+                        // Check for connection errors
+                        if ($conn->connect_error) {
+                            die("Connection failed: " . $conn->connect_error);
+                        }
+
+                        // Get the session_id of the logged-in user
+                        $email = $_SESSION['email']; // Assuming email is stored in session after login
+                        $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+                        $stmt->bind_param("s", $email);
+                        $stmt->execute();
+                        $stmt->bind_result($session_id);
+                        $stmt->fetch();
+                        $stmt->close();
+
+                        // Fetch sections from the database based on session_id
+                        $sql = "SELECT section_id, section_name FROM sections WHERE grade_id = 3 AND session_id = ?";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->bind_param("s", $session_id);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+
+                        if ($result->num_rows > 0) {
+                            echo "<option value=''>Select a section</option>";
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<option value='" . $row['section_id'] . "'>" . $row['section_name'] . "</option>";
+                            }
+                        } else {
+                            echo "<option value=''>No sections available for Kinder</option>";
+                        }
+
+                        $conn->close();
                      ?>
                   </select>
                </div>
@@ -357,15 +421,15 @@ $conn->close();
             </form>
          </div>
          <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-</div>
-<p class="text-center text-warning px-3" style="margin-top: 10px;">
-    Note: Creating a new weighing session for the same section will replace the existing session if there are no students or weighing records.
-</p>
-
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+         </div>
+         <p class="text-center text-warning px-3" style="margin-top: 10px;">
+            Note: Creating a new weighing session for the same section will replace the existing session if there are no students or weighing records.
+         </p>
       </div>
    </div>
 </div>
+
 
 
 
@@ -405,8 +469,8 @@ $conn->close();
                             This section name already exists. Please choose a different one.
                         </div>
                     </div>
-                    <p class="text-warning">Note: The section will be created for Grade ID 3.</p>
-                    <input type="hidden" name="grade_id" value="3">
+                    <p class="text-warning">Note: The section will be created for Grade ID 1.</p>
+                    <input type="hidden" name="grade_id" value="1">
                     <button type="submit" class="btn btn-primary">Save Section</button>
                 </form>
             </div>
@@ -514,9 +578,29 @@ $(document).ready(function() {
                 <form id="deleteSectionsForm" method="POST" action="delete_sections.php">
                     <div id="sectionsList">
                     <?php
-                    // Fetch sections from the database
-                    $conn = new mysqli($servername, $username, $password, $dbname);
-                    $result = $conn->query("SELECT section_id, section_name FROM sections WHERE grade_id = 3");
+                    // Database connection
+                    $conn = new mysqli('localhost', 'root', '', 'sbfp');
+
+                    // Check for connection errors
+                    if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+
+                    // Get the session_id of the logged-in user
+                    $email = $_SESSION['email']; // Assuming email is stored in session after login
+                    $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+                    $stmt->bind_param("s", $email);
+                    $stmt->execute();
+                    $stmt->bind_result($session_id);
+                    $stmt->fetch();
+                    $stmt->close();
+
+                    // Fetch sections from the database based on session_id
+                    $sql = "SELECT section_id, section_name FROM sections WHERE grade_id = 3 AND session_id = ?";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("s", $session_id);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
 
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
@@ -547,90 +631,104 @@ $(document).ready(function() {
 
 
 
+
 <!-- PHP BACK END OF THIS MODAL -->
 <?php
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-   // Database connection
-   $conn = new mysqli('localhost', 'root', '', 'sbfp');
+    // Database connection
+    $conn = new mysqli('localhost', 'root', '', 'sbfp');
 
-   // Check connection
-   if ($conn->connect_error) {
-       die("Connection failed: " . $conn->connect_error);
-   }
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
 
-   // Collect form data
-   $school_year = $_POST['school_year'];
-   $weighing_date = $_POST['weighing_date'];
-   $section_id = $_POST['section_id'];
+    // Collect form data
+    $school_year = $_POST['school_year'];
+    $weighing_date = $_POST['weighing_date'];
+    $section_id = $_POST['section_id'];
 
-   // Ensure all form fields are filled
-   if (!empty($school_year) && !empty($weighing_date) && !empty($section_id)) {
+    // Get the session_id of the logged-in user based on their email
+    if (isset($_SESSION['email'])) {
+        $email = $_SESSION['email'];
+        
+        $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->bind_result($user_session_id);
+        $stmt->fetch();
+        $stmt->close();
+    } else {
+        die("Error: User email not found in session.");
+    }
 
-       // Check if there's already a pending weighing session for this section
-       $check_session_sql = "
-           SELECT session_id 
-           FROM weighing_sessions 
-           WHERE section_id = ? AND session_date = ? AND school_year = ? AND status = 'pending'
-       ";
-       $check_session_stmt = $conn->prepare($check_session_sql);
-       $check_session_stmt->bind_param("iss", $section_id, $weighing_date, $school_year);
-       $check_session_stmt->execute();
-       $check_session_stmt->store_result();
+    // Ensure all form fields are filled
+    if (!empty($school_year) && !empty($weighing_date) && !empty($section_id) && !empty($user_session_id)) {
+        // Check if there's already a pending weighing session for this section
+        $check_session_sql = "
+            SELECT session_id 
+            FROM weighing_sessions 
+            WHERE section_id = ? AND session_date = ? AND school_year = ? AND status = 'pending'
+        ";
+        $check_session_stmt = $conn->prepare($check_session_sql);
+        $check_session_stmt->bind_param("iss", $section_id, $weighing_date, $school_year);
+        $check_session_stmt->execute();
+        $check_session_stmt->store_result();
 
-       // If a pending session exists, delete it
-       if ($check_session_stmt->num_rows > 0) {
-           $check_session_stmt->bind_result($existing_session_id);
-           $check_session_stmt->fetch();
+        // If a pending session exists, delete it
+        if ($check_session_stmt->num_rows > 0) {
+            $check_session_stmt->bind_result($existing_session_id);
+            $check_session_stmt->fetch();
 
-           // Delete the existing session
-           $delete_session_sql = "DELETE FROM weighing_sessions WHERE session_id = ?";
-           $delete_session_stmt = $conn->prepare($delete_session_sql);
-           $delete_session_stmt->bind_param("i", $existing_session_id);
-           $delete_session_stmt->execute();
-           $delete_session_stmt->close();
-       }
+            $delete_session_sql = "DELETE FROM weighing_sessions WHERE session_id = ?";
+            $delete_session_stmt = $conn->prepare($delete_session_sql);
+            $delete_session_stmt->bind_param("i", $existing_session_id);
+            $delete_session_stmt->execute();
+            $delete_session_stmt->close();
+        }
 
-       // Insert the new weighing session
-       $insert_sql = "
-           INSERT INTO weighing_sessions (session_date, school_year, section_id, status) 
-           VALUES (?, ?, ?, 'pending')
-       ";
-       $insert_stmt = $conn->prepare($insert_sql);
-       $insert_stmt->bind_param("ssi", $weighing_date, $school_year, $section_id);
-       $insert_stmt->execute();
+        // Insert the new weighing session
+        $insert_sql = "
+            INSERT INTO weighing_sessions (session_date, school_year, section_id, status, user_session_id) 
+            VALUES (?, ?, ?, 'pending', ?)
+        ";
+        $insert_stmt = $conn->prepare($insert_sql);
+        $insert_stmt->bind_param("ssis", $weighing_date, $school_year, $section_id, $user_session_id);
+        $insert_stmt->execute();
 
-       // Display success message in modal
-       if ($insert_stmt->affected_rows > 0) {
-           echo "
-               <script>
-                   document.getElementById('modalMessage').innerText = 'Weighing session created successfully!';
-                   var myModal = new bootstrap.Modal(document.getElementById('responseModal'), {});
-                   myModal.show();
-               </script>
-           ";
-       } else {
-           echo "
-               <script>
-                   document.getElementById('modalMessage').innerText = 'Error creating weighing session.';
-                   var myModal = new bootstrap.Modal(document.getElementById('responseModal'), {});
-                   myModal.show();
-               </script>
-           ";
-       }
+        // Display success message in modal
+        if ($insert_stmt->affected_rows > 0) {
+            echo "
+                <script>
+                    document.getElementById('modalMessage').innerText = 'Weighing session created successfully!';
+                    var myModal = new bootstrap.Modal(document.getElementById('responseModal'), {});
+                    myModal.show();
+                </script>
+            ";
+        } else {
+            echo "
+                <script>
+                    document.getElementById('modalMessage').innerText = 'Error creating weighing session.';
+                    var myModal = new bootstrap.Modal(document.getElementById('responseModal'), {});
+                    myModal.show();
+                </script>
+            ";
+        }
 
-       $insert_stmt->close();
-       $conn->close();
-   } else {
-       echo "
-           <script>
-               document.getElementById('modalMessage').innerText = 'Required form data is missing. Please fill in all fields.';
-               var myModal = new bootstrap.Modal(document.getElementById('responseModal'), {});
-               myModal.show();
-           </script>
-       ";
-   }
+        $insert_stmt->close();
+        $conn->close();
+    } else {
+        echo "
+            <script>
+                document.getElementById('modalMessage').innerText = 'Required form data is missing. Please fill in all fields.';
+                var myModal = new bootstrap.Modal(document.getElementById('responseModal'), {});
+                myModal.show();
+            </script>
+        ";
+    }
 }
 ?>
+
 
 
 
@@ -678,18 +776,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label for="sectionId" class="form-label">Section</label>
                         <select class="form-select" id="sectionId" name="section_id" required>
                             <?php
-                            // Fetch sections dynamically from the database
+                            // Start the session to access session data
+                            session_start();
+
+                            // Database connection
                             $conn = new mysqli('localhost', 'root', '', 'sbfp');
-                            $sections_sql = "SELECT section_id, section_name FROM sections";
-                            $sections_result = $conn->query($sections_sql);
-                            if ($sections_result->num_rows > 0) {
-                                while ($row = $sections_result->fetch_assoc()) {
-                                    echo "<option value='" . $row['section_id'] . "'>" . $row['section_name'] . "</option>";
-                                }
-                            } else {
-                                echo "<option value=''>No sections available</option>";
+
+                            // Check for connection errors
+                            if ($conn->connect_error) {
+                                die("Connection failed: " . $conn->connect_error);
                             }
-                            $conn->close();
+
+                            // Get the session_id of the logged-in user
+                            $email = $_SESSION['email']; // Assuming email is stored in session after login
+                            $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+                            $stmt->bind_param("s", $email);
+                            $stmt->execute();
+                            $stmt->bind_result($session_id);
+                            $stmt->fetch();
+                            $stmt->close();
+
+                                 // Fetch sections from the database based on session_id
+                        $sql = "SELECT section_id, section_name FROM sections WHERE grade_id = 3 AND session_id = ?";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->bind_param("s", $session_id);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+
+                        if ($result->num_rows > 0) {
+                            echo "<option value=''>Select a section</option>";
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<option value='" . $row['section_id'] . "'>" . $row['section_name'] . "</option>";
+                            }
+                        } else {
+                            echo "<option value=''>No sections available for Kinder</option>";
+                        }
+
+                        $conn->close();
                             ?>
                         </select>
                     </div>
@@ -702,6 +825,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 </div>
+
 
 
 

@@ -17,18 +17,27 @@ if ($conn->connect_error) {
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['section_ids'])) {
     $section_ids = $_POST['section_ids'];
 
-    // Prepare the statement for deletion
+    // Prepare the statement for deleting students in the selected sections
     $placeholders = implode(',', array_fill(0, count($section_ids), '?'));
-    $stmt = $conn->prepare("DELETE FROM sections WHERE section_id IN ($placeholders)");
+    $stmt = $conn->prepare("DELETE FROM students WHERE section_id IN ($placeholders)");
     
     // Dynamically bind parameters
     $stmt->bind_param(str_repeat('i', count($section_ids)), ...$section_ids);
 
-    // Execute the statement and check for success
+    // Execute the statement for deleting students
     if ($stmt->execute()) {
-        $_SESSION['success'] = 'Sections deleted successfully!';
+        // Now delete the sections
+        $stmt = $conn->prepare("DELETE FROM sections WHERE section_id IN ($placeholders)");
+        $stmt->bind_param(str_repeat('i', count($section_ids)), ...$section_ids);
+        
+        // Execute the statement for deleting sections
+        if ($stmt->execute()) {
+            $_SESSION['success'] = 'Sections and their dependent students deleted successfully!';
+        } else {
+            $_SESSION['error'] = 'Error deleting sections: ' . $stmt->error;
+        }
     } else {
-        $_SESSION['error'] = 'Error deleting sections: ' . $stmt->error;
+        $_SESSION['error'] = 'Error deleting students: ' . $stmt->error;
     }
 
     // Close the statement and connection

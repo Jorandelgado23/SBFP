@@ -1,5 +1,6 @@
 <?php
-// add_section.php
+// Start session to access session variables
+session_start();
 
 // Database connection
 $servername = "localhost";
@@ -19,38 +20,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $section_name = $_POST['section_name'];
     $grade_id = $_POST['grade_id'];
 
-    // Check if the section name already exists
-    $check_stmt = $conn->prepare("SELECT COUNT(*) FROM sections WHERE section_name = ? AND grade_id = ?");
-    $check_stmt->bind_param("si", $section_name, $grade_id);
+    // Get the session_id of the logged-in user
+    $email = $_SESSION['email']; // Assuming email is stored in session after login
+    $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->bind_result($session_id);
+    $stmt->fetch();
+    $stmt->close();
+
+    // Check if the section name already exists for the same session_id
+    $check_stmt = $conn->prepare("SELECT COUNT(*) FROM sections WHERE section_name = ? AND grade_id = ? AND session_id = ?");
+    $check_stmt->bind_param("sis", $section_name, $grade_id, $session_id);
     $check_stmt->execute();
     $check_stmt->bind_result($count);
     $check_stmt->fetch();
     $check_stmt->close();
 
     if ($count > 0) {
-        // Section name already exists
+        // Section already exists
         echo "Error: Section '$section_name' already exists for Grade ID $grade_id.";
     } else {
-        // Prepare and bind the SQL statement for insertion
-        $stmt = $conn->prepare("INSERT INTO sections (section_name, grade_id) VALUES (?, ?)");
-        $stmt->bind_param("si", $section_name, $grade_id);
+        // Insert the section with session_id
+        $stmt = $conn->prepare("INSERT INTO sections (section_name, grade_id, session_id) VALUES (?, ?, ?)");
+        $stmt->bind_param("sis", $section_name, $grade_id, $session_id);
 
-        // Execute the statement and check for success
         if ($stmt->execute()) {
-            // Set session variable and redirect
-            session_start(); // Start the session here
-            $_SESSION['success'] = true; // Set the session variable
-            header("Location: weighing_sessions.php"); // Change to the page you want to redirect to
+            // Set session success message and redirect
+            $_SESSION['success'] = true;
+            header("Location: weighing_sessions.php");
             exit();
         } else {
             echo "Error inserting section: " . $stmt->error;
         }
 
-        // Close the statement
         $stmt->close();
     }
 
-    // Close the connection
     $conn->close();
 }
 ?>

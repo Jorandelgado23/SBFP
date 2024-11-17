@@ -92,7 +92,7 @@ include("adminauth.php");
                     <h4>General</h4>
                     <ul class="list-unstyled components">
                     <li>
-                            <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
+                            <a href="admindashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
                         </li>
 
                         <li class="active">
@@ -105,7 +105,7 @@ include("adminauth.php");
                      </li>
                        
                         <li>
-                            <a href="adbeneficiaries.php"><i class="fa fa-university""></i> <span>All School Beneficiaries</span></a>
+                            <a href="adbeneficiaries.php"><i class="fa fa-university"></i> <span>All School Beneficiaries</span></a>
                         </li>
 
                         <li >
@@ -114,6 +114,10 @@ include("adminauth.php");
 
                         <li>
                             <a href="adaccountmanagement.php"><i class="fa fa-group"></i> <span>Account Management</span></a>
+                        </li>
+
+                        <li>
+                            <a href="age_gender_analysis.php"><i class="fa fa-archive"></i> <span>age and gender Analysis</span></a>
                         </li>
                        
                         <li>

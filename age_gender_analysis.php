@@ -146,8 +146,8 @@ include("adminauth.php");
                 <div class="sidebar_blog_2">
                     <h4>General</h4>
                     <ul class="list-unstyled components">
-                    <li class="active">
-                            <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
+                    <li>
+                            <a href="admindashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
                         </li>
 
                         <li>
@@ -171,7 +171,7 @@ include("adminauth.php");
                             <a href="adaccountmanagement.php"><i class="fa fa-group"></i> <span>Account Management</span></a>
                         </li>
 
-                        <li>
+                        <li class="active">
                             <a href="age_gender_analysis.php"><i class="fa fa-archive"></i> <span>age and gender Analysis</span></a>
                         </li>
                        

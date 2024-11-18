@@ -43,7 +43,7 @@ include("connection.php");
 
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
 
       
 
@@ -94,7 +94,7 @@ include("connection.php");
             <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
         </li>
 
-        <li>
+        <li class="active">
     <a href="#snsDropdown" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
         <i class="fa fa-dashboard"></i> <span>SNS List</span>
     </a>
@@ -111,7 +111,7 @@ include("connection.php");
 </li>
 
 
-        <li class="active">
+        <li>
             <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
         </li>
 

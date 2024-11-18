@@ -71,46 +71,66 @@ include("connection.php");
 
                 </div>
                 <div class="sidebar_blog_2">
-                    <h4>General</h4>
-                    <ul class="list-unstyled components">
-                    <li>
-                            <a href="dashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
-                        </li>
+    <h4>General</h4>
+    <ul class="list-unstyled components">
+        <li>
+            <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
+        </li>
 
-                        <li>
-                            <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
-                        </li>
-                        <li>
-                            <!-- <a href="form2.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 2</span></a> -->
-                        </li>
-                        <!-- <li>
-                            <a href="form3.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 3</span></a>
-                        </li> -->
-                        <li>
-                            <a href="student_attendance.php"><i class="fa fa-calendar"></i> <span>Student Attendance</span></a>
-                        </li>
-                        <!-- <li>
-                            <a href="form5.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 5</span></a>
-                        </li> -->
-                        <li>
-                            <a href="form6.php"><i class="fa fa-flask"></i> <span>Milk Component Data</span></a>
-                        </li>
-                        <!-- <li>
-                            <a href="form7.php"><i class="fa fa-file-excel-o"></i> <span>SBFP-FORM 7</span></a>
-                        </li> -->
-                        <li>
-                            <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>QUARTERLY REPORT</span></a>
-                        </li>
-                       
-                      
-                      
-            
-                        
-                        <li>
-                            <a href="usersetting.php"><i class="fa fa-cog yellow_color"></i> <span>Settings</span></a>
-                        </li>
-                    </ul>
-                </div>
+        <li>
+    <a href="#snsDropdown" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <i class="fa fa-dashboard"></i> <span>SNS List</span>
+    </a>
+    <ul class="collapse list-unstyled" id="snsDropdown">
+        <li><a href="weighing_sessions.php?kinder">> <span>Kinder</span></a></li>
+        <li><a href="weighing_sessions1.php?grade1">> <span>Grade 1</span></a></li>
+        <li><a href="weighing_sessions2.php?grade2">> <span>Grade 2</span></a></li>
+        <li><a href="weighing_sessions3.php?grade3">> <span>Grade 3</span></a></li>
+        <li><a href="weighing_sessions4.php?grade4">> <span>Grade 4</span></a></li>
+        <li><a href="weighing_sessions5.php?grade5">> <span>Grade 5</span></a></li>
+        <li><a href="weighing_sessions6.php?grade6">> <span>Grade 6</span></a></li>
+        <li><a href="sns_summary.php">> <span>SNS Summary</span></a></li>
+    </ul>
+</li>
+
+        <li>
+            <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
+        </li>
+
+         <!-- Dropdown for Beneficiary Improvement and Progress Input -->
+         <li>
+            <a href="#beneficiaryDropdown" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <i class="fa fa-line-chart"></i> <span>Beneficiary Section</span>
+            </a>
+            <ul class="collapse list-unstyled" id="beneficiaryDropdown">
+                <li><a href="progress_input.php">> <span>Progress Input</span></a></li>
+                <li><a href="Beneficiary_list.php">> <span>Beneficiary Improvement</span></a></li>
+            </ul>
+        </li>
+
+        <!-- Dropdown for Student Attendance and Beneficiary Attendance -->
+        <li>
+            <a href="#attendanceDropdown" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <i class="fa fa-calendar"></i> <span>Attendance Section</span>
+            </a>
+            <ul class="collapse list-unstyled" id="attendanceDropdown">
+            <li><a href="beneficiary_attendance.php">> <span>Beneficiary Attendance</span></a></li>
+                <li><a href="student_attendance.php">> <span>Attendance Table</span></a></li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="form6.php"><i class="fa fa-flask"></i> <span>Milk Component Data</span></a>
+        </li>
+        <li class="active">
+            <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>QUARTERLY REPORT</span></a>
+        </li>
+
+        <li>
+            <a href="usersetting.php"><i class="fa fa-cog yellow_color"></i> <span>Settings</span></a>
+        </li>
+    </ul>
+</div>
             </nav>
             <!-- End Sidebar -->
             <!-- Right Content -->

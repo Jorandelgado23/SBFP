@@ -22,8 +22,8 @@ $stmt->fetch();
 $stmt->close();
 
 // ClickSend API credentials
-$username = 'joran2312';  // Your ClickSend username
-$apiKey = 'EB59DEAA-98B2-5648-FB90-4BD97EA1CFDA';  // Your ClickSend API key
+$username = 'delgado2312';  // Your ClickSend username
+$apiKey = 'B67D7603-BD80-2F41-C466-22FF2FE52530';  // Your ClickSend API key
 
 // Loop through each beneficiary
 foreach ($status as $beneficiary_id => $attendance_status) {

@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-require_once 'vendor/autoload.php'; // Include Composer's autoloader
+// Include Composer's autoloader and database connection
+require_once 'vendor/autoload.php';
 use Dompdf\Dompdf;
 use Dompdf\Options;
-
 include("accountconnection.php");
 
 // Process form submission
@@ -42,7 +42,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql_school = "INSERT INTO division_schools (report_id, division_school, sdo_school, target_sbfp_school, actual_sbfp_school, percent, status, target_beneficiaries, actual_beneficiaries, completion_percentage)
                            VALUES ('$report_id', '".$division_schools[$i]."', '".$sdo_schools[$i]."', '".$target_sbfp_schools[$i]."', '".$actual_sbfp_schools[$i]."', '".$percentage[$i]."', '".$implementation_status[$i]."', '".$target_beneficiaries[$i]."', '".$actual_beneficiaries[$i]."', '".$completion_percentage[$i]."')";
 
-            $conn->query($sql_school);
+            if (!$conn->query($sql_school)) {
+                echo "Error: " . $conn->error . "<br>SQL: " . $sql_school;
+            }
         }
 
         // Generate PDF after successful submission
@@ -63,13 +65,6 @@ function generatePDF($report_id, $conn) {
     $division_query = "SELECT * FROM division_schools WHERE report_id = $report_id";
     $division_result = $conn->query($division_query);
 
-    $division_province = $report_data['region_division'];
-    $name_of_principal = "John Doe"; // Example data, replace with actual from DB or form
-    $city_municipality_barangay = "City Name"; // Example data
-    $name_of_feeding_focal_person = "Focal Person Name"; // Example data
-    $name_of_school = "School Name"; // Example data
-    $school_id_number = "12345"; // Example data
-    $school_year = "2023-2024"; // Example data
     $currentYear = date('Y'); // Current year
 
     // Initialize Dompdf
@@ -94,26 +89,22 @@ function generatePDF($report_id, $conn) {
         </tr>
     </table>
 
-    
     <br><br><br>
     <h2 style="text-align:center;">LIST OF BENEFICIARIES (SBFP) (SY ' . $currentYear . ')</h2>
 
     <table border="0" cellpadding="4" cellspacing="0" style="width: 100%;">
-    <tr>
-        <td style="text-align: left; width: 50%;">
-            <strong>Division/Province:</strong>__________________________________<br>
-            <strong>Name of Principal:</strong>__________________________________<br>
-            <strong>City/Municipality/Barangay:</strong>_________________________<br>
-        </td>
-        <td style="text-align: right; width: 50%;">
-            <strong>Name of Feeding Focal Person:</strong>________________________________<br>
-            <strong>Name of School:</strong>____________________________________________<br>
-            <strong>School ID Number:</strong>_______________<br>
-        </td>
-    </tr>
-</table>
+        <tr>
+            <td style="text-align: left; width: 50%;">
+                <strong>Division/Province:</strong> ' . $report_data['region_division'] . '<br>
+                <strong>Amount Allocated:</strong> ' . $report_data['amount_allocated'] . '<br>
+            </td>
+            <td style="text-align: right; width: 50%;">
+                <strong>Amount Downloaded:</strong> ' . $report_data['amount_downloaded'] . '<br>
+                <strong>Status of Fund Downloading:</strong> ' . $report_data['status_fund_downloading'] . '<br>
+            </td>
+        </tr>
+    </table>
 
-    
     <table border="1" cellpadding="4" cellspacing="0" style="width: 100%; border-collapse: collapse;">
         <thead>
             <tr>
@@ -125,7 +116,7 @@ function generatePDF($report_id, $conn) {
                 <th>Status of Implementation</th>
                 <th>No. of Target Beneficiaries</th>
                 <th>No. of Actual Beneficiaries</th>
-                <th>% of Completion</th>
+                <th>percent of Completion</th>
             </tr>
         </thead>
         <tbody>';
@@ -146,7 +137,6 @@ function generatePDF($report_id, $conn) {
 
     $html .= '</tbody></table>';
 
-    // Add "Prepared by" and "Approved by" sections
     $html .= "
     <table border='0' cellpadding='4' cellspacing='0' style='width: 100%; margin-top: 30px;'>
         <tr>

@@ -52,7 +52,7 @@ include("connection.php");
         font-weight: bold; /* Bold text */
     }
 
-    
+
     
 </style>
 

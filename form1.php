@@ -485,7 +485,7 @@ function maskName($name) {
                         echo "</td>";
 
                         echo "<td class='text-center'>";
-                        echo "<button class='btn btn-sm btn-danger remove-btn' data-id='" . $row["id"] . "'>";
+                        echo "<button class='btn btn-sm btn-danger remove-btn' data-beneficiary-id='" . $row["beneficiary_id"] . "'>";
                         echo "<i class='fa fa-trash'></i>";
                         echo "</button>";
                         echo "</td>";
@@ -788,9 +788,9 @@ $('#saveChanges').on('click', function() {
 });
 
 
-  // Handle Remove button click
+// Handle Remove button click
 $('.remove-btn').on('click', function() {
-    var id = $(this).data('id');
+    var beneficiary_id = $(this).data('beneficiary-id'); // Get beneficiary_id
     // Use SweetAlert for confirmation
     Swal.fire({
         title: 'Are you sure?',
@@ -813,7 +813,7 @@ $('.remove-btn').on('click', function() {
             $.ajax({
                 url: 'remove_beneficiary.php',
                 type: 'post',
-                data: { id: id },
+                data: { beneficiary_id: beneficiary_id }, // Send beneficiary_id instead of id
                 success: function(response) {
                     const res = JSON.parse(response);
                     Swal.fire({
@@ -839,6 +839,7 @@ $('.remove-btn').on('click', function() {
         }
     });
 });
+
 
   // Auto-compute age
   $('#edit-date_of_birth, #edit-date_of_weighing').on('change', function() {

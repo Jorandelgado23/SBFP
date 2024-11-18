@@ -20,7 +20,8 @@ $required_fields = [
     'name_of_school', 
     'school_id_number', 
     'name_of_principal', 
-    'name_of_feeding_focal_person'
+    'name_of_feeding_focal_person',
+    'beneficiary_name' // Ensure beneficiary_name is required
 ];
 
 // Validate required fields for beneficiaries table
@@ -37,28 +38,30 @@ foreach ($required_fields as $field) {
 }
 
 // Insert into the beneficiaries table
-$stmt = $conn->prepare("INSERT INTO beneficiaries (session_id, division_province, city_municipality_barangay, name_of_school, school_id_number, name_of_principal, name_of_feeding_focal_person) VALUES (?, ?, ?, ?, ?, ?, ?)");
+$stmt = $conn->prepare("INSERT INTO beneficiaries (session_id, division_province, city_municipality_barangay, name_of_school, school_id_number, name_of_principal, name_of_feeding_focal_person, beneficiary_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+
 $division_province = $_POST['division_province'];
 $city_municipality_barangay = $_POST['city_municipality_barangay'];
 $name_of_school = $_POST['name_of_school'];
 $school_id_number = $_POST['school_id_number'];
 $name_of_principal = $_POST['name_of_principal'];
 $name_of_feeding_focal_person = $_POST['name_of_feeding_focal_person'];
-$stmt->bind_param("sssssss", $session_id, $division_province, $city_municipality_barangay, $name_of_school, $school_id_number, $name_of_principal, $name_of_feeding_focal_person);
-$stmt->execute();
-$beneficiary_id = $stmt->insert_id; // Get the inserted beneficiary ID
-$stmt->close();
 
-// Validate beneficiary details
-if (!isset($_POST['beneficiary_name']) || !is_array($_POST['beneficiary_name'])) {
-    $response = [
-        'success' => false,
-        'message' => 'Beneficiary details are missing.'
-    ];
-    header('Content-Type: application/json');
-    echo json_encode($response);
-    exit();
+// Loop through each beneficiary's name and insert
+foreach ($_POST['beneficiary_name'] as $index => $beneficiary_name) {
+    $stmt->bind_param("ssssssss", $session_id, $division_province, $city_municipality_barangay, $name_of_school, $school_id_number, $name_of_principal, $name_of_feeding_focal_person, $beneficiary_name);
+    $stmt->execute();
+    $beneficiary_id = $stmt->insert_id; // Get the inserted beneficiary ID
+
+    // Now update the beneficiaries table with the beneficiary_id
+    $update_stmt = $conn->prepare("UPDATE beneficiaries SET beneficiary_id = ? WHERE id = ?");
+    $update_stmt->bind_param("ii", $beneficiary_id, $beneficiary_id);
+    $update_stmt->execute();
+    $update_stmt->close();
 }
+
+// Close the statement for beneficiaries table
+$stmt->close();
 
 // Prepare statement for inserting beneficiary details
 $stmt = $conn->prepare("INSERT INTO beneficiary_details (session_id, beneficiary_id, student_section, name, lrn_no, sex, grade_section, date_of_birth, date_of_weighing, age, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa, dewormed, parents_consent_for_milk, participation_in_4ps, beneficiary_of_sbfp_in_previous_years, parent_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");

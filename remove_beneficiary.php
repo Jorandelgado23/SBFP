@@ -4,21 +4,32 @@ session_start(); // Ensure session is started
 include("accountconnection.php");
 
 // Fetch data from AJAX request
-$id = $_POST['id'];
+$beneficiary_id = $_POST['beneficiary_id']; // Get beneficiary_id from AJAX request
 
-// Delete query
-$sql = "DELETE FROM beneficiary_details WHERE id=?";
-
-// Prepare statement to prevent SQL injection
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $id);
+// Start a transaction to ensure data integrity
+$conn->begin_transaction();
 
 $response = array(); // Initialize response array
 
-if ($stmt->execute()) {
+try {
+    // Delete from beneficiary_details table (using beneficiary_id to identify the record)
+    $sql1 = "DELETE FROM beneficiary_details WHERE beneficiary_id=?";
+    $stmt1 = $conn->prepare($sql1);
+    $stmt1->bind_param("s", $beneficiary_id); // Bind beneficiary_id as the parameter
+    $stmt1->execute();
+
+    // Delete from beneficiaries table (using beneficiary_id to identify the record)
+    $sql2 = "DELETE FROM beneficiaries WHERE beneficiary_id=?";
+    $stmt2 = $conn->prepare($sql2);
+    $stmt2->bind_param("s", $beneficiary_id); // Bind beneficiary_id as the parameter
+    $stmt2->execute();
+
+    // Commit the transaction
+    $conn->commit();
+
     // Log the activity if the email is set and the role is 'sbfp'
     if (isset($_SESSION['email']) && $_SESSION['role'] === 'sbfp') {
-        $activity = "Deleted beneficiary details for ID: $id";
+        $activity = "Deleted beneficiary details for Beneficiary ID: $beneficiary_id";
         $activity_type = "delete"; // Define the activity type
         $timestamp = date("Y-m-d H:i:s");
 
@@ -35,18 +46,23 @@ if ($stmt->execute()) {
         $sbfp_activity_stmt->close();
     }
 
-    $response['success'] = true; // Indicate success
+    // Success response
+    $response['success'] = true;
     $response['message'] = "Record deleted successfully"; // Success message
-} else {
+} catch (Exception $e) {
+    // If any error occurs, roll back the transaction
+    $conn->rollback();
+
     $response['success'] = false; // Indicate failure
-    $response['message'] = "Error deleting record: " . $stmt->error; // Error message
+    $response['message'] = "Error deleting record: " . $e->getMessage(); // Error message
 }
 
 // Output response as JSON
 header('Content-Type: application/json');
 echo json_encode($response);
 
-// Close the statement and connection
-$stmt->close();
+// Close the statements and connection
+$stmt1->close();
+$stmt2->close();
 $conn->close();
 ?>

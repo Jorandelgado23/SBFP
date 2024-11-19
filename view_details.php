@@ -138,7 +138,7 @@ $conn->close();
                      </li>
                        
                         <li class="active">
-                            <a href="adbeneficiaries.php"><i class="fa fa-university""></i> <span>All School Beneficiaries</span></a>
+                            <a href="adbeneficiaries.php"><i class="fa fa-university"></i> <span>All School Beneficiaries</span></a>
                         </li>
 
                         <li >

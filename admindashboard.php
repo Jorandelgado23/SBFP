@@ -142,7 +142,7 @@ include("adminauth.php");
                     <h4>General</h4>
                     <ul class="list-unstyled components">
                     <li class="active">
-                            <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
+                            <a href="admindashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
                         </li>
 
                         <li>
@@ -220,7 +220,7 @@ $conn->close();
 
 </li>
 
-<li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+
                                        
                                     </ul>
                                     <ul class="user_profile_dd">

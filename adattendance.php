@@ -58,6 +58,17 @@ include("adminauth.php");
         font-weight: bold; /* Bold text */
     }
 
+    form {
+            display: flex;
+            
+            gap: 45px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+
     
 
 
@@ -291,12 +302,12 @@ $rowsPerPage = 5;
 <!-- Filter Form -->
 <form method="POST" action="" class="form-inline">
     <div class="form-group">
-        <label for="attendance_date" style="font-weight: bolder;">DATE :</label>
+        <label for="attendance_date">DATE :</label>
         <input type="date" name="attendance_date" id="attendance_date" class="form-control" value="<?php echo htmlspecialchars($filter_date); ?>">
     </div>
 
     <div class="form-group">
-        <label for="name_of_school" style="font-weight: bolder;">SCHOOL :</label>
+        <label for="name_of_school">SCHOOL :</label>
         <select name="name_of_school" id="name_of_school" class="form-control">
             <option value="">Select a school</option>
             <?php foreach ($schools as $school): ?>

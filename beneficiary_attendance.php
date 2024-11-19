@@ -88,7 +88,7 @@ include("connection.php");
             <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
         </li>
 
-        <li>
+        <!-- <li>
     <a href="#snsDropdown" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
         <i class="fa fa-dashboard"></i> <span>SNS List</span>
     </a>
@@ -102,7 +102,7 @@ include("connection.php");
         <li><a href="weighing_sessions6.php?grade6">> <span>Grade 6</span></a></li>
         <li><a href="sns_summary.php">> <span>SNS Summary</span></a></li>
     </ul>
-</li>
+</li> -->
 
         <li>
             <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
@@ -307,7 +307,7 @@ $result = $stmt->get_result();
 ?>
 
 <!-- Filter Form -->
-<form method="POST" action="beneficiary_attendance.php" class="form-inline mb-3">
+<form method="POST" action="beneficiary_attendance.php" class="form-inline mb-3" style="float: right;">
     <label for="grade_section" class="mr-2">Grade Level:</label>
     <select name="grade_section" id="grade_section" class="form-control mr-3">
         <option value="">All</option>
@@ -331,27 +331,33 @@ $result = $stmt->get_result();
 <form method="POST" action="submit_attendance.php">
     <div class="form-row align-items-center">
         <div class="col-auto">
-            <label for="attendance_date">Select Date of Attendance:</label>
+            <label for="attendance_date">Date of Attendance:</label>
             <input type="date" name="attendance_date" id="attendance_date" class="form-control" value="<?= date('Y-m-d'); ?>" required>
         </div>
     </div>
+<br>
+<br>
 
-    <!-- Toggle Attendance Mode Button -->
+    <!-- Toggle Attendance Mode Button
     <button type="button" id="toggleMode" class="btn btn-secondary mb-3">Select Present</button>
-    <input type="hidden" name="attendance_mode" id="attendance_mode" value="Present">
+    <input type="hidden" name="attendance_mode" id="attendance_mode" value="Present"> -->
 
     <!-- Table Section -->
     <div class="col-md-12">
         <div class="white_shd full margin_bottom_30">
             <div class="full graph_head">
                 <div class="heading1 margin_0">
-                    <h2>Beneficiary Attendance</h2>
+                    <h2>Attendance</h2>
                 </div>
             </div>
 
             <div class="table_section padding_infor_info">
                 <div class="table-responsive-sm">
                     <table class="table table-bordered">
+
+                     <!-- Toggle Attendance Mode Button -->
+    <button type="button" id="toggleMode" class="btn btn-secondary mb-3">Select Present</button>
+    <input type="hidden" name="attendance_mode" id="attendance_mode" value="Present">
                         <thead>
                             <tr>
                                 <th>Beneficiary Name</th>
@@ -410,8 +416,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update button text
         this.textContent = isPresentMode ? 'Select Absent' : 'Select Present';
 
-        // Update all meal served fields based on the new mode
+        // Update all meal served fields and row colors based on the new mode
         updateMealServed();
+        updateRowColors(); // Update colors dynamically
         clearCheckboxesForAbsentMode(); // Clears checkboxes in Absent mode
     });
 
@@ -440,6 +447,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Update row colors based on attendance status
+    function updateRowColors() {
+        document.querySelectorAll('.attendance-checkbox').forEach(checkbox => {
+            const row = checkbox.closest('tr'); // Get the table row
+            if (checkbox.checked) {
+                row.style.backgroundColor = document.getElementById('attendance_mode').value === 'Present' ? 'green' : 'red';
+                row.style.color = 'white'; // Optional: Set text color for better contrast
+            } else {
+                row.style.backgroundColor = ''; // Reset to default color
+                row.style.color = ''; // Reset text color
+            }
+        });
+    }
+
     // Handle checkbox change (when a student is marked present/absent)
     document.querySelectorAll('.attendance-checkbox').forEach(checkbox => {
         checkbox.addEventListener('change', function() {
@@ -461,6 +482,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     mealDropdown.value = "A";  // Mark absent when unchecked in present mode
                 }
             }
+
+            // Update row color dynamically
+            updateRowColors();
         });
     });
 
@@ -505,16 +529,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 mealDropdown.value = "A";  // Set all meals to "A" in Absent mode
             }
         });
+
+        // Update row colors
+        updateRowColors();
     }
 
     // Dynamically reset checkbox behavior and meal updates
     window.addEventListener('load', function() {
         clearCheckboxesForAbsentMode();  // Clear checkboxes in Absent mode on page load
         updateMealServed();  // Initialize meal served state for Present or Absent mode
+        updateRowColors();  // Update row colors on page load
     });
 });
-
-
 </script>
 
 
@@ -522,6 +548,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+
+<br>
+<br>
 
 
 
@@ -541,7 +570,7 @@ $stmt->close();
 // Fetch attendance records for a specific date and session_id
 $date_filter = isset($_POST['date_filter']) ? $_POST['date_filter'] : date('Y-m-d');
 
-$sql = "SELECT bd.name, bd.grade_section, ba.status, ba.meal_served, ba.attendance_date 
+$sql = "SELECT bd.name, bd.grade_section, bd.student_section, ba.status, ba.meal_served, ba.attendance_date 
         FROM beneficiary_attendance ba
         JOIN beneficiary_details bd ON ba.beneficiary_id = bd.id
         WHERE ba.attendance_date = ? AND bd.session_id = ?";
@@ -587,7 +616,7 @@ $result = $stmt->get_result();
                             <?php while ($row = $result->fetch_assoc()) { ?>
                             <tr>
                                 <td><?= htmlspecialchars($row['name']) ?></td>
-                                <td><?= htmlspecialchars($row['grade_section']) ?></td>
+                                <td><?= htmlspecialchars($row['grade_section'] . " - " . $row['student_section']) ?></td>
                                 <td><?= htmlspecialchars($row['status']) ?></td>
                                 <td><?= htmlspecialchars($row['meal_served']) ?></td>
                                 <td><?= htmlspecialchars($row['attendance_date']) ?></td>
@@ -632,7 +661,7 @@ $stmt->fetch();
 $stmt->close();
 
 // Fetch attendance statistics (count of absences) for each beneficiary associated with the session_id
-$sql = "SELECT bd.name, bd.grade_section, COUNT(ba.status) AS absences
+$sql = "SELECT bd.name, bd.grade_section, bd.student_section, COUNT(ba.status) AS absences
         FROM beneficiary_details bd
         LEFT JOIN beneficiary_attendance ba ON bd.id = ba.beneficiary_id
         WHERE ba.status = 'Absent' AND bd.session_id = ?
@@ -672,7 +701,7 @@ $result = $stmt->get_result();
                             <?php while ($row = $result->fetch_assoc()) { ?>
                             <tr>
                                 <td><?= htmlspecialchars($row['name']) ?></td>
-                                <td><?= htmlspecialchars($row['grade_section']) ?></td>
+                                <td><?= htmlspecialchars($row['grade_section'] . " - " . $row['student_section']) ?></td>
                                 <td><?= htmlspecialchars($row['absences']) ?></td>
                             </tr>
                             <?php } ?>

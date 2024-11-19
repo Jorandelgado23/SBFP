@@ -126,7 +126,7 @@ ob_start(); ?>
             </td>
             <td style="text-align: right;">
                 <strong>School:</strong> <?php echo htmlspecialchars($name_of_school); ?><br>
-                <strong>Grade: __________ Section _____________________</strong><br>
+                <!-- <strong>Grade: __________ Section _____________________</strong><br> -->
                 <strong>School  ID Number:</strong> <?php echo htmlspecialchars($school_id_number); ?><br>
             </td>
         </tr>

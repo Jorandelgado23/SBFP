@@ -64,7 +64,7 @@ include("adminauth.php");
         form {
             display: flex;
             
-            gap: 15px;
+            gap: 45px;
         }
         label {
             font-weight: bold;
@@ -225,7 +225,7 @@ $conn->close();
 
 </li>
 
-<li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+
                                        
                                     </ul>
                                     <ul class="user_profile_dd">

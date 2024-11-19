@@ -82,6 +82,14 @@ $conn->close();
       <![endif]-->
    </head>
 
+   <style>
+     .active {
+        background-color: lightblue; /* Background color */
+        color: #fff; /* Text color */
+        font-weight: bold; /* Bold text */
+    }
+   </style>
+
 <body class="dashboard dashboard_2">
     <div class="full_container">
         <div class="inner_container">
@@ -110,32 +118,35 @@ $conn->close();
                 <div class="sidebar_blog_2">
                     <h4>General</h4>
                     <ul class="list-unstyled components">
-                    <li class="active">
+                    <li>
                             <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
                         </li>
 
-                        <!-- <li>
-                            <a href="attendance.php"><i class="fa fa-calendar"></i> <span>Attendance</span></a>
-                        </li> -->
-
+                        <li>
+                        <a href="#element" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-calendar"></i> <span>School Attendance</span></a>
+                        <ul class="collapse list-unstyled" id="element">
+                           <li><a href="monthly_attendance_reports.php">> <span>Monthly Report</span></a></li> 
+                           <li><a href="adattendance.php">> <span>Attendance Logs</span></a></li> 
+                          
+                        </ul>
+                     </li>
                        
                         <li>
                             <a href="adbeneficiaries.php"><i class="fa fa-university""></i> <span>All School Beneficiaries</span></a>
                         </li>
 
-                        <li>
+                        <li class="active">
                             <a href="adschoollist.php"><i class="fa fa-pie-chart"></i> <span>School List Of Laguna</span></a>
                         </li>
 
                         <li>
                             <a href="adaccountmanagement.php"><i class="fa fa-group"></i> <span>Account Management</span></a>
                         </li>
+
+                        <li>
+                            <a href="age_gender_analysis.php"><i class="fa fa-archive"></i> <span>age and gender Analysis</span></a>
+                        </li>
                        
-                       
-                      
-                      
-            
-                        
                         <li>
                             <a href="adsettings.php"><i class="fa fa-cog yellow_color"></i> <span>Settings</span></a>
                         </li>
@@ -156,9 +167,35 @@ $conn->close();
                             <div class="right_topbar">
                                 <div class="icon_info">
                                     <ul>
-                                        <li><a href="#"><i class="fa fa-bell-o"></i><span class="badge">2</span></a></li>
-                                        <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+                                    <li>
+
+<?php
+include("accountconnection.php");
+
+// Query recent activities count with status 'new'
+$sql = "SELECT COUNT(*) AS activity_count FROM recent_activity WHERE status = 'new'";
+$result = $conn->query($sql);
+
+// Get activity count
+$activity_count = 0;
+if ($result->num_rows > 0) {
+$row = $result->fetch_assoc();
+$activity_count = $row['activity_count'];
+}
+
+// Close connection
+$conn->close();
+?>
+
+
+<a href="allactivities.php?mark_read=true">
+<i class="fa fa-bell-o"></i>
+<?php if ($activity_count > 0): ?>
+<span class="badge"><?php echo $activity_count; ?></span>
+<?php endif; ?>
+</a>
+
+</li>
                                     </ul>
                                     <ul class="user_profile_dd">
                                         <li>
@@ -247,6 +284,9 @@ $conn->close();
     <div class="text-left mt-4">
         <a href="javascript:history.back()" class="btn btn-primary">Back</a>
     </div>
+    
+    <br>
+    <br>
 
     <div class="col-md-12">
     <div class="white_shd full margin_bottom_30">

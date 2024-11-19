@@ -92,7 +92,7 @@ include("connection.php");
             <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
         </li>
 
-        <li>
+        <!-- <li>
     <a href="#snsDropdown" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
         <i class="fa fa-dashboard"></i> <span>SNS List</span>
     </a>
@@ -106,7 +106,7 @@ include("connection.php");
         <li><a href="weighing_sessions6.php?grade6">> <span>Grade 6</span></a></li>
         <li><a href="sns_summary.php">> <span>SNS Summary</span></a></li>
     </ul>
-</li>
+</li> -->
 
         <li>
             <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
@@ -367,12 +367,13 @@ while ($chart_row = $chart_result_previous->fetch_assoc()) {
             <!-- <div class="heading1 margin_0">
                 <h2>Filtering of Beneficiary Progress</h2>
             </div> -->
+            
         </div>
         <div class="padding_infor_info">
             <form method="POST" action="" id="dateForm" class="mb-0">
                 <div class="form-row align-items-center">
                     <div class="col-auto">
-                        <label for="date">Select Date:</label>
+                        <label for="date">Select Date of progress:</label>
                         <input type="date" name="date" id="date" class="form-control" value="<?= $date ?>" required onchange="submitForm()">
                     </div>
                 </div>

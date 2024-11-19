@@ -94,7 +94,7 @@ include("connection.php");
             <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
         </li>
 
-        <li class="active">
+        <!-- <li class="active">
     <a href="#snsDropdown" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
         <i class="fa fa-dashboard"></i> <span>SNS List</span>
     </a>
@@ -108,10 +108,10 @@ include("connection.php");
         <li><a href="weighing_sessions6.php?grade6">> <span>Grade 6</span></a></li>
         <li><a href="sns_summary.php">> <span>SNS Summary</span></a></li>
     </ul>
-</li>
+</li> -->
 
 
-        <li>
+        <li class="active">
             <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
         </li>
 

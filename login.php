@@ -127,11 +127,11 @@
         <form id="loginForm" method="post" action="loginauth.php">
             <div class="form-group">
                 <label for="inputEmail">Email</label>
-                <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email" required autofocus>
+                <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Enter your email" required autofocus>
             </div>
             <div class="form-group">
                 <label for="inputPassword">Password</label>
-                <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+                <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Enter your Password" required>
             </div>
             <button class="btn btn-primary" type="submit">Login</button>
         </form>

@@ -123,7 +123,7 @@
         <form id="resetRequestForm" method="post" action="send_reset_link.php">
             <div class="form-group">
                 <label for="inputEmail">Email Address</label>
-                <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
+                <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Enter your email address" required autofocus>
             </div>
             <button class="btn btn-primary" type="submit">Send Reset Link</button>
         </form>

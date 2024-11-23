@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Check if the user account is active
         if ($is_active == 0) {
             // Return JSON response indicating the account is disabled
+            $stmt->close();
             echo json_encode(array('success' => false, 'message' => 'Your account is disabled. Please contact the administrator.'));
             exit();
         }
@@ -54,20 +55,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             // Return JSON response indicating success
+            $stmt->close();
             echo json_encode(array('success' => true, 'role' => $role));
             exit();
         } else {
             // Invalid password
+            $stmt->close();
             echo json_encode(array('success' => false, 'message' => 'Invalid password.'));
             exit();
         }
     } else {
         // No user found with that email address
+        $stmt->close();
         echo json_encode(array('success' => false, 'message' => 'No user found with that email address.'));
         exit();
     }
-
-    $stmt->close();
 }
 
 // Close connection

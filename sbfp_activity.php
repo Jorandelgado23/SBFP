@@ -251,15 +251,42 @@ $conn->close();
                                         <li>
                                             
                                         <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user light_color"></i>
-    <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
+        <!-- <img class="img-responsive rounded-circle" src="images/origlogo.jpg" alt="#" /> -->
+
     <span class="name_user"><?php echo $user_role; ?></span>
+
 </a>
 
-                                            <div class="dropdown-menu">
+<div class="dropdown-menu">
                                                 <a class="dropdown-item" href="usersetting.php">My Profile</a>
-                                                <a class="dropdown-item" href="settings.html">Settings</a>
-                                                <a class="dropdown-item" href="help.html">Help</a>
-                                                <a class="dropdown-item" href="logout.php"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                                                <a class="dropdown-item" href="#" id="logoutLink">
+    <span>Log Out</span> <i class="fa fa-sign-out"></i>
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.getElementById('logoutLink').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default link action
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out of your account!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, log me out!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to logout.php if confirmed
+                window.location.href = 'logout.php';
+            }
+        });
+    });
+</script>
+
                                             </div>
                                         </li>
                                     </ul>

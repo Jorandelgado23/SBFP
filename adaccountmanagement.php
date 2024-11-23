@@ -388,7 +388,16 @@ function updateSchoolDetails() {
 
    
 
+<?php
+
+include 'accountconnection.php';
+
+// Assuming the logged-in user's email is stored in the session
+$logged_in_user_email = $_SESSION['email']; // Adjust this to your session variable
+?>
+
 <div class="container-fluid">
+    <!-- Admin Accounts Section -->
     <div class="row justify-content-between mb-4">
         <div class="col-md-12">
             <div class="text-right">
@@ -399,160 +408,162 @@ function updateSchoolDetails() {
         </div>
     </div>
     <div class="row">
-    <div class="col-md-12">
-        <div class="white_shd full margin_bottom_30">
-            <div class="full graph_head" style="background-color:#0971b8;">
-                <div class="heading1 margin_0">
-                    <h2 style="color:#fff;">Admin Accounts</h2>
+        <div class="col-md-12">
+            <div class="white_shd full margin_bottom_30">
+                <div class="full graph_head" style="background-color:#0971b8;">
+                    <div class="heading1 margin_0">
+                        <h2 style="color:#fff;">Admin Accounts</h2>
+                    </div>
+                </div>
+                <div class="table_section padding_infor_info">
+                    <div class="table-responsive-sm">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Phone Number</th>
+                                    <th>Role</th>
+                                    <th class="text-center">Edit</th>
+                                    <th class="text-center">Account Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                // Fetch Admin Accounts excluding the main admin account
+                                $sql_admin = "SELECT id, firstname, lastname, email, phone_number, role, is_active FROM users WHERE role = 'admin' AND email != 'mainadmin@sbfp.ph'";
+                                $result_admin = $conn->query($sql_admin);
+
+                                // Display Admin Accounts
+                                if ($result_admin->num_rows > 0) {
+                                    while ($row = $result_admin->fetch_assoc()) {
+                                        echo "<tr>";
+                                        echo "<td>" . $row["firstname"] . "</td>";
+                                        echo "<td>" . $row["lastname"] . "</td>";
+                                        echo "<td>" . $row["email"] . "</td>";
+                                        echo "<td>" . $row["phone_number"] . "</td>";
+                                        echo "<td>" . $row["role"] . "</td>";
+
+                                        // Edit Button
+                                        echo "<td class='text-center'>";
+                                        echo "<button class='btn btn-sm btn-info' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '', '". $row['role'] . "')\"><i class='fa fa-edit'></i></button>";
+                                        echo "</td>";
+
+                                        // Show Disable/Enable buttons only for mainadmin@sbfp.ph
+                                        if ($logged_in_user_email == 'mainadmin@sbfp.ph') {
+                                            echo "<td class='text-center'>";
+                                            if ($row['is_active'] == 1) {
+                                                echo "<button class='btn btn-sm btn-danger' onclick=\"toggleUserStatus('" . $row['id'] . "', 0)\">Disable</button>";
+                                            } else {
+                                                echo "<button class='btn btn-sm btn-success' onclick=\"toggleUserStatus('" . $row['id'] . "', 1)\">Enable</button>";
+                                            }
+                                            echo "</td>";
+                                        }
+
+                                        echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='7'>No admin accounts found</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div class="table_section padding_infor_info">
-                <div class="table-responsive-sm">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <!-- <th>ID</th> -->
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Email</th>
-                                <th>Phone Number</th>
-                                <th>Role</th>
-                                <!-- <th>Division/Province</th>
-                                <th>School District/Municipality</th>
-                                <th>School Name</th>
-                                <th>BEIS ID</th>
-                                <th>School Address</th>
-                                <th>Barangay Name</th>
-                                <th>Supervisor/Principal Name</th>
-                                <th>Actions</th>  -->
-                                <th class="text-center">Edit</th>
-                                <th class="text-center">Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        include 'accountconnection.php';
+        </div>
+    </div>
 
-                        // Fetch Admin Accounts excluding the main admin account
-                        $sql_admin = "SELECT id, firstname, lastname, email, phone_number, role, `Division/Province`, school_district_municipality, school_name, beis_id, school_address, barangay_name, supervisor_principal_name FROM users WHERE role = 'admin' AND email != 'mainadmin@sbfp.ph'";
-                        $result_admin = $conn->query($sql_admin);
+    <!-- SBFP Accounts Section -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="white_shd full margin_bottom_30">
+                <div class="full graph_head" style="background-color:#0971b8;">
+                    <div class="heading1 margin_0">
+                        <h2 style="color:#fff;">SBFP Accounts</h2>
+                    </div>
+                </div>
+                <div class="table_section padding_infor_info">
+                    <div class="table-responsive-sm">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Phone Number</th>
+                                    <th>Birthday</th>
+                                    <th>Role</th>
+                                    <th>Division/Province</th>
+                                    <th>School District/Municipality</th>
+                                    <th>School Name</th>
+                                    <th>BEIS ID</th>
+                                    <th>School Address</th>
+                                    <th>Barangay Name</th>
+                                    <th>Supervisor/Principal Name</th>
+                                    <th class="text-center">Edit</th>
+                                    <th class="text-center">Account Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                // Fetch SBFP Accounts
+                                $sql_sbfp = "SELECT id, firstname, lastname, email, phone_number, birthday, role, is_active, `Division/Province`, school_district_municipality, school_name, beis_id, school_address, barangay_name, supervisor_principal_name FROM users WHERE role = 'sbfp'";
+                                $result_sbfp = $conn->query($sql_sbfp);
 
-                        // Display Admin Accounts
-                        if ($result_admin->num_rows > 0) {
-                            while ($row = $result_admin->fetch_assoc()) {
-                                echo "<tr>";
-                                // echo "<td>" . $row["id"] . "</td>";
-                                echo "<td>" . $row["firstname"] . "</td>";
-                                echo "<td>" . $row["lastname"] . "</td>";
-                                echo "<td>" . $row["email"] . "</td>";
-                                echo "<td>" . $row["phone_number"] . "</td>";
-                                echo "<td>" . $row["role"] . "</td>";
-                                // echo "<td>" . $row["Division/Province"] . "</td>";
-                                // echo "<td>" . $row["school_district_municipality"] . "</td>";
-                                // echo "<td>" . $row["school_name"] . "</td>";
-                                // echo "<td>" . $row["beis_id"] . "</td>";
-                                // echo "<td>" . $row["school_address"] . "</td>";
-                                // echo "<td>" . $row["barangay_name"] . "</td>";
-                                // echo "<td>" . $row["supervisor_principal_name"] . "</td>";
-                                echo "<td class='text-center'>";
-                                echo "<button class='btn btn-sm btn-info' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '', '". $row['role'] . "')\"><i class='fa fa-edit'></i></button>";
-                                echo "</td>";
-                                echo "<td class='text-center'>";
-                                echo "<button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\"><i class='fa fa-trash'></i></button>";
-                                echo "</td>";
-                                echo "</tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='7'>No admin accounts found</td></tr>";
-                        }
+                                // Display SBFP Accounts
+                                if ($result_sbfp->num_rows > 0) {
+                                    while ($row = $result_sbfp->fetch_assoc()) {
+                                        echo "<tr>";
+                                        echo "<td>" . $row["firstname"] . "</td>";
+                                        echo "<td>" . $row["lastname"] . "</td>";
+                                        echo "<td>" . $row["email"] . "</td>";
+                                        echo "<td>" . $row["phone_number"] . "</td>";
+                                        echo "<td>" . $row["birthday"] . "</td>";
+                                        echo "<td>" . $row["role"] . "</td>";
+                                        echo "<td>" . $row["Division/Province"] . "</td>";
+                                        echo "<td>" . $row["school_district_municipality"] . "</td>";
+                                        echo "<td>" . $row["school_name"] . "</td>";
+                                        echo "<td>" . $row["beis_id"] . "</td>";
+                                        echo "<td>" . $row["school_address"] . "</td>";
+                                        echo "<td>" . $row["barangay_name"] . "</td>";
+                                        echo "<td>" . $row["supervisor_principal_name"] . "</td>";
 
-                        $conn->close();
-                        ?>
-                        </tbody>
-                    </table>
+                                        // Edit Button
+                                        echo "<td class='text-center'>";
+                                        echo "<button class='btn btn-sm btn-info' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '" . $row['birthday'] . "', '" . $row['role'] . "', '" . $row['Division/Province'] . "', '" . $row['school_district_municipality'] . "', '" . $row['school_name'] . "', '" . $row['beis_id'] . "', '" . $row['school_address'] . "', '" . $row['barangay_name'] . "', '" . $row['supervisor_principal_name'] . "')\"><i class='fa fa-edit'></i></button>";
+                                        echo "</td>";
+
+                                        // Show Disable/Enable buttons only for mainadmin@sbfp.ph
+                                        if ($logged_in_user_email == 'mainadmin@sbfp.ph') {
+                                            echo "<td class='text-center'>";
+                                            if ($row['is_active'] == 1) {
+                                                echo "<button class='btn btn-sm btn-danger' onclick=\"toggleUserStatus('" . $row['id'] . "', 0)\">Disable</button>";
+                                            } else {
+                                                echo "<button class='btn btn-sm btn-success' onclick=\"toggleUserStatus('" . $row['id'] . "', 1)\">Enable</button>";
+                                            }
+                                            echo "</td>";
+                                        }
+
+                                        echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='14'>No SBFP accounts found</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-
-<div class="col-md-12">
-    <div class="white_shd full margin_bottom_30">
-        <div class="full graph_head" style="background-color:#0971b8;">
-            <div class="heading1 margin_0">
-                <h2 style="color:#fff;">SBFP Accounts</h2>
-            </div>
-        </div>
-        <div class="table_section padding_infor_info">
-            <div class="table-responsive-sm">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <!-- <th>ID</th> -->
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
-                            <th>Phone Number</th>
-                            <th>Birthday</th>
-                            <th>Role</th>
-                            <th>Division/Province</th>
-                            <th>School District/Municipality</th>
-                            <th>School Name</th>
-                            <th>BEIS ID</th>
-                            <th>School Address</th>
-                            <th>Barangay Name</th>
-                            <th>Supervisor/Principal Name</th>
-                            <th class="text-center">Edit</th>
-                            <th class="text-center">Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    include 'accountconnection.php';
-
-                    // Fetch SBFP Accounts
-                    $sql_sbfp = "SELECT id, firstname, lastname, email, phone_number, birthday, role, `Division/Province`, school_district_municipality, school_name, beis_id, school_address, barangay_name, supervisor_principal_name FROM users WHERE role = 'sbfp'";
-                    $result_sbfp = $conn->query($sql_sbfp);
-
-                    // Display SBFP Accounts
-                    if ($result_sbfp->num_rows > 0) {
-                        while ($row = $result_sbfp->fetch_assoc()) {
-                            echo "<tr>";
-                            // echo "<td>" . $row["id"] . "</td>";
-                            echo "<td>" . $row["firstname"] . "</td>";
-                            echo "<td>" . $row["lastname"] . "</td>";
-                            echo "<td>" . $row["email"] . "</td>";
-                            echo "<td>" . $row["phone_number"] . "</td>";
-                            echo "<td>" . $row["birthday"] . "</td>";
-                            echo "<td>" . $row["role"] . "</td>";
-                            echo "<td>" . $row["Division/Province"] . "</td>";
-                            echo "<td>" . $row["school_district_municipality"] . "</td>";
-                            echo "<td>" . $row["school_name"] . "</td>";
-                            echo "<td>" . $row["beis_id"] . "</td>";
-                            echo "<td>" . $row["school_address"] . "</td>";
-                            echo "<td>" . $row["barangay_name"] . "</td>";
-                            echo "<td>" . $row["supervisor_principal_name"] . "</td>";
-                            echo "<td class='text-center'>";
-                            echo "<button class='btn btn-sm btn-info' onclick=\"editUser('" . $row['id'] . "', '" . $row['firstname'] . "', '" . $row['lastname'] . "', '" . $row['email'] . "', '" . $row['phone_number'] . "', '" . $row['birthday'] . "', '" . $row['role'] . "', '" . $row['Division/Province'] . "', '" . $row['school_district_municipality'] . "', '" . $row['school_name'] . "', '" . $row['beis_id'] . "', '" . $row['school_address'] . "', '" . $row['barangay_name'] . "', '" . $row['supervisor_principal_name'] . "')\"><i class='fa fa-edit'></i></button>";
-                            echo "</td>";
-                            echo "<td class='text-center'>";
-                            echo "<button class='btn btn-sm btn-danger' onclick=\"removeUser('" . $row['id'] . "')\"><i class='fa fa-trash'></i></button>";
-                            echo "</td>";
-                            echo "</tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='14'>No SBFP accounts found</td></tr>";
-                    }
-
-                    $conn->close();
-                    ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+<?php
+$conn->close();
+?>
 
 
 <!-- Edit User Modal -->
@@ -808,6 +819,48 @@ function updateSchoolDetails() {
             });
         });
     });
+</script>
+
+
+<script>
+    function toggleUserStatus(userId, newStatus) {
+    fetch('toggle_user_status.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: userId, is_active: newStatus })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: `User has been ${newStatus == 1 ? 'enabled' : 'disabled'}.`,
+                confirmButtonText: 'OK'
+            }).then(() => {
+                location.reload();
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: data.message || 'There was an error. Please try again.',
+                confirmButtonText: 'OK'
+            });
+        }
+    })
+    .catch(error => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'There was a problem with the request. Please try again later.',
+            confirmButtonText: 'OK'
+        });
+    });
+}
+
 </script>
 
 

@@ -350,10 +350,10 @@ $conn->close();
 
     <!-- Add buttons for generating Excel and PDF -->
     <div class="text-center mt-4">
-        <form action="schoollist_pdf_excel.php" method="post" target="_blank" style="display: inline;">
+        <!-- <form action="schoollist_pdf_excel.php" method="post" target="_blank" style="display: inline;">
             <input type="hidden" name="action" value="excel">
             <button type="submit" class="btn btn-success"><i class="fa fa-file-excel-o"> </i>Generate Excel</button>
-        </form>
+        </form> -->
         <form action="schoollist_pdf_excel.php" method="post" target="_blank" style="display: inline;">
             <input type="hidden" name="action" value="pdf">
             <button type="submit" class="btn btn-danger"><i class="fa fa-file-pdf-o"> </i>Generate PDF</button>

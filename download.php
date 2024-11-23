@@ -149,7 +149,7 @@ ob_start(); ?>
                         <th rowspan="2" style="border: 1px solid black; text-align: center;">Percentage (A/B) * 100</th>
                     </tr>
                     <tr>
-                        <?php for ($i = 1; $i <= 31; $i++) { echo "<th style='border: 1px solid black;'>$i</th>"; } ?>
+                        <?php for ($i = 1; $i <= 31; $i++) { echo "<th style='border: 1px solid black; width: 20px; text-align: center; font-size: 10px;'>$i</th>"; } ?>
                     </tr>
                 </thead>
                 <tbody>

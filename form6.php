@@ -625,7 +625,7 @@ $stmt->close();
                 <h1 >Milk Component Data Table</h1> -->
                 <form method="POST" action="milk_regenerate.php" style="float: right;">
                     <button type="submit" name="action" value="pdf" class="btn btn-primary"><i class="fa fa-file-pdf-o"></i> Generate PDF</button>
-                    <button type="submit" name="action" value="excel" class="btn btn-success"><i class="fa fa-file-excel-o"> </i>Generate Excel</button>
+                    <!-- <button type="submit" name="action" value="excel" class="btn btn-success"><i class="fa fa-file-excel-o"> </i>Generate Excel</button> -->
                 </form>
                 <?php displayMilkData($conn, $session_id); ?>
                 <?php displayEditModal(); ?>

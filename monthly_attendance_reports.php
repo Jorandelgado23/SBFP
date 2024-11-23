@@ -333,11 +333,23 @@ while ($row = $result->fetch_assoc()) {
         </select>
     </div>
 
-    <button type="submit" class="btn btn-primary">Generate Report</button>
+    <button type="submit" class="btn btn-primary">Filter Attendance</button>
 </form>
 <br>
 
 
+
+<!-- Add a "Generate PDF" button -->
+<form method="POST" action="attendance_report.php" target="_blank" style="float: right;">
+    <!-- Include hidden fields to send filters if needed -->
+    <input type="hidden" name="name_of_school" value="<?php echo htmlspecialchars($filter_school); ?>">
+    <input type="hidden" name="grade_section" value="<?php echo htmlspecialchars($filter_grade); ?>">
+    
+    <button type="submit" class="btn btn-success">Generate Report</button>
+</form>
+
+<br>
+<br>
 
 <!-- Table Section -->
 <div class="col-md-12">

@@ -21,7 +21,8 @@ $required_fields = [
     'school_id_number', 
     'name_of_principal', 
     'name_of_feeding_focal_person',
-    'beneficiary_name' // Ensure beneficiary_name is required
+    'beneficiary_first_name', // Updated for first name
+    'beneficiary_last_name'   // Updated for last name
 ];
 
 // Validate required fields for beneficiaries table
@@ -48,7 +49,10 @@ $name_of_principal = $_POST['name_of_principal'];
 $name_of_feeding_focal_person = $_POST['name_of_feeding_focal_person'];
 
 // Loop through each beneficiary's name and insert
-foreach ($_POST['beneficiary_name'] as $index => $beneficiary_name) {
+foreach ($_POST['beneficiary_first_name'] as $index => $first_name) {
+    $last_name = $_POST['beneficiary_last_name'][$index];
+    $beneficiary_name = $first_name . ' ' . $last_name;
+
     $stmt->bind_param("ssssssss", $session_id, $division_province, $city_municipality_barangay, $name_of_school, $school_id_number, $name_of_principal, $name_of_feeding_focal_person, $beneficiary_name);
     $stmt->execute();
     $beneficiary_id = $stmt->insert_id; // Get the inserted beneficiary ID
@@ -67,17 +71,18 @@ $stmt->close();
 $stmt = $conn->prepare("INSERT INTO beneficiary_details (session_id, beneficiary_id, student_section, name, lrn_no, sex, grade_section, date_of_birth, date_of_weighing, age, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa, dewormed, parents_consent_for_milk, participation_in_4ps, beneficiary_of_sbfp_in_previous_years, parent_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 // Loop through each beneficiary and insert details
-foreach ($_POST['beneficiary_name'] as $index => $beneficiary_name) {
+foreach ($_POST['beneficiary_first_name'] as $index => $first_name) {
+    $last_name = $_POST['beneficiary_last_name'][$index];
+    $beneficiary_name = $first_name . ' ' . $last_name;
+    // Continue as in the original form
+    
     $student_section = $_POST['student_section'][$index];
     $lrn_no = $_POST['lrn_no'][$index];
     $beneficiary_sex = $_POST['beneficiary_sex'][$index];
     $beneficiary_grade_section = $_POST['beneficiary_grade_section'][$index];
     $beneficiary_dob = $_POST['beneficiary_dob'][$index];
     $beneficiary_dow = $_POST['beneficiary_dow'][$index];
-    
-    // Get the age, but only keep the years part
-    $beneficiary_age = intval($_POST['beneficiary_age'][$index]); // Assuming beneficiary_age comes as "15 years, 5 months"
-
+    $beneficiary_age = intval($_POST['beneficiary_age'][$index]);
     $beneficiary_weight = $_POST['beneficiary_weight'][$index];
     $beneficiary_height = $_POST['beneficiary_height'][$index];
     $beneficiary_bmi = $_POST['beneficiary_bmi'][$index];
@@ -87,18 +92,7 @@ foreach ($_POST['beneficiary_name'] as $index => $beneficiary_name) {
     $parents_consent_for_milk = $_POST['parents_consent_for_milk'][$index];
     $participation_in_4ps = $_POST['participation_in_4ps'][$index];
     $beneficiary_of_sbfp_in_previous_years = $_POST['beneficiary_of_sbfp_in_previous_years'][$index];
-    $parent_phone = $_POST['parent_phone'][$index]; // New field for parent's phone number
-
-    // Validate each beneficiary detail
-    if (empty($beneficiary_name) || empty($lrn_no) || empty($beneficiary_sex) || empty($beneficiary_grade_section) || empty($beneficiary_dob) || empty($student_section)) {
-        $response = [
-            'success' => false,
-            'message' => 'All beneficiary details are required.'
-        ];
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        exit();
-    }
+    $parent_phone = $_POST['parent_phone'][$index];
 
     // Bind parameters and execute
     $stmt->bind_param("ssssssssssssssssssss", $session_id, $beneficiary_id, $student_section, $beneficiary_name, $lrn_no, $beneficiary_sex, $beneficiary_grade_section, $beneficiary_dob, $beneficiary_dow, $beneficiary_age, $beneficiary_weight, $beneficiary_height, $beneficiary_bmi, $nutritional_status_bmia, $nutritional_status_hfa, $dewormed, $parents_consent_for_milk, $participation_in_4ps, $beneficiary_of_sbfp_in_previous_years, $parent_phone);

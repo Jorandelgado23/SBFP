@@ -101,10 +101,17 @@ $stmt->close();
             </div>
 
             <div class="form-group col-md-6">
-                <label for="beneficiary_name" class="form-label">Name:</label>
-                <input type="text" class="form-control" id="beneficiary_name" name="beneficiary_name[]" required>
-                <div class="invalid-feedback">Please provide the beneficiary name.</div>
-            </div>
+    <label for="beneficiary_first_name" class="form-label">First Name:</label>
+    <input type="text" class="form-control" id="beneficiary_first_name" name="beneficiary_first_name[]" required>
+    <div class="invalid-feedback">Please provide the beneficiary's first name.</div>
+</div>
+
+<div class="form-group col-md-6">
+    <label for="beneficiary_last_name" class="form-label">Last Name:</label>
+    <input type="text" class="form-control" id="beneficiary_last_name" name="beneficiary_last_name[]" required>
+    <div class="invalid-feedback">Please provide the beneficiary's last name.</div>
+</div>
+
 
             <div class="form-group col-md-6">
                 <label for="student_section" class="form-label">Student Section:</label>
@@ -337,39 +344,57 @@ $stmt->close();
 
 // Fetch submitted data for the logged-in user only
 $selected_grade = isset($_POST['grade_level']) ? $_POST['grade_level'] : '';
+$search_name = isset($_POST['search_name']) ? $_POST['search_name'] : '';
 
 $sql = "SELECT * FROM beneficiary_details WHERE session_id = ?";
 
+// Apply filters
+$params = [$session_id];
+$types = "s"; // Bind parameter type for session_id
+
 if (!empty($selected_grade)) {
     $sql .= " AND grade_section LIKE ?";
-    $selected_grade = "%$selected_grade%";
+    $params[] = "%$selected_grade%";
+    $types .= "s";
 }
 
-$stmt = $conn->prepare($sql);
-if (!empty($selected_grade)) {
-    $stmt->bind_param("ss", $session_id, $selected_grade);
-} else {
-    $stmt->bind_param("s", $session_id);
+if (!empty($search_name)) {
+    // Split the search_name into keywords
+    $keywords = explode(' ', $search_name);
+    foreach ($keywords as $keyword) {
+        $sql .= " AND name LIKE ?";
+        $params[] = "%$keyword%";
+        $types .= "s";
+    }
 }
+
+// Prepare the statement dynamically
+$stmt = $conn->prepare($sql);
+$stmt->bind_param($types, ...$params);
 $stmt->execute();
 $result = $stmt->get_result();
 
 // Function to partially mask the student's name
 function maskName($name) {
+    // Check if the name is empty
+    if (empty($name)) {
+        return ''; // Return empty string if name is empty
+    }
+
     $parts = explode(' ', $name);
     $maskedName = '';
 
     // Mask the first name
     if (isset($parts[0])) {
         $firstName = $parts[0];
-        $maskedFirstName = substr($firstName, 0, 1) . str_repeat('*', strlen($firstName) - 1);
+        $maskedFirstName = substr($firstName, 0, 1) . (strlen($firstName) > 1 ? str_repeat('*', strlen($firstName) - 1) : '');
         $maskedName = $maskedFirstName;
     }
 
     // Mask the last name
     if (isset($parts[1])) {
         $lastName = $parts[1];
-        $maskedLastName = substr($lastName, 0, 1) . str_repeat('*', strlen($lastName) - 1);
+        $maskedLastName = substr($lastName, 0, 1) . (strlen($lastName) > 1 ? str_repeat('*', strlen($lastName) - 1) : '');
         $maskedName .= ' ' . $maskedLastName;
     }
 
@@ -378,137 +403,162 @@ function maskName($name) {
 
 ?>
 
-<div class="col-md-12">
-                           <div class="white_shd full margin_bottom_30">
-                              <div class="full graph_head">
-                                 <div class="heading1 margin_0">
-              <!-- <div class="heading1 margin_0">
-                <h2>Master List Beneficiaries Table</h2>
-              </div> -->
-            </div>
-            <div class="mb-3">
-              <form method="POST" id="filterForm">
+<div class="mb-3">
+    <form method="POST" id="filterForm">
+        <div class="row justify-content-end">
+            <!-- Grade Level Filter -->
+            <div class="col-md-3">
                 <label for="grade_level">Filter by Grade Level:</label>
                 <select name="grade_level" id="grade_level" class="form-control" onchange="document.getElementById('filterForm').submit();">
-                  <option value="">All</option>
-                  <?php
-                  $grades = array("Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6");
-                  foreach ($grades as $grade) {
-                      echo "<option value=\"$grade\"" . ($selected_grade == "%$grade%" ? " selected" : "") . ">$grade</option>";
-                  }
-                  ?>
-                </select>
-              </form>
-            </div>
-            <div class="table_section padding_infor_info">
-    <div class="table-responsive-sm">
-        <table class="table table-bordered">
-            <thead style="color: #fff; background-color: #0971b8;">
-                <tr>
-                    <th style="display:none;">No.</th> <!-- Hidden column -->
-                    <th>LRN No.</th>
-                    <th>Name</th>
-                    <th>Sex</th>
-                    <th>Grade Level</th>
-                    <th>Student Section</th>
-                    <th>Date of Birth</th>
-                    <th>Date of Weighing</th>
-                    <th>Age</th>
-                    <th>Weight (Kg)</th>
-                    <th>Height (cm)</th>
-                    <th>BMI</th>
-                    <th>Nutritional Status (BMI-A)</th>
-                    <th>Nutritional Status (HFA)</th>
-                    <th>Dewormed?</th>
-                    <th>Parent's consent for milk?</th>
-                    <th>Participation in 4Ps?</th>
-                    <th>Beneficiary of SBFP in Previous Years?</th>
-                    <th class="text-center">Edit</th>
-                    <th class="text-center">Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                if ($result->num_rows > 0) {
-                    $count = 1;
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td style='display:none;'>" . $count++ . "</td>"; // Hidden column
-                        echo "<td>" . $row["lrn_no"] . "</td>";
-                        echo "<td>" . maskName($row["name"]) . "</td>"; // Masked name
-                        echo "<td>" . $row["sex"] . "</td>";
-                        echo "<td>" . $row["grade_section"] . "</td>";
-                        echo "<td>" . $row["student_section"] . "</td>";
-                        echo "<td>" . $row["date_of_birth"] . "</td>";
-                        echo "<td>" . $row["date_of_weighing"] . "</td>";
-                        echo "<td>" . $row["age"] . "</td>";
-                        echo "<td>" . $row["weight"] . "</td>";
-                        echo "<td>" . $row["height"] . "</td>";
-                        echo "<td>" . $row["bmi"] . "</td>";
-
-                        // Nutritional Status (BMI-A) with color coding
-                        $bmi_status = $row["nutritional_status_bmia"];
-                        $bmi_class = "";
-                        if ($bmi_status == "Severely Wasted") {
-                            $bmi_class = "table-danger"; // Red color for Severely Wasted
-                        } elseif ($bmi_status == "Wasted") {
-                            $bmi_class = "table-warning"; // Yellow color for Wasted
-                        } elseif ($bmi_status == "Normal") {
-                            $bmi_class = "table-success"; // Green color for Normal
-                        } elseif ($bmi_status == "Overweight") {
-                            $bmi_class = "table-warning"; // Yellow for Overweight
-                        } elseif ($bmi_status == "Obese") {
-                            $bmi_class = "table-danger"; // Red color for Obese
-                        }
-                        echo "<td class='$bmi_class'>" . $bmi_status . "</td>";
-
-                        // Nutritional Status (HFA) with color coding
-                        $hfa_status = $row["nutritional_status_hfa"];
-                        $hfa_class = "";
-                        if ($hfa_status == "Stunted") {
-                            $hfa_class = "table-danger"; // Red color for Stunted
-                        } elseif ($hfa_status == "Normal") {
-                            $hfa_class = "table-success"; // Green color for Normal
-                        }
-                        echo "<td class='$hfa_class'>" . $hfa_status . "</td>";
-
-                        echo "<td>" . $row["dewormed"] . "</td>";
-                        echo "<td>" . $row["parents_consent_for_milk"] . "</td>";
-                        echo "<td>" . $row["participation_in_4ps"] . "</td>";
-                        echo "<td>" . $row["beneficiary_of_sbfp_in_previous_years"] . "</td>";
-
-                        // Edit and Delete buttons
-                        echo "<td class='text-center'>";
-                        echo "<button class='btn btn-sm btn-info edit-btn' data-id='" . $row["id"] . "'>";
-                        echo "<i class='fa fa-edit'></i>";
-                        echo "</button>";
-                        echo "</td>";
-
-                        echo "<td class='text-center'>";
-                        echo "<button class='btn btn-sm btn-danger remove-btn' data-beneficiary-id='" . $row["beneficiary_id"] . "'>";
-                        echo "<i class='fa fa-trash'></i>";
-                        echo "</button>";
-                        echo "</td>";
-
-                        echo "</tr>";
+                    <option value="">All</option>
+                    <?php
+                    $grades = array("kinder", "Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6");
+                    foreach ($grades as $grade) {
+                        echo "<option value=\"$grade\"" . ($selected_grade == "%$grade%" ? " selected" : "") . ">$grade</option>";
                     }
-                } else {
-                    echo "<tr><td colspan='18'>No data available</td></tr>";
-                }
-                $stmt->close();
-                $conn->close();
-                ?>
-            </tbody>
-        </table>
-    </div>
-              </div>
+                    ?>
+                </select>
             </div>
-          </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="search_name"><strong>Search by Name:</strong></label>
+                    <div class="input-group">
+                        <input type="text" name="search_name" id="search_name" class="form-control" placeholder="Enter name to search"
+                               value="<?php echo htmlspecialchars($search_name); ?>" />
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
+    </form>
 </div>
+
+<div class="col-md-12">
+    <div class="white_shd full margin_bottom_30">
+        <div class="full graph_head">
+            <div class="heading1 margin_0">
+                <h2>Master List Beneficiaries Table</h2>
+            </div>
+            
+            <div class="table_section padding_infor_info">
+                <div class="table-responsive-sm">
+                    <table class="table table-bordered">
+                        <thead style="color: #fff; background-color: #0971b8;">
+                            <tr>
+                                <th style="display:none;">No.</th> <!-- Hidden column -->
+                                <th>LRN No.</th>
+                                <th>First Name</th> <!-- Added First Name column -->
+                                <th>Last Name</th> <!-- Added Last Name column -->
+                                <th>Sex</th>
+                                <th>Grade Level</th>
+                                <th>Student Section</th>
+                                <th>Date of Birth</th>
+                                <th>Date of Weighing</th>
+                                <th>Age</th>
+                                <th>Weight (Kg)</th>
+                                <th>Height (cm)</th>
+                                <th>BMI</th>
+                                <th>Nutritional Status (BMI-A)</th>
+                                <th>Nutritional Status (HFA)</th>
+                                <th>Dewormed?</th>
+                                <th>Parent's consent for milk?</th>
+                                <th>Participation in 4Ps?</th>
+                                <th>Beneficiary of SBFP in Previous Years?</th>
+                                <th class="text-center">Edit</th>
+                                <th class="text-center">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if ($result->num_rows > 0) {
+                                $count = 1;
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<tr>";
+                                    echo "<td style='display:none;'>" . $count++ . "</td>"; // Hidden column
+                                    echo "<td>" . $row["lrn_no"] . "</td>";
+
+                                    // Split the name into first and last names
+                                    $fullName = explode(' ', $row["name"]);
+                                    $firstName = isset($fullName[0]) ? $fullName[0] : '';
+                                    $lastName = isset($fullName[1]) ? $fullName[1] : '';
+
+                                    // Mask the first and last name separately
+                                    echo "<td>" . maskName($firstName) . "</td>"; // Masked first name
+                                    echo "<td>" . maskName($lastName) . "</td>"; // Masked last name
+
+                                    echo "<td>" . $row["sex"] . "</td>";
+                                    echo "<td>" . $row["grade_section"] . "</td>";
+                                    echo "<td>" . $row["student_section"] . "</td>";
+                                    echo "<td>" . $row["date_of_birth"] . "</td>";
+                                    echo "<td>" . $row["date_of_weighing"] . "</td>";
+                                    echo "<td>" . $row["age"] . "</td>";
+                                    echo "<td>" . $row["weight"] . "</td>";
+                                    echo "<td>" . $row["height"] . "</td>";
+                                    echo "<td>" . $row["bmi"] . "</td>";
+
+                                    // Nutritional Status (BMI-A) with color coding
+                                    $bmi_status = $row["nutritional_status_bmia"];
+                                    $bmi_class = "";
+                                    if ($bmi_status == "Severely Wasted") {
+                                        $bmi_class = "table-danger"; // Red color for Severely Wasted
+                                    } elseif ($bmi_status == "Wasted") {
+                                        $bmi_class = "table-warning"; // Yellow color for Wasted
+                                    } elseif ($bmi_status == "Normal") {
+                                        $bmi_class = "table-success"; // Green color for Normal
+                                    } elseif ($bmi_status == "Overweight") {
+                                        $bmi_class = "table-warning"; // Yellow for Overweight
+                                    } elseif ($bmi_status == "Obese") {
+                                        $bmi_class = "table-danger"; // Red color for Obese
+                                    }
+                                    echo "<td class='$bmi_class'>" . $bmi_status . "</td>";
+
+                                    // Nutritional Status (HFA) with color coding
+                                    $hfa_status = $row["nutritional_status_hfa"];
+                                    $hfa_class = "";
+                                    if ($hfa_status == "Stunted") {
+                                        $hfa_class = "table-danger"; // Red color for Stunted
+                                    } elseif ($hfa_status == "Normal") {
+                                        $hfa_class = "table-success"; // Green color for Normal
+                                    }
+                                    echo "<td class='$hfa_class'>" . $hfa_status . "</td>";
+
+                                    echo "<td>" . $row["dewormed"] . "</td>";
+                                    echo "<td>" . $row["parents_consent_for_milk"] . "</td>";
+                                    echo "<td>" . $row["participation_in_4ps"] . "</td>";
+                                    echo "<td>" . $row["beneficiary_of_sbfp_in_previous_years"] . "</td>";
+
+                                    // Edit and Delete buttons
+                                    echo "<td class='text-center'>";
+                                    echo "<button class='btn btn-sm btn-info edit-btn' data-id='" . $row["id"] . "'>";
+                                    echo "<i class='fa fa-edit'></i>";
+                                    echo "</button>";
+                                    echo "</td>";
+
+                                    echo "<td class='text-center'>";
+                                    echo "<button class='btn btn-sm btn-danger remove-btn' data-beneficiary-id='" . $row["beneficiary_id"] . "'>";
+                                    echo "<i class='fa fa-trash'></i>";
+                                    echo "</button>";
+                                    echo "</td>";
+
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='18'>No data available</td></tr>";
+                            }
+                            $stmt->close();
+                            $conn->close();
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 <!-- Edit Modal -->

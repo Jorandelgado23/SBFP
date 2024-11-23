@@ -8,15 +8,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Prepare and bind
-    $stmt = $conn->prepare("SELECT id, firstname, lastname, email, password, role FROM users WHERE email = ?");
+    // Prepare and bind the SQL query to fetch user details including `is_active`
+    $stmt = $conn->prepare("SELECT id, firstname, lastname, email, password, role, is_active FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $stmt->store_result();
-    $stmt->bind_result($id, $firstname, $lastname, $email, $hashed_password, $role);
+    $stmt->bind_result($id, $firstname, $lastname, $email, $hashed_password, $role, $is_active);
 
     if ($stmt->num_rows > 0) {
         $stmt->fetch();
+
+        // Check if the user account is active
+        if ($is_active == 0) {
+            // Return JSON response indicating the account is disabled
+            echo json_encode(array('success' => false, 'message' => 'Your account is disabled. Please contact the administrator.'));
+            exit();
+        }
+
         // Verify the password
         if (password_verify($password, $hashed_password)) {
             // Password is correct, start a session

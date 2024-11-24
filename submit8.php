@@ -9,16 +9,16 @@ include("accountconnection.php");
 
 // Process form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
-    $region_division = $_POST['region_division'];
-    $amount_allocated = $_POST['amount_allocated'];
-    $amount_downloaded = $_POST['amount_downloaded'];
-    $status_fund_downloading = $_POST['status_fund_downloading'];
-    $first_liquidation = $_POST['first_liquidation'];
-    $second_liquidation = $_POST['second_liquidation'];
-    $total_liquidation = $_POST['total_liquidation'];
-    $liquidation_status = $_POST['liquidation_status'];
-    $remarks = $_POST['remarks'];
+    // Sanitize and retrieve form data
+    $region_division = $conn->real_escape_string($_POST['region_division']);
+    $amount_allocated = $conn->real_escape_string($_POST['amount_allocated']);
+    $amount_downloaded = $conn->real_escape_string($_POST['amount_downloaded']);
+    $status_fund_downloading = $conn->real_escape_string($_POST['status_fund_downloading']);
+    $first_liquidation = $conn->real_escape_string($_POST['first_liquidation']);
+    $second_liquidation = $conn->real_escape_string($_POST['second_liquidation']);
+    $total_liquidation = $conn->real_escape_string($_POST['total_liquidation']);
+    $liquidation_status = $conn->real_escape_string($_POST['liquidation_status']);
+    $remarks = $conn->real_escape_string($_POST['remarks']);
 
     // Insert data into `quarterly_reportform8` table
     $sql = "INSERT INTO quarterly_reportform8 (region_division, amount_allocated, amount_downloaded, status_fund_downloading, first_liquidation, second_liquidation, total_liquidation, liquidation_status, remarks)
@@ -40,17 +40,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         for ($i = 0; $i < count($division_schools); $i++) {
             $sql_school = "INSERT INTO division_schools (report_id, division_school, sdo_school, target_sbfp_school, actual_sbfp_school, percent, status, target_beneficiaries, actual_beneficiaries, completion_percentage)
-                           VALUES ('$report_id', '".$division_schools[$i]."', '".$sdo_schools[$i]."', '".$target_sbfp_schools[$i]."', '".$actual_sbfp_schools[$i]."', '".$percentage[$i]."', '".$implementation_status[$i]."', '".$target_beneficiaries[$i]."', '".$actual_beneficiaries[$i]."', '".$completion_percentage[$i]."')";
+                           VALUES ('$report_id', '" . $conn->real_escape_string($division_schools[$i]) . "', 
+                                   '" . $conn->real_escape_string($sdo_schools[$i]) . "', 
+                                   '" . $conn->real_escape_string($target_sbfp_schools[$i]) . "', 
+                                   '" . $conn->real_escape_string($actual_sbfp_schools[$i]) . "', 
+                                   '" . $conn->real_escape_string($percentage[$i]) . "', 
+                                   '" . $conn->real_escape_string($implementation_status[$i]) . "', 
+                                   '" . $conn->real_escape_string($target_beneficiaries[$i]) . "', 
+                                   '" . $conn->real_escape_string($actual_beneficiaries[$i]) . "', 
+                                   '" . $conn->real_escape_string($completion_percentage[$i]) . "')";
 
             if (!$conn->query($sql_school)) {
-                echo "Error: " . $conn->error . "<br>SQL: " . $sql_school;
+                echo "Error inserting into division_schools: " . $conn->error . "<br>SQL: " . $sql_school;
             }
         }
 
         // Generate PDF after successful submission
         generatePDF($report_id, $conn);
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error inserting into quarterly_reportform8: " . $conn->error . "<br>SQL: " . $sql;
     }
 }
 
@@ -90,21 +98,16 @@ function generatePDF($report_id, $conn) {
     </table>
 
     <br><br><br>
-    <h2 style="text-align:center;">LIST OF BENEFICIARIES (SBFP) (SY ' . $currentYear . ')</h2>
-
+    <h4 style="text-align:center;">LIST OF BENEFICIARIES (SBFP) (SY ' . $currentYear . ')</h4>
     <table border="0" cellpadding="4" cellspacing="0" style="width: 100%;">
-        <tr>
-            <td style="text-align: left; width: 50%;">
-                <strong>Division/Province:</strong> ' . $report_data['region_division'] . '<br>
-                <strong>Amount Allocated:</strong> ' . $report_data['amount_allocated'] . '<br>
-            </td>
-            <td style="text-align: right; width: 50%;">
-                <strong>Amount Downloaded:</strong> ' . $report_data['amount_downloaded'] . '<br>
-                <strong>Status of Fund Downloading:</strong> ' . $report_data['status_fund_downloading'] . '<br>
-            </td>
-        </tr>
-    </table>
+    <tr>
+        <td style="text-align: left; width: 50%;">
+            <strong>Region/Division:___________________</strong>
+           
+    </tr>
+</table>
 
+<br>
     <table border="1" cellpadding="4" cellspacing="0" style="width: 100%; border-collapse: collapse;">
         <thead>
             <tr>
@@ -116,7 +119,7 @@ function generatePDF($report_id, $conn) {
                 <th>Status of Implementation</th>
                 <th>No. of Target Beneficiaries</th>
                 <th>No. of Actual Beneficiaries</th>
-                <th>percent of Completion</th>
+                <th>Percent of Completion</th>
             </tr>
         </thead>
         <tbody>';
@@ -137,6 +140,32 @@ function generatePDF($report_id, $conn) {
 
     $html .= '</tbody></table>';
 
+    // Add additional details
+    $html .= "<br><br>
+    <table border='1' cellpadding='4' cellspacing='0' style='width: 100%; border-collapse: collapse;'>
+        <tr>
+            <th>Amount Allocated</th>
+            <th>Amount Downloaded</th>
+            <th>Fund Downloading Status</th>
+            <th>First Liquidation</th>
+            <th>Second Liquidation</th>
+            <th>Total Liquidation</th>
+            <th>Liquidation Status</th>
+            <th>Remarks</th>
+        </tr>
+        <tr>
+            <td>{$report_data['amount_allocated']}</td>
+            <td>{$report_data['amount_downloaded']}</td>
+            <td>{$report_data['status_fund_downloading']}</td>
+            <td>{$report_data['first_liquidation']}</td>
+            <td>{$report_data['second_liquidation']}</td>
+            <td>{$report_data['total_liquidation']}</td>
+            <td>{$report_data['liquidation_status']}</td>
+            <td>{$report_data['remarks']}</td>
+        </tr>
+    </table>";
+
+    // Add signatures
     $html .= "
     <table border='0' cellpadding='4' cellspacing='0' style='width: 100%; margin-top: 30px;'>
         <tr>
@@ -151,21 +180,14 @@ function generatePDF($report_id, $conn) {
         </tr>
     </table>";
 
+
     // Load HTML to Dompdf
     $dompdf->loadHtml($html);
-
-    // Set paper size and orientation
     $dompdf->setPaper('A4', 'landscape');
-
-    // Render the HTML as PDF
     $dompdf->render();
 
-    // Output the generated PDF to Browser
-    $dompdf->stream("report_$report_id.pdf", array("Attachment" => false));
-
-    // Optional: Provide a success message
-    echo "<h2>Report submitted successfully! PDF generated.</h2>";
+    // Stream the generated PDF
+    $dompdf->stream("Quarterly_Report_Form_8", ["Attachment" => false]);
+    exit;
 }
-
-$conn->close();
 ?>

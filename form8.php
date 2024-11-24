@@ -255,93 +255,97 @@ $conn->close();
         </div>
 
         <div class="col-md-12">
-            <div class="white_shd full margin_bottom_30">
-                <div class="full graph_head">
-                    <div class="heading1 margin_0">
-                        <form action="submit8.php" method="POST">
-                            <div class="form-group">
-                                <label for="region_division">Region/Division:</label>
-                                <input type="text" class="form-control" name="region_division" id="region_division" required>
-                            </div>
-
-                            <h3 class="mt-4">Division/Schools</h3>
-                            <div class="table-responsive-sm">
-                <table class="table table-bordered">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th>Division/Schools</th>
-                                            <th>No. of SDO Schools</th>
-                                            <th>Target No. of SBFP Schools</th>
-                                            <th>Actual No. of SBFP Schools</th>
-                                            <th>% (SBFP Schools/SDO Schools)</th>
-                                            <th>Status of Implementation</th>
-                                            <th>No. of Target Beneficiaries</th>
-                                            <th>No. of Actual Beneficiaries</th>
-                                            <th>% of Completion</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><input type="text" class="form-control" name="division_schools[]" required></td>
-                                            <td><input type="number" class="form-control" name="sdo_schools[]" required></td>
-                                            <td><input type="number" class="form-control" name="target_sbfp_schools[]" required></td>
-                                            <td><input type="number" class="form-control" name="actual_sbfp_schools[]" required></td>
-                                            <td><input type="number" class="form-control" name="percentage[]" required></td>
-                                            <td><input type="text" class="form-control" name="implementation_status[]" required></td>
-                                            <td><input type="number" class="form-control" name="target_beneficiaries[]" oninput="calculateCompletion()" required></td>
-                                            <td><input type="number" class="form-control" name="actual_beneficiaries[]" oninput="calculateCompletion()" required></td>
-                                            <td><input type="number" step="0.01" class="form-control" name="completion_percentage[]" readonly></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <h3 class="mt-4">Financial Status</h3>
-                            <div class="form-group">
-                                <label for="amount_allocated">Amount Allocated:</label>
-                                <input type="number" class="form-control" name="amount_allocated" id="amount_allocated" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="amount_downloaded">Amount Downloaded to Schools:</label>
-                                <input type="number" class="form-control" name="amount_downloaded" id="amount_downloaded" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="disbursed">Status of Downloading of Funds:</label>
-                                <input type="text" class="form-control" name="status_fund_downloading" id="status_fund_downloading" required>
-                            </div>
-
-                            <h3 class="mt-4">Liquidation</h3>
-                            <div class="form-group">
-                                <label for="first_liquidation">1st Liquidation:</label>
-                                <input type="number" class="form-control" name="first_liquidation" id="first_liquidation" oninput="calculateTotalLiquidation()" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="second_liquidation">2nd Liquidation:</label>
-                                <input type="number" class="form-control" name="second_liquidation" id="second_liquidation" oninput="calculateTotalLiquidation()" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="total_liquidation">Total Liquidation:</label>
-                                <input type="number" class="form-control" name="total_liquidation" id="total_liquidation" readonly>
-                            </div>
-
-                            <h3 class="mt-4">Remarks</h3>
-                            <div class="form-group">
-                                <label for="liquidation_status">Fully/Partially Liquidated:</label>
-                                <select name="liquidation_status" class="form-control" id="liquidation_status">
-                                    <option value="Fully">Fully Liquidated</option>
-                                    <option value="Partially">Partially Liquidated</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <textarea name="remarks" class="form-control" id="remarks" cols="30" rows="5" placeholder="Enter remarks here"></textarea>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary" style="float: right;">Submit Report</button>
-                        </form>
+    <div class="white_shd full margin_bottom_30">
+        <div class="full graph_head">
+            <div class="heading1 margin_0">
+                <form action="submit8.php" method="POST">
+                    <!-- Region/Division Section -->
+                    <div class="form-group">
+                        <label for="region_division" class="h5">Region/Division:</label>
+                        <input type="text" class="form-control" name="region_division" id="region_division" required placeholder="Enter Region or Division">
                     </div>
-                </div>
+
+                    <h3 class="mt-4 text-primary">Division/Schools</h3>
+                    <div class="table-responsive-sm">
+                        <table class="table table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Division/Schools</th>
+                                    <th>No. of SDO Schools</th>
+                                    <th>Target No. of SBFP Schools</th>
+                                    <th>Actual No. of SBFP Schools</th>
+                                    <th>% (SBFP Schools/SDO Schools)</th>
+                                    <th>Status of Implementation</th>
+                                    <th>No. of Target Beneficiaries</th>
+                                    <th>No. of Actual Beneficiaries</th>
+                                    <th>% of Completion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" class="form-control" name="division_schools[]" required placeholder="Enter Division/School"></td>
+                                    <td><input type="number" class="form-control" name="sdo_schools[]" required placeholder="Enter SDO Schools"></td>
+                                    <td><input type="number" class="form-control" name="target_sbfp_schools[]" required placeholder="Enter Target SBFP Schools"></td>
+                                    <td><input type="number" class="form-control" name="actual_sbfp_schools[]" required placeholder="Enter Actual SBFP Schools"></td>
+                                    <td><input type="number" class="form-control" name="percentage[]" required placeholder="Enter Percentage"></td>
+                                    <td><input type="text" class="form-control" name="implementation_status[]" required placeholder="Enter Status"></td>
+                                    <td><input type="number" class="form-control" name="target_beneficiaries[]" oninput="calculateCompletion()" required placeholder="Enter Target Beneficiaries"></td>
+                                    <td><input type="number" class="form-control" name="actual_beneficiaries[]" oninput="calculateCompletion()" required placeholder="Enter Actual Beneficiaries"></td>
+                                    <td><input type="number" step="0.01" class="form-control" name="completion_percentage[]" readonly placeholder="Completion %"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Financial Status Section -->
+                    <h3 class="mt-4 text-primary">Financial Status</h3>
+                    <div class="form-group">
+                        <label for="amount_allocated" class="h5">Amount Allocated:</label>
+                        <input type="number" class="form-control" name="amount_allocated" id="amount_allocated" required placeholder="Enter Allocated Amount">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount_downloaded" class="h5">Amount Downloaded to Schools:</label>
+                        <input type="number" class="form-control" name="amount_downloaded" id="amount_downloaded" required placeholder="Enter Downloaded Amount">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="disbursed" class="h5">Status of Downloading of Funds:</label>
+                        <input type="text" class="form-control" name="status_fund_downloading" id="status_fund_downloading" required placeholder="Enter Fund Download Status">
+                    </div>
+
+                    <!-- Liquidation Section -->
+                    <h3 class="mt-4 text-primary">Liquidation</h3>
+                    <div class="form-group">
+                        <label for="first_liquidation" class="h5">1st Liquidation:</label>
+                        <input type="number" class="form-control" name="first_liquidation" id="first_liquidation" oninput="calculateTotalLiquidation()" required placeholder="Enter 1st Liquidation Amount">
+                    </div>
+                    <div class="form-group">
+                        <label for="second_liquidation" class="h5">2nd Liquidation:</label>
+                        <input type="number" class="form-control" name="second_liquidation" id="second_liquidation" oninput="calculateTotalLiquidation()" required placeholder="Enter 2nd Liquidation Amount">
+                    </div>
+                    <div class="form-group">
+                        <label for="total_liquidation" class="h5">Total Liquidation:</label>
+                        <input type="number" class="form-control" name="total_liquidation" id="total_liquidation" readonly placeholder="Total Liquidation Amount">
+                    </div>
+
+                    <!-- Remarks Section -->
+                    <h3 class="mt-4 text-primary">Remarks</h3>
+                    <div class="form-group">
+                        <label for="liquidation_status" class="h5">Fully/Partially Liquidated:</label>
+                        <select name="liquidation_status" class="form-control" id="liquidation_status">
+                            <option value="Fully">Fully Liquidated</option>
+                            <option value="Partially">Partially Liquidated</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="remarks" class="h5">Remarks:</label>
+                        <textarea name="remarks" class="form-control" id="remarks" cols="30" rows="5" placeholder="Enter remarks here"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-success" style="float: right; margin-top: 20px;">Submit Report</button>
+                </form>
             </div>
         </div>
     </div>
@@ -381,6 +385,7 @@ $conn->close();
 </script>
 
 
+
             </div>
         </div>
     </div>
@@ -393,51 +398,6 @@ $conn->close();
     <!-- Chart Plugins -->
     <script src="js/Chart.min.js"></script>
     <!-- Init Charts -->
-    <script>
-        var ctx = document.getElementById('chartjs_area').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-
-        var ctx = document.getElementById('chartjs_bar').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-
-        var ctx = document.getElementById('chartjs_line').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Dataset 1',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [0, 10, 5, 2, 20, 30, 45]
-                }]
-            },
-            options: {}
-        });
-    </script>
 </body>
 
 </html>

@@ -106,6 +106,65 @@ include("adminauth.php");
         font-weight: bold; /* Bold text */
     }
 
+    /* Container for the Gantt Chart */
+.gantt_chart_alternative {
+    display: flex;
+    height: 50px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    background: #f7f7f7;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Segments for Healthy and Unhealthy */
+.gantt_segment {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    position: relative;
+    transition: transform 0.2s;
+}
+
+/* Segment Colors */
+.gantt_segment.healthy {
+    background-color: #4CAF50; /* Green for healthy */
+}
+
+.gantt_segment.unhealthy {
+    background-color: #FF6F61; /* Orange-red for unhealthy */
+}
+
+/* Hover Effect for Segments */
+.gantt_segment:hover {
+    transform: scale(1.05);
+    z-index: 1;
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Labels Inside the Segments */
+.segment_label {
+    position: absolute;
+    padding: 5px;
+    font-size: 13px;
+    color: white;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
+/* Text Summary Below the Chart */
+.gantt_summary {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
 
     </style>
 
@@ -168,6 +227,10 @@ include("adminauth.php");
 
                         <li>
                             <a href="age_gender_analysis.php"><i class="fa fa-archive"></i> <span>age and gender Analysis</span></a>
+                        </li>
+
+                        <li>
+                            <a href="school_report.php"><i class="fa fa-file-zip-o"></i> <span>Monthly School Report</span></a>
                         </li>
                        
                         <li>
@@ -433,7 +496,7 @@ $beneficiaries_json = json_encode($beneficiaries);
     var schools = <?php echo $schools_json; ?>;
     var beneficiaries = <?php echo $beneficiaries_json; ?>;
 
-    // Generate bar chart
+    // Generate bar chart with updated design
     var ctx = document.getElementById('bar_chart').getContext('2d');
     var barChart = new Chart(ctx, {
         type: 'bar',
@@ -442,20 +505,88 @@ $beneficiaries_json = json_encode($beneficiaries);
             datasets: [{
                 label: 'Number of Beneficiaries',
                 data: beneficiaries, // Number of beneficiaries per school
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: function(context) {
+                    var index = context.dataIndex;
+                    var colors = [
+                        'rgba(255, 99, 132, 0.6)', 
+                        'rgba(54, 162, 235, 0.6)', 
+                        'rgba(255, 206, 86, 0.6)', 
+                        'rgba(75, 192, 192, 0.6)', 
+                        'rgba(153, 102, 255, 0.6)', 
+                        'rgba(255, 159, 64, 0.6)'
+                    ];
+                    return colors[index % colors.length];
+                },
+                borderColor: function(context) {
+                    var index = context.dataIndex;
+                    var colors = [
+                        'rgba(255, 99, 132, 1)', 
+                        'rgba(54, 162, 235, 1)', 
+                        'rgba(255, 206, 86, 1)', 
+                        'rgba(75, 192, 192, 1)', 
+                        'rgba(153, 102, 255, 1)', 
+                        'rgba(255, 159, 64, 1)'
+                    ];
+                    return colors[index % colors.length];
+                },
                 borderWidth: 1
             }]
         },
         options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw + ' beneficiaries';
+                        }
+                    }
+                }
+            },
             scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Schools',
+                        font: {
+                            size: 14,
+                            family: 'Arial, sans-serif',
+                            weight: 'bold'
+                        },
+                        color: '#333'
+                    }
+                },
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Beneficiaries',
+                        font: {
+                            size: 14,
+                            family: 'Arial, sans-serif',
+                            weight: 'bold'
+                        },
+                        color: '#333'
+                    },
+                    grid: {
+                        borderColor: '#ddd',
+                        borderWidth: 1,
+                        tickColor: '#ddd'
+                    }
+                }
+            },
+            layout: {
+                padding: {
+                    left: 20,
+                    right: 20,
+                    top: 20,
+                    bottom: 20
                 }
             }
         }
     });
 </script>
+
 
 
 
@@ -520,41 +651,37 @@ $conn->close(); // Close the database connection
     </div>
 
     <!-- Progress Bar Section for Healthy and Unhealthy Students -->
-    <div class="col-md-6">
-        <div class="white_shd full margin_bottom_30">
-            <div class="full graph_head">
-                <div class="heading1 margin_0">
-                    <h2>Students Progress</h2>
+ <!-- Alternative Gantt Chart Section for Healthy and Unhealthy Students -->
+<div class="col-md-6">
+    <div class="white_shd full margin_bottom_30">
+        <div class="full graph_head">
+            <div class="heading1 margin_0">
+                <h2>Students Progress (Gantt Chart)</h2>
+            </div>
+        </div>
+        <div class="full gantt_chart_inner">
+            <div class="gantt_chart_alternative">
+                <!-- Healthy Students Segment -->
+                <div class="gantt_segment healthy" style="width: <?php echo round($healthy_percentage); ?>%;">
+                    <span class="segment_label">Healthy: <?php echo round($healthy_percentage); ?>%</span>
+                </div>
+                <!-- Unhealthy Students Segment -->
+                <div class="gantt_segment unhealthy" style="width: <?php echo round($unhealthy_percentage); ?>%;">
+                    <span class="segment_label">Unhealthy: <?php echo round($unhealthy_percentage); ?>%</span>
                 </div>
             </div>
-            <div class="full progress_bar_inner">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="progress_bar">
-                            <!-- Healthy Students Progress Bar -->
-                            <span class="skill" style="width:<?php echo round($healthy_percentage); ?>%; color: #4CAF50;">Healthy Students <span class="info_valume"><?php echo round($healthy_percentage); ?>%</span></span>
-                            <div class="progress skill-bar">
-                                <div class="progress-bar progress-bar-animated progress-bar-striped" role="progressbar" aria-valuenow="<?php echo round($healthy_percentage); ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo round($healthy_percentage); ?>%;">
-                                </div>
-                            </div>
-                            <!-- Unhealthy Students Progress Bar -->
-                            <span class="skill" style="width:<?php echo round($unhealthy_percentage); ?>%; color: red;">Unhealthy Students <span class="info_valume"><?php echo round($unhealthy_percentage); ?>%</span></span>
-                            <div class="progress skill-bar">
-                                <div class="progress-bar progress-bar-danger progress-bar-animated progress-bar-striped" role="progressbar" aria-valuenow="<?php echo round($unhealthy_percentage); ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo round($unhealthy_percentage); ?>%;">
-                                </div>
-                            </div>
-                            <br>
-                            <br>
-                            <br>
-                            <!-- Display total healthy and unhealthy students -->
-                            <p style="color: #4CAF50; font-weight:bold">Total Healthy Students: <?php echo $healthy_students; ?> out of <?php echo $total_students; ?> students</p>
-                            <p style="color: red; font-weight:bold">Total Unhealthy Students: <?php echo $unhealthy_students; ?> out of <?php echo $total_students; ?> students</p>
-                        </div>
-                    </div>
-                </div>
+
+            <br>
+            <br>
+            <!-- Text Summary -->
+            <div class="gantt_summary">
+                <p style="color: #4CAF50; font-weight: bold;">Total Healthy Students: <?php echo $healthy_students; ?> out of <?php echo $total_students; ?> students</p>
+                <p style="color: red; font-weight: bold;">Total Unhealthy Students: <?php echo $unhealthy_students; ?> out of <?php echo $total_students; ?> students</p>
             </div>
         </div>
     </div>
+</div>
+
 </div>
 
 <script>

@@ -771,7 +771,7 @@ $result = $stmt->get_result();
             <table class="table table-bordered">
                <thead style="color: #fff; background-color: #0971b8;">
                   <tr>
-                     <th>Name of Parent</th>
+                     <th>Name of Students</th>
                      <th>Parent Phone Number</th>
                   </tr>
                </thead>

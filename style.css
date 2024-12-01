@@ -2244,11 +2244,11 @@ i.icon {
 /** pagination **/
 
 .pagination .btn {
-    background: #1ed085;
+    background: #607D8B;
     color: #fff;
     border-color: #1ed085;
     width: 45px;
-    height: 40px;
+    /* height: 40px; */
     font-size: 14px;
     font-weight: 500;
 }

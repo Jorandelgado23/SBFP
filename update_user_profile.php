@@ -9,7 +9,6 @@ $user_firstname = "";
 $user_lastname = "";
 $email = "";
 $user_profile_picture = "";
-$role = ""; // Add a variable to store user role
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -20,22 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Initialize variables for recent activity logging
     $activity = "";
     $activity_type = "";
-    
-    // Fetch user data including profile picture and role
-    $sql = "SELECT * FROM users WHERE email = '$email'";
-    $result = $conn->query($sql);
-    
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $user_id = $row['id'];
-        $user_firstname = $row['firstname'];
-        $user_lastname = $row['lastname'];
-        $email = $row['email'];
-        $user_profile_picture = $row['profile_picture']; // Retrieve profile picture filename
-        $role = $row['role']; // Retrieve user role
-    } else {
-        echo "Error: User not found.";
-    }
     
     // Handle profile picture upload
     if ($_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
@@ -58,6 +41,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             echo "Failed to move uploaded file.";
         }
+    }
+    
+    // Fetch user data including profile picture
+    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $result = $conn->query($sql);
+    
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $user_id = $row['id'];
+        $user_firstname = $row['firstname'];
+        $user_lastname = $row['lastname'];
+        $email = $row['email'];
+        $user_profile_picture = $row['profile_picture']; // Retrieve profile picture filename
+    } else {
+        echo "Error: User not found.";
     }
     
     // Handle other profile information updates
@@ -115,14 +113,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Recent activity logged successfully.";
         } else {
             echo "Error logging recent activity: " . $conn->error;
-        }
-        
-        // Insert into sbfp_recent_activity for SBFP role only
-        if ($role === 'sbfp') {
-            $sbfp_activity_stmt = $conn->prepare("INSERT INTO sbfp_recent_activity (email, activity, activity_type, timestamp) VALUES (?, ?, ?, ?)");
-            $sbfp_activity_stmt->bind_param("ssss", $email, $activity, $activity_type, $timestamp);
-            $sbfp_activity_stmt->execute();
-            $sbfp_activity_stmt->close();
         }
     }
 }

@@ -56,6 +56,10 @@ include("connection.php");
         font-weight: bold; /* Bold text */
     }
 
+    .table_section {
+    text-align: center;
+}
+
 
    </style>
 

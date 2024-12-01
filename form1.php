@@ -112,6 +112,13 @@ $stmt->close();
     <div class="invalid-feedback">Please provide the beneficiary's last name.</div>
 </div>
 
+  <!-- New field for Parent's Phone Number -->
+  <div class="form-group col-md-6">
+    <label for="parent_phone" class="form-label">Parent's Phone Number:</label>
+    <input type="tel" class="form-control" id="parent_phone" name="parent_phone[]" required pattern="^\+63\d{10}$" title="Please enter a valid Philippine phone number (11 digits, including +63)" placeholder="912 345 6789" maxlength="13" onfocus="addPrefix(this)" oninput="validatePhone(this)">
+    <div class="invalid-feedback">Please provide the parent's phone number.</div>
+</div>
+
 
             <div class="form-group col-md-6">
                 <label for="student_section" class="form-label">Student Section:</label>
@@ -228,12 +235,7 @@ $stmt->close();
                 </select>
                 <div class="invalid-feedback">Please specify if the beneficiary was part of SBFP in previous years.</div>
             </div>
-          <!-- New field for Parent's Phone Number -->
-          <div class="form-group col-md-6">
-    <label for="parent_phone" class="form-label">Parent's Phone Number:</label>
-    <input type="tel" class="form-control" id="parent_phone" name="parent_phone[]" required pattern="^\+63\d{10}$" title="Please enter a valid Philippine phone number (11 digits, including +63)" placeholder="912 345 6789" maxlength="13" onfocus="addPrefix(this)" oninput="validatePhone(this)">
-    <div class="invalid-feedback">Please provide the parent's phone number.</div>
-</div>
+        
 
 
         </div>
@@ -337,84 +339,92 @@ $email = $_SESSION['email'];
 $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
-$stmt->store_result();
 $stmt->bind_result($session_id);
 $stmt->fetch();
 $stmt->close();
 
-// Fetch submitted data for the logged-in user only
+// Handle filters
 $selected_grade = isset($_POST['grade_level']) ? $_POST['grade_level'] : '';
 $search_name = isset($_POST['search_name']) ? $_POST['search_name'] : '';
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$limit = 5; // Rows per page
+$offset = ($page - 1) * $limit;
 
+// Base query
 $sql = "SELECT * FROM beneficiary_details WHERE session_id = ?";
-
-// Apply filters
 $params = [$session_id];
-$types = "s"; // Bind parameter type for session_id
+$types = "s";
 
+// Apply grade level filter
 if (!empty($selected_grade)) {
-    $sql .= " AND grade_section LIKE ?";
-    $params[] = "%$selected_grade%";
+    $sql .= " AND grade_section = ?";
+    $params[] = $selected_grade;
     $types .= "s";
 }
 
+// Apply search name filter
 if (!empty($search_name)) {
-    // Split the search_name into keywords
-    $keywords = explode(' ', $search_name);
-    foreach ($keywords as $keyword) {
-        $sql .= " AND name LIKE ?";
-        $params[] = "%$keyword%";
-        $types .= "s";
-    }
+    $sql .= " AND name LIKE ?";
+    $params[] = "%" . $search_name . "%";
+    $types .= "s";
 }
 
-// Prepare the statement dynamically
+// Get total rows for pagination
+$count_sql = "SELECT COUNT(*) as total FROM (" . $sql . ") as filtered";
+$stmt = $conn->prepare($count_sql);
+$stmt->bind_param($types, ...$params);
+$stmt->execute();
+$stmt->bind_result($total_rows);
+$stmt->fetch();
+$stmt->close();
+
+$total_pages = ceil($total_rows / $limit);
+
+// Add LIMIT and OFFSET to the main query
+$sql .= " LIMIT ? OFFSET ?";
+$params[] = $limit;
+$params[] = $offset;
+$types .= "ii";
+
 $stmt = $conn->prepare($sql);
 $stmt->bind_param($types, ...$params);
 $stmt->execute();
 $result = $stmt->get_result();
 
 // Function to partially mask the student's name
-function maskName($name) {
-    // Check if the name is empty
+function maskName($name)
+{
     if (empty($name)) {
         return ''; // Return empty string if name is empty
     }
-
     $parts = explode(' ', $name);
     $maskedName = '';
-
-    // Mask the first name
     if (isset($parts[0])) {
         $firstName = $parts[0];
         $maskedFirstName = substr($firstName, 0, 1) . (strlen($firstName) > 1 ? str_repeat('*', strlen($firstName) - 1) : '');
         $maskedName = $maskedFirstName;
     }
-
-    // Mask the last name
     if (isset($parts[1])) {
         $lastName = $parts[1];
         $maskedLastName = substr($lastName, 0, 1) . (strlen($lastName) > 1 ? str_repeat('*', strlen($lastName) - 1) : '');
         $maskedName .= ' ' . $maskedLastName;
     }
-
     return $maskedName;
 }
 
 ?>
-
 <div class="mb-3">
     <form method="POST" id="filterForm">
         <div class="row justify-content-end">
-            <!-- Grade Level Filter -->
             <div class="col-md-3">
                 <label for="grade_level">Filter by Grade Level:</label>
                 <select name="grade_level" id="grade_level" class="form-control" onchange="document.getElementById('filterForm').submit();">
                     <option value="">All</option>
                     <?php
-                    $grades = array("kinder", "Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6");
+                    $grades = array("Kinder", "Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6");
                     foreach ($grades as $grade) {
-                        echo "<option value=\"$grade\"" . ($selected_grade == "%$grade%" ? " selected" : "") . ">$grade</option>";
+                        $selected = ($selected_grade == $grade) ? "selected" : "";
+                        echo "<option value=\"$grade\" $selected>$grade</option>";
                     }
                     ?>
                 </select>
@@ -434,6 +444,20 @@ function maskName($name) {
         </div>
     </form>
 </div>
+<div class="col ml-auto">
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="actionMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            GENERATE PDF
+        </button>
+        <div class="dropdown-menu" aria-labelledby="actionMenuButton">
+            <form action="masterlist_pdf.php" method="get" class="dropdown-item">
+                <input type="hidden" name="session_id" value="<?php echo htmlspecialchars($session_id); ?>">
+                <button type="submit" class="btn btn-link">Download as PDF</button>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <div class="col-md-12">
     <div class="white_shd full margin_bottom_30">
@@ -441,11 +465,10 @@ function maskName($name) {
             <div class="heading1 margin_0">
                 <h2>Master List Beneficiaries Table</h2>
             </div>
-            
             <div class="table_section padding_infor_info">
                 <div class="table-responsive-sm">
                     <table class="table table-bordered">
-                        <thead style="color: #fff; background-color: #0971b8;">
+                    <thead style="color: #fff; background-color: #0971b8;">
                             <tr>
                                 <th style="display:none;">No.</th> <!-- Hidden column -->
                                 <th>LRN No.</th>
@@ -471,7 +494,7 @@ function maskName($name) {
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
+                        <?php
                             if ($result->num_rows > 0) {
                                 $count = 1;
                                 while ($row = $result->fetch_assoc()) {
@@ -547,16 +570,41 @@ function maskName($name) {
                             } else {
                                 echo "<tr><td colspan='18'>No data available</td></tr>";
                             }
-                            $stmt->close();
-                            $conn->close();
                             ?>
                         </tbody>
                     </table>
                 </div>
+                <div class="pagination">
+    <?php
+    // Display the "Previous" button
+    if ($page > 1) {
+        $prev_page = $page - 1;
+        echo "<a class='btn btn-primary' href='?page=$prev_page'><</a> ";
+    }
+
+    // Display individual page numbers
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $active = $i == $page ? "active" : "";
+        echo "<a class='btn btn-primary $active' href='?page=$i'>$i</a> ";
+    }
+
+    // Display the "Next" button
+    if ($page < $total_pages) {
+        $next_page = $page + 1;
+        echo "<a class='btn btn-primary' href='?page=$next_page'>></a>";
+    }
+    ?>
+</div>
             </div>
         </div>
     </div>
 </div>
+
+<?php
+$stmt->close();
+$conn->close();
+?>
+
 
 
 

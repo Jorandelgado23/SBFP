@@ -338,9 +338,7 @@ $result = $stmt->get_result();
 <br>
 <br>
 
-    <!-- Toggle Attendance Mode Button
-    <button type="button" id="toggleMode" class="btn btn-secondary mb-3">Select Present</button>
-    <input type="hidden" name="attendance_mode" id="attendance_mode" value="Present"> -->
+
 
     <!-- Table Section -->
     <div class="col-md-12">

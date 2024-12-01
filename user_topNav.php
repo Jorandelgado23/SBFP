@@ -60,6 +60,21 @@ include("connection.php");
         font-weight: bold; /* Bold text */
     }
 
+    .table_section {
+    text-align: center;
+}
+
+.pagination a.active {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.pagination a {
+    margin: 0 5px;
+    text-decoration: none;
+}
+
     
    </style>
 

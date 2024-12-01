@@ -458,20 +458,21 @@ $(document).ready(function() {
 </script>
 
 <div class="col-md-12 grid-margin stretch-card">
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title">Input Progress for Beneficiary</h4>
+    <div class="card shadow-lg" style="border-radius: 15px; overflow: hidden;">
+        <div class="card-body p-5" style="background:#0971b8; color: #007bff;">
+            <!-- <h4 class="card-title text-uppercase text-center mb-4" style="font-weight: bold; letter-spacing: 1px;">Input Progress for Beneficiary</h4> -->
             <form action="" method="post" class="forms-sample">
+                <!-- Beneficiary Selection -->
                 <div class="form-group row">
-                    <label for="beneficiary_id" class="col-sm-4 col-form-label">Beneficiary:</label>
+                    <label for="beneficiary_id" class="col-sm-4 col-form-label text-white font-weight-bold">Beneficiary:</label>
                     <div class="col-sm-8">
-                        <select name="beneficiary_id" id="beneficiary_id" class="form-control" required>
+                        <select name="beneficiary_id" id="beneficiary_id" class="form-control" style="border-radius: 25px; border: none; padding: 10px;" required>
                             <option value="">Select a beneficiary</option>
                             <?php while ($row = $result->fetch_assoc()) { ?>
                                 <option value="<?= $row['id'] ?>" 
                                         data-date_of_birth="<?= $row['date_of_birth'] ?>" 
                                         data-session_id="<?= $session_id ?>"
-                                        data-student_section="<?= $row['student_section'] ?>"> <!-- Add this data attribute -->
+                                        data-student_section="<?= $row['student_section'] ?>">
                                     <?= $row['name'] ?>
                                 </option>
                             <?php } ?>
@@ -479,56 +480,71 @@ $(document).ready(function() {
                     </div>
                 </div>
 
+                <!-- Date of Progress -->
                 <div class="form-group row">
-                    <label for="date_of_progress" class="col-sm-4 col-form-label">Date of Progress:</label>
+                    <label for="date_of_progress" class="col-sm-4 col-form-label text-white font-weight-bold">Date of Progress:</label>
                     <div class="col-sm-8">
-                        <input type="date" name="date_of_progress" id="date_of_progress" class="form-control" required>
+                        <input type="date" name="date_of_progress" id="date_of_progress" 
+                               class="form-control" style="border-radius: 25px; border: none; padding: 10px;" required>
                     </div>
                 </div>
 
+                <!-- Weight -->
                 <div class="form-group row">
-                    <label for="weight" class="col-sm-4 col-form-label">Weight (kg):</label>
+                    <label for="weight" class="col-sm-4 col-form-label text-white font-weight-bold">Weight (kg):</label>
                     <div class="col-sm-8">
-                        <input type="number" step="0.01" name="weight" id="weight" class="form-control" required>
+                        <input type="number" step="0.01" name="weight" id="weight" 
+                               class="form-control" style="border-radius: 25px; border: none; padding: 10px;" required>
                     </div>
                 </div>
 
+                <!-- Height -->
                 <div class="form-group row">
-                    <label for="height" class="col-sm-4 col-form-label">Height (cm):</label>
+                    <label for="height" class="col-sm-4 col-form-label text-white font-weight-bold">Height (cm):</label>
                     <div class="col-sm-8">
-                        <input type="number" step="0.01" name="height" id="height" class="form-control" required>
+                        <input type="number" step="0.01" name="height" id="height" 
+                               class="form-control" style="border-radius: 25px; border: none; padding: 10px;" required>
                     </div>
                 </div>
 
+                <!-- BMI -->
                 <div class="form-group row">
-                    <label for="bmi" class="col-sm-4 col-form-label">BMI:</label>
+                    <label for="bmi" class="col-sm-4 col-form-label text-white font-weight-bold">BMI:</label>
                     <div class="col-sm-8">
-                        <input type="text" name="bmi" id="bmi" class="form-control" readonly>
+                        <input type="text" name="bmi" id="bmi" class="form-control" 
+                               style="border-radius: 25px; border: none; padding: 10px; background-color: rgba(255, 255, 255, 0.2); color: #fff;" readonly>
                     </div>
                 </div>
 
+                <!-- Nutritional Status (BMIA) -->
                 <div class="form-group row">
-                    <label for="nutritional_status_bmia" class="col-sm-4 col-form-label">Nutritional Status (BMIA):</label>
+                    <label for="nutritional_status_bmia" class="col-sm-4 col-form-label text-white font-weight-bold">Nutritional Status (BMI-A):</label>
                     <div class="col-sm-8">
-                        <input type="text" name="nutritional_status_bmia" id="nutritional_status_bmia" class="form-control" readonly>
+                        <input type="text" name="nutritional_status_bmia" id="nutritional_status_bmia" 
+                               class="form-control" style="border-radius: 25px; border: none; padding: 10px; background-color: rgba(255, 255, 255, 0.2); color: #fff;" readonly>
                     </div>
                 </div>
 
+                <!-- Nutritional Status (HFA) -->
                 <div class="form-group row">
-                    <label for="nutritional_status_hfa" class="col-sm-4 col-form-label">Nutritional Status (HFA):</label>
+                    <label for="nutritional_status_hfa" class="col-sm-4 col-form-label text-white font-weight-bold">Nutritional Status (HFA):</label>
                     <div class="col-sm-8">
-                        <input type="text" name="nutritional_status_hfa" id="nutritional_status_hfa" class="form-control" readonly>
+                        <input type="text" name="nutritional_status_hfa" id="nutritional_status_hfa" 
+                               class="form-control" style="border-radius: 25px; border: none; padding: 10px; background-color: rgba(255, 255, 255, 0.2); color: #fff;" readonly>
                     </div>
                 </div>
 
-                <!-- Hidden input for student section -->
+                <!-- Hidden Input -->
                 <input type="hidden" name="student_section" id="student_section">
 
-                <button type="submit" class="btn btn-primary mr-2" style="float: right;">Submit Progress</button>
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-light btn-block mt-4" 
+                        style="border-radius: 25px; font-weight: bold; letter-spacing: 1px;">Submit Progress</button>
             </form>
         </div>
     </div>
 </div>
+
 
 
 

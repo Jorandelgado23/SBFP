@@ -255,101 +255,112 @@ $conn->close();
         </div>
 
         <div class="col-md-12">
-    <div class="white_shd full margin_bottom_30">
-        <div class="full graph_head">
-            <div class="heading1 margin_0">
-                <form action="submit8.php" method="POST">
-                    <!-- Region/Division Section -->
-                    <div class="form-group">
-                        <label for="region_division" class="h5">Region/Division:</label>
-                        <input type="text" class="form-control" name="region_division" id="region_division" required placeholder="Enter Region or Division">
-                    </div>
+    <div class="white_shd full margin_bottom_30 shadow-lg" style="border-radius: 15px; background: #f8f9fa; overflow: hidden;">
+        <div class="full graph_head p-4" style="background:#fff; color: #fff; border-radius: 15px 15px 0 0;">
+            <h2 class="text-center" style="font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Submit SBFP Report</h2>
+        </div>
+        <div class="heading1 margin_0 p-5">
+            <form action="submit8.php" method="POST">
+                <!-- Region/Division Section -->
+                <div class="form-group">
+                    <label for="region_division" class="h5 font-weight-bold text-primary">Region/Division:</label>
+                    <input type="text" class="form-control" name="region_division" id="region_division" required 
+                        placeholder="Enter Region or Division" style="border-radius: 10px; padding: 10px;">
+                </div>
 
-                    <h3 class="mt-4 text-primary">Division/Schools</h3>
-                    <div class="table-responsive-sm">
-                        <table class="table table-bordered">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>Division/Schools</th>
-                                    <th>No. of SDO Schools</th>
-                                    <th>Target No. of SBFP Schools</th>
-                                    <th>Actual No. of SBFP Schools</th>
-                                    <th>% (SBFP Schools/SDO Schools)</th>
-                                    <th>Status of Implementation</th>
-                                    <th>No. of Target Beneficiaries</th>
-                                    <th>No. of Actual Beneficiaries</th>
-                                    <th>% of Completion</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input type="text" class="form-control" name="division_schools[]" required placeholder="Enter Division/School"></td>
-                                    <td><input type="number" class="form-control" name="sdo_schools[]" required placeholder="Enter SDO Schools"></td>
-                                    <td><input type="number" class="form-control" name="target_sbfp_schools[]" required placeholder="Enter Target SBFP Schools"></td>
-                                    <td><input type="number" class="form-control" name="actual_sbfp_schools[]" required placeholder="Enter Actual SBFP Schools"></td>
-                                    <td><input type="number" class="form-control" name="percentage[]" required placeholder="Enter Percentage"></td>
-                                    <td><input type="text" class="form-control" name="implementation_status[]" required placeholder="Enter Status"></td>
-                                    <td><input type="number" class="form-control" name="target_beneficiaries[]" oninput="calculateCompletion()" required placeholder="Enter Target Beneficiaries"></td>
-                                    <td><input type="number" class="form-control" name="actual_beneficiaries[]" oninput="calculateCompletion()" required placeholder="Enter Actual Beneficiaries"></td>
-                                    <td><input type="number" step="0.01" class="form-control" name="completion_percentage[]" readonly placeholder="Completion %"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <h3 class="mt-4 text-secondary">Division/Schools</h3>
+                <div class="table-responsive-sm">
+                    <table class="table table-bordered table-hover" style="border-radius: 10px; overflow: hidden;">
+                        <thead class="thead-dark text-white" style="background: #4a69bd;">
+                            <tr>
+                                <th>Division/Schools</th>
+                                <th>No. of SDO Schools</th>
+                                <th>Target No. of SBFP Schools</th>
+                                <th>Actual No. of SBFP Schools</th>
+                                <th>% (SBFP Schools/SDO Schools)</th>
+                                <th>Status of Implementation</th>
+                                <th>No. of Target Beneficiaries</th>
+                                <th>No. of Actual Beneficiaries</th>
+                                <th>% of Completion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" class="form-control" name="division_schools[]" required placeholder="Enter Division/School" style="border-radius: 10px;"></td>
+                                <td><input type="number" class="form-control" name="sdo_schools[]" required placeholder="Enter SDO Schools" style="border-radius: 10px;"></td>
+                                <td><input type="number" class="form-control" name="target_sbfp_schools[]" required placeholder="Enter Target SBFP Schools" style="border-radius: 10px;"></td>
+                                <td><input type="number" class="form-control" name="actual_sbfp_schools[]" required placeholder="Enter Actual SBFP Schools" style="border-radius: 10px;"></td>
+                                <td><input type="number" class="form-control" name="percentage[]" required placeholder="Enter Percentage" style="border-radius: 10px;"></td>
+                                <td><input type="text" class="form-control" name="implementation_status[]" required placeholder="Enter Status" style="border-radius: 10px;"></td>
+                                <td><input type="number" class="form-control" name="target_beneficiaries[]" oninput="calculateCompletion()" required placeholder="Enter Target Beneficiaries" style="border-radius: 10px;"></td>
+                                <td><input type="number" class="form-control" name="actual_beneficiaries[]" oninput="calculateCompletion()" required placeholder="Enter Actual Beneficiaries" style="border-radius: 10px;"></td>
+                                <td><input type="number" step="0.01" class="form-control" name="completion_percentage[]" readonly placeholder="Completion %" style="border-radius: 10px; background: #e9ecef;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                    <!-- Financial Status Section -->
-                    <h3 class="mt-4 text-primary">Financial Status</h3>
-                    <div class="form-group">
-                        <label for="amount_allocated" class="h5">Amount Allocated:</label>
-                        <input type="number" class="form-control" name="amount_allocated" id="amount_allocated" required placeholder="Enter Allocated Amount">
-                    </div>
+                <!-- Financial Status Section -->
+                <h3 class="mt-4 text-secondary">Financial Status</h3>
+                <div class="form-group">
+                    <label for="amount_allocated" class="h5 font-weight-bold text-primary">Amount Allocated:</label>
+                    <input type="number" class="form-control" name="amount_allocated" id="amount_allocated" required 
+                        placeholder="Enter Allocated Amount" style="border-radius: 10px; padding: 10px;">
+                </div>
 
-                    <div class="form-group">
-                        <label for="amount_downloaded" class="h5">Amount Downloaded to Schools:</label>
-                        <input type="number" class="form-control" name="amount_downloaded" id="amount_downloaded" required placeholder="Enter Downloaded Amount">
-                    </div>
+                <div class="form-group">
+                    <label for="amount_downloaded" class="h5 font-weight-bold text-primary">Amount Downloaded to Schools:</label>
+                    <input type="number" class="form-control" name="amount_downloaded" id="amount_downloaded" required 
+                        placeholder="Enter Downloaded Amount" style="border-radius: 10px; padding: 10px;">
+                </div>
 
-                    <div class="form-group">
-                        <label for="disbursed" class="h5">Status of Downloading of Funds:</label>
-                        <input type="text" class="form-control" name="status_fund_downloading" id="status_fund_downloading" required placeholder="Enter Fund Download Status">
-                    </div>
+                <div class="form-group">
+                    <label for="status_fund_downloading" class="h5 font-weight-bold text-primary">Status of Downloading of Funds:</label>
+                    <input type="text" class="form-control" name="status_fund_downloading" id="status_fund_downloading" required 
+                        placeholder="Enter Fund Download Status" style="border-radius: 10px; padding: 10px;">
+                </div>
 
-                    <!-- Liquidation Section -->
-                    <h3 class="mt-4 text-primary">Liquidation</h3>
-                    <div class="form-group">
-                        <label for="first_liquidation" class="h5">1st Liquidation:</label>
-                        <input type="number" class="form-control" name="first_liquidation" id="first_liquidation" oninput="calculateTotalLiquidation()" required placeholder="Enter 1st Liquidation Amount">
-                    </div>
-                    <div class="form-group">
-                        <label for="second_liquidation" class="h5">2nd Liquidation:</label>
-                        <input type="number" class="form-control" name="second_liquidation" id="second_liquidation" oninput="calculateTotalLiquidation()" required placeholder="Enter 2nd Liquidation Amount">
-                    </div>
-                    <div class="form-group">
-                        <label for="total_liquidation" class="h5">Total Liquidation:</label>
-                        <input type="number" class="form-control" name="total_liquidation" id="total_liquidation" readonly placeholder="Total Liquidation Amount">
-                    </div>
+                <!-- Liquidation Section -->
+                <h3 class="mt-4 text-secondary">Liquidation</h3>
+                <div class="form-group">
+                    <label for="first_liquidation" class="h5 font-weight-bold text-primary">1st Liquidation:</label>
+                    <input type="number" class="form-control" name="first_liquidation" id="first_liquidation" oninput="calculateTotalLiquidation()" required 
+                        placeholder="Enter 1st Liquidation Amount" style="border-radius: 10px; padding: 10px;">
+                </div>
+                <div class="form-group">
+                    <label for="second_liquidation" class="h5 font-weight-bold text-primary">2nd Liquidation:</label>
+                    <input type="number" class="form-control" name="second_liquidation" id="second_liquidation" oninput="calculateTotalLiquidation()" required 
+                        placeholder="Enter 2nd Liquidation Amount" style="border-radius: 10px; padding: 10px;">
+                </div>
+                <div class="form-group">
+                    <label for="total_liquidation" class="h5 font-weight-bold text-primary">Total Liquidation:</label>
+                    <input type="number" class="form-control" name="total_liquidation" id="total_liquidation" readonly 
+                        placeholder="Total Liquidation Amount" style="border-radius: 10px; background: #e9ecef;">
+                </div>
 
-                    <!-- Remarks Section -->
-                    <h3 class="mt-4 text-primary">Remarks</h3>
-                    <div class="form-group">
-                        <label for="liquidation_status" class="h5">Fully/Partially Liquidated:</label>
-                        <select name="liquidation_status" class="form-control" id="liquidation_status">
-                            <option value="Fully">Fully Liquidated</option>
-                            <option value="Partially">Partially Liquidated</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="remarks" class="h5">Remarks:</label>
-                        <textarea name="remarks" class="form-control" id="remarks" cols="30" rows="5" placeholder="Enter remarks here"></textarea>
-                    </div>
+                <!-- Remarks Section -->
+                <h3 class="mt-4 text-secondary">Remarks</h3>
+                <div class="form-group">
+                    <label for="liquidation_status" class="h5 font-weight-bold text-primary">Fully/Partially Liquidated:</label>
+                    <select name="liquidation_status" class="form-control" id="liquidation_status" style="border-radius: 10px;">
+                        <option value="Fully">Fully Liquidated</option>
+                        <option value="Partially">Partially Liquidated</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="remarks" class="h5 font-weight-bold text-primary">Remarks:</label>
+                    <textarea name="remarks" class="form-control" id="remarks" cols="30" rows="5" 
+                        placeholder="Enter remarks here" style="border-radius: 10px; padding: 10px;"></textarea>
+                </div>
 
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-success" style="float: right; margin-top: 20px;">Submit Report</button>
-                </form>
-            </div>
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary btn-block mt-4" 
+                    style="border-radius: 15px; font-weight: bold; letter-spacing: 1px;">Submit Report</button>
+            </form>
         </div>
     </div>
 </div>
+
 
 <script>
     // Function to compute % of Completion

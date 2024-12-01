@@ -294,7 +294,7 @@ $conn->close();
                                     </div>
                                     <div class="form-group">
                                         <label for="email">Email:</label>
-                                        <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($email); ?>">
+                                        <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($email); ?>" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6">

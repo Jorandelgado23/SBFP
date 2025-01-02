@@ -60,6 +60,36 @@ include("connection.php");
     text-align: center;
 }
 
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 5px;
+}
+
+.pagination-container .btn {
+    padding: 8px 12px;
+    text-decoration: none;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #007bff;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.pagination-container .btn:hover {
+    background-color: #0056b3;
+    color: #fff;
+}
+
+.pagination-container .btn.active {
+    background-color: #0056b3;
+    color: #fff;
+    pointer-events: none;
+}
+
+
 
    </style>
 
@@ -475,80 +505,162 @@ function maskName($name) {
     return $maskedName;
 }
 
-// Function to fetch and display the milk data table
-function displayMilkData($conn, $session_id) {
-    $stmt = $conn->prepare("SELECT * FROM milkcomponent WHERE session_id = ?");
-    $stmt->bind_param("s", $session_id);
+// Pagination setup
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$limit = 5; // Rows per page
+$offset = ($page - 1) * $limit;
+
+// Function to fetch and display the milk data table with pagination
+function displayMilkData($conn, $session_id, $page, $limit, $offset) {
+    $nameSearch = isset($_GET['student_name']) ? "%" . $_GET['student_name'] . "%" : '%';
+    $gradeLevelSearch = isset($_GET['grade_level']) && $_GET['grade_level'] !== '' ? $_GET['grade_level'] : '%';
+
+    // Fetch total records
+    $countQuery = $conn->prepare("SELECT COUNT(*) AS total FROM milkcomponent 
+                                  WHERE session_id = ? 
+                                  AND student_name LIKE ? 
+                                  AND (grade_section LIKE ? OR ? = '%')");
+    $countQuery->bind_param("ssss", $session_id, $nameSearch, $gradeLevelSearch, $gradeLevelSearch);
+    $countQuery->execute();
+    $countResult = $countQuery->get_result()->fetch_assoc();
+    $totalRecords = $countResult['total'];
+    $countQuery->close();
+
+    $totalPages = ceil($totalRecords / $limit);
+
+    // Fetch paginated records
+    $stmt = $conn->prepare("SELECT * FROM milkcomponent 
+                            WHERE session_id = ? 
+                            AND student_name LIKE ? 
+                            AND (grade_section LIKE ? OR ? = '%') 
+                            LIMIT ?, ?");
+    $stmt->bind_param("ssssii", $session_id, $nameSearch, $gradeLevelSearch, $gradeLevelSearch, $offset, $limit);
     $stmt->execute();
     $result = $stmt->get_result();
     ?>
-    <!-- Table Section -->
 
-          
-    <div class="white_shd full margin_bottom_30">
-            <div class="full graph_head">
-              <div class="heading1 margin_0">
-              </div>
+    <div class="mb-3">
+        <form method="GET" id="filterForm">
+            <div class="row justify-content-right">
+                <!-- Filter by Grade Level -->
+                <div class="col-md-3">
+                    <label for="grade_level"><strong>Filter by Grade Level:</strong></label>
+                    <select name="grade_level" id="grade_level" class="form-control" onchange="document.getElementById('filterForm').submit();">
+                        <option value="">All</option>
+                        <option value="Kinder" <?php echo (isset($_GET['grade_level']) && $_GET['grade_level'] === 'Kinder') ? 'selected' : ''; ?>>Kinder</option>
+                        <option value="Grade 1" <?php echo (isset($_GET['grade_level']) && $_GET['grade_level'] === 'Grade 1') ? 'selected' : ''; ?>>Grade 1</option>
+                        <option value="Grade 2" <?php echo (isset($_GET['grade_level']) && $_GET['grade_level'] === 'Grade 2') ? 'selected' : ''; ?>>Grade 2</option>
+                        <option value="Grade 3" <?php echo (isset($_GET['grade_level']) && $_GET['grade_level'] === 'Grade 3') ? 'selected' : ''; ?>>Grade 3</option>
+                        <option value="Grade 4" <?php echo (isset($_GET['grade_level']) && $_GET['grade_level'] === 'Grade 4') ? 'selected' : ''; ?>>Grade 4</option>
+                        <option value="Grade 5" <?php echo (isset($_GET['grade_level']) && $_GET['grade_level'] === 'Grade 5') ? 'selected' : ''; ?>>Grade 5</option>
+                        <option value="Grade 6" <?php echo (isset($_GET['grade_level']) && $_GET['grade_level'] === 'Grade 6') ? 'selected' : ''; ?>>Grade 6</option>
+                    </select>
+                </div>
+
+                <!-- Search by Name -->
+                <div class="col-md-3">
+                    <label for="student_name"><strong>Search by Name:</strong></label>
+                    <div class="input-group">
+                        <input type="text" name="student_name" id="student_name" class="form-control" placeholder="Enter name to search"
+                               value="<?php echo isset($_GET['student_name']) ? $_GET['student_name'] : ''; ?>" />
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="table_section padding_infor_info">
-              <div class="table-responsive-sm">
-                <table class="table table-bordered">
-                <thead style="color: #fff; background-color: #0971b8;">
-                    <tr>
-                      <th hidden>Region/Division/District</th>
-                      <th>Name of School</th>
-                      <th>School ID Number</th>
-                      <th>Student Name</th>
-                      <th>Grade & Section</th>
-                      <th>Milk Tolerance</th>
-                      <th>Edit</th>
-                      <th>Delete</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            $maskedStudentName = maskName($row['student_name']); // Mask the student name
-                            echo "<tr>
-                                
-                                <td>{$row['name_of_school']}</td>
-                                <td>{$row['school_id_number']}</td>
-                                <td>{$maskedStudentName}</td>  <!-- Use the masked name here -->
-                                <td>{$row['grade_section']}</td>
-                                <td>{$row['milk_tolerance']}</td>
-                                <td>
-                                    <button class='btn btn-info' onclick='showEditModal({$row['id']}, \"{$row['milk_tolerance']}\")'>
-                                        <i class='fa fa-edit'></i>
-                                    </button>
-                                </td>
-                                <td>
-                                    <button class='btn btn-danger' onclick='confirmDelete({$row['id']});'>
-                                        <i class='fa fa-trash'></i>
-                                    </button>
-                                </td>
-                            </tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='8'>No records found</td></tr>";
-                    }
-                    ?>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        </form>
     </div>
-  </div>
+
+    <!-- Table Section -->
+    <div class="white_shd full margin_bottom_30">
+        <div class="table_section padding_infor_info">
+            <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                    <thead style="color: #fff; background-color: #0971b8;">
+                        <tr>
+                            <th>Name of School</th>
+                            <th>Student Name</th>
+                            <th>Grade & Section</th>
+                            <th>Milk Tolerance</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $maskedStudentName = maskName($row['student_name']); // Mask the student name
+                                echo "<tr>
+                                    <td>{$row['name_of_school']}</td>
+                                    <td>{$maskedStudentName}</td>
+                                    <td>{$row['grade_section']}</td>
+                                    <td>{$row['milk_tolerance']}</td>
+                                    <td>
+                                        <button class='btn btn-info' onclick='showEditModal({$row['id']}, \"{$row['milk_tolerance']}\")'>
+                                            <i class='fa fa-edit'></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button class='btn btn-danger' onclick='confirmDelete({$row['id']});'>
+                                            <i class='fa fa-trash'></i>
+                                        </button>
+                                    </td>
+                                </tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='6'>No records found</td></tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+             <!-- Pagination -->
+    <div class="pagination-container">
+    <?php
+    // Calculate total pages
+    $stmt = $conn->prepare("SELECT COUNT(*) as total FROM milkcomponent WHERE session_id = ?");
+    $stmt->bind_param("s", $session_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $total_rows = $row['total'];
+    $total_pages = ceil($total_rows / $limit);
+
+
+    // Display the "Previous" button
+    if ($page > 1) {
+        $prev_page = $page - 1;
+        echo "<a class='btn btn-primary' href='?page=$prev_page'>&laquo;</a>";
+    }
+
+    // Display individual page numbers
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $active = $i == $page ? "active" : "";
+        echo "<a class='btn btn-primary $active' href='?page=$i'>$i</a>";
+    }
+
+    // Display the "Next" button
+    if ($page < $total_pages) {
+        $next_page = $page + 1;
+        echo "<a class='btn btn-primary' href='?page=$next_page'>&raquo;</a>";
+    }
+    ?>
 </div>
+        </div>
+    </div>
+
+   
+
     <?php
     $stmt->close();
 }
 
 
-// Function to display the modal for editing milk tolerance
+
+
+
 // Function to display the modal for editing milk tolerance
 function displayEditModal() {
     ?>
@@ -631,7 +743,7 @@ $stmt->close();
                     <button type="submit" name="action" value="pdf" class="btn btn-primary"><i class="fa fa-file-pdf-o"></i> Generate PDF</button>
                     <!-- <button type="submit" name="action" value="excel" class="btn btn-success"><i class="fa fa-file-excel-o"> </i>Generate Excel</button> -->
                 </form>
-                <?php displayMilkData($conn, $session_id); ?>
+                <?php displayMilkData($conn, $session_id, $page, $limit, $offset); ?>
                 <?php displayEditModal(); ?>
             </div>
         </div>
@@ -676,6 +788,13 @@ $stmt->close();
 $conn->close();
 ?>
 
+
+<script>
+    // Automatically submit the form when the grade level changes
+    function submitFilterForm() {
+        document.getElementById('filterForm').submit();
+    }
+</script>
 
 <!-- Include SweetAlert CSS and JS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">

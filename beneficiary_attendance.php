@@ -283,6 +283,11 @@ $stmt->close();
 $selected_grade = isset($_POST['grade_section']) ? $_POST['grade_section'] : '';
 $selected_section = isset($_POST['student_section']) ? $_POST['student_section'] : '';
 
+// Pagination setup
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+$limit = 5;
+$offset = ($page - 1) * $limit;
+
 $sql = "SELECT * FROM beneficiary_details WHERE session_id = ?";
 $params = [$session_id];
 $types = "s";
@@ -299,11 +304,26 @@ if (!empty($selected_section)) {
     $types .= "s";
 }
 
-$sql .= " ORDER BY name";
+$sql .= " ORDER BY name LIMIT ? OFFSET ?";
+$params[] = $limit;
+$params[] = $offset;
+$types .= "ii";
+
 $stmt = $conn->prepare($sql);
 $stmt->bind_param($types, ...$params);
 $stmt->execute();
 $result = $stmt->get_result();
+
+// Count total rows for pagination
+$count_sql = "SELECT COUNT(*) as total FROM beneficiary_details WHERE session_id = ?";
+$count_stmt = $conn->prepare($count_sql);
+$count_stmt->bind_param("s", $session_id);
+$count_stmt->execute();
+$count_result = $count_stmt->get_result();
+$total_rows = $count_result->fetch_assoc()['total'];
+$count_stmt->close();
+
+$total_pages = ceil($total_rows / $limit);
 ?>
 
 <!-- Filter Form -->
@@ -335,10 +355,7 @@ $result = $stmt->get_result();
             <input type="date" name="attendance_date" id="attendance_date" class="form-control" value="<?= date('Y-m-d'); ?>" required>
         </div>
     </div>
-<br>
-<br>
-
-
+    <br><br>
 
     <!-- Table Section -->
     <div class="col-md-12">
@@ -352,17 +369,15 @@ $result = $stmt->get_result();
             <div class="table_section padding_infor_info">
                 <div class="table-responsive-sm">
                     <table class="table table-bordered">
-
-                     <!-- Toggle Attendance Mode Button -->
-    <button type="button" id="toggleMode" class="btn btn-secondary mb-3">Select Present</button>
-    <input type="hidden" name="attendance_mode" id="attendance_mode" value="Present">
+                        <!-- Toggle Attendance Mode Button -->
+                        <button type="button" id="toggleMode" class="btn btn-secondary mb-3">Select Present</button>
+                        <input type="hidden" name="attendance_mode" id="attendance_mode" value="Present">
                         <thead>
                             <tr>
                                 <th>Beneficiary Name</th>
                                 <th>Grade & Section</th>
                                 <th>Status (Present/Absent)</th>
                                 <th>
-                                    <!-- Dropdown for meal selection in the header -->
                                     <select id="meal-served-header" class="form-control">
                                         <option value="H">Hot Meal (H)</option>
                                         <option value="M">Milk (M)</option>
@@ -381,12 +396,10 @@ $result = $stmt->get_result();
                                     <td><?= htmlspecialchars($row['name']) ?></td>
                                     <td><?= htmlspecialchars($row['grade_section'] . " - " . $row['student_section']) ?></td>
                                     <td>
-                                        <!-- Checkbox with hidden input for unchecked state -->
                                         <input type="hidden" name="status[<?= $row['id'] ?>]" value="Absent">
                                         <input type="checkbox" name="status[<?= $row['id'] ?>]" value="Present" class="attendance-checkbox">
                                     </td>
                                     <td>
-                                        <!-- Individual dropdown for each student -->
                                         <input name="meal_served[<?= $row['id'] ?>]" class="form-control meal-served-dropdown" readonly required>
                                     </td>
                                 </tr>
@@ -400,6 +413,25 @@ $result = $stmt->get_result();
 
     <button type="submit" class="btn btn-primary">Submit Attendance</button>
 </form>
+
+<!-- Pagination Links -->
+<nav>
+    <ul class="pagination justify-content-center">
+        <?php if ($page > 1): ?>
+            <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>">Previous</a></li>
+        <?php endif; ?>
+
+        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+            <li class="page-item <?= ($i === $page) ? 'active' : '' ?>">
+                <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+            </li>
+        <?php endfor; ?>
+
+        <?php if ($page < $total_pages): ?>
+            <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>">Next</a></li>
+        <?php endif; ?>
+    </ul>
+</nav>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -466,6 +498,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const mealDropdown = document.querySelector(`input[name="meal_served[${studentId}]"]`);
             const selectedMeal = document.getElementById('meal-served-header').value;
             const mode = document.getElementById('attendance_mode').value;
+
+            // Save checkbox state to localStorage
+            localStorage.setItem(`attendance_${studentId}`, this.checked ? 'Present' : 'Absent');
 
             if (mode === 'Absent') {
                 if (this.checked) {
@@ -534,11 +569,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Dynamically reset checkbox behavior and meal updates
     window.addEventListener('load', function() {
+        // Restore checkbox states from localStorage
+        document.querySelectorAll('.attendance-checkbox').forEach(checkbox => {
+            const studentId = checkbox.getAttribute('name').replace('status[', '').replace(']', '');
+            const storedState = localStorage.getItem(`attendance_${studentId}`);
+            if (storedState === 'Present') {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+        });
+
         clearCheckboxesForAbsentMode();  // Clear checkboxes in Absent mode on page load
         updateMealServed();  // Initialize meal served state for Present or Absent mode
         updateRowColors();  // Update row colors on page load
     });
 });
+
 </script>
 
 

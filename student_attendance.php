@@ -263,10 +263,9 @@ $conn->close();
 
 <div>
     <br>
-<?php
-
+    <?php
+// Session check
 if (!isset($_SESSION['email'])) {
-    // Redirect to login if the user is not logged in
     header("Location: login.php");
     exit();
 }
@@ -283,6 +282,10 @@ $stmt->bind_result($session_id);
 $stmt->fetch();
 $stmt->close();
 
+// Handle start date input
+$start_date = isset($_GET['start_date']) ? $_GET['start_date'] : date('Y-m-01'); // Default to the first day of the current month
+$selected_month = date('Y-m', strtotime($start_date)); // Extract year and month from the selected date
+
 // Fetch submitted data for the logged-in user
 $sql = "SELECT * FROM beneficiary_details WHERE session_id = ? ORDER BY name";
 $stmt = $conn->prepare($sql);
@@ -290,18 +293,15 @@ $stmt->bind_param("s", $session_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Fetch attendance records for the current month
-$current_month = date('Y-m'); // Get current year and month
+// Fetch attendance records for the selected month
 $attendance_sql = "SELECT beneficiary_id, meal_served, DAY(attendance_date) as day
                    FROM beneficiary_attendance
                    WHERE attendance_date LIKE ? AND beneficiary_id IN 
                    (SELECT id FROM beneficiary_details WHERE session_id = ?)";
 
 $attendance_stmt = $conn->prepare($attendance_sql);
-
-// Use variables for binding
-$month_like = $current_month . '%'; // Create a variable for the LIKE clause
-$attendance_stmt->bind_param("ss", $month_like, $session_id); // Now bind the variables
+$month_like = $selected_month . '%'; // Create a variable for the LIKE clause
+$attendance_stmt->bind_param("ss", $month_like, $session_id);
 $attendance_stmt->execute();
 $attendance_result = $attendance_stmt->get_result();
 
@@ -312,107 +312,102 @@ while ($row = $attendance_result->fetch_assoc()) {
 }
 ?>
 
-
-
-
-    <!-- Table Section -->
+<!-- Date Selection Form -->
+<div class="row">
     <div class="col-md-12">
-        <div class="white_shd full margin_bottom_30">
-            <div class="full graph_head">
-                <!-- <div class="heading1 margin_0">
-                    <h2>Feeding Attendance Table</h2>
-                </div> -->
-            </div>
-            <div class="table_section padding_infor_info">
-                <div class="table-responsive-sm">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th rowspan="3">Name of Pupil</th>
-                                <th colspan="31" style="padding: 10px; text-align: center; font-size: 12px;">Actual Feeding</th>
-                                <th colspan="3" style="text-align: center;">ATTENDANCE</th>
-                            </tr>
-                            <tr>
-                                <!-- Blank Row Under "Actual Feeding" -->
-                                <?php for ($i = 1; $i <= 31; $i++) { echo "<th></th>"; } ?>
-                                <th rowspan="2" style="text-align: center;">No. of Days Present (A)</th>
-                                <th rowspan="2" style="text-align: center;">No. of Feeding Days (B)</th>
-                                <th rowspan="2" style="text-align: center;">Percentage (A/B) * 100</th>
-                            </tr>
-                            <tr>
-                                <!-- Days of the month (1 to 31) -->
-                                <?php for ($i = 1; $i <= 31; $i++) { echo "<th>$i</th>"; } ?>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            if ($result->num_rows > 0) {
-                                $counter = 1; // Initialize counter for student numbering
-                                // Loop through each student
-                                while ($row = $result->fetch_assoc()) {
-                                    echo '<tr>';
-                                    // Display student name with numbering
-                                    echo '<td>' . $counter++ . '. ' . htmlspecialchars($row['name']) . '</td>'; // Numbering included
-                                    
-                                    $days_present = 0; // Track the number of present days
+        <form method="GET" action="">
+            <label for="start_date">Select Start Date:</label>
+            <input type="date" id="start_date" name="start_date" value="<?php echo htmlspecialchars($start_date); ?>">
+            <button type="submit" class="btn btn-primary">View Attendance</button>
+        </form>
+    </div>
+</div>
 
-                                    // Display 31 columns for feeding days
-                                    for ($i = 1; $i <= 31; $i++) {
-                                        // Check if meal data exists for the given day
-                                        if (isset($meal_data[$row['id']][$i])) {
-                                            $meal_served = $meal_data[$row['id']][$i];
-                                            echo '<td>' . htmlspecialchars($meal_served) . '</td>'; // Display meal served
-                                            if ($meal_served !== 'A') {
-                                                $days_present++; // Increment for every non-absent day
-                                            }
-                                        } else {
-                                            echo '<td></td>'; // Empty cell if no meal data
-                                        }
-                                    }
-                                    echo '<td>' . $days_present . '</td>'; // Total number of days present
-                                    echo '<td></td>'; // Placeholder for total feeding days
-                                    echo '<td></td>'; // Placeholder for percentage
-                                    echo '</tr>';
-                                }
+<br>
+<br>
 
-                                // Total Row for Meal Count
+<!-- Attendance Table -->
+<div class="col-md-12">
+    <div class="white_shd full margin_bottom_30">
+        <div class="table_section padding_infor_info">
+            <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th rowspan="3">Name of Pupil</th>
+                            <th colspan="31" style="text-align: center;">Actual Feeding</th>
+                            <th colspan="3" style="text-align: center;">ATTENDANCE</th>
+                        </tr>
+                        <tr>
+                            <?php for ($i = 1; $i <= 31; $i++) { echo "<th></th>"; } ?>
+                            <th rowspan="2" style="text-align: center;">No. of Days Present (A)</th>
+                            <th rowspan="2" style="text-align: center;">No. of Feeding Days (B)</th>
+                            <th rowspan="2" style="text-align: center;">Percentage (A/B) * 100</th>
+                        </tr>
+                        <tr>
+                            <?php for ($i = 1; $i <= 31; $i++) { echo "<th>$i</th>"; } ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($result->num_rows > 0) {
+                            $counter = 1; // Initialize counter for student numbering
+                            while ($row = $result->fetch_assoc()) {
                                 echo '<tr>';
-                                echo '<td>Total:</td>';
+                                echo '<td>' . $counter++ . '. ' . htmlspecialchars($row['name']) . '</td>';
+                                
+                                $days_present = 0; // Track the number of present days
+
                                 for ($i = 1; $i <= 31; $i++) {
-                                    $daily_total = 0;
-
-                                    // Loop through meal_data to sum meals served for each day
-                                    foreach ($meal_data as $beneficiary_id => $meals) {
-                                        if (isset($meals[$i]) && $meals[$i] !== 'A') {
-                                            $daily_total++;
+                                    if (isset($meal_data[$row['id']][$i])) {
+                                        $meal_served = $meal_data[$row['id']][$i];
+                                        echo '<td>' . htmlspecialchars($meal_served) . '</td>';
+                                        if ($meal_served !== 'A') {
+                                            $days_present++;
                                         }
+                                    } else {
+                                        echo '<td></td>';
                                     }
-
-                                    // Display the total meals served for each day, or leave empty if no meals served
-                                    echo '<td style="text-align: center;">' . ($daily_total > 0 ? $daily_total : '') . '</td>';
                                 }
-
-                                // No average calculation
-                                echo '<td colspan="2" style="text-align: center;">Average:</td>'; // Display average label without calculation
-                                echo '<td></td>'; // Empty cell for total present days
+                                echo '<td>' . $days_present . '</td>'; // Total days present
+                                echo '<td></td>'; // Placeholder for total feeding days
+                                echo '<td></td>'; // Placeholder for percentage
                                 echo '</tr>';
-
-                            } else {
-                                // Placeholder rows if no data is found
-                                for ($i = 1; $i <= 25; $i++) {
-                                    echo '<tr>';
-                                    echo '<td>' . $i . '. Pupil ' . $i . '</td>'; // Numbering included for placeholder pupils
-                                    echo '<td colspan="31"></td>';
-                                    echo '<td>0</td>';
-                                    echo '<td>0</td>';
-                                    echo '<td>0%</td>';
-                                    echo '</tr>';
-                                }
                             }
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
+
+                            // Total Row for Meal Count
+                            echo '<tr>';
+                            echo '<td>Total:</td>';
+                            for ($i = 1; $i <= 31; $i++) {
+                                $daily_total = 0;
+
+                                foreach ($meal_data as $beneficiary_id => $meals) {
+                                    if (isset($meals[$i]) && $meals[$i] !== 'A') {
+                                        $daily_total++;
+                                    }
+                                }
+
+                                echo '<td style="text-align: center;">' . ($daily_total > 0 ? $daily_total : '') . '</td>';
+                            }
+
+                            echo '<td colspan="2" style="text-align: center;">Average:</td>';
+                            echo '<td></td>'; // Empty cell for total present days
+                            echo '</tr>';
+                        } else {
+                            // Placeholder rows if no data is found
+                            for ($i = 1; $i <= 25; $i++) {
+                                echo '<tr>';
+                                echo '<td>' . $i . '. Pupil ' . $i . '</td>';
+                                echo '<td colspan="31"></td>';
+                                echo '<td>0</td>';
+                                echo '<td>0</td>';
+                                echo '<td>0%</td>';
+                                echo '</tr>';
+                            }
+                        }
+                        ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -422,6 +417,7 @@ while ($row = $attendance_result->fetch_assoc()) {
 // Close the database connection
 $conn->close();
 ?>
+
 
 
 

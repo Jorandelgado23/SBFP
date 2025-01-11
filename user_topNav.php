@@ -101,15 +101,26 @@ include("connection.php");
     </div>
 </div>
 
+<<<<<<< HEAD
                 </div>
+=======
+</div>
+>>>>>>> cc86752 (Initial commit)
                 <div class="sidebar_blog_2">
     <h4>General</h4>
     <ul class="list-unstyled components">
         <li>
+<<<<<<< HEAD
             <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
         </li>
 
         <!-- <li class="active">
+=======
+            <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
+        </li>
+
+        <!-- <li>
+>>>>>>> cc86752 (Initial commit)
     <a href="#snsDropdown" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
         <i class="fa fa-dashboard"></i> <span>SNS List</span>
     </a>
@@ -125,6 +136,7 @@ include("connection.php");
     </ul>
 </li> -->
 
+<<<<<<< HEAD
 
         <li class="active">
             <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
@@ -132,6 +144,14 @@ include("connection.php");
 
            <!-- Dropdown for Beneficiary Improvement and Progress Input -->
            <li>
+=======
+        <li  class="active">
+            <a href="form1.php"><i class="fa fa-group"></i> <span>Master List Of Student</span></a>
+        </li>
+
+         <!-- Dropdown for Beneficiary Improvement and Progress Input -->
+         <li>
+>>>>>>> cc86752 (Initial commit)
             <a href="#beneficiaryDropdown" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                 <i class="fa fa-line-chart"></i> <span>Beneficiary Section</span>
             </a>
@@ -156,7 +176,11 @@ include("connection.php");
             <a href="form6.php"><i class="fa fa-flask"></i> <span>Milk Component Data</span></a>
         </li>
         <li>
+<<<<<<< HEAD
             <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>QUARTERLY REPORT</span></a>
+=======
+            <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>Quaterly  Report</span></a>
+>>>>>>> cc86752 (Initial commit)
         </li>
 
         <li>
@@ -165,6 +189,10 @@ include("connection.php");
     </ul>
 </div>
             </nav>
+<<<<<<< HEAD
+=======
+
+>>>>>>> cc86752 (Initial commit)
             <!-- End Sidebar -->
             <!-- Right Content -->
             <div id="content">

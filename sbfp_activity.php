@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 session_start();
 
 if (!isset($_SESSION['email'])) {
@@ -37,6 +38,9 @@ if ($stmt->num_rows > 0) {
 
 $stmt->close();
 $conn->close();
+=======
+include("connection.php");
+>>>>>>> cc86752 (Initial commit)
 ?>
 
 
@@ -108,7 +112,11 @@ $conn->close();
     <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
 
     <div class="user_info">
+<<<<<<< HEAD
     <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
+=======
+    <h6><?php echo $school_name; ?></h6>
+>>>>>>> cc86752 (Initial commit)
         
     <p><span class="online_animation"></span> Logged In</p>
 
@@ -170,7 +178,11 @@ $conn->close();
             <a href="form6.php"><i class="fa fa-flask"></i> <span>Milk Component Data</span></a>
         </li>
         <li>
+<<<<<<< HEAD
             <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>QUARTERLY REPORT</span></a>
+=======
+            <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>Quaterly Report</span></a>
+>>>>>>> cc86752 (Initial commit)
         </li>
 
         <li>

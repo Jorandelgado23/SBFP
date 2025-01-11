@@ -103,7 +103,11 @@ include("adminauth.php");
                     <h4>General</h4>
                     <ul class="list-unstyled components">
                     <li>
+<<<<<<< HEAD
                             <a href="admindashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
+=======
+                            <a href="admindashboard.php"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
+>>>>>>> cc86752 (Initial commit)
                         </li>
 
                         <li class="active">

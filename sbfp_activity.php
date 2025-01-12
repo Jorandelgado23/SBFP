@@ -1,46 +1,5 @@
 <?php
-<<<<<<< HEAD
-session_start();
-
-if (!isset($_SESSION['email'])) {
-    header("Location: login.php"); // Redirect to login if not logged in
-    exit();
-}
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sbfp";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$email = $_SESSION['email'];
-
-// Prepare and bind
-$stmt = $conn->prepare("SELECT firstname, lastname, role FROM users WHERE email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$stmt->store_result();
-$stmt->bind_result($user_firstname, $user_lastname, $user_role);
-
-if ($stmt->num_rows > 0) {
-    $stmt->fetch();
-} else {
-    echo "No user found with that email address.";
-    exit();
-}
-
-$stmt->close();
-$conn->close();
-=======
 include("connection.php");
->>>>>>> cc86752 (Initial commit)
 ?>
 
 
@@ -112,11 +71,7 @@ include("connection.php");
     <div class="user_img"><img class="img-responsive" src="images/origlogo.jpg" alt="#" /></div>
 
     <div class="user_info">
-<<<<<<< HEAD
-    <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
-=======
     <h6><?php echo $school_name; ?></h6>
->>>>>>> cc86752 (Initial commit)
         
     <p><span class="online_animation"></span> Logged In</p>
 
@@ -178,11 +133,7 @@ include("connection.php");
             <a href="form6.php"><i class="fa fa-flask"></i> <span>Milk Component Data</span></a>
         </li>
         <li>
-<<<<<<< HEAD
-            <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>QUARTERLY REPORT</span></a>
-=======
             <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>Quaterly Report</span></a>
->>>>>>> cc86752 (Initial commit)
         </li>
 
         <li>

@@ -80,11 +80,7 @@ include("connection.php");
 </div>
 
 
-<<<<<<< HEAD
-                </div>
-=======
 </div>
->>>>>>> cc86752 (Initial commit)
                 <div class="sidebar_blog_2">
     <h4>General</h4>
     <ul class="list-unstyled components">
@@ -93,11 +89,7 @@ include("connection.php");
             <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
 =======
             <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
->>>>>>> cc86752 (Initial commit)
-        </li>
-
         <!-- <li>
-    <a href="#snsDropdown" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
         <i class="fa fa-dashboard"></i> <span>SNS List</span>
     </a>
     <ul class="collapse list-unstyled" id="snsDropdown">

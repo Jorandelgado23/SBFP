@@ -500,8 +500,7 @@ if (isset($_SESSION['response'])) {
                             <tr>
                                 <th style="display:none;">No.</th> <!-- Hidden column -->
                                 <th>LRN No.</th>
-                                <th>First Name</th> <!-- Added First Name column -->
-                                <th>Last Name</th> <!-- Added Last Name column -->
+                                <th>Name</th> <!-- Changed to Full Name column -->
                                 <th>Sex</th>
                                 <th>Grade Level</th>
                                 <th>Student Section</th>
@@ -530,14 +529,8 @@ if (isset($_SESSION['response'])) {
                                     echo "<td style='display:none;'>" . $count++ . "</td>"; // Hidden column
                                     echo "<td>" . $row["lrn_no"] . "</td>";
 
-                                    // Split the name into first and last names
-                                    $fullName = explode(' ', $row["name"]);
-                                    $firstName = isset($fullName[0]) ? $fullName[0] : '';
-                                    $lastName = isset($fullName[1]) ? $fullName[1] : '';
-
-                                    // Mask the first and last name separately
-                                    echo "<td>" . maskName($firstName) . "</td>"; // Masked first name
-                                    echo "<td>" . maskName($lastName) . "</td>"; // Masked last name
+                                    $fullName = $row["name"];
+                echo "<td>" . maskName($fullName) . "</td>"; 
 
                                     echo "<td>" . $row["sex"] . "</td>";
                                     echo "<td>" . $row["grade_section"] . "</td>";

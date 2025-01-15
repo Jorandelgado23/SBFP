@@ -41,15 +41,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Loop through rows 14 to 26 to extract data
                 for ($row = 14; $row <= 26; $row++) {
-                    // Extract data from columns B, C, D, and E for each row
+                    // Extract data from columns
                     $name = trim($sheet->getCell('B' . $row)->getValue());
                     $sex = trim($sheet->getCell('C' . $row)->getValue());
                     $gradeSection = trim($sheet->getCell('D' . $row)->getValue());
                     $dob = trim($sheet->getCell('E' . $row)->getValue());
+                    $dateOfWeighing = trim($sheet->getCell('F' . $row)->getValue());
+                    $age = trim($sheet->getCell('G' . $row)->getValue());
+                    $weight = trim($sheet->getCell('H' . $row)->getValue());
+                    $height = trim($sheet->getCell('I' . $row)->getValue());
+                    $bmi = trim($sheet->getCell('J' . $row)->getValue());
+                    $nutritionalStatusBmiA = trim($sheet->getCell('K' . $row)->getValue());
+                    $nutritionalStatusHfa = trim($sheet->getCell('L' . $row)->getValue());
+                    $dewormed = trim($sheet->getCell('M' . $row)->getValue());
+                    $parentsConsentForMilk = trim($sheet->getCell('N' . $row)->getValue());
+                    $participationIn4Ps = trim($sheet->getCell('O' . $row)->getValue());
+                    $beneficiaryOfSbfpPreviousYears = trim($sheet->getCell('P' . $row)->getValue());
 
-                    // Check if 'name' is empty, if so, skip this row
                     if (empty($name)) {
-                        continue; // Skip the current row if 'name' is empty
+                        continue; // Skip if 'name' is empty
                     }
 
                     // Handle the date of birth (DOB) - Check if it's a valid date
@@ -70,6 +80,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $dob = null; // Default to null if DOB is empty
                     }
 
+                    // Handle the date of weighing/measuring (F column)
+                    if (!empty($dateOfWeighing)) {
+                        if (is_numeric($dateOfWeighing)) {
+                            // Convert Excel serial date format to DateTime object
+                            $dateOfWeighing = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($dateOfWeighing)->format('Y/m/d');
+                        } else {
+                            // Parse the date as MM/DD/YYYY and reformat it to YYYY/MM/DD
+                            $dateObject = DateTime::createFromFormat('m/d/Y', $dateOfWeighing);
+                            if ($dateObject) {
+                                $dateOfWeighing = $dateObject->format('Y/m/d');
+                            } else {
+                                $dateOfWeighing = null; // Set to null if date conversion fails
+                            }
+                        }
+                    } else {
+                        $dateOfWeighing = null; // Default to null if empty
+                    }
+
+                    
+
                     // Insert into beneficiaries table
                     $sqlBeneficiaries = "INSERT INTO beneficiaries 
                         (beneficiary_name, session_id) 
@@ -89,12 +119,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmtBeneficiariesUpdate->execute();
 
                     // Insert into beneficiary_details table with beneficiary_id
+                    // Insert into beneficiary_details table
                     $sqlDetails = "INSERT INTO beneficiary_details 
-                        (beneficiary_id, name, sex, grade_section, date_of_birth, session_id) 
-                        VALUES (?, ?, ?, ?, ?, ?)";
+                        (beneficiary_id, name, sex, grade_section, date_of_birth, date_of_weighing, age, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa, dewormed, parents_consent_for_milk, participation_in_4ps, beneficiary_of_sbfp_in_previous_years, session_id) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                     $stmtDetails = $conn->prepare($sqlDetails);
-                    $stmtDetails->bind_param("isssss", $beneficiaryId, $name, $sex, $gradeSection, $dob, $session_id);
+                    $stmtDetails->bind_param(
+                        "issssssddssssssss",
+                        $beneficiaryId,
+                        $name,
+                        $sex,
+                        $gradeSection,
+                        $dob,
+                        $dateOfWeighing,
+                        $age,
+                        $weight,
+                        $height,
+                        $bmi,
+                        $nutritionalStatusBmiA,
+                        $nutritionalStatusHfa,
+                        $dewormed,
+                        $parentsConsentForMilk,
+                        $participationIn4Ps,
+                        $beneficiaryOfSbfpPreviousYears,
+                        $session_id
+                    );
                     $stmtDetails->execute();
                 }
 

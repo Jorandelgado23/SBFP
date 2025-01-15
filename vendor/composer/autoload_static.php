@@ -10,10 +10,15 @@ class ComposerStaticInit2185d2f99bcd56787481d9357a5972d3
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '9b852576b362e677d2f77ddd9ef91bd1' => __DIR__ . '/..' . '/infobip-community/infobip-api-php-sdk/src/Helpers/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
+        's' => 
+        array (
+            'setasign\\Fpdi\\' => 14,
+        ),
         'Z' => 
         array (
             'ZipStream\\' => 10,
@@ -24,6 +29,7 @@ class ComposerStaticInit2185d2f99bcd56787481d9357a5972d3
         ),
         'S' => 
         array (
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Svg\\' => 4,
             'Sabberworm\\CSS\\' => 15,
         ),
@@ -66,6 +72,10 @@ class ComposerStaticInit2185d2f99bcd56787481d9357a5972d3
     );
 
     public static $prefixDirsPsr4 = array (
+        'setasign\\Fpdi\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/setasign/fpdi/src',
+        ),
         'ZipStream\\' => 
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
@@ -73,6 +83,10 @@ class ComposerStaticInit2185d2f99bcd56787481d9357a5972d3
         'Twilio\\' => 
         array (
             0 => __DIR__ . '/..' . '/twilio/sdk/src/Twilio',
+        ),
+        'Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
         ),
         'Svg\\' => 
         array (
@@ -145,10 +159,21 @@ class ComposerStaticInit2185d2f99bcd56787481d9357a5972d3
         ),
     );
 
+    public static $prefixesPsr0 = array (
+        'S' => 
+        array (
+            'Smalot\\PdfParser\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/smalot/pdfparser/src',
+            ),
+        ),
+    );
+
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Datamatrix' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
         'Dompdf\\Cpdf' => __DIR__ . '/..' . '/dompdf/dompdf/lib/Cpdf.php',
+        'FPDF' => __DIR__ . '/..' . '/setasign/fpdf/fpdf.php',
         'PDF417' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/pdf417.php',
         'QRcode' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/qrcode.php',
         'Stringable' => __DIR__ . '/..' . '/myclabs/php-enum/stubs/Stringable.php',
@@ -170,6 +195,7 @@ class ComposerStaticInit2185d2f99bcd56787481d9357a5972d3
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit2185d2f99bcd56787481d9357a5972d3::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit2185d2f99bcd56787481d9357a5972d3::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit2185d2f99bcd56787481d9357a5972d3::$prefixesPsr0;
             $loader->classMap = ComposerStaticInit2185d2f99bcd56787481d9357a5972d3::$classMap;
 
         }, null, ClassLoader::class);

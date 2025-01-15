@@ -82,11 +82,7 @@ include("adminauth.php");
                     <h4>General</h4>
                     <ul class="list-unstyled components">
                     <li>
-<<<<<<< HEAD
-                            <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
-=======
                             <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>Dashboard</span></a>
->>>>>>> cc86752 (Initial commit)
                         </li>
 
                         <li>
@@ -234,10 +230,19 @@ $conn->close();
         <?php
 include("accountconnection.php");
 
+// Define the date for filtering
+$filter_date = isset($_GET['filter_date']) ? $_GET['filter_date'] : '';
+
 // Fetch list of schools with their data from `division_schools` table
-$sql_schools = "SELECT ds.division_school, ds.target_sbfp_school, ds.actual_sbfp_school, ds.completion_percentage, qrf.amount_allocated, qrf.amount_downloaded 
+$sql_schools = "SELECT ds.division_school, ds.target_sbfp_school, ds.actual_sbfp_school, ds.completion_percentage, qrf.amount_allocated, qrf.amount_downloaded, qrf.date_submitted 
                 FROM division_schools ds
                 LEFT JOIN quarterly_reportform8 qrf ON ds.report_id = qrf.report_id";
+
+// Apply date filter if provided
+if (!empty($filter_date)) {
+    $sql_schools .= " WHERE DATE(qrf.date_submitted) = '$filter_date'";
+}
+
 $result_schools = $conn->query($sql_schools);
 
 // Store the data in an array
@@ -248,7 +253,7 @@ if ($result_schools->num_rows > 0) {
     }
 }
 
-// Filtering functionality
+// Search filtering
 $search_term = isset($_GET['search']) ? $_GET['search'] : '';
 if (!empty($search_term)) {
     $filtered_schools = array_filter($schools_data, function ($school) use ($search_term) {
@@ -259,18 +264,26 @@ if (!empty($search_term)) {
 }
 ?>
 
-<div class="col-md-12">
-    <!-- Search form -->
+<div class="mb-3">
+    <!-- Filter form -->
     <form method="get" class="mb-4">
-        <div class="input-group">
-            <input type="text" class="form-control" name="search" placeholder="Search by school name" value="<?php echo htmlspecialchars($search_term); ?>">
-            <div class="input-group-append">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fa fa-search"></i> Search
+    <div class="row justify-content-end">
+            <div class="col-md-3">
+                <input type="text" class="form-control" name="search" placeholder="Search by school name" value="<?php echo htmlspecialchars($search_term); ?>">
+            </div>
+            <!-- Date filter -->
+            <div>
+                <input type="date" class="form-control" name="filter_date" value="<?php echo htmlspecialchars($filter_date); ?>">
+            </div>
+            <!-- Submit button -->
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fa fa-filter"></i> Filter
                 </button>
             </div>
         </div>
     </form>
+
     <div class="card shadow">
         <div class="card-body">
             <!-- Table -->
@@ -279,21 +292,28 @@ if (!empty($search_term)) {
                     <thead>
                         <tr style="color: #fff; background-color: #0971b8;">
                             <th style="text-align: center;">School Name</th>
+                            <th style="text-align: center;">Date Submitted</th>
                             <th style="text-align: center;">View Report</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($filtered_schools as $school) : ?>
+                        <?php if (!empty($filtered_schools)) : ?>
+                            <?php foreach ($filtered_schools as $school) : ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($school['division_school']); ?></td>
+                                    <td style="text-align: center;"><?php echo htmlspecialchars($school['date_submitted']); ?></td>
+                                    <td style="text-align: center;">
+                                        <a href="view_report.php?school_name=<?php echo urlencode($school['division_school']); ?>" class="btn btn-info">
+                                            <i class="fa fa-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else : ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($school['division_school']); ?></td>
-                              
-                                <td style="text-align: center;">
-                                    <a href="view_report.php?school_name=<?php echo urlencode($school['division_school']); ?>" class="btn btn-info">
-                                        <i class="fa fa-eye"></i> View
-                                    </a>
-                                </td>
+                                <td colspan="3" style="text-align: center;">No records found for the selected criteria.</td>
                             </tr>
-                        <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -303,8 +323,6 @@ if (!empty($search_term)) {
 
 <?php $conn->close(); ?>
 
-    </div>
-</div>
 
                 <!-- End Dashboard Inner -->
             </div>

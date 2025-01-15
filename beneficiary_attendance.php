@@ -85,9 +85,6 @@ include("connection.php");
     <h4>General</h4>
     <ul class="list-unstyled components">
         <li>
-<<<<<<< HEAD
-            <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
-=======
             <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
         <!-- <li>
         <i class="fa fa-dashboard"></i> <span>SNS List</span>
@@ -120,11 +117,9 @@ include("connection.php");
         </li>
 
         <!-- Dropdown for Student Attendance and Beneficiary Attendance -->
-<<<<<<< HEAD
+
         <li class="active">
-=======
         <li   class="active">
->>>>>>> cc86752 (Initial commit)
             <a href="#attendanceDropdown" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                 <i class="fa fa-calendar"></i> <span>Attendance Section</span>
             </a>
@@ -138,11 +133,7 @@ include("connection.php");
             <a href="form6.php"><i class="fa fa-flask"></i> <span>Milk Component Data</span></a>
         </li>
         <li>
-<<<<<<< HEAD
-            <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>QUARTERLY REPORT</span></a>
-=======
             <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>Quaterly  Report</span></a>
->>>>>>> cc86752 (Initial commit)
         </li>
 
         <li>
@@ -152,10 +143,6 @@ include("connection.php");
 </div>
             </nav>
 
-<<<<<<< HEAD
-=======
-
->>>>>>> cc86752 (Initial commit)
             <!-- End Sidebar -->
             <!-- Right Content -->
             <div id="content">
@@ -295,11 +282,6 @@ $stmt->close();
 $selected_grade = isset($_POST['grade_section']) ? $_POST['grade_section'] : '';
 $selected_section = isset($_POST['student_section']) ? $_POST['student_section'] : '';
 
-// Pagination setup
-$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
-$limit = 5;
-$offset = ($page - 1) * $limit;
-
 $sql = "SELECT * FROM beneficiary_details WHERE session_id = ?";
 $params = [$session_id];
 $types = "s";
@@ -316,26 +298,11 @@ if (!empty($selected_section)) {
     $types .= "s";
 }
 
-$sql .= " ORDER BY name LIMIT ? OFFSET ?";
-$params[] = $limit;
-$params[] = $offset;
-$types .= "ii";
-
+$sql .= " ORDER BY name";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param($types, ...$params);
 $stmt->execute();
 $result = $stmt->get_result();
-
-// Count total rows for pagination
-$count_sql = "SELECT COUNT(*) as total FROM beneficiary_details WHERE session_id = ?";
-$count_stmt = $conn->prepare($count_sql);
-$count_stmt->bind_param("s", $session_id);
-$count_stmt->execute();
-$count_result = $count_stmt->get_result();
-$total_rows = $count_result->fetch_assoc()['total'];
-$count_stmt->close();
-
-$total_pages = ceil($total_rows / $limit);
 ?>
 
 <!-- Filter Form -->
@@ -367,7 +334,10 @@ $total_pages = ceil($total_rows / $limit);
             <input type="date" name="attendance_date" id="attendance_date" class="form-control" value="<?= date('Y-m-d'); ?>" required>
         </div>
     </div>
-    <br><br>
+<br>
+<br>
+
+
 
     <!-- Table Section -->
     <div class="col-md-12">
@@ -381,15 +351,17 @@ $total_pages = ceil($total_rows / $limit);
             <div class="table_section padding_infor_info">
                 <div class="table-responsive-sm">
                     <table class="table table-bordered">
-                        <!-- Toggle Attendance Mode Button -->
-                        <button type="button" id="toggleMode" class="btn btn-secondary mb-3">Select Present</button>
-                        <input type="hidden" name="attendance_mode" id="attendance_mode" value="Present">
+
+                     <!-- Toggle Attendance Mode Button -->
+    <button type="button" id="toggleMode" class="btn btn-secondary mb-3">Select Present</button>
+    <input type="hidden" name="attendance_mode" id="attendance_mode" value="Present">
                         <thead>
                             <tr>
                                 <th>Beneficiary Name</th>
                                 <th>Grade & Section</th>
                                 <th>Status (Present/Absent)</th>
                                 <th>
+                                    <!-- Dropdown for meal selection in the header -->
                                     <select id="meal-served-header" class="form-control">
                                         <option value="H">Hot Meal (H)</option>
                                         <option value="M">Milk (M)</option>
@@ -408,10 +380,12 @@ $total_pages = ceil($total_rows / $limit);
                                     <td><?= htmlspecialchars($row['name']) ?></td>
                                     <td><?= htmlspecialchars($row['grade_section'] . " - " . $row['student_section']) ?></td>
                                     <td>
+                                        <!-- Checkbox with hidden input for unchecked state -->
                                         <input type="hidden" name="status[<?= $row['id'] ?>]" value="Absent">
                                         <input type="checkbox" name="status[<?= $row['id'] ?>]" value="Present" class="attendance-checkbox">
                                     </td>
                                     <td>
+                                        <!-- Individual dropdown for each student -->
                                         <input name="meal_served[<?= $row['id'] ?>]" class="form-control meal-served-dropdown" readonly required>
                                     </td>
                                 </tr>
@@ -425,25 +399,6 @@ $total_pages = ceil($total_rows / $limit);
 
     <button type="submit" class="btn btn-primary">Submit Attendance</button>
 </form>
-
-<!-- Pagination Links -->
-<nav>
-    <ul class="pagination justify-content-center">
-        <?php if ($page > 1): ?>
-            <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>">Previous</a></li>
-        <?php endif; ?>
-
-        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-            <li class="page-item <?= ($i === $page) ? 'active' : '' ?>">
-                <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
-            </li>
-        <?php endfor; ?>
-
-        <?php if ($page < $total_pages): ?>
-            <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>">Next</a></li>
-        <?php endif; ?>
-    </ul>
-</nav>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -510,9 +465,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const mealDropdown = document.querySelector(`input[name="meal_served[${studentId}]"]`);
             const selectedMeal = document.getElementById('meal-served-header').value;
             const mode = document.getElementById('attendance_mode').value;
-
-            // Save checkbox state to localStorage
-            localStorage.setItem(`attendance_${studentId}`, this.checked ? 'Present' : 'Absent');
 
             if (mode === 'Absent') {
                 if (this.checked) {
@@ -581,23 +533,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Dynamically reset checkbox behavior and meal updates
     window.addEventListener('load', function() {
-        // Restore checkbox states from localStorage
-        document.querySelectorAll('.attendance-checkbox').forEach(checkbox => {
-            const studentId = checkbox.getAttribute('name').replace('status[', '').replace(']', '');
-            const storedState = localStorage.getItem(`attendance_${studentId}`);
-            if (storedState === 'Present') {
-                checkbox.checked = true;
-            } else {
-                checkbox.checked = false;
-            }
-        });
-
         clearCheckboxesForAbsentMode();  // Clear checkboxes in Absent mode on page load
         updateMealServed();  // Initialize meal served state for Present or Absent mode
         updateRowColors();  // Update row colors on page load
     });
 });
-
 </script>
 
 
@@ -609,171 +549,6 @@ document.addEventListener('DOMContentLoaded', function() {
 <br>
 <br>
 
-
-
-<?php
-include("accountconnection.php");
-
-// Retrieve session_id of the logged-in user
-$email = $_SESSION['email'];
-$stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$stmt->store_result();
-$stmt->bind_result($session_id);
-$stmt->fetch();
-$stmt->close();
-
-// Fetch attendance records for a specific date and session_id
-$date_filter = isset($_POST['date_filter']) ? $_POST['date_filter'] : date('Y-m-d');
-
-$sql = "SELECT bd.name, bd.grade_section, bd.student_section, ba.status, ba.meal_served, ba.attendance_date 
-        FROM beneficiary_attendance ba
-        JOIN beneficiary_details bd ON ba.beneficiary_id = bd.id
-        WHERE ba.attendance_date = ? AND bd.session_id = ?";
-
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $date_filter, $session_id);
-$stmt->execute();
-$result = $stmt->get_result();
-?>
-
-<div class="container">
-
-    <form method="POST" action="">
-    <div class="form-row align-items-center">
-                    <div class="col-auto">
-            <label for="date_filter" style="font-size: large;">Select Date To View Attendance</label>
-            <input type="date" name="date_filter" id="date_filter" class="form-control" value="<?= htmlspecialchars($date_filter) ?>" required onchange="this.form.submit()">
-        </div>
-    </form>
-
-
-    <!-- table section -->
-    <div class="col-md-12">
-        <div class="white_shd full margin_bottom_30">
-            <div class="full graph_head">
-                <div class="heading1 margin_0">
-                    <h2>Attendance Records Table</h2>
-                </div>
-            </div>
-            <div class="table_section padding_infor_info">
-                <div class="table-responsive-sm">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Grade & Section</th>
-                                <th>Status</th>
-                                <th>Meal Served</th>
-                                <th>Attendance Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php while ($row = $result->fetch_assoc()) { ?>
-                            <tr>
-                                <td><?= htmlspecialchars($row['name']) ?></td>
-                                <td><?= htmlspecialchars($row['grade_section'] . " - " . $row['student_section']) ?></td>
-                                <td><?= htmlspecialchars($row['status']) ?></td>
-                                <td><?= htmlspecialchars($row['meal_served']) ?></td>
-                                <td><?= htmlspecialchars($row['attendance_date']) ?></td>
-                            </tr>
-                            <?php } ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- table section -->
-</div>
-
-<?php
-$conn->close();
-?>
-
-
-
-
-
-
-<br>
-<br>
-
-
-
-
-
-<?php
-include("accountconnection.php");
-
-// Retrieve session_id of the logged-in user
-$email = $_SESSION['email'];
-$stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$stmt->store_result();
-$stmt->bind_result($session_id);
-$stmt->fetch();
-$stmt->close();
-
-// Fetch attendance statistics (count of absences) for each beneficiary associated with the session_id
-$sql = "SELECT bd.name, bd.grade_section, bd.student_section, COUNT(ba.status) AS absences
-        FROM beneficiary_details bd
-        LEFT JOIN beneficiary_attendance ba ON bd.id = ba.beneficiary_id
-        WHERE ba.status = 'Absent' AND bd.session_id = ?
-        GROUP BY bd.id
-        HAVING absences > 0";
-
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $session_id);
-$stmt->execute();
-$result = $stmt->get_result();
-?>
-
-
-
-
-    <div class="container">
-
-    <!-- Table Section -->
-    <div class="col-md-12">
-        <div class="white_shd full margin_bottom_30">
-            <div class="full graph_head">
-                <div class="heading1 margin_0">
-                    <h2>Beneficiary Absence Statistics Table</h2>
-                </div>
-            </div>
-            <div class="table_section padding_infor_info">
-            <div class="table-responsive-sm">
-                <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Beneficiary Name</th>
-                                <th>Grade & Section</th>
-                                <th>Number of Absences</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php while ($row = $result->fetch_assoc()) { ?>
-                            <tr>
-                                <td><?= htmlspecialchars($row['name']) ?></td>
-                                <td><?= htmlspecialchars($row['grade_section'] . " - " . $row['student_section']) ?></td>
-                                <td><?= htmlspecialchars($row['absences']) ?></td>
-                            </tr>
-                            <?php } ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<?php
-$conn->close();
-?>
 
 
 

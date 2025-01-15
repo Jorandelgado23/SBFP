@@ -133,11 +133,7 @@ include("connection.php");
     <h4>General</h4>
     <ul class="list-unstyled components">
         <li  class="active">
-<<<<<<< HEAD
-            <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
-=======
             <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
->>>>>>> cc86752 (Initial commit)
         </li>
 
         <!-- <li>
@@ -186,11 +182,7 @@ include("connection.php");
             <a href="form6.php"><i class="fa fa-flask"></i> <span>Milk Component Data</span></a>
         </li>
         <li>
-<<<<<<< HEAD
-            <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>QUARTERLY REPORT</span></a>
-=======
             <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>Quaterly  Report</span></a>
->>>>>>> cc86752 (Initial commit)
         </li>
 
         <li>

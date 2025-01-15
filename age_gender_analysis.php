@@ -137,11 +137,7 @@ include("adminauth.php");
     <div class="user_info">
     <h6><?php echo $user_firstname . ' ' . $user_lastname; ?></h6>
         
-<<<<<<< HEAD
-        <p><span class="online_animation"></span> Online</p>
-=======
         <p><span class="online_animation"></span> Logged In</p>
->>>>>>> cc86752 (Initial commit)
     </div>
 </div>
 </div>
@@ -151,11 +147,7 @@ include("adminauth.php");
                     <h4>General</h4>
                     <ul class="list-unstyled components">
                     <li>
-<<<<<<< HEAD
-                            <a href="admindashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
-=======
                             <a href="admindashboard.php"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
->>>>>>> cc86752 (Initial commit)
                         </li>
 
                         <li>

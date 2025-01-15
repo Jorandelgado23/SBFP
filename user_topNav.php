@@ -164,10 +164,6 @@ include("connection.php");
     </ul>
 </div>
             </nav>
-<<<<<<< HEAD
-=======
-
->>>>>>> cc86752 (Initial commit)
             <!-- End Sidebar -->
             <!-- Right Content -->
             <div id="content">

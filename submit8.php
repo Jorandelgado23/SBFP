@@ -19,48 +19,80 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $total_liquidation = $conn->real_escape_string($_POST['total_liquidation']);
     $liquidation_status = $conn->real_escape_string($_POST['liquidation_status']);
     $remarks = $conn->real_escape_string($_POST['remarks']);
+    $current_date = date('Y-m-d');
 
-    // Insert data into `quarterly_reportform8` table
-    $sql = "INSERT INTO quarterly_reportform8 (region_division, amount_allocated, amount_downloaded, status_fund_downloading, first_liquidation, second_liquidation, total_liquidation, liquidation_status, remarks)
-            VALUES ('$region_division', '$amount_allocated', '$amount_downloaded', '$status_fund_downloading', '$first_liquidation', '$second_liquidation', '$total_liquidation', '$liquidation_status', '$remarks')";
+    // Check if a report already exists for today
+    $check_sql = "SELECT report_id FROM quarterly_reportform8 WHERE date_submitted = '$current_date' AND region_division = '$region_division'";
+    $check_result = $conn->query($check_sql);
 
-    if ($conn->query($sql) === TRUE) {
-        $report_id = $conn->insert_id; // Get the report_id of the newly inserted row
+    if ($check_result->num_rows > 0) {
+        // Update existing report
+        $row = $check_result->fetch_assoc();
+        $report_id = $row['report_id'];
 
-        // Insert division schools data
-        $division_schools = $_POST['division_schools'];
-        $sdo_schools = $_POST['sdo_schools'];
-        $target_sbfp_schools = $_POST['target_sbfp_schools'];
-        $actual_sbfp_schools = $_POST['actual_sbfp_schools'];
-        $percentage = $_POST['percentage'];
-        $implementation_status = $_POST['implementation_status'];
-        $target_beneficiaries = $_POST['target_beneficiaries'];
-        $actual_beneficiaries = $_POST['actual_beneficiaries'];
-        $completion_percentage = $_POST['completion_percentage'];
+        $update_sql = "UPDATE quarterly_reportform8 
+                       SET amount_allocated = '$amount_allocated', 
+                           amount_downloaded = '$amount_downloaded', 
+                           status_fund_downloading = '$status_fund_downloading', 
+                           first_liquidation = '$first_liquidation', 
+                           second_liquidation = '$second_liquidation', 
+                           total_liquidation = '$total_liquidation', 
+                           liquidation_status = '$liquidation_status', 
+                           remarks = '$remarks' 
+                       WHERE report_id = '$report_id'";
+        $conn->query($update_sql);
 
-        for ($i = 0; $i < count($division_schools); $i++) {
-            $sql_school = "INSERT INTO division_schools (report_id, division_school, sdo_school, target_sbfp_school, actual_sbfp_school, percent, status, target_beneficiaries, actual_beneficiaries, completion_percentage)
-                           VALUES ('$report_id', '" . $conn->real_escape_string($division_schools[$i]) . "', 
-                                   '" . $conn->real_escape_string($sdo_schools[$i]) . "', 
-                                   '" . $conn->real_escape_string($target_sbfp_schools[$i]) . "', 
-                                   '" . $conn->real_escape_string($actual_sbfp_schools[$i]) . "', 
-                                   '" . $conn->real_escape_string($percentage[$i]) . "', 
-                                   '" . $conn->real_escape_string($implementation_status[$i]) . "', 
-                                   '" . $conn->real_escape_string($target_beneficiaries[$i]) . "', 
-                                   '" . $conn->real_escape_string($actual_beneficiaries[$i]) . "', 
-                                   '" . $conn->real_escape_string($completion_percentage[$i]) . "')";
+        // Delete old division schools data for this report
+        $conn->query("DELETE FROM division_schools WHERE report_id = '$report_id'");
+    } else {
+        // Insert new report
+        $insert_sql = "INSERT INTO quarterly_reportform8 (region_division, amount_allocated, amount_downloaded, status_fund_downloading, first_liquidation, second_liquidation, total_liquidation, liquidation_status, remarks, date_submitted)
+                       VALUES ('$region_division', '$amount_allocated', '$amount_downloaded', '$status_fund_downloading', '$first_liquidation', '$second_liquidation', '$total_liquidation', '$liquidation_status', '$remarks', '$current_date')";
 
-            if (!$conn->query($sql_school)) {
-                echo "Error inserting into division_schools: " . $conn->error . "<br>SQL: " . $sql_school;
-            }
+        if ($conn->query($insert_sql) === TRUE) {
+            $report_id = $conn->insert_id; // Get the report_id of the newly inserted row
+        } else {
+            echo "Error inserting into quarterly_reportform8: " . $conn->error . "<br>SQL: " . $insert_sql;
+            exit;
         }
+    }
+
+    // Insert division schools data
+    $division_schools = $_POST['division_schools'];
+    $sdo_schools = $_POST['sdo_schools'];
+    $target_sbfp_schools = $_POST['target_sbfp_schools'];
+    $actual_sbfp_schools = $_POST['actual_sbfp_schools'];
+    $percentage = $_POST['percentage'];
+    $implementation_status = $_POST['implementation_status'];
+    $target_beneficiaries = $_POST['target_beneficiaries'];
+    $actual_beneficiaries = $_POST['actual_beneficiaries'];
+    $completion_percentage = $_POST['completion_percentage'];
+
+    for ($i = 0; $i < count($division_schools); $i++) {
+        $sql_school = "INSERT INTO division_schools (report_id, division_school, sdo_school, target_sbfp_school, actual_sbfp_school, percent, status, target_beneficiaries, actual_beneficiaries, completion_percentage, date_submitted)
+                       VALUES ('$report_id', '" . $conn->real_escape_string($division_schools[$i]) . "', 
+                               '" . $conn->real_escape_string($sdo_schools[$i]) . "', 
+                               '" . $conn->real_escape_string($target_sbfp_schools[$i]) . "', 
+                               '" . $conn->real_escape_string($actual_sbfp_schools[$i]) . "', 
+                               '" . $conn->real_escape_string($percentage[$i]) . "', 
+                               '" . $conn->real_escape_string($implementation_status[$i]) . "', 
+                               '" . $conn->real_escape_string($target_beneficiaries[$i]) . "', 
+                               '" . $conn->real_escape_string($actual_beneficiaries[$i]) . "', 
+                               '" . $conn->real_escape_string($completion_percentage[$i]) . "', 
+                               '$current_date')";
+
+        if (!$conn->query($sql_school)) {
+            echo "Error inserting into division_schools: " . $conn->error . "<br>SQL: " . $sql_school;
+        }
+    }
+
 
         // Generate PDF after successful submission
         generatePDF($report_id, $conn);
     } else {
         echo "Error inserting into quarterly_reportform8: " . $conn->error . "<br>SQL: " . $sql;
     }
-}
+
 
 // Function to generate PDF
 function generatePDF($report_id, $conn) {

@@ -126,11 +126,7 @@ $conn->close();
                     <h4>General</h4>
                     <ul class="list-unstyled components">
                     <li>
-<<<<<<< HEAD
-                            <a href="admindashboard.php"><i class="fa fa-dashboard""></i> <span>DASHBOARD</span></a>
-=======
                             <a href="admindashboard.php"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
->>>>>>> cc86752 (Initial commit)
                         </li>
 
                         <li>
@@ -156,13 +152,10 @@ $conn->close();
                         <li>
                             <a href="age_gender_analysis.php"><i class="fa fa-archive"></i> <span>age and gender Analysis</span></a>
                         </li>
-<<<<<<< HEAD
-=======
 
                         <li>
                             <a href="school_report.php"><i class="fa fa-file-zip-o"></i> <span>Monthly School Report</span></a>
                         </li>
->>>>>>> cc86752 (Initial commit)
                        
                         <li>
                             <a href="adsettings.php"><i class="fa fa-cog yellow_color"></i> <span>Settings</span></a>

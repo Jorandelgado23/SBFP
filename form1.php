@@ -413,6 +413,42 @@ function maskName($name)
 }
 
 ?>
+
+<?php
+if (isset($_SESSION['response'])) {
+    $status = $_SESSION['response']['status'];
+    $msg = $_SESSION['response']['msg'];
+    echo "<div class='alert alert-$status'>$msg</div>";
+    unset($_SESSION['response']); // Clear the response after showing
+}
+?>
+
+
+<div class="row mt-5" style="float: left;">
+    <!-- Excel file upload form -->
+    <div class="col ml-auto">
+        <div class="head">
+            <div class="float-end">
+                <a href="javascript:void(0);" class="btn btn-success" onclick="formToggle('importExcelFrm');"><i class="plus"></i> Upload Excel</a>
+            </div>
+        </div>
+        <div class="col-md-12" id="importExcelFrm" style="display: none;">
+            <form action="import_csv.php" method="POST" class="row g-2 float-end" enctype="multipart/form-data">
+                <div class="col-auto">
+                   
+                    <input type="file" name="excel_file" id="excel_file" class="form-control" accept=".xls, .xlsx" required />
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-success mb-3">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    </div>
+</div>
+
+
 <div class="mb-3">
     <form method="POST" id="filterForm">
         <div class="row justify-content-end">
@@ -444,19 +480,6 @@ function maskName($name)
         </div>
     </form>
 </div>
-<div class="col ml-auto">
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="actionMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            GENERATE PDF
-        </button>
-        <div class="dropdown-menu" aria-labelledby="actionMenuButton">
-            <form action="masterlist_pdf.php" method="get" class="dropdown-item">
-                <input type="hidden" name="session_id" value="<?php echo htmlspecialchars($session_id); ?>">
-                <button type="submit" class="btn btn-link">Download as PDF</button>
-            </form>
-        </div>
-    </div>
-</div>
 
 
 <div class="col-md-12">
@@ -465,6 +488,11 @@ function maskName($name)
             <div class="heading1 margin_0">
                 <h2>Master List Beneficiaries Table</h2>
             </div>
+
+            <form action="masterlist_pdf.php" method="get" class="mb-3" style="float: right;">
+            <input type="hidden" name="session_id" value="<?php echo htmlspecialchars($session_id); ?>">
+            <button type="submit" class="btn btn-danger">Download as PDF</button>
+        </form>
             <div class="table_section padding_infor_info">
                 <div class="table-responsive-sm">
                     <table class="table table-bordered">
@@ -1093,6 +1121,19 @@ function validatePhone(input) {
     }
 
     input.value = value; // Update the input value with the formatted value
+}
+</script>
+
+
+<!-- Show/hide CSV upload form -->
+<script>
+function formToggle(ID){
+    var element = document.getElementById(ID);
+    if(element.style.display === "none"){
+        element.style.display = "block";
+    }else{
+        element.style.display = "none";
+    }
 }
 </script>
 

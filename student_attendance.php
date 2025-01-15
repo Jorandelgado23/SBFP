@@ -86,21 +86,12 @@ include("connection.php");
         </div>
     </div>
 </div>
-<<<<<<< HEAD
-
-                </div>
-=======
 </div>
->>>>>>> cc86752 (Initial commit)
                 <div class="sidebar_blog_2">
     <h4>General</h4>
     <ul class="list-unstyled components">
         <li>
-<<<<<<< HEAD
-            <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>DASHBOARD</span></a>
-=======
             <a href="dashboard.php"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
->>>>>>> cc86752 (Initial commit)
         </li>
 
         <!-- <li>
@@ -135,11 +126,7 @@ include("connection.php");
         </li>
 
         <!-- Dropdown for Student Attendance and Beneficiary Attendance -->
-<<<<<<< HEAD
-        <li class="active">
-=======
         <li   class="active">
->>>>>>> cc86752 (Initial commit)
             <a href="#attendanceDropdown" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                 <i class="fa fa-calendar"></i> <span>Attendance Section</span>
             </a>
@@ -157,19 +144,12 @@ include("connection.php");
             <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>QUARTERLY REPORT</span></a>
 =======
             <a href="form8.php"><i class="fa fa-file-text-o"></i> <span>Quaterly  Report</span></a>
->>>>>>> cc86752 (Initial commit)
-        </li>
-
         <li>
-            <a href="usersetting.php"><i class="fa fa-cog yellow_color"></i> <span>Settings</span></a>
         </li>
     </ul>
 </div>
             </nav>
-<<<<<<< HEAD
-=======
 
->>>>>>> cc86752 (Initial commit)
             <!-- End Sidebar -->
             <!-- Right Content -->
             <div id="content">
@@ -439,6 +419,168 @@ $conn->close();
 ?>
 
 
+
+
+<div class="row">
+<?php
+include("accountconnection.php");
+
+// Retrieve session_id of the logged-in user
+$email = $_SESSION['email'];
+$stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($session_id);
+$stmt->fetch();
+$stmt->close();
+
+// Fetch attendance records for a specific date and session_id
+$date_filter = isset($_POST['date_filter']) ? $_POST['date_filter'] : date('Y-m-d');
+
+$sql = "SELECT bd.name, bd.grade_section, bd.student_section, ba.status, ba.meal_served, ba.attendance_date 
+        FROM beneficiary_attendance ba
+        JOIN beneficiary_details bd ON ba.beneficiary_id = bd.id
+        WHERE ba.attendance_date = ? AND bd.session_id = ?";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ss", $date_filter, $session_id);
+$stmt->execute();
+$result = $stmt->get_result();
+?>
+
+<div class="container">
+
+    <form method="POST" action="">
+    <div class="form-row align-items-center">
+                    <div class="col-auto">
+            <label for="date_filter" style="font-size: large;">Select Date To View Attendance</label>
+            <input type="date" name="date_filter" id="date_filter" class="form-control" value="<?= htmlspecialchars($date_filter) ?>" required onchange="this.form.submit()">
+        </div>
+    </form>
+
+
+    <!-- table section -->
+    <div class="col-md-12">
+        <div class="white_shd full margin_bottom_30">
+            <div class="full graph_head">
+                <div class="heading1 margin_0">
+                    <h2>Attendance Records Table</h2>
+                </div>
+            </div>
+            <div class="table_section padding_infor_info">
+                <div class="table-responsive-sm">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Grade & Section</th>
+                                <th>Status</th>
+                                <th>Meal Served</th>
+                                <th>Attendance Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php while ($row = $result->fetch_assoc()) { ?>
+                            <tr>
+                                <td><?= htmlspecialchars($row['name']) ?></td>
+                                <td><?= htmlspecialchars($row['grade_section'] . " - " . $row['student_section']) ?></td>
+                                <td><?= htmlspecialchars($row['status']) ?></td>
+                                <td><?= htmlspecialchars($row['meal_served']) ?></td>
+                                <td><?= htmlspecialchars($row['attendance_date']) ?></td>
+                            </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- table section -->
+</div>
+
+<?php
+$conn->close();
+?>
+
+
+
+
+
+
+
+
+
+<?php
+include("accountconnection.php");
+
+// Retrieve session_id of the logged-in user
+$email = $_SESSION['email'];
+$stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($session_id);
+$stmt->fetch();
+$stmt->close();
+
+// Fetch attendance statistics (count of absences) for each beneficiary associated with the session_id
+$sql = "SELECT bd.name, bd.grade_section, bd.student_section, COUNT(ba.status) AS absences
+        FROM beneficiary_details bd
+        LEFT JOIN beneficiary_attendance ba ON bd.id = ba.beneficiary_id
+        WHERE ba.status = 'Absent' AND bd.session_id = ?
+        GROUP BY bd.id
+        HAVING absences > 0";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $session_id);
+$stmt->execute();
+$result = $stmt->get_result();
+?>
+
+</div>
+
+
+    <div class="container">
+
+    <!-- Table Section -->
+    <div class="col-md-12">
+        <div class="white_shd full margin_bottom_30">
+            <div class="full graph_head">
+                <div class="heading1 margin_0">
+                    <h2>Beneficiary Absence Statistics Table</h2>
+                </div>
+            </div>
+            <div class="table_section padding_infor_info">
+            <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Beneficiary Name</th>
+                                <th>Grade & Section</th>
+                                <th>Number of Absences</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php while ($row = $result->fetch_assoc()) { ?>
+                            <tr>
+                                <td><?= htmlspecialchars($row['name']) ?></td>
+                                <td><?= htmlspecialchars($row['grade_section'] . " - " . $row['student_section']) ?></td>
+                                <td><?= htmlspecialchars($row['absences']) ?></td>
+                            </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<?php
+$conn->close();
+?>
 
 
 

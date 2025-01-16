@@ -68,14 +68,14 @@ foreach ($_POST['beneficiary_first_name'] as $index => $first_name) {
 $stmt->close();
 
 // Prepare statement for inserting beneficiary details
-$stmt = $conn->prepare("INSERT INTO beneficiary_details (session_id, beneficiary_id, student_section, name, lrn_no, sex, grade_section, date_of_birth, date_of_weighing, age, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa, dewormed, parents_consent_for_milk, participation_in_4ps, beneficiary_of_sbfp_in_previous_years, parent_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt = $conn->prepare("INSERT INTO beneficiary_details (session_id, beneficiary_id, student_section, name, lrn_no, sex, grade_section, date_of_birth, date_of_weighing, age, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa, dewormed, parents_consent_for_milk, participation_in_4ps, beneficiary_of_sbfp_in_previous_years, parent_phone, school_year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 // Loop through each beneficiary and insert details
 foreach ($_POST['beneficiary_first_name'] as $index => $first_name) {
     $last_name = $_POST['beneficiary_last_name'][$index];
     $beneficiary_name = $first_name . ' ' . $last_name;
-    // Continue as in the original form
     
+    // Continue as in the original form
     $student_section = $_POST['student_section'][$index];
     $lrn_no = $_POST['lrn_no'][$index];
     $beneficiary_sex = $_POST['beneficiary_sex'][$index];
@@ -93,9 +93,12 @@ foreach ($_POST['beneficiary_first_name'] as $index => $first_name) {
     $participation_in_4ps = $_POST['participation_in_4ps'][$index];
     $beneficiary_of_sbfp_in_previous_years = $_POST['beneficiary_of_sbfp_in_previous_years'][$index];
     $parent_phone = $_POST['parent_phone'][$index];
+    
+    // Retrieve and format the school year
+    $school_year = $_POST['school_year'][$index];
 
     // Bind parameters and execute
-    $stmt->bind_param("ssssssssssssssssssss", $session_id, $beneficiary_id, $student_section, $beneficiary_name, $lrn_no, $beneficiary_sex, $beneficiary_grade_section, $beneficiary_dob, $beneficiary_dow, $beneficiary_age, $beneficiary_weight, $beneficiary_height, $beneficiary_bmi, $nutritional_status_bmia, $nutritional_status_hfa, $dewormed, $parents_consent_for_milk, $participation_in_4ps, $beneficiary_of_sbfp_in_previous_years, $parent_phone);
+    $stmt->bind_param("sssssssssssssssssssss", $session_id, $beneficiary_id, $student_section, $beneficiary_name, $lrn_no, $beneficiary_sex, $beneficiary_grade_section, $beneficiary_dob, $beneficiary_dow, $beneficiary_age, $beneficiary_weight, $beneficiary_height, $beneficiary_bmi, $nutritional_status_bmia, $nutritional_status_hfa, $dewormed, $parents_consent_for_milk, $participation_in_4ps, $beneficiary_of_sbfp_in_previous_years, $parent_phone, $school_year);
     $stmt->execute();
 }
 

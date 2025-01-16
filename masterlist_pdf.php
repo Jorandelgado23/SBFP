@@ -12,8 +12,9 @@ $password = "";
 $dbname = "sbfp";
 
 // Check if session_id is provided
-if (isset($_GET['session_id'])) {
+if (isset($_GET['session_id']) && isset($_GET['school_year'])) {
     $session_id = $_GET['session_id'];
+    $school_year = $_GET['school_year'];
 
     // Create a new connection
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -56,16 +57,11 @@ if (isset($_GET['session_id'])) {
                            beneficiary_of_sbfp_in_previous_years 
                     FROM beneficiary_details bd 
                     INNER JOIN beneficiaries b ON bd.beneficiary_id = b.id 
-                    WHERE b.session_id = ?";
+                    WHERE b.session_id = ? AND bd.school_year = ?";
     $stmt_details = $conn->prepare($sql_details);
-    $stmt_details->bind_param("s", $session_id);
+    $stmt_details->bind_param("ss", $session_id, $school_year);
     $stmt_details->execute();
     $result_details = $stmt_details->get_result();
-
-    if ($result_details->num_rows == 0) {
-        die("No beneficiary details found for the given session ID.");
-    }
-
     // Initialize DOMPDF and set options
     $options = new Options();
     $options->set('isHtml5ParserEnabled', true);

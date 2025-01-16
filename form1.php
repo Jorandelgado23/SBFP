@@ -236,7 +236,21 @@ $stmt->close();
                 <div class="invalid-feedback">Please specify if the beneficiary was part of SBFP in previous years.</div>
             </div>
         
-
+<!-- School Year Dropdown -->
+<div class="form-group col-md-6">
+    <label for="schoolYear" class="form-label">School Year:</label>
+    <select class="form-select" id="schoolYear" name="school_year[]" required>
+        <?php
+            $currentYear = date('Y');
+            for ($i = 0; $i <= 5; $i++) {
+                $nextYear = $currentYear + $i;
+                $schoolYear = $nextYear . '-' . ($nextYear + 1);
+                echo "<option value=\"$schoolYear\">$schoolYear</option>";
+            }
+        ?>
+    </select>
+    <div class="invalid-feedback">Please select the school year.</div>
+</div>
 
         </div>
     </div>
@@ -331,7 +345,6 @@ document.addEventListener('DOMContentLoaded', function() {
 </section>
 
 <?php
-
 include("accountconnection.php");
 
 // Retrieve session_id of the logged-in user
@@ -346,14 +359,15 @@ $stmt->close();
 // Handle filters
 $selected_grade = isset($_POST['grade_level']) ? $_POST['grade_level'] : '';
 $search_name = isset($_POST['search_name']) ? $_POST['search_name'] : '';
+$selected_school_year = isset($_POST['school_year']) ? $_POST['school_year'] : date("Y") . "-" . (date("Y") + 1); // Default: current school year
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = 5; // Rows per page
 $offset = ($page - 1) * $limit;
 
 // Base query
-$sql = "SELECT * FROM beneficiary_details WHERE session_id = ?";
-$params = [$session_id];
-$types = "s";
+$sql = "SELECT * FROM beneficiary_details WHERE session_id = ? AND school_year = ?";
+$params = [$session_id, $selected_school_year];
+$types = "ss";
 
 // Apply grade level filter
 if (!empty($selected_grade)) {
@@ -411,7 +425,6 @@ function maskName($name)
     }
     return $maskedName;
 }
-
 ?>
 
 <?php
@@ -422,7 +435,6 @@ if (isset($_SESSION['response'])) {
     unset($_SESSION['response']); // Clear the response after showing
 }
 ?>
-
 
 <div class="row mt-5" style="float: left;">
     <!-- Excel file upload form -->
@@ -435,7 +447,6 @@ if (isset($_SESSION['response'])) {
         <div class="col-md-12" id="importExcelFrm" style="display: none;">
             <form action="import_csv.php" method="POST" class="row g-2 float-end" enctype="multipart/form-data">
                 <div class="col-auto">
-                   
                     <input type="file" name="excel_file" id="excel_file" class="form-control" accept=".xls, .xlsx" required />
                 </div>
                 <div>
@@ -444,14 +455,25 @@ if (isset($_SESSION['response'])) {
             </form>
         </div>
     </div>
-
-    </div>
 </div>
-
 
 <div class="mb-3">
     <form method="POST" id="filterForm">
         <div class="row justify-content-end">
+            <div class="col-md-3">
+                <label for="school_year">Filter by School Year:</label>
+                <select name="school_year" id="school_year" class="form-control" onchange="document.getElementById('filterForm').submit();">
+                    <option value="">All</option>
+                    <?php
+                    $years = range(date("Y"), date("Y") - 5); // Last 10 years
+                    foreach ($years as $year) {
+                        $schoolYear = "$year-" . ($year + 1);
+                        $selected = ($selected_school_year == $schoolYear) ? "selected" : "";
+                        echo "<option value=\"$schoolYear\" $selected>$schoolYear</option>";
+                    }
+                    ?>
+                </select>
+            </div>
             <div class="col-md-3">
                 <label for="grade_level">Filter by Grade Level:</label>
                 <select name="grade_level" id="grade_level" class="form-control" onchange="document.getElementById('filterForm').submit();">
@@ -466,21 +488,18 @@ if (isset($_SESSION['response'])) {
                 </select>
             </div>
             <div class="col-md-3">
-                <div class="form-group">
-                    <label for="search_name"><strong>Search by Name:</strong></label>
-                    <div class="input-group">
-                        <input type="text" name="search_name" id="search_name" class="form-control" placeholder="Enter name to search"
-                               value="<?php echo htmlspecialchars($search_name); ?>" />
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-primary">Search</button>
-                        </div>
+                <label for="search_name"><strong>Search by Name:</strong></label>
+                <div class="input-group">
+                    <input type="text" name="search_name" id="search_name" class="form-control" placeholder="Enter name to search"
+                           value="<?php echo htmlspecialchars($search_name); ?>" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">Search</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
 </div>
-
 
 <div class="col-md-12">
     <div class="white_shd full margin_bottom_30">
@@ -490,9 +509,11 @@ if (isset($_SESSION['response'])) {
             </div>
 
             <form action="masterlist_pdf.php" method="get" class="mb-3" style="float: right;">
-            <input type="hidden" name="session_id" value="<?php echo htmlspecialchars($session_id); ?>">
-            <button type="submit" class="btn btn-danger">Download as PDF</button>
-        </form>
+                <input type="hidden" name="session_id" value="<?php echo htmlspecialchars($session_id); ?>">
+                <input type="hidden" name="school_year" value="<?php echo htmlspecialchars($selected_school_year); ?>">
+                <button type="submit" class="btn btn-danger">Download as PDF</button>
+            </form>
+    
             <div class="table_section padding_infor_info">
                 <div class="table-responsive-sm">
                     <table class="table table-bordered">

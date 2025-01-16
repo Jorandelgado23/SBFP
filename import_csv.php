@@ -98,6 +98,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $dateOfWeighing = null; // Default to null if empty
                     }
 
+                    // Calculate the school year
+                    $currentYear = date("Y"); // Retrieves the current year
+                    $schoolYear = "$currentYear-" . ($currentYear + 1); // Always starts in the current year and ends in the next year
                     
 
                     // Insert into beneficiaries table
@@ -112,6 +115,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Get the auto-generated beneficiary_id
                     $beneficiaryId = $conn->insert_id;
 
+
+                    
+
                     // Update the beneficiary_id field in the beneficiaries table
                     $sqlBeneficiariesUpdate = "UPDATE beneficiaries SET beneficiary_id = ? WHERE id = ?";
                     $stmtBeneficiariesUpdate = $conn->prepare($sqlBeneficiariesUpdate);
@@ -121,12 +127,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Insert into beneficiary_details table with beneficiary_id
                     // Insert into beneficiary_details table
                     $sqlDetails = "INSERT INTO beneficiary_details 
-                        (beneficiary_id, name, sex, grade_section, date_of_birth, date_of_weighing, age, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa, dewormed, parents_consent_for_milk, participation_in_4ps, beneficiary_of_sbfp_in_previous_years, session_id) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        (beneficiary_id, name, sex, grade_section, date_of_birth, date_of_weighing, age, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa, dewormed, parents_consent_for_milk, participation_in_4ps, beneficiary_of_sbfp_in_previous_years, session_id, school_year) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                     $stmtDetails = $conn->prepare($sqlDetails);
                     $stmtDetails->bind_param(
-                        "issssssddssssssss",
+                        "issssssddsssssssss",
                         $beneficiaryId,
                         $name,
                         $sex,
@@ -143,7 +149,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $parentsConsentForMilk,
                         $participationIn4Ps,
                         $beneficiaryOfSbfpPreviousYears,
-                        $session_id
+                        $session_id,
+                        $schoolYear
                     );
                     $stmtDetails->execute();
                 }

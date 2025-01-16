@@ -68,8 +68,9 @@ if (isset($_GET['session_id']) && isset($_GET['school_year'])) {
     $options->set('isRemoteEnabled', true);  // Allow remote image loading (optional)
     $dompdf = new Dompdf($options);
     
-    // Get the current year
-    $currentYear = date('Y');
+    // Extract the current year based on the school year
+$school_year_parts = explode('-', $school_year);
+$currentYear = trim($school_year_parts[0]); // Take the starting year of the school yea
 
     // Fetch and encode the logos
     $leftLogoPath = 'images/LOGO.png';

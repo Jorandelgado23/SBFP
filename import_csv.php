@@ -39,12 +39,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Get the sheet named "SBFP-FORM 1"
                 $sheet = $spreadsheet->getSheetByName('SBFP-FORM 1');
 
-                // Loop through rows 14 to 26 to extract data
-                for ($row = 14; $row <= 26; $row++) {
+                 // Loop through rows 14 to 26 to extract data
+                 for ($row = 14; $row <= 26; $row++) {
                     // Extract data from columns
                     $name = trim($sheet->getCell('B' . $row)->getValue());
                     $sex = trim($sheet->getCell('C' . $row)->getValue());
-                    $gradeSection = trim($sheet->getCell('D' . $row)->getValue());
+                    $gradeSectionRaw = trim($sheet->getCell('D' . $row)->getValue());
                     $dob = trim($sheet->getCell('E' . $row)->getValue());
                     $dateOfWeighing = trim($sheet->getCell('F' . $row)->getValue());
                     $age = trim($sheet->getCell('G' . $row)->getValue());
@@ -62,40 +62,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         continue; // Skip if 'name' is empty
                     }
 
-                    // Handle the date of birth (DOB) - Check if it's a valid date
-                    if (!empty($dob)) {
-                        if (is_numeric($dob)) {
-                            // Convert Excel serial date format to DateTime object
-                            $dob = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($dob)->format('m/d/Y');
-                        }
+                    // Separate gradeSection and student_section
+                    $gradeSection = null;       // For the grade level (e.g., "Grade 1")
+                    $studentSection = null;     // For the section (e.g., "/Sample Section")
 
-                        // Parse the date as MM/DD/YYYY and reformat it to YYYY/MM/DD
-                        $dateObject = DateTime::createFromFormat('m/d/Y', $dob);
-                        if ($dateObject) {
-                            $dob = $dateObject->format('Y/m/d');
+                    if (!empty($gradeSectionRaw)) {
+                        // Split the value by the first occurrence of a slash (/)
+                        $parts = explode('/', $gradeSectionRaw, 2);
+                        $gradeSection = trim($parts[0]); // Extract the grade level (e.g., "Grade 1")
+
+                        if (isset($parts[1])) {
+                            $studentSection = '' . trim($parts[1]); // Ensure the section starts with '/'
                         } else {
-                            $dob = null; // Set to null if date conversion fails
+                            $studentSection = 'Default Section'; // Default if no section is specified
                         }
                     } else {
-                        $dob = null; // Default to null if DOB is empty
+                        $gradeSection = 'Unknown Grade'; // Default if gradeSection is empty
+                        $studentSection = '/Default Section'; // Default section
                     }
 
-                    // Handle the date of weighing/measuring (F column)
-                    if (!empty($dateOfWeighing)) {
-                        if (is_numeric($dateOfWeighing)) {
-                            // Convert Excel serial date format to DateTime object
-                            $dateOfWeighing = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($dateOfWeighing)->format('Y/m/d');
+                    // Handle the date of birth (DOB)
+                    if (!empty($dob)) {
+                        if (is_numeric($dob)) {
+                            $dob = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($dob)->format('Y/m/d');
                         } else {
-                            // Parse the date as MM/DD/YYYY and reformat it to YYYY/MM/DD
-                            $dateObject = DateTime::createFromFormat('m/d/Y', $dateOfWeighing);
-                            if ($dateObject) {
-                                $dateOfWeighing = $dateObject->format('Y/m/d');
-                            } else {
-                                $dateOfWeighing = null; // Set to null if date conversion fails
-                            }
+                            $dob = DateTime::createFromFormat('m/d/Y', $dob) ? DateTime::createFromFormat('m/d/Y', $dob)->format('Y/m/d') : null;
                         }
                     } else {
-                        $dateOfWeighing = null; // Default to null if empty
+                        $dob = null;
+                    }
+
+                    // Handle the date of weighing
+                    if (!empty($dateOfWeighing)) {
+                        if (is_numeric($dateOfWeighing)) {
+                            $dateOfWeighing = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($dateOfWeighing)->format('Y/m/d');
+                        } else {
+                            $dateOfWeighing = DateTime::createFromFormat('m/d/Y', $dateOfWeighing) ? DateTime::createFromFormat('m/d/Y', $dateOfWeighing)->format('Y/m/d') : null;
+                        }
+                    } else {
+                        $dateOfWeighing = null;
                     }
 
                     // Calculate the school year
@@ -126,17 +131,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     // Insert into beneficiary_details table with beneficiary_id
                     // Insert into beneficiary_details table
+                    // Insert into beneficiary_details table
                     $sqlDetails = "INSERT INTO beneficiary_details 
-                        (beneficiary_id, name, sex, grade_section, date_of_birth, date_of_weighing, age, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa, dewormed, parents_consent_for_milk, participation_in_4ps, beneficiary_of_sbfp_in_previous_years, session_id, school_year) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        (beneficiary_id, name, sex, grade_section, student_section, date_of_birth, date_of_weighing, age, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa, dewormed, parents_consent_for_milk, participation_in_4ps, beneficiary_of_sbfp_in_previous_years, session_id, school_year) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                     $stmtDetails = $conn->prepare($sqlDetails);
                     $stmtDetails->bind_param(
-                        "issssssddsssssssss",
+                        "issssssddssssssssss",
                         $beneficiaryId,
                         $name,
                         $sex,
                         $gradeSection,
+                        $studentSection,
                         $dob,
                         $dateOfWeighing,
                         $age,

@@ -126,8 +126,17 @@ foreach ($status as $beneficiary_id => $attendance_status) {
     $info_stmt->close();
 }
 
+// Set status message for response
+$res_status = 'success'; 
+$res_msg = 'Attendance has been successfully updated.';
+$_SESSION['response'] = array( 
+    'status' => $res_status, 
+    'msg' => $res_msg 
+);
+
 $conn->close();
 
+// Redirect to beneficiary_attendance.php
 header("Location: beneficiary_attendance.php?success=1");
 exit();
 ?>

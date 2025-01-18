@@ -256,6 +256,13 @@ $conn->close();
         <?php
 include("accountconnection.php");
 
+// Get status message if it exists in the session
+if (!empty($_SESSION['response'])) { 
+    $status = $_SESSION['response']['status']; 
+    $statusMsg = $_SESSION['response']['msg']; 
+    unset($_SESSION['response']); 
+}
+
 // Retrieve session_id of the logged-in user
 $email = $_SESSION['email'];
 $stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
@@ -307,6 +314,13 @@ $stmt->bind_param($types, ...$params);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
+
+<!-- Display status message -->
+<?php if (!empty($statusMsg)) { ?>
+<div class="col-xs-12">
+    <div class="alert alert-<?php echo $status; ?>"><?php echo $statusMsg; ?></div>
+</div>
+<?php } ?>
 
 <!-- Filter Form -->
 <form method="POST" action="beneficiary_attendance.php" class="form-inline mb-3" style="float: right;">

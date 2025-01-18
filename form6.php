@@ -564,7 +564,7 @@ function displayMilkData($conn, $session_id, $page, $limit, $offset) {
                         <input type="text" name="student_name" id="student_name" class="form-control" placeholder="Enter name to search"
                                value="<?php echo isset($_GET['student_name']) ? $_GET['student_name'] : ''; ?>" />
                         <div class="input-group-append">
-                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                         </div>
                     </div>
                 </div>
@@ -740,7 +740,7 @@ $stmt->close();
             <div class="heading1 margin_0">
                 <h1 >Milk Component Data Table</h1> -->
                 <form method="POST" action="milk_regenerate.php" style="float: right;">
-                    <button type="submit" name="action" value="pdf" class="btn btn-primary"><i class="fa fa-file-pdf-o"></i> Generate PDF</button>
+                    <button type="submit" name="action" value="pdf" class="btn btn-danger"><i class="fa fa-file-pdf-o"></i> Generate PDF</button>
                     <!-- <button type="submit" name="action" value="excel" class="btn btn-success"><i class="fa fa-file-excel-o"> </i>Generate Excel</button> -->
                 </form>
                 <?php displayMilkData($conn, $session_id, $page, $limit, $offset); ?>

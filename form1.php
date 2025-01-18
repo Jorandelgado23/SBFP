@@ -13,7 +13,7 @@ include'user_topNav.php';
                         </div>
 
                     <p class="card-text" style="font-size: large;">Click The Open Form Below To Add Beneficiaries</p>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sbfpModal" data-whatever="@mdo"><i class="fa fa-plus"> </i>Open Form</button>
+                    <button type="button" class="btn cur-p btn-outline-secondary" data-toggle="modal" data-target="#sbfpModal" data-whatever="@mdo"><i class="fa fa-plus"> </i>Open Form</button>
         <br>
         <br>
 
@@ -493,7 +493,7 @@ if (isset($_SESSION['response'])) {
                     <input type="text" name="search_name" id="search_name" class="form-control" placeholder="Enter name to search"
                            value="<?php echo htmlspecialchars($search_name); ?>" />
                     <div class="input-group-append">
-                        <button type="submit" class="btn btn-primary">Search</button>
+                        <button type="submit" class="btn cur-p btn-secondary"><i class="fa fa-search"></i></button>
                     </div>
                 </div>
             </div>

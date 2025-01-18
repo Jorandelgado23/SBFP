@@ -16,7 +16,7 @@ include("connection.php");
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>Master List Of Beneficiaries</title>
+      <title>Beneficiary Progress Input and Nutritional Tracking</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -55,7 +55,11 @@ include("connection.php");
         color: #fff; /* Text color */
         font-weight: bold; /* Bold text */
     }
+    
+    .table_section {
+    text-align: center;
 
+ }
     
    </style>
 
@@ -248,7 +252,7 @@ $conn->close();
                         <div class="row column_title">
                             <div class="col-md-12">
                                 <div class="page_title">
-                                    <h2>Beneficiary Progress</h2>
+                                    <h2>Beneficiary Progress Input and Nutritional Tracking</h2>
                                 </div>
                             </div>
                         </div>
@@ -282,96 +286,96 @@ $result = $stmt->get_result();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Process form submission
-    $beneficiary_id = $_POST['beneficiary_id'];
-    $date_of_progress = $_POST['date_of_progress'];
-    $weight = $_POST['weight'];
-    $height = $_POST['height'];
-    $bmi = $_POST['bmi'];
-    $nutritional_status_bmia = $_POST['nutritional_status_bmia'];
-    $nutritional_status_hfa = $_POST['nutritional_status_hfa'];
-    $student_section = $_POST['student_section'];
+    foreach ($_POST['beneficiary'] as $beneficiary_id => $data) {
+        $date_of_progress = $data['date_of_progress'];
+        $weight = $data['weight'];
+        $height = $data['height'];
+        $bmi = $data['bmi'];
+        $nutritional_status_bmia = $data['nutritional_status_bmia'];
+        $nutritional_status_hfa = $data['nutritional_status_hfa'];
+        $student_section = $data['student_section'];
 
-    // Check if a record for this beneficiary and date already exists
-    $sql_check = "SELECT * FROM beneficiary_progress WHERE beneficiary_id = ? AND date_of_progress = ?";
-    $stmt_check = $conn->prepare($sql_check);
-    $stmt_check->bind_param('is', $beneficiary_id, $date_of_progress);
-    $stmt_check->execute();
-    $result_check = $stmt_check->get_result();
+        // Check if a record for this beneficiary and date already exists
+        $sql_check = "SELECT * FROM beneficiary_progress WHERE beneficiary_id = ? AND date_of_progress = ?";
+        $stmt_check = $conn->prepare($sql_check);
+        $stmt_check->bind_param('is', $beneficiary_id, $date_of_progress);
+        $stmt_check->execute();
+        $result_check = $stmt_check->get_result();
 
-    $improvement_message = "No Improvement Detected.";
+        $improvement_message = "No Improvement Detected.";
 
-    if ($result_check->num_rows > 0) {
-        // Update record
-        $previous_record = $result_check->fetch_assoc();
+        if ($result_check->num_rows > 0) {
+            // Update record
+            $previous_record = $result_check->fetch_assoc();
 
-        if (
-            ($previous_record['nutritional_status_bmia'] == "Severely Wasted" && $nutritional_status_bmia == "Normal") ||
-            ($previous_record['nutritional_status_bmia'] == "Wasted" && $nutritional_status_bmia == "Normal")
-        ) {
-            $improvement_message = "Improvement Detected!";
-        }
+            if (
+                ($previous_record['nutritional_status_bmia'] == "Severely Wasted" && $nutritional_status_bmia == "Normal") ||
+                ($previous_record['nutritional_status_bmia'] == "Wasted" && $nutritional_status_bmia == "Normal")
+            ) {
+                $improvement_message = "Improvement Detected!";
+            }
 
-        if ($weight > $previous_record['weight']) {
-            $improvement_message .= " Weight has increased.";
+            if ($weight > $previous_record['weight']) {
+                $improvement_message .= " Weight has increased.";
+            } else {
+                $improvement_message .= " Weight has not improved.";
+            }
+
+            $sql_update = "UPDATE beneficiary_progress 
+                           SET date_of_progress = ?, weight = ?, height = ?, bmi = ?, 
+                               nutritional_status_bmia = ?, nutritional_status_hfa = ?, session_id = ? 
+                           WHERE beneficiary_id = ? AND date_of_progress = ?";
+            $stmt_update = $conn->prepare($sql_update);
+            $stmt_update->bind_param('sddssssis', 
+                $date_of_progress, 
+                $weight, 
+                $height, 
+                $bmi, 
+                $nutritional_status_bmia, 
+                $nutritional_status_hfa, 
+                $session_id, 
+                $beneficiary_id,
+                $date_of_progress 
+            );
+            $stmt_update->execute();
+
+            $activity = "Updated progress for beneficiary ID: $beneficiary_id on date: $date_of_progress";
+            $activity_type = "progress_update";
         } else {
-            $improvement_message .= " Weight has not improved.";
+            // Insert new record
+            $sql_insert = "INSERT INTO beneficiary_progress (beneficiary_id, date_of_progress, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa, session_id)
+                           VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt_insert = $conn->prepare($sql_insert);
+            $stmt_insert->bind_param('issddsss', $beneficiary_id, $date_of_progress, $weight, $height, $bmi, $nutritional_status_bmia, $nutritional_status_hfa, $session_id);
+            $stmt_insert->execute();
+
+            $activity = "Inserted progress for beneficiary ID: $beneficiary_id on date: $date_of_progress";
+            $activity_type = "progress_insert";
+            $improvement_message = "New record added.";
         }
 
-        $sql_update = "UPDATE beneficiary_progress 
-                       SET date_of_progress = ?, weight = ?, height = ?, bmi = ?, 
-                           nutritional_status_bmia = ?, nutritional_status_hfa = ?, session_id = ? 
-                       WHERE beneficiary_id = ? AND date_of_progress = ?";
-        $stmt_update = $conn->prepare($sql_update);
-        $stmt_update->bind_param('sddssssis', 
-            $date_of_progress, 
-            $weight, 
-            $height, 
-            $bmi, 
-            $nutritional_status_bmia, 
-            $nutritional_status_hfa, 
-            $session_id, 
-            $beneficiary_id,
-            $date_of_progress 
-        );
-        $stmt_update->execute();
+        $sql_details_update = "UPDATE beneficiary_details SET weight = ?, height = ?, bmi = ?, nutritional_status_bmia = ?, nutritional_status_hfa = ?, student_section = ?, date_of_weighing = ? WHERE id = ?";
+        $stmt_details_update = $conn->prepare($sql_details_update);
+        $stmt_details_update->bind_param('ddsssssi', $weight, $height, $bmi, $nutritional_status_bmia, $nutritional_status_hfa, $student_section, $date_of_progress, $beneficiary_id);
+        $stmt_details_update->execute();
 
-        $activity = "Updated progress for beneficiary ID: $beneficiary_id on date: $date_of_progress";
-        $activity_type = "progress_update";
-        
-    } else {
-        // Insert new record
-        $sql_insert = "INSERT INTO beneficiary_progress (beneficiary_id, date_of_progress, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa, session_id)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt_insert = $conn->prepare($sql_insert);
-        $stmt_insert->bind_param('issddsss', $beneficiary_id, $date_of_progress, $weight, $height, $bmi, $nutritional_status_bmia, $nutritional_status_hfa, $session_id);
-        $stmt_insert->execute();
+        $activity .= " Updated beneficiary details.";
+        $activity_type .= "_details_update";
 
-        $activity = "Inserted progress for beneficiary ID: $beneficiary_id on date: $date_of_progress";
-        $activity_type = "progress_insert";
-        $improvement_message = "New record added.";
+        $timestamp = date("Y-m-d H:i:s");
+        $log_stmt = $conn->prepare("INSERT INTO recent_activity (activity, email, activity_type, timestamp) VALUES (?, ?, ?, ?)");
+        $log_stmt->bind_param("ssss", $activity, $email, $activity_type, $timestamp);
+        $log_stmt->execute();
+        $log_stmt->close();
+
+        if ($_SESSION['role'] === 'sbfp') {
+            $sbfp_activity_stmt = $conn->prepare("INSERT INTO sbfp_recent_activity (activity, email, activity_type, timestamp) VALUES (?, ?, ?, ?)");
+            $sbfp_activity_stmt->bind_param("ssss", $activity, $email, $activity_type, $timestamp);
+            $sbfp_activity_stmt->execute();
+            $sbfp_activity_stmt->close();
+        }
     }
 
-    $sql_details_update = "UPDATE beneficiary_details SET weight = ?, height = ?, bmi = ?, nutritional_status_bmia = ?, nutritional_status_hfa = ?, student_section = ?, date_of_weighing = ? WHERE id = ?";
-    $stmt_details_update = $conn->prepare($sql_details_update);
-    $stmt_details_update->bind_param('ddsssssi', $weight, $height, $bmi, $nutritional_status_bmia, $nutritional_status_hfa, $student_section,$date_of_progress, $beneficiary_id);
-    $stmt_details_update->execute();
-
-    $activity .= " Updated beneficiary details.";
-    $activity_type .= "_details_update";
-
-    $timestamp = date("Y-m-d H:i:s");
-    $log_stmt = $conn->prepare("INSERT INTO recent_activity (activity, email, activity_type, timestamp) VALUES (?, ?, ?, ?)");
-    $log_stmt->bind_param("ssss", $activity, $email, $activity_type, $timestamp);
-    $log_stmt->execute();
-    $log_stmt->close();
-
-    if ($_SESSION['role'] === 'sbfp') {
-        $sbfp_activity_stmt = $conn->prepare("INSERT INTO sbfp_recent_activity (activity, email, activity_type, timestamp) VALUES (?, ?, ?, ?)");
-        $sbfp_activity_stmt->bind_param("ssss", $activity, $email, $activity_type, $timestamp);
-        $sbfp_activity_stmt->execute();
-        $sbfp_activity_stmt->close();
-    }
-    
     // Display success message
     $success_message = $improvement_message;
 }
@@ -398,21 +402,20 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-
 <title>Input Beneficiary Progress</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
     // Nutritional Status Calculation Function
-    function calculateNutritionalStatus() {
-        const weight = parseFloat($('#weight').val());
-        const heightCm = parseFloat($('#height').val());
+    function calculateNutritionalStatus(row) {
+        const weight = parseFloat(row.find('.weight').val());
+        const heightCm = parseFloat(row.find('.height').val());
 
         if (weight > 0 && heightCm > 0) {
             // Calculate BMI
             const heightM = heightCm / 100;
             const bmi = weight / (heightM * heightM);
-            $('#bmi').val(bmi.toFixed(2)); // Display BMI
+            row.find('.bmi').val(bmi.toFixed(2)); // Display BMI
 
             // Calculate BMI nutritional status based on BMI value
             let nutritionalStatusBMI = "Normal";
@@ -425,10 +428,10 @@ $(document).ready(function() {
             } else if (bmi >= 30) {
                 nutritionalStatusBMI = "Obese";
             }
-            $('#nutritional_status_bmia').val(nutritionalStatusBMI);
+            row.find('.nutritional_status_bmia').val(nutritionalStatusBMI);
 
             // Calculate HFA nutritional status based on age and height
-            const dob = new Date($('#date_of_birth').val());
+            const dob = new Date(row.find('.date_of_birth').val());
             const now = new Date();
             const ageMonths = (now.getFullYear() - dob.getFullYear()) * 12 + now.getMonth() - dob.getMonth();
             let nutritionalStatusHFA = "Normal";
@@ -440,106 +443,82 @@ $(document).ready(function() {
             } else {
                 nutritionalStatusHFA = heightCm < 130 ? "Stunted" : heightCm > 160 ? "Tall" : "Normal";
             }
-            $('#nutritional_status_hfa').val(nutritionalStatusHFA);
+            row.find('.nutritional_status_hfa').val(nutritionalStatusHFA);
         }
     }
 
     // Event listeners for weight and height inputs
-    $('#weight, #height').on('input', calculateNutritionalStatus);
+    $(document).on('input', '.weight, .height', function() {
+        const row = $(this).closest('tr');
+        calculateNutritionalStatus(row);
+    });
+});
 
-    // Update beneficiary details on selection change
-    $('#beneficiary_id').on('change', function() {
-        const selectedOption = $(this).find('option:selected');
-        $('#date_of_birth').val(selectedOption.data('date_of_birth'));
-        $('#student_section').val(selectedOption.data('student_section'));
-        calculateNutritionalStatus(); // Recalculate when selecting a new beneficiary
+document.addEventListener('DOMContentLoaded', function () {
+    // Restore saved values from session storage
+    const formInputs = document.querySelectorAll('input, select, textarea');
+    formInputs.forEach((input) => {
+        const savedValue = sessionStorage.getItem(input.name);
+        if (savedValue) {
+            input.value = savedValue;
+        }
+    });
+
+    // Save form input values to session storage on input change
+    formInputs.forEach((input) => {
+        input.addEventListener('input', () => {
+            sessionStorage.setItem(input.name, input.value);
+        });
+    });
+
+    // Clear session storage on form submission
+    const form = document.querySelector('form');
+    form.addEventListener('submit', () => {
+        sessionStorage.clear();
     });
 });
 </script>
 
-<div class="col-md-12 grid-margin stretch-card">
-    <div class="card shadow-lg" style="border-radius: 15px; overflow: hidden;">
-        <div class="card-body p-5" style="background:#0971b8; color: #007bff;">
-            <!-- <h4 class="card-title text-uppercase text-center mb-4" style="font-weight: bold; letter-spacing: 1px;">Input Progress for Beneficiary</h4> -->
+<div class="white_shd full margin_bottom_30">
+        <div class="table_section padding_infor_info">
+            <div class="table-responsive-sm">
             <form action="" method="post" class="forms-sample">
-                <!-- Beneficiary Selection -->
-                <div class="form-group row">
-                    <label for="beneficiary_id" class="col-sm-4 col-form-label text-white font-weight-bold">Beneficiary:</label>
-                    <div class="col-sm-8">
-                        <select name="beneficiary_id" id="beneficiary_id" class="form-control" style="border-radius: 25px; border: none; padding: 10px;" required>
-                            <option value="">Select a beneficiary</option>
-                            <?php while ($row = $result->fetch_assoc()) { ?>
-                                <option value="<?= $row['id'] ?>" 
-                                        data-date_of_birth="<?= $row['date_of_birth'] ?>" 
-                                        data-session_id="<?= $session_id ?>"
-                                        data-student_section="<?= $row['student_section'] ?>">
-                                    <?= $row['name'] ?>
-                                </option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Date of Progress -->
-                <div class="form-group row">
-                    <label for="date_of_progress" class="col-sm-4 col-form-label text-white font-weight-bold">Date of Progress:</label>
-                    <div class="col-sm-8">
-                        <input type="date" name="date_of_progress" id="date_of_progress" 
-                               class="form-control" style="border-radius: 25px; border: none; padding: 10px;" required>
-                    </div>
-                </div>
-
-                <!-- Weight -->
-                <div class="form-group row">
-                    <label for="weight" class="col-sm-4 col-form-label text-white font-weight-bold">Weight (kg):</label>
-                    <div class="col-sm-8">
-                        <input type="number" step="0.01" name="weight" id="weight" 
-                               class="form-control" style="border-radius: 25px; border: none; padding: 10px;" required>
-                    </div>
-                </div>
-
-                <!-- Height -->
-                <div class="form-group row">
-                    <label for="height" class="col-sm-4 col-form-label text-white font-weight-bold">Height (cm):</label>
-                    <div class="col-sm-8">
-                        <input type="number" step="0.01" name="height" id="height" 
-                               class="form-control" style="border-radius: 25px; border: none; padding: 10px;" required>
-                    </div>
-                </div>
-
-                <!-- BMI -->
-                <div class="form-group row">
-                    <label for="bmi" class="col-sm-4 col-form-label text-white font-weight-bold">BMI:</label>
-                    <div class="col-sm-8">
-                        <input type="text" name="bmi" id="bmi" class="form-control" 
-                               style="border-radius: 25px; border: none; padding: 10px; background-color: rgba(255, 255, 255, 0.2); color: #fff;" readonly>
-                    </div>
-                </div>
-
-                <!-- Nutritional Status (BMIA) -->
-                <div class="form-group row">
-                    <label for="nutritional_status_bmia" class="col-sm-4 col-form-label text-white font-weight-bold">Nutritional Status (BMI-A):</label>
-                    <div class="col-sm-8">
-                        <input type="text" name="nutritional_status_bmia" id="nutritional_status_bmia" 
-                               class="form-control" style="border-radius: 25px; border: none; padding: 10px; background-color: rgba(255, 255, 255, 0.2); color: #fff;" readonly>
-                    </div>
-                </div>
-
-                <!-- Nutritional Status (HFA) -->
-                <div class="form-group row">
-                    <label for="nutritional_status_hfa" class="col-sm-4 col-form-label text-white font-weight-bold">Nutritional Status (HFA):</label>
-                    <div class="col-sm-8">
-                        <input type="text" name="nutritional_status_hfa" id="nutritional_status_hfa" 
-                               class="form-control" style="border-radius: 25px; border: none; padding: 10px; background-color: rgba(255, 255, 255, 0.2); color: #fff;" readonly>
-                    </div>
-                </div>
-
-                <!-- Hidden Input -->
-                <input type="hidden" name="student_section" id="student_section">
+            <table class="table table-bordered">
+                <thead style="color: #fff; background-color: #0971b8;">
+                        <tr>
+                            <th>Name</th>
+                            <th>Date of Birth</th>
+                            <th>Student Section</th>
+                            <th>Weight (kg)</th>
+                            <th>Height (cm)</th>
+                            <th>BMI</th>
+                            <th>Nutritional Status (BMI-A)</th>
+                            <th>Nutritional Status (HFA)</th>
+                            <th>Date of Progress</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php while ($row = $result->fetch_assoc()) { ?>
+                            <tr>
+                                <td><?= $row['name'] ?></td>
+                                <td><?= $row['date_of_birth'] ?></td>
+                                <td><?= $row['student_section'] ?></td>
+                                <td><input type="number" step="0.01" name="beneficiary[<?= $row['id'] ?>][weight]" class="form-control weight" required></td>
+                                <td><input type="number" step="0.01" name="beneficiary[<?= $row['id'] ?>][height]" class="form-control height" required></td>
+                                <td><input type="text" name="beneficiary[<?= $row['id'] ?>][bmi]" class="form-control bmi" readonly></td>
+                                <td><input type="text" name="beneficiary[<?= $row['id'] ?>][nutritional_status_bmia]" class="form-control nutritional_status_bmia" readonly></td>
+                                <td><input type="text" name="beneficiary[<?= $row['id'] ?>][nutritional_status_hfa]" class="form-control nutritional_status_hfa" readonly></td>
+                                <td><input type="date" name="beneficiary[<?= $row['id'] ?>][date_of_progress]" class="form-control" required></td>
+                                <input type="hidden" name="beneficiary[<?= $row['id'] ?>][student_section]" value="<?= $row['student_section'] ?>">
+                                <input type="hidden" name="beneficiary[<?= $row['id'] ?>][date_of_birth]" value="<?= $row['date_of_birth'] ?>">
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
 
                 <!-- Submit Button -->
                 <button type="submit" class="btn btn-light btn-block mt-4" 
-                        style="border-radius: 25px; font-weight: bold; letter-spacing: 1px;">Submit Progress</button>
+                        style="border-radius: 25px; font-weight: bold; letter-spacing: 1px; background-color: #58a75a; color: #fff;">Submit Progress</button>
             </form>
         </div>
     </div>

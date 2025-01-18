@@ -16,7 +16,7 @@ include("connection.php");
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>beneficiaries Improvement Tracking</title>
+      <title>beneficiaries Progress page</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -252,242 +252,112 @@ $conn->close();
                         <div class="row column_title">
                             <div class="col-md-12">
                                 <div class="page_title">
-                                    <h2>Beneficiary Improvement Tracking</h2>
+                                    <h2>Beneficiary Improvement Page</h2>
                                 </div>
                             </div>
                             
                         </div>  
 
-
-
-             
-
-
-
-                        <?php
+<?php
 include("accountconnection.php");
 
-// Retrieve session_id of the logged-in user
-$email = $_SESSION['email'];
-$stmt = $conn->prepare("SELECT session_id FROM users WHERE email = ?");
-$stmt->bind_param("s", $email);
+// Get the student ID from the URL
+$student_id = isset($_GET['student_id']) ? $_GET['student_id'] : '';
+
+// Fetch student details from the database
+$stmt = $conn->prepare("SELECT name, grade_section, student_section FROM beneficiary_details WHERE id = ?");
+$stmt->bind_param("i", $student_id);
 $stmt->execute();
 $stmt->store_result();
-$stmt->bind_result($session_id);
+$stmt->bind_result($name, $grade_section, $student_section);
 $stmt->fetch();
 $stmt->close();
 
-// Initialize variables for filtering
-$dateRange = isset($_POST['dateRange']) ? $_POST['dateRange'] : 'current_month';
-$date = date('Y-m-d');
-switch ($dateRange) {
-    case 'last_month':
-        $date = date('Y-m-d', strtotime('first day of last month'));
-        break;
-    case 'current_month':
-        $date = date('Y-m-d');
-        break;
-    case 'custom':
-        $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
-        break;
-}
+// Fetch historical progress data for the student
+$stmt_progress = $conn->prepare("SELECT date_of_progress, weight, height, bmi, nutritional_status_bmia, nutritional_status_hfa FROM beneficiary_progress WHERE beneficiary_id = ? ORDER BY date_of_progress ASC");
+$stmt_progress->bind_param("i", $student_id);
+$stmt_progress->execute();
+$result_progress = $stmt_progress->get_result();
 
-// Extract month and year from the selected date
-$month = date('m', strtotime($date));
-$year = date('Y', strtotime($date));
-$prev_month = date('m', strtotime("-1 month", strtotime($date)));
-$prev_year = date('Y', strtotime("-1 month", strtotime($date)));
-
-// Fetch beneficiaries associated with the user's session_id for the selected date range
-$sql = "SELECT bd.id, bd.name, bd.grade_section, bd.student_section, bp.weight, bp.height, bp.bmi, bp.nutritional_status_bmia, bp.nutritional_status_hfa, bp.date_of_progress
-        FROM beneficiary_details bd
-        LEFT JOIN beneficiary_progress bp ON bp.beneficiary_id = bd.id
-        WHERE bd.session_id = ? AND MONTH(bp.date_of_progress) = ? AND YEAR(bp.date_of_progress) = ?
-        ORDER BY bp.date_of_progress DESC";
-
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("sii", $session_id, $month, $year);
-$stmt->execute();
-$result = $stmt->get_result();
-
-$beneficiary_data = [];
-while ($row = $result->fetch_assoc()) {
-    $beneficiary_data[] = $row;
-}
-
-// Prepare data for line chart comparison
-function prepareChartData($session_id, $month, $year, $conn) {
-    $sql_chart = "SELECT bp.date_of_progress, bp.weight, bp.height, bp.bmi
-                  FROM beneficiary_details bd
-                  LEFT JOIN beneficiary_progress bp ON bp.beneficiary_id = bd.id
-                  WHERE bd.session_id = ? AND MONTH(bp.date_of_progress) = ? AND YEAR(bp.date_of_progress) = ?
-                  ORDER BY bp.date_of_progress ASC";
-
-    $stmt_chart = $conn->prepare($sql_chart);
-    $stmt_chart->bind_param("sii", $session_id, $month, $year);
-    $stmt_chart->execute();
-    return $stmt_chart->get_result();
-}
-
-// Get data for current month
-$chart_result = prepareChartData($session_id, $month, $year, $conn);
 $dates = [];
 $weights = [];
 $heights = [];
 $bmis = [];
-while ($chart_row = $chart_result->fetch_assoc()) {
-    $dates[] = $chart_row['date_of_progress'];
-    $weights[] = $chart_row['weight'];
-    $heights[] = $chart_row['height'];
-    $bmis[] = $chart_row['bmi'];
+
+while ($row = $result_progress->fetch_assoc()) {
+    $dates[] = $row['date_of_progress'];
+    $weights[] = $row['weight'];
+    $heights[] = $row['height'];
+    $bmis[] = $row['bmi'];
 }
 
+$stmt_progress->close();
 ?>
 
-<!-- Include DataTables.js and Chart.js -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- Filter Form -->
-<div class="col-md-12">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div class="col-sm-6">
+        <form action="beneficiary_list.php" method="get">
+            <button type="submit" class="btn btn-primary"> <i class="fa fa-arrow-left"></i></button>
+        </form>
+        <br>
+    </div>
+    <div class="col-md-12">
     <div class="white_shd full margin_bottom_30">
         <div class="padding_infor_info">
             <form method="POST" action="" id="dateForm" class="mb-0">
-                <div class="form-row align-items-center">
-                    <div class="col-auto">
-                        <label for="dateRange">Select Date Range:</label>
-                        <select name="dateRange" id="dateRange" class="form-control" onchange="submitForm()">
-                            <option value="current_month" <?= $dateRange == 'current_month' ? 'selected' : '' ?>>Current Month</option>
-                            <option value="last_month" <?= $dateRange == 'last_month' ? 'selected' : '' ?>>Last Month</option>
-                            <option value="custom" <?= $dateRange == 'custom' ? 'selected' : '' ?>>Custom Date</option>
-                        </select>
-                    </div>
-                    <div class="col-auto" id="customDate" style="display: <?= $dateRange == 'custom' ? 'block' : 'none' ?>;">
-                        <label for="date">Select Date:</label>
-                        <input type="date" name="date" id="date" class="form-control" value="<?= $date ?>" required onchange="submitForm()">
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
+             
+                  
+        <h1>Student Profile: <?= $name ?></h1>
+        <p><strong>Grade and Section:</strong> <?= $grade_section ?>, <?= $student_section ?></p>
 
-    <!-- Table Section for Selected Date -->
-    <div class="table_section padding_infor_info">
-        <h3>Beneficiary Progress for <?= date('F Y', strtotime($date)) ?></h3>
-        <div class="table-responsive-sm">
-            <table id="beneficiaryTable" class="table table-bordered">
-                <thead style="color: #fff; background-color: #0971b8;">
-                    <tr>
-                        <th>Date of Progress</th>
-                        <th>Name</th>
-                        <th>Grade</th>
-                        <th>Section</th>
-                        <th>Weight (kg)</th>
-                        <th>Height (cm)</th>
-                        <th>BMI</th>
-                        <th>Nutritional Status (BMI)</th>
-                        <th>Nutritional Status (HFA)</th>
-                        <th>Status</th>
-                        <th>View Profile</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($beneficiary_data as $row) { ?>
-                        <tr>
-                            <td><?= $row['date_of_progress'] ?></td>
-                            <td><?= $row['name'] ?></td>
-                            <td><?= $row['grade_section'] ?></td>
-                            <td><?= $row['student_section'] ?></td>
-                            <td><?= $row['weight'] ?></td>
-                            <td><?= $row['height'] ?></td>
-                            <td><?= $row['bmi'] ?></td>
-                            <td><?= $row['nutritional_status_bmia'] ?></td>
-                            <td><?= $row['nutritional_status_hfa'] ?></td>
-                            <td style="color: <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'white' : 'white' ?>; background-color: <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? '#59CE8F' : '#FC2947' ?>; padding: 5px; border-radius: 4px; font-weight:400; text-align: center;">
-                                <?= ($row['nutritional_status_bmia'] == 'Normal' && $row['nutritional_status_hfa'] == 'Normal') ? 'Healthy' : 'At Risk' ?>
-                            </td>
-                            <td>
-                                <a href="viewProfile.php?student_id=<?= $row['id'] ?>" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                            </td>
-                        </tr>
-                    <?php } ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
+        <!-- Progress Chart -->
+        <canvas id="progressChart" width="400" height="200"></canvas>
 
-    <script>
-    $(document).ready(function() {
-        $('#beneficiaryTable').DataTable({
-            responsive: true,
-            paging: true,
-            searching: true
-        });
-    });
-
-    function submitForm() {
-        document.getElementById('dateForm').submit();
-    }
-    </script>
-
-    <!-- Chart Section -->
-    <canvas id="growthTrendChart" width="400" height="200"></canvas>
-    <script>
-    var ctx = document.getElementById('growthTrendChart').getContext('2d');
-    var growthTrendChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: <?= json_encode($dates) ?>,
-            datasets: [{
-                label: 'Weight (kg)',
-                data: <?= json_encode($weights) ?>,
-                borderColor: 'rgb(75, 192, 192)',
-                fill: false
-            }, {
-                label: 'Height (cm)',
-                data: <?= json_encode($heights) ?>,
-                borderColor: 'rgb(255, 159, 64)',
-                fill: false
-            }, {
-                label: 'BMI',
-                data: <?= json_encode($bmis) ?>,
-                borderColor: 'rgb(153, 102, 255)',
-                fill: false
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                x: {
-                    beginAtZero: true
+        <script>
+            var ctx = document.getElementById('progressChart').getContext('2d');
+            var progressChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: <?= json_encode($dates) ?>,
+                    datasets: [{
+                        label: 'Weight (kg)',
+                        data: <?= json_encode($weights) ?>,
+                        borderColor: 'rgb(75, 192, 192)',
+                        fill: false
+                    }, {
+                        label: 'Height (cm)',
+                        data: <?= json_encode($heights) ?>,
+                        borderColor: 'rgb(255, 159, 64)',
+                        fill: false
+                    }, {
+                        label: 'BMI',
+                        data: <?= json_encode($bmis) ?>,
+                        borderColor: 'rgb(255, 99, 132)',
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date of Progress'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Values'
+                            }
+                        }
+                    }
                 }
-            }
-        }
-    });
-    </script>
+            });
+        </script>
 
-</div>
-
-
-
-
-
-
-
-
-
-
-                        
-                    </div>
-                   
-                </div>
-                <!-- End Dashboard Inner -->
-            </div>
-        </div>
     </div>
-    <!-- jQuery -->
     <script src="js/jquery.min.js"></script>
     <!-- Bootstrap Bundle JavaScript -->
     <script src="js/bootstrap.bundle.min.js"></script>
@@ -500,3 +370,4 @@ while ($chart_row = $chart_result->fetch_assoc()) {
 </body>
 
 </html>
+

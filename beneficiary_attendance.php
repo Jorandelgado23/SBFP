@@ -369,12 +369,13 @@ $result = $stmt->get_result();
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Beneficiary Name</th>
-                                <th>Grade & Section</th>
-                                <th>Status (Present/Absent)
+                            <th>Status (Present/Absent)
                                     <br>
                                     <input type="checkbox" id="selectAll"> Select All
                                 </th>
+                                <th>Beneficiary Name</th>
+                                <th>Grade & Section</th>
+                                
                                 <th>
                                     <select id="meal-served-header" class="form-control">
                                         <option value="H">Hot Meal (H)</option>
@@ -391,12 +392,13 @@ $result = $stmt->get_result();
                         <tbody>
                             <?php while ($row = $result->fetch_assoc()) { ?>
                                 <tr>
-                                    <td><?= htmlspecialchars($row['name']) ?></td>
-                                    <td><?= htmlspecialchars($row['grade_section'] . " - " . $row['student_section']) ?></td>
-                                    <td>
+                                <td>
                                         <input type="hidden" name="status[<?= $row['id'] ?>]" value="Absent">
                                         <input type="checkbox" name="status[<?= $row['id'] ?>]" value="Present" class="attendance-checkbox">
                                     </td>
+                                    <td><?= htmlspecialchars($row['name']) ?></td>
+                                    <td><?= htmlspecialchars($row['grade_section'] . " - " . $row['student_section']) ?></td>
+                                  
                                     <td>
                                         <input name="meal_served[<?= $row['id'] ?>]" class="form-control meal-served-dropdown" readonly required>
                                     </td>

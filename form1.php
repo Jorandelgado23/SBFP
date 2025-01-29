@@ -515,116 +515,88 @@ if (isset($_SESSION['response'])) {
             </form>
     
             <div class="table_section padding_infor_info">
-                <div class="table-responsive-sm">
-                    <table class="table table-bordered">
-                    <thead style="color: #fff; background-color: #0971b8;">
-                            <tr>
-                                <th style="display:none;">No.</th> <!-- Hidden column -->
-                                <th>LRN No.</th>
-                                <th>Name</th> <!-- Changed to Full Name column -->
-                                <th>Sex</th>
-                                <th>Grade Level</th>
-                                <th>Student Section</th>
-                                <th>Date of Birth</th>
-                                <th>Date of Weighing</th>
-                                <th>Age</th>
-                                <th>Weight (Kg)</th>
-                                <th>Height (cm)</th>
-                                <th>BMI</th>
-                                <th>Nutritional Status (BMI-A)</th>
-                                <th>Nutritional Status (HFA)</th>
-                                <th>Dewormed?</th>
-                                <th>Parent's consent for milk?</th>
-                                <th>Participation in 4Ps?</th>
-                                <th>Beneficiary of SBFP in Previous Years?</th>
-                                <th class="text-center">Promote</th>
-                                <th class="text-center">Edit</th>
-                                <th class="text-center">Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                            if ($result->num_rows > 0) {
-                                $count = 1;
-                                while ($row = $result->fetch_assoc()) {
-                                    echo "<tr>";
-                                    echo "<td style='display:none;'>" . $count++ . "</td>"; // Hidden column
-                                    echo "<td>" . $row["lrn_no"] . "</td>";
+    <div class="table-responsive-sm">
+        <table class="table table-bordered">
+            <thead style="color: #fff; background-color: #0971b8;">
+                <tr>
+                    <th style="display:none;">No.</th> <!-- Hidden column -->
+                    <th><input type="checkbox" id="select-all"> Select All</th> <!-- Select All Checkbox -->
+                    <th>LRN No.</th>
+                    <th>Name</th>
+                    <th>Sex</th>
+                    <th>Grade Level</th>
+                    <th>Student Section</th>
+                    <th>Date of Birth</th>
+                    <th>Date of Weighing</th>
+                    <th>Age</th>
+                    <th>Weight (Kg)</th>
+                    <th>Height (cm)</th>
+                    <th>BMI</th>
+                    <th>Nutritional Status (BMI-A)</th>
+                    <th>Nutritional Status (HFA)</th>
+                    <th>Dewormed?</th>
+                    <th>Parent's consent for milk?</th>
+                    <th>Participation in 4Ps?</th>
+                    <th>Beneficiary of SBFP in Previous Years?</th>
+                    <!-- <th class="text-center">Promote</th> -->
+                    <th class="text-center">Edit</th>
+                    <th class="text-center">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                    if ($result->num_rows > 0) {
+                        $count = 1;
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td style='display:none;'>" . $count++ . "</td>"; // Hidden column
+                            echo "<td><input type='checkbox' class='promote-checkbox' data-beneficiary-id='" . $row['beneficiary_id'] . "' data-grade-section='" . $row['grade_section'] . "'></td>";
 
-                                    $fullName = $row["name"];
-                                    echo "<td>" . maskName($fullName) . "</td>"; 
+                            echo "<td>" . $row["lrn_no"] . "</td>";
+                            echo "<td>" . maskName($row["name"]) . "</td>";
+                            echo "<td>" . $row["sex"] . "</td>";
+                            echo "<td>" . $row["grade_section"] . "</td>";
+                            echo "<td>" . $row["student_section"] . "</td>";
+                            echo "<td>" . $row["date_of_birth"] . "</td>";
+                            echo "<td>" . $row["date_of_weighing"] . "</td>";
+                            echo "<td>" . $row["age"] . "</td>";
+                            echo "<td>" . $row["weight"] . "</td>";
+                            echo "<td>" . $row["height"] . "</td>";
+                            echo "<td>" . $row["bmi"] . "</td>";
+                            echo "<td>" . $row["nutritional_status_bmia"] . "</td>";
+                            echo "<td>" . $row["nutritional_status_hfa"] . "</td>";
+                            echo "<td>" . $row["dewormed"] . "</td>";
+                            echo "<td>" . $row["parents_consent_for_milk"] . "</td>";
+                            echo "<td>" . $row["participation_in_4ps"] . "</td>";
+                            echo "<td>" . $row["beneficiary_of_sbfp_in_previous_years"] . "</td>";
 
-                                    echo "<td>" . $row["sex"] . "</td>";
-                                    echo "<td>" . $row["grade_section"] . "</td>";
-                                    echo "<td>" . $row["student_section"] . "</td>";
-                                    echo "<td>" . $row["date_of_birth"] . "</td>";
-                                    echo "<td>" . $row["date_of_weighing"] . "</td>";
-                                    echo "<td>" . $row["age"] . "</td>";
-                                    echo "<td>" . $row["weight"] . "</td>";
-                                    echo "<td>" . $row["height"] . "</td>";
-                                    echo "<td>" . $row["bmi"] . "</td>";
+                            // echo "<td class='text-center'>
+                            //         <button class='btn btn-sm btn-success promote-btn' data-beneficiary-id='" . $row['beneficiary_id'] . "' data-grade-section='" . $row['grade_section'] . "'>
+                            //             Promote
+                            //         </button>
+                            //       </td>";
 
-                                    // Nutritional Status (BMI-A) with color coding
-                                    $bmi_status = $row["nutritional_status_bmia"];
-                                    $bmi_class = "";
-                                    if ($bmi_status == "Severely Wasted") {
-                                        $bmi_class = "table-danger"; // Red color for Severely Wasted
-                                    } elseif ($bmi_status == "Wasted") {
-                                        $bmi_class = "table-warning"; // Yellow color for Wasted
-                                    } elseif ($bmi_status == "Normal") {
-                                        $bmi_class = "table-success"; // Green color for Normal
-                                    } elseif ($bmi_status == "Overweight") {
-                                        $bmi_class = "table-warning"; // Yellow for Overweight
-                                    } elseif ($bmi_status == "Obese") {
-                                        $bmi_class = "table-danger"; // Red color for Obese
-                                    }
-                                    echo "<td class='$bmi_class'>" . $bmi_status . "</td>";
+                            echo "<td class='text-center'>
+                                    <button class='btn btn-sm btn-info edit-btn' data-id='" . $row["id"] . "'>
+                                        <i class='fa fa-edit'></i>
+                                    </button>
+                                  </td>";
 
-                                    // Nutritional Status (HFA) with color coding
-                                    $hfa_status = $row["nutritional_status_hfa"];
-                                    $hfa_class = "";
-                                    if ($hfa_status == "Stunted") {
-                                        $hfa_class = "table-danger"; // Red color for Stunted
-                                    } elseif ($hfa_status == "Normal") {
-                                        $hfa_class = "table-success"; // Green color for Normal
-                                    }
-                                    echo "<td class='$hfa_class'>" . $hfa_status . "</td>";
+                            echo "<td class='text-center'>
+                                    <button class='btn btn-sm btn-danger remove-btn' data-beneficiary-id='" . $row["beneficiary_id"] . "'>
+                                        <i class='fa fa-trash'></i>
+                                    </button>
+                                  </td>";
 
-                                    echo "<td>" . $row["dewormed"] . "</td>";
-                                    echo "<td>" . $row["parents_consent_for_milk"] . "</td>";
-                                    echo "<td>" . $row["participation_in_4ps"] . "</td>";
-                                    echo "<td>" . $row["beneficiary_of_sbfp_in_previous_years"] . "</td>";
-
-                                     // Promotion Button
-                    echo "<td class='text-center'>
-                    <form action='promote_beneficiary.php' method='POST'>
-                        <input type='hidden' name='beneficiary_id' value='" . $row['beneficiary_id'] . "' />
-                        <input type='hidden' name='next_grade_section' value='" . getNextGrade($row['grade_section']) . "' />
-                        <button type='submit' name='promote' class='btn btn-sm btn-success'>Promote</button>
-                    </form>
-                </td>";
-
-                                    // Edit and Delete buttons
-                                    echo "<td class='text-center'>
-                                            <button class='btn btn-sm btn-info edit-btn' data-id='" . $row["id"] . "'>
-                                                <i class='fa fa-edit'></i>
-                                            </button>
-                                        </td>";
-
-                                    echo "<td class='text-center'>
-                                            <button class='btn btn-sm btn-danger remove-btn' data-beneficiary-id='" . $row["beneficiary_id"] . "'>
-                                                <i class='fa fa-trash'></i>
-                                            </button>
-                                        </td>";
-
-                                    echo "</tr>";
-                                }
-                            } else {
-                                echo "<tr><td colspan='18'>No data available</td></tr>";
-                            }
-                            ?>
-                        </tbody>
-                    </table>
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='18'>No data available</td></tr>";
+                    }
+                ?>
+            </tbody>
+        </table>
+        <button id="promote-selected" class="btn btn-primary">Promote Selected Beneficiaries</button>
                 </div>
                 <div class="pagination">
     <?php
@@ -658,30 +630,74 @@ $conn->close();
 ?>
 
 
-<?php
-function getNextGrade($current_grade_section) {
-    // Define the grade progression logic
-    $grade_map = [
-        'Grade 1' => 'Grade 2',
-        'Grade 2' => 'Grade 3',
-        'Grade 3' => 'Grade 4',
-        'Grade 4' => 'Grade 5',
-        'Grade 5' => 'Grade 6',
-        'Grade 6' => 'Grade 7',
-        // Add more grade mappings as needed
-    ];
-
-    // Return the next grade based on the current grade
-    if (array_key_exists($current_grade_section, $grade_map)) {
-        return $grade_map[$current_grade_section];
-    } else {
-        // If grade progression is unknown, return the current grade or handle accordingly
-        return $current_grade_section;
-    }
-}
 
 
-?>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Select/Deselect all checkboxes
+        document.getElementById('select-all').addEventListener('change', function() {
+            const isChecked = this.checked;
+            document.querySelectorAll('.promote-checkbox').forEach(checkbox => {
+                checkbox.checked = isChecked;
+            });
+        });
+
+        // Handle promote button for selected checkboxes
+        document.getElementById('promote-selected').addEventListener('click', function() {
+            const selectedBeneficiaries = [];
+            
+            document.querySelectorAll('.promote-checkbox:checked').forEach(checkbox => {
+                const beneficiaryId = checkbox.getAttribute('data-beneficiary-id');
+                const currentGradeSection = checkbox.getAttribute('data-grade-section');
+                selectedBeneficiaries.push({ beneficiaryId, currentGradeSection });
+            });
+
+            if (selectedBeneficiaries.length === 0) {
+                alert('No beneficiaries selected for promotion.');
+                return;
+            }
+
+            selectedBeneficiaries.forEach(beneficiary => {
+                const nextGradeSection = incrementGradeSection(beneficiary.currentGradeSection);
+
+                // Send the AJAX request to promote the beneficiary
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'promote_beneficiary.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.status === 'success') {
+                            alert('Beneficiary promoted successfully!');
+                            location.reload(); // Reload the page to reflect the changes
+                        } else {
+                            alert(response.msg);
+                        }
+                    }
+                };
+
+                // Send the POST data
+                xhr.send('beneficiary_id=' + encodeURIComponent(beneficiary.beneficiaryId) + 
+                         '&next_grade_section=' + encodeURIComponent(nextGradeSection));
+            });
+        });
+
+        // Helper function to determine next grade
+        function incrementGradeSection(gradeSection) {
+            const gradeMap = {
+                'Grade 1': 'Grade 2',
+                'Grade 2': 'Grade 3',
+                'Grade 3': 'Grade 4',
+                'Grade 4': 'Grade 5',
+                'Grade 5': 'Grade 6',
+                'Grade 6': 'Grade 7'
+            };
+
+            return gradeMap[gradeSection] || gradeSection;  // Return the next grade or the same if not found
+        }
+    });
+</script>
 
 
 

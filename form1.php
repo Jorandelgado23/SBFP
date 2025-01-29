@@ -537,6 +537,7 @@ if (isset($_SESSION['response'])) {
                                 <th>Parent's consent for milk?</th>
                                 <th>Participation in 4Ps?</th>
                                 <th>Beneficiary of SBFP in Previous Years?</th>
+                                <th class="text-center">Promote</th>
                                 <th class="text-center">Edit</th>
                                 <th class="text-center">Delete</th>
                             </tr>
@@ -551,7 +552,7 @@ if (isset($_SESSION['response'])) {
                                     echo "<td>" . $row["lrn_no"] . "</td>";
 
                                     $fullName = $row["name"];
-                echo "<td>" . maskName($fullName) . "</td>"; 
+                                    echo "<td>" . maskName($fullName) . "</td>"; 
 
                                     echo "<td>" . $row["sex"] . "</td>";
                                     echo "<td>" . $row["grade_section"] . "</td>";
@@ -594,18 +595,27 @@ if (isset($_SESSION['response'])) {
                                     echo "<td>" . $row["participation_in_4ps"] . "</td>";
                                     echo "<td>" . $row["beneficiary_of_sbfp_in_previous_years"] . "</td>";
 
-                                    // Edit and Delete buttons
-                                    echo "<td class='text-center'>";
-                                    echo "<button class='btn btn-sm btn-info edit-btn' data-id='" . $row["id"] . "'>";
-                                    echo "<i class='fa fa-edit'></i>";
-                                    echo "</button>";
-                                    echo "</td>";
+                                     // Promotion Button
+                    echo "<td class='text-center'>
+                    <form action='promote_beneficiary.php' method='POST'>
+                        <input type='hidden' name='beneficiary_id' value='" . $row['beneficiary_id'] . "' />
+                        <input type='hidden' name='next_grade_section' value='" . getNextGrade($row['grade_section']) . "' />
+                        <button type='submit' name='promote' class='btn btn-sm btn-success'>Promote</button>
+                    </form>
+                </td>";
 
-                                    echo "<td class='text-center'>";
-                                    echo "<button class='btn btn-sm btn-danger remove-btn' data-beneficiary-id='" . $row["beneficiary_id"] . "'>";
-                                    echo "<i class='fa fa-trash'></i>";
-                                    echo "</button>";
-                                    echo "</td>";
+                                    // Edit and Delete buttons
+                                    echo "<td class='text-center'>
+                                            <button class='btn btn-sm btn-info edit-btn' data-id='" . $row["id"] . "'>
+                                                <i class='fa fa-edit'></i>
+                                            </button>
+                                        </td>";
+
+                                    echo "<td class='text-center'>
+                                            <button class='btn btn-sm btn-danger remove-btn' data-beneficiary-id='" . $row["beneficiary_id"] . "'>
+                                                <i class='fa fa-trash'></i>
+                                            </button>
+                                        </td>";
 
                                     echo "</tr>";
                                 }
@@ -647,6 +657,31 @@ $stmt->close();
 $conn->close();
 ?>
 
+
+<?php
+function getNextGrade($current_grade_section) {
+    // Define the grade progression logic
+    $grade_map = [
+        'Grade 1' => 'Grade 2',
+        'Grade 2' => 'Grade 3',
+        'Grade 3' => 'Grade 4',
+        'Grade 4' => 'Grade 5',
+        'Grade 5' => 'Grade 6',
+        'Grade 6' => 'Grade 7',
+        // Add more grade mappings as needed
+    ];
+
+    // Return the next grade based on the current grade
+    if (array_key_exists($current_grade_section, $grade_map)) {
+        return $grade_map[$current_grade_section];
+    } else {
+        // If grade progression is unknown, return the current grade or handle accordingly
+        return $current_grade_section;
+    }
+}
+
+
+?>
 
 
 

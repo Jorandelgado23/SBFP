@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 18, 2025 at 03:06 PM
+-- Generation Time: Jan 30, 2025 at 12:15 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -46,9 +46,8 @@ CREATE TABLE `beneficiaries` (
 --
 
 INSERT INTO `beneficiaries` (`id`, `beneficiary_id`, `division_province`, `city_municipality_barangay`, `name_of_school`, `school_id_number`, `name_of_principal`, `name_of_feeding_focal_person`, `school_year`, `beneficiary_name`, `session_id`) VALUES
-(349, 349, NULL, NULL, NULL, NULL, NULL, NULL, '', 'delgado', 'e55jUNtr'),
 (350, 350, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', '', 'tyr try', 'e55jUNtr'),
-(351, 351, 'Laguna', 'Santa Cruz', 'Gatid Elementary School', '123461', 'LOREVIE K. RIVERA', 'icievy sandrino', '', 'tyr try', 'e55jUNtr');
+(397, 397, NULL, NULL, NULL, NULL, NULL, NULL, '', 'delgado', 'e55jUNtr');
 
 -- --------------------------------------------------------
 
@@ -113,8 +112,7 @@ CREATE TABLE `beneficiary_details` (
 --
 
 INSERT INTO `beneficiary_details` (`id`, `beneficiary_id`, `student_section`, `lrn_no`, `name`, `sex`, `grade_section`, `date_of_birth`, `date_of_weighing`, `age`, `weight`, `height`, `bmi`, `nutritional_status_bmia`, `nutritional_status_hfa`, `dewormed`, `parents_consent_for_milk`, `participation_in_4ps`, `beneficiary_of_sbfp_in_previous_years`, `session_id`, `selected`, `parent_phone`, `school_year`) VALUES
-(297, 349, 'sample section', '4342324234', 'delgado', 'Male', 'grade 1', '2017-10-20', '2025-01-18', '7', 45.00, 130.00, 26.63, 'Overweight', 'Normal', 'Yes', 'Yes', 'Yes', 'Yes', 'e55jUNtr', 1, '+639207569581', '2025-2026'),
-(298, 351, 'kamagong', '345657757657', 'tyr try', 'Male', 'Grade 4', '2010-10-29', '2025-01-18', '14', 56.00, 130.00, 33.14, 'Obese', 'Normal', 'Yes', 'Yes', 'Yes', 'Yes', 'e55jUNtr', 0, '+631234567890', '2025-2026');
+(493, 397, 'lupet section', '', 'delgado', 'Male', 'grade 1', '2017-10-20', '2025-01-15', '7', 45.00, 140.00, 22.96, 'Normal', 'Normal', 'Yes', 'Yes', 'Yes', 'Yes', 'e55jUNtr', 0, '', '2025-2026');
 
 -- --------------------------------------------------------
 
@@ -136,21 +134,6 @@ CREATE TABLE `beneficiary_progress` (
   `student_section` varchar(50) DEFAULT NULL,
   `grade_section` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `beneficiary_progress`
---
-
-INSERT INTO `beneficiary_progress` (`id`, `beneficiary_id`, `date_of_progress`, `weight`, `height`, `bmi`, `nutritional_status_bmia`, `nutritional_status_hfa`, `session_id`, `name`, `student_section`, `grade_section`) VALUES
-(96, 297, '2025-02-16', 45.00, 130.00, 26.63, 'Overweight', 'Normal', 'e55jUNtr', NULL, NULL, NULL),
-(97, 297, '2025-03-17', 45.00, 129.00, 27.04, 'Overweight', 'Stunted', 'e55jUNtr', NULL, NULL, NULL),
-(98, 297, '2025-04-17', 34.00, 120.00, 23.61, 'Normal', 'Stunted', 'e55jUNtr', NULL, NULL, NULL),
-(99, 298, '2010-10-20', 30.00, 130.00, 17.75, 'Wasted', 'Normal', 'e55jUNtr', NULL, NULL, NULL),
-(100, 298, '2025-01-17', 34.00, 139.00, 17.60, 'Wasted', 'Normal', 'e55jUNtr', NULL, NULL, NULL),
-(101, 298, '2025-02-17', 34.00, 136.00, 18.38, 'Wasted', 'Normal', 'e55jUNtr', NULL, NULL, NULL),
-(102, 297, '2025-01-17', 34.00, 134.00, 18.94, 'Normal', 'Normal', 'e55jUNtr', NULL, NULL, NULL),
-(103, 297, '2025-01-18', 45.00, 130.00, 26.63, 'Overweight', 'Normal', 'e55jUNtr', NULL, NULL, NULL),
-(104, 298, '2025-01-18', 56.00, 130.00, 33.14, 'Obese', 'Normal', 'e55jUNtr', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -220,13 +203,6 @@ CREATE TABLE `milkcomponent` (
   `milk_tolerance` enum('Without milk intolerance and will participate in milk feeding','With milk intolerance but willing to participate in milk feeding','Not allowed by parents to participate in milk feeding') NOT NULL,
   `session_id` varchar(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `milkcomponent`
---
-
-INSERT INTO `milkcomponent` (`id`, `region_division_district`, `name_of_school`, `school_id_number`, `student_name`, `grade_section`, `milk_tolerance`, `session_id`) VALUES
-(101, 'Laguna', 'Gatid Elementary School', '123461', 'delgado', 'grade 1', 'Without milk intolerance and will participate in milk feeding', 'e55jUNtr');
 
 -- --------------------------------------------------------
 
@@ -664,7 +640,81 @@ INSERT INTO `recent_activity` (`id`, `email`, `activity`, `activity_type`, `time
 (1846, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 357', 'delete', '2025-01-18 07:01:27', 'new'),
 (1847, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 358', 'delete', '2025-01-18 07:03:24', 'new'),
 (1848, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 359', 'delete', '2025-01-18 07:03:49', 'new'),
-(1849, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 360', 'delete', '2025-01-18 07:05:31', 'new');
+(1849, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 360', 'delete', '2025-01-18 07:05:31', 'new'),
+(1850, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-19 03:47:33', 'new'),
+(1851, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 361', 'delete', '2025-01-19 03:48:01', 'new'),
+(1852, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-23 05:20:09', 'new'),
+(1853, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-23 07:30:25', 'new'),
+(1854, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-23 18:02:31', 'new'),
+(1855, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-28 02:00:29', 'new'),
+(1856, 'icievy@gmail.com', 'Updated beneficiary details for ID: 297', 'update', '2025-01-28 03:10:59', 'new'),
+(1857, 'icievy@gmail.com', 'User logged out', 'logout', '2025-01-28 04:15:52', 'new'),
+(1858, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-28 04:15:56', 'new'),
+(1859, 'icievy@gmail.com', 'Deleted milk component record for student: delgado (ID: 101)', 'delete', '2025-01-28 04:16:12', 'new'),
+(1860, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 362', 'delete', '2025-01-28 04:16:41', 'new'),
+(1861, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-29 00:33:56', 'new'),
+(1862, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 349', 'delete', '2025-01-29 01:16:19', 'new'),
+(1863, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 351', 'delete', '2025-01-29 01:26:23', 'new'),
+(1864, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 363', 'delete', '2026-01-29 01:34:53', 'new'),
+(1865, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 364', 'delete', '2025-01-29 01:38:11', 'new'),
+(1866, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 365', 'delete', '2025-01-29 01:42:23', 'new'),
+(1867, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 366', 'delete', '2025-01-29 01:44:33', 'new'),
+(1868, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 367', 'delete', '2025-01-29 01:54:38', 'new'),
+(1869, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 368', 'delete', '2027-01-29 01:55:07', 'new'),
+(1870, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 369', 'delete', '2025-01-29 01:55:27', 'new'),
+(1871, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 370', 'delete', '2025-01-29 01:57:30', 'new'),
+(1872, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 371', 'delete', '2025-01-29 01:58:21', 'new'),
+(1873, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 372', 'delete', '2025-01-29 02:01:04', 'new'),
+(1874, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 373', 'delete', '2026-01-29 02:01:30', 'new'),
+(1875, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 374', 'delete', '2025-01-29 02:03:26', 'new'),
+(1876, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 375', 'delete', '2025-01-29 02:06:10', 'new'),
+(1877, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 376', 'delete', '2025-01-29 02:11:09', 'new'),
+(1878, 'icievy@gmail.com', 'Inserted milkcomponent data', 'data_insert', '2025-01-29 02:13:42', 'new'),
+(1879, 'icievy@gmail.com', 'Deleted milk component record for student: delgado (ID: 102)', 'delete', '2025-01-29 02:13:44', 'new'),
+(1880, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 377', 'delete', '2025-01-29 02:13:48', 'new'),
+(1881, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 378', 'delete', '2025-01-29 02:14:48', 'new'),
+(1882, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 379', 'delete', '2025-01-29 02:17:40', 'new'),
+(1883, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 380', 'delete', '2025-01-29 02:24:50', 'new'),
+(1884, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 381', 'delete', '2025-01-29 02:26:55', 'new'),
+(1885, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 382', 'delete', '2025-01-29 02:30:52', 'new'),
+(1886, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 383', 'delete', '2026-01-29 02:43:05', 'new'),
+(1887, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 384', 'delete', '2027-01-29 02:49:09', 'new'),
+(1888, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 385', 'delete', '2027-01-29 02:49:34', 'new'),
+(1889, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 386', 'delete', '2025-01-29 02:52:55', 'new'),
+(1890, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 387', 'delete', '2025-01-29 03:03:25', 'new'),
+(1891, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 388', 'delete', '2025-01-29 03:03:53', 'new'),
+(1892, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 389', 'delete', '2025-01-29 03:05:12', 'new'),
+(1893, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 390', 'delete', '2025-01-29 03:09:25', 'new'),
+(1894, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 391', 'delete', '2025-01-29 03:10:35', 'new'),
+(1895, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 392', 'delete', '2025-01-29 03:11:11', 'new'),
+(1896, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 393', 'delete', '2025-01-29 03:12:49', 'new'),
+(1897, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 393', 'delete', '2025-01-29 03:12:51', 'new'),
+(1898, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 394', 'delete', '2025-01-29 03:13:52', 'new'),
+(1899, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-29 03:22:02', 'new'),
+(1900, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 395', 'delete', '2025-01-29 03:33:08', 'new'),
+(1901, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: ', 'delete', '2025-01-29 03:38:11', 'new'),
+(1902, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 396', 'delete', '2025-01-29 03:38:18', 'new'),
+(1903, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 401', 'delete', '2025-01-29 04:02:35', 'new'),
+(1904, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 403', 'delete', '2025-01-29 04:05:14', 'new'),
+(1905, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 406', 'delete', '2025-01-29 04:06:50', 'new'),
+(1906, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 407', 'delete', '2025-01-29 04:10:55', 'new'),
+(1907, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 409', 'delete', '2025-01-29 06:40:19', 'new'),
+(1908, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 411', 'delete', '2025-01-29 06:45:32', 'new'),
+(1909, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 412', 'delete', '2025-01-29 06:57:27', 'new'),
+(1910, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 414', 'delete', '2025-01-29 07:18:21', 'new'),
+(1911, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 413', 'delete', '2025-01-29 07:18:24', 'new'),
+(1912, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 415', 'delete', '2025-01-29 07:18:52', 'new'),
+(1913, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 416', 'delete', '2027-01-29 07:19:43', 'new'),
+(1914, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 418', 'delete', '2027-01-29 07:27:23', 'new'),
+(1915, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 419', 'delete', '2027-01-29 07:32:17', 'new'),
+(1916, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 420', 'delete', '2027-01-29 07:32:47', 'new'),
+(1917, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-29 15:20:00', 'new'),
+(1918, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 424', 'delete', '2027-01-29 15:40:27', 'new'),
+(1919, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 425', 'delete', '2027-01-29 15:44:44', 'new');
+INSERT INTO `recent_activity` (`id`, `email`, `activity`, `activity_type`, `timestamp`, `status`) VALUES
+(1920, 'icievy@gmail.com', 'Updated beneficiary details for ID: 493', 'update', '2025-01-29 15:51:36', 'new'),
+(1921, 'icievy@gmail.com', 'Updated beneficiary details for ID: 493', 'update', '2025-01-29 15:56:02', 'new'),
+(1922, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 428', 'delete', '2025-01-29 16:10:15', 'new');
 
 -- --------------------------------------------------------
 
@@ -997,7 +1047,80 @@ INSERT INTO `sbfp_recent_activity` (`id`, `email`, `activity`, `activity_type`, 
 (1178, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 357', 'delete', '2025-01-18 07:01:27', 'new'),
 (1179, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 358', 'delete', '2025-01-18 07:03:24', 'new'),
 (1180, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 359', 'delete', '2025-01-18 07:03:49', 'new'),
-(1181, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 360', 'delete', '2025-01-18 07:05:31', 'new');
+(1181, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 360', 'delete', '2025-01-18 07:05:31', 'new'),
+(1182, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-19 03:47:33', 'new'),
+(1183, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 361', 'delete', '2025-01-19 03:48:01', 'new'),
+(1184, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-23 05:20:09', 'new'),
+(1185, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-23 07:30:25', 'new'),
+(1186, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-23 18:02:31', 'new'),
+(1187, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-28 02:00:29', 'new'),
+(1188, 'icievy@gmail.com', 'Updated beneficiary details for ID: 297', 'update', '2025-01-28 03:10:59', 'new'),
+(1189, 'icievy@gmail.com', 'User logged out', 'logout', '2025-01-28 04:15:52', 'new'),
+(1190, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-28 04:15:56', 'new'),
+(1191, 'icievy@gmail.com', 'Deleted milk component record for student: delgado (ID: 101)', 'delete', '2025-01-28 04:16:12', 'new'),
+(1192, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 362', 'delete', '2025-01-28 04:16:41', 'new'),
+(1193, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-29 00:33:56', 'new'),
+(1194, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 349', 'delete', '2025-01-29 01:16:19', 'new'),
+(1195, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 351', 'delete', '2025-01-29 01:26:23', 'new'),
+(1196, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 363', 'delete', '2026-01-29 01:34:53', 'new'),
+(1197, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 364', 'delete', '2025-01-29 01:38:11', 'new'),
+(1198, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 365', 'delete', '2025-01-29 01:42:23', 'new'),
+(1199, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 366', 'delete', '2025-01-29 01:44:33', 'new'),
+(1200, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 367', 'delete', '2025-01-29 01:54:38', 'new'),
+(1201, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 368', 'delete', '2027-01-29 01:55:07', 'new'),
+(1202, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 369', 'delete', '2025-01-29 01:55:27', 'new'),
+(1203, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 370', 'delete', '2025-01-29 01:57:30', 'new'),
+(1204, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 371', 'delete', '2025-01-29 01:58:21', 'new'),
+(1205, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 372', 'delete', '2025-01-29 02:01:04', 'new'),
+(1206, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 373', 'delete', '2026-01-29 02:01:30', 'new'),
+(1207, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 374', 'delete', '2025-01-29 02:03:26', 'new'),
+(1208, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 375', 'delete', '2025-01-29 02:06:10', 'new'),
+(1209, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 376', 'delete', '2025-01-29 02:11:09', 'new'),
+(1210, 'icievy@gmail.com', 'Inserted milkcomponent data', 'data_insert', '2025-01-29 02:13:42', 'new'),
+(1211, 'icievy@gmail.com', 'Deleted milk component record for student: delgado (ID: 102)', 'delete', '2025-01-29 02:13:44', 'new'),
+(1212, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 377', 'delete', '2025-01-29 02:13:48', 'new'),
+(1213, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 378', 'delete', '2025-01-29 02:14:48', 'new'),
+(1214, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 379', 'delete', '2025-01-29 02:17:40', 'new'),
+(1215, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 380', 'delete', '2025-01-29 02:24:50', 'new'),
+(1216, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 381', 'delete', '2025-01-29 02:26:55', 'new'),
+(1217, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 382', 'delete', '2025-01-29 02:30:52', 'new'),
+(1218, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 383', 'delete', '2026-01-29 02:43:05', 'new'),
+(1219, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 384', 'delete', '2027-01-29 02:49:09', 'new'),
+(1220, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 385', 'delete', '2027-01-29 02:49:34', 'new'),
+(1221, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 386', 'delete', '2025-01-29 02:52:55', 'new'),
+(1222, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 387', 'delete', '2025-01-29 03:03:25', 'new'),
+(1223, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 388', 'delete', '2025-01-29 03:03:53', 'new'),
+(1224, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 389', 'delete', '2025-01-29 03:05:12', 'new'),
+(1225, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 390', 'delete', '2025-01-29 03:09:25', 'new'),
+(1226, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 391', 'delete', '2025-01-29 03:10:35', 'new'),
+(1227, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 392', 'delete', '2025-01-29 03:11:11', 'new'),
+(1228, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 393', 'delete', '2025-01-29 03:12:49', 'new'),
+(1229, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 393', 'delete', '2025-01-29 03:12:51', 'new'),
+(1230, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 394', 'delete', '2025-01-29 03:13:52', 'new'),
+(1231, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-29 03:22:02', 'new'),
+(1232, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 395', 'delete', '2025-01-29 03:33:08', 'new'),
+(1233, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: ', 'delete', '2025-01-29 03:38:11', 'new'),
+(1234, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 396', 'delete', '2025-01-29 03:38:18', 'new'),
+(1235, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 401', 'delete', '2025-01-29 04:02:35', 'new'),
+(1236, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 403', 'delete', '2025-01-29 04:05:14', 'new'),
+(1237, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 406', 'delete', '2025-01-29 04:06:50', 'new'),
+(1238, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 407', 'delete', '2025-01-29 04:10:55', 'new'),
+(1239, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 409', 'delete', '2025-01-29 06:40:19', 'new'),
+(1240, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 411', 'delete', '2025-01-29 06:45:32', 'new'),
+(1241, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 412', 'delete', '2025-01-29 06:57:27', 'new'),
+(1242, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 414', 'delete', '2025-01-29 07:18:21', 'new'),
+(1243, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 413', 'delete', '2025-01-29 07:18:24', 'new'),
+(1244, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 415', 'delete', '2025-01-29 07:18:52', 'new'),
+(1245, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 416', 'delete', '2027-01-29 07:19:43', 'new'),
+(1246, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 418', 'delete', '2027-01-29 07:27:23', 'new'),
+(1247, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 419', 'delete', '2027-01-29 07:32:17', 'new'),
+(1248, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 420', 'delete', '2027-01-29 07:32:47', 'new'),
+(1249, 'icievy@gmail.com', 'User logged in', 'login', '2025-01-29 15:20:00', 'new'),
+(1250, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 424', 'delete', '2027-01-29 15:40:27', 'new'),
+(1251, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 425', 'delete', '2027-01-29 15:44:44', 'new'),
+(1252, 'icievy@gmail.com', 'Updated beneficiary details for ID: 493', 'update', '2025-01-29 15:51:36', 'new'),
+(1253, 'icievy@gmail.com', 'Updated beneficiary details for ID: 493', 'update', '2025-01-29 15:56:02', 'new'),
+(1254, 'icievy@gmail.com', 'Deleted beneficiary details for Beneficiary ID: 428', 'delete', '2025-01-29 16:10:15', 'new');
 
 -- --------------------------------------------------------
 
@@ -1206,7 +1329,7 @@ ALTER TABLE `weighing_sessions`
 -- AUTO_INCREMENT for table `beneficiaries`
 --
 ALTER TABLE `beneficiaries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=361;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=429;
 
 --
 -- AUTO_INCREMENT for table `beneficiary_attendance`
@@ -1218,7 +1341,7 @@ ALTER TABLE `beneficiary_attendance`
 -- AUTO_INCREMENT for table `beneficiary_details`
 --
 ALTER TABLE `beneficiary_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=306;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=530;
 
 --
 -- AUTO_INCREMENT for table `beneficiary_progress`
@@ -1236,7 +1359,7 @@ ALTER TABLE `division_schools`
 -- AUTO_INCREMENT for table `milkcomponent`
 --
 ALTER TABLE `milkcomponent`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT for table `quarterly_reportform8`
@@ -1248,13 +1371,13 @@ ALTER TABLE `quarterly_reportform8`
 -- AUTO_INCREMENT for table `recent_activity`
 --
 ALTER TABLE `recent_activity`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1850;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1923;
 
 --
 -- AUTO_INCREMENT for table `sbfp_recent_activity`
 --
 ALTER TABLE `sbfp_recent_activity`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1182;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1255;
 
 --
 -- AUTO_INCREMENT for table `sections`
